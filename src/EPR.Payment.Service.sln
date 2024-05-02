@@ -5,9 +5,11 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service", "EPR.Payment.Service\EPR.Payment.Service.csproj", "{2BABACBF-28B2-43B0-BBCD-3C88FBF18E2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Service.Common", "EPR.Payment.Service.Common\EPR.Payment.Service.Common.csproj", "{14ACD7DC-978F-40BE-A29E-97D959B7C27E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.Common", "EPR.Payment.Service.Common\EPR.Payment.Service.Common.csproj", "{14ACD7DC-978F-40BE-A29E-97D959B7C27E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Service.UnitTests", "EPR.Payment.Service.UnitTests\EPR.Payment.Service.UnitTests.csproj", "{D9D75872-84A7-49FA-B6D4-E4667B957F6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.UnitTests", "EPR.Payment.Service.UnitTests\EPR.Payment.Service.UnitTests.csproj", "{D9D75872-84A7-49FA-B6D4-E4667B957F6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Service.Common.Data", "EPR.Payment.Service.Common.Data\EPR.Payment.Service.Common.Data.csproj", "{E8120BBE-E9B9-437D-BA43-537A60D1B1FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{D9D75872-84A7-49FA-B6D4-E4667B957F6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9D75872-84A7-49FA-B6D4-E4667B957F6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9D75872-84A7-49FA-B6D4-E4667B957F6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8120BBE-E9B9-437D-BA43-537A60D1B1FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8120BBE-E9B9-437D-BA43-537A60D1B1FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8120BBE-E9B9-437D-BA43-537A60D1B1FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8120BBE-E9B9-437D-BA43-537A60D1B1FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

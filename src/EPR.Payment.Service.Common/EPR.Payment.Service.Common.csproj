@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\" />
-    <Folder Include="Enums\" />
-    <Folder Include="RESTServices\Interfaces\" />
+    <Compile Remove="Enums\**" />
+    <Compile Remove="RESTServices\**" />
+    <EmbeddedResource Remove="Enums\**" />
+    <EmbeddedResource Remove="RESTServices\**" />
+    <None Remove="Enums\**" />
+    <None Remove="RESTServices\**" />
   </ItemGroup>
 
   <ItemGroup>
