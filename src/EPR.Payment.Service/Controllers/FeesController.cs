@@ -17,7 +17,7 @@ namespace EPR.Payment.Service.Controllers
             _feesService = feesService ?? throw new ArgumentNullException(nameof(feesService));
         }
 
-        // TODO : This endpoint  can be removed later. It is just to explain to the devs
+        // TODO : MA - This endpoint can be removed later. Remove this endpoint during clean up activity as this may not be needed.
         [MapToApiVersion(1)]
         [HttpGet]
         [Route("GetFees")]
