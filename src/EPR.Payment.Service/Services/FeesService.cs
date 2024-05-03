@@ -15,16 +15,17 @@ namespace EPR.Payment.Service.Services
 
         public async Task<GetFeesResponse?> GetFees(bool isLarge, string regulator)
         {
-            var fees = await _feesRepository.GetFeesAsync(isLarge, regulator);
-
-            return fees;
+            return await _feesRepository.GetFeesAsync(isLarge, regulator);
         }
 
         public async Task<decimal?> GetFeesAmount(bool isLarge, string regulator)
         {
-            var fees = await _feesRepository.GetFeesAmountAsync(isLarge, regulator);
+            return await _feesRepository.GetFeesAmountAsync(isLarge, regulator);
+        }
 
-            return fees;
+        public async Task<int> GetFeesCount()
+        {
+            return await _feesRepository.GetFeesCount();
         }
 
     }

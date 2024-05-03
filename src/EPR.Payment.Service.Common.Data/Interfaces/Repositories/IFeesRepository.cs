@@ -1,5 +1,4 @@
-﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
-using EPR.Payment.Service.Common.Dtos.Responses;
+﻿using EPR.Payment.Service.Common.Dtos.Responses;
 
 namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories
 {
@@ -10,5 +9,7 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories
         Task<decimal?> GetFeesAmountAsync(bool isLarge, string regulator);
 
         Task<GetFeesResponse?> GetFeesAsync(bool isLarge, string regulator);
+
+        Task<int> GetFeesCount();
     }
 }

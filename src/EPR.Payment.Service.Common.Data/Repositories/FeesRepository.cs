@@ -38,5 +38,10 @@ namespace EPR.Payment.Service.Common.Data.Repositories
                 .Select(i => _mapper.Map<GetFeesResponse>(i))
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<int> GetFeesCount()
+        {
+            return await _feePaymentDataContext.Fees.CountAsync();
+        }
     }
 }

@@ -36,7 +36,7 @@ namespace EPR.Payment.Service.Controllers
         [MapToApiVersion(1)]
         [HttpGet]
         [Route("GetFeesAmount")]
-        [ProducesResponseType(typeof(GetFeesResponse), 200)]
+        [ProducesResponseType(typeof(decimal), 200)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetFeesAmount(bool isLarge, string regulator)
         {

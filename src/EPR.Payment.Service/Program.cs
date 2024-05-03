@@ -2,9 +2,21 @@ using Asp.Versioning;
 using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Common.Data.Extensions;
 using EPR.Payment.Service.Extension;
+using EPR.Payment.Service.HealthCheck;
+using EPR.Payment.Service.ResponseWriter;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+string _environmentName = builder.Configuration.GetValue<string>("EnvironmentName") ?? "LOCAL"; ;
+
+bool IsEnvironmentLocalOrDev =
+    _environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
+    || _environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
 
 // Add services to the container.
 
@@ -15,8 +27,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDependencies();
 builder.Services.AddFeePaymentDataContext(builder.Configuration.GetConnectionString("PaymentConnnectionString")!);
 
-builder.Services.AddHealthChecks();
-//builder.Services.AddDbContextCheck<FeePaymentDataContext>();
+builder.Services
+    .AddHealthChecks()
+    .AddDbContextCheck<FeePaymentDataContext>()
+    .AddCheck<FeesHealthCheck>(FeesHealthCheck.HealthCheckResultDescription,
+            failureStatus: HealthStatus.Unhealthy,
+            tags: new[] { "ready" }); ;
 
 builder.Services.AddApiVersioning(options =>
 {
@@ -35,16 +51,34 @@ builder.Services.AddApiVersioning(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
+
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
+    });
+
+if (!IsEnvironmentLocalOrDev)
+    app.UseHealthChecks("/ping",
+        new HealthCheckOptions
+        {
+            Predicate = _ => false,
+            ResponseWriter = (context, report) =>
+            {
+                context.Response.ContentType = "application/json";
+                return context.Response.WriteAsync("");
+            }
+        });
 
 app.UseHttpsRedirection();
+app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllers();
+//app.MapControllers();
+app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 app.Run();
