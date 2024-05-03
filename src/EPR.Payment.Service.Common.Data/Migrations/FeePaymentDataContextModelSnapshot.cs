@@ -119,7 +119,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.InternalStatus", b =>
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.PaymentStatus", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -131,7 +131,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InternalStatus", "Lookup");
+                    b.ToTable("PaymentStatus", "Lookup");
 
                     b.HasData(
                         new
@@ -238,7 +238,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Payment", b =>
                 {
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.InternalStatus", "Status")
+                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.PaymentStatus", "Status")
                         .WithMany("Payments")
                         .HasForeignKey("InternalStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -247,7 +247,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.InternalStatus", b =>
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.PaymentStatus", b =>
                 {
                     b.Navigation("Payments");
                 });

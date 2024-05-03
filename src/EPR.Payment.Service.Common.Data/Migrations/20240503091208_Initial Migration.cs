@@ -31,7 +31,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InternalStatus",
+                name: "PaymentStatus",
                 schema: "Lookup",
                 columns: table => new
                 {
@@ -40,7 +40,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InternalStatus", x => x.Id);
+                    table.PrimaryKey("PK_PaymentStatus", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,10 +70,10 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 {
                     table.PrimaryKey("PK_Payment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Payment_InternalStatus_InternalStatusId",
+                        name: "FK_Payment_PaymentStatus_InternalStatusId",
                         column: x => x.InternalStatusId,
                         principalSchema: "Lookup",
-                        principalTable: "InternalStatus",
+                        principalTable: "PaymentStatus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -96,7 +96,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             migrationBuilder.InsertData(
                 schema: "Lookup",
-                table: "InternalStatus",
+                table: "PaymentStatus",
                 columns: new[] { "Id", "Status" },
                 values: new object[,]
                 {
@@ -128,7 +128,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 name: "Payment");
 
             migrationBuilder.DropTable(
-                name: "InternalStatus",
+                name: "PaymentStatus",
                 schema: "Lookup");
         }
     }

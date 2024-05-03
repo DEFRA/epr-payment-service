@@ -1,6 +1,6 @@
 ﻿namespace EPR.Payment.Service.Common.Dtos.Enums
 {
-    public enum InternalStatus
+    public enum Status
     {
         Initiated,
         Success,

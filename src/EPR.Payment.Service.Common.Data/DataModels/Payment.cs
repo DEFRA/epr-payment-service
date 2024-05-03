@@ -18,7 +18,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels
         public string GovpayPaymentId { get; set; } = null!;
 
         [ForeignKey("Status")]
-        public Enums.InternalStatus InternalStatusId { get; set; }
+        public Enums.Status InternalStatusId { get; set; }
 
         [MaxLength(200)]
         public string Regulator { get; set; } = null!;
@@ -51,7 +51,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         #region Navigation properties
 
-        public virtual InternalStatus Status { get; set; } = null!;
+        public virtual PaymentStatus Status { get; set; } = null!;
 
         #endregion Navigation properties
     }

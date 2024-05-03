@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 {
-    [Table("InternalStatus", Schema = "Lookup")]
-    public class InternalStatus
+    [Table("PaymentStatus", Schema = "Lookup")]
+    public class PaymentStatus
     {
         [Key]
-        public Enums.InternalStatus Id { get; set; }
+        public Enums.Status Id { get; set; }
 
         [Required]
         [MaxLength(10)]

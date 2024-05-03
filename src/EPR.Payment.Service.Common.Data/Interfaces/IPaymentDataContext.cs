@@ -5,7 +5,7 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
 {
     public interface IPaymentDataContext
     {
-        DbSet<InternalStatus> InternalStatus { get; } 
+        DbSet<PaymentStatus> PaymentStatus { get; } 
         DbSet<DataModels.Payment> Payment { get; } 
         DbSet<Fees> Fees { get; }
     }

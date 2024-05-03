@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Common.Data.Extensions;
 using EPR.Payment.Service.Extension;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDependencies();
 builder.Services.AddFeePaymentDataContext(builder.Configuration.GetConnectionString("PaymentConnnectionString")!);
+
+builder.Services.AddHealthChecks();
+//builder.Services.AddDbContextCheck<FeePaymentDataContext>();
 
 builder.Services.AddApiVersioning(options =>
 {

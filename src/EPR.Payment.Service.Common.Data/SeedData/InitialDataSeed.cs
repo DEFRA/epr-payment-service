@@ -9,11 +9,11 @@ namespace EPR.Payment.Service.Common.Data.SeedData
         public static void Seed(ModelBuilder modelBuilder)
         {
             DateTime effectiveFromDate = DateTime.ParseExact("01/04/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            modelBuilder.Entity<InternalStatus>().HasData(
-                new InternalStatus { Id = Enums.InternalStatus.Initiated, Status = "Initiated" },
-                new InternalStatus { Id = Enums.InternalStatus.Success, Status = "Success" },
-                new InternalStatus { Id = Enums.InternalStatus.Failed, Status = "Failed" },
-                new InternalStatus { Id = Enums.InternalStatus.Error, Status = "Error" }
+            modelBuilder.Entity<PaymentStatus>().HasData(
+                new PaymentStatus { Id = Enums.Status.Initiated, Status = "Initiated" },
+                new PaymentStatus { Id = Enums.Status.Success, Status = "Success" },
+                new PaymentStatus { Id = Enums.Status.Failed, Status = "Failed" },
+                new PaymentStatus { Id = Enums.Status.Error, Status = "Error" }
                 );
 
             modelBuilder.Entity<Fees>().HasData(

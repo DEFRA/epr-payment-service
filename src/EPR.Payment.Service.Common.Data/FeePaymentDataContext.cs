@@ -15,7 +15,7 @@ namespace EPR.Payment.Service.Common.Data
         {
         }
 
-        public DbSet<InternalStatus> InternalStatus => Set<InternalStatus>();
+        public DbSet<PaymentStatus> PaymentStatus => Set<PaymentStatus>();
         public DbSet<DataModels.Payment> Payment => Set<DataModels.Payment>();
         public DbSet<Fees> Fees => Set<Fees>();
 

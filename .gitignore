@@ -353,3 +353,4 @@ MigrationBackup/
 # VSCode and IDEA misc directories
 .vscode/
 .idea/
+/src/EPR.Payment.Service/appsettings.Development.json
