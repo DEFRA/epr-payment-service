@@ -8,11 +8,11 @@ namespace EPR.Payment.Service.Controllers
     [ApiVersion(1)]
     [ApiController]
     [Route("/api/[controller]")]
-    public class FeesController : ControllerBase
+    public class AccreditationFeesController : ControllerBase
     {
         private readonly IAccreditationFeesService _accreditationFeesService;
 
-        public FeesController(IAccreditationFeesService feesService)
+        public AccreditationFeesController(IAccreditationFeesService feesService)
         {
             _accreditationFeesService = feesService ?? throw new ArgumentNullException(nameof(feesService));
         }

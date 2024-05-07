@@ -2,6 +2,7 @@
 {
     public class GetAccreditationFeesResponse
     {
+        public int Id { get; set; }
         public bool Large { get; set; }
 
         public string Regulator { get; set; } = null!;

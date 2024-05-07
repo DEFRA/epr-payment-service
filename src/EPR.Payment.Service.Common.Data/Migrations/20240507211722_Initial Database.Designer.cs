@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
-    [DbContext(typeof(FeePaymentDataContext))]
-    [Migration("20240507161903_Initial Database")]
+    [DbContext(typeof(FeesPaymentDataContext))]
+    [Migration("20240507211722_Initial Database")]
     partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

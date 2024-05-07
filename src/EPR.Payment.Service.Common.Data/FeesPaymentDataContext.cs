@@ -7,19 +7,19 @@ using System.Diagnostics.CodeAnalysis;
 namespace EPR.Payment.Service.Common.Data
 {
     [ExcludeFromCodeCoverage]
-    public class FeePaymentDataContext : DbContext, IPaymentDataContext
+    public class FeesPaymentDataContext : DbContext, IPaymentDataContext
     {
-        public FeePaymentDataContext()
+        public FeesPaymentDataContext()
         {
         }
 
-        public FeePaymentDataContext(DbContextOptions options) : base(options)
+        public FeesPaymentDataContext(DbContextOptions options) : base(options)
         {
         }
 
-        public DbSet<PaymentStatus> PaymentStatus => Set<PaymentStatus>();
-        public DbSet<DataModels.Payment> Payment => Set<DataModels.Payment>();
-        public DbSet<AccreditationFees> AccreditationFees => Set<AccreditationFees>();
+        public virtual DbSet<PaymentStatus> PaymentStatus => Set<PaymentStatus>();
+        public virtual DbSet<DataModels.Payment> Payment => Set<DataModels.Payment>();
+        public virtual DbSet<AccreditationFees> AccreditationFees => Set<AccreditationFees>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

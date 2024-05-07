@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
 using EPR.Payment.Service.Common.Dtos.Responses;
 using Microsoft.EntityFrameworkCore;
@@ -7,19 +8,16 @@ namespace EPR.Payment.Service.Common.Data.Repositories
 {
     public class AccreditationFeesRepository : IAccreditationFeesRepository
     {
-        private IMapper _mapper;
-        private readonly FeePaymentDataContext _feePaymentDataContext;
+        private readonly FeesPaymentDataContext _feePaymentDataContext;
 
-        public AccreditationFeesRepository(IMapper mapper, FeePaymentDataContext feePaymentDataContext)
+        public AccreditationFeesRepository(FeesPaymentDataContext feePaymentDataContext)
         {
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _feePaymentDataContext = feePaymentDataContext;
         }
 
-        public async Task<List<GetAccreditationFeesResponse>> GetAllFeesAsync()
+        public async Task<List<AccreditationFees>> GetAllFeesAsync()
         {
             return await _feePaymentDataContext.AccreditationFees
-                .Select(i => _mapper.Map<GetAccreditationFeesResponse>(i))
                 .ToListAsync();
         }
 
@@ -31,11 +29,10 @@ namespace EPR.Payment.Service.Common.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<GetAccreditationFeesResponse?> GetFeesAsync(bool isLarge, string regulator)
+        public async Task<AccreditationFees?> GetFeesAsync(bool isLarge, string regulator)
         {
             return await _feePaymentDataContext.AccreditationFees
                 .Where(i => i.Large == isLarge && i.Regulator == regulator)
-                .Select(i => _mapper.Map<GetAccreditationFeesResponse>(i))
                 .FirstOrDefaultAsync();
         }
 

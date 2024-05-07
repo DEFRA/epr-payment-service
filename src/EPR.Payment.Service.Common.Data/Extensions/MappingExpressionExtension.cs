@@ -6,7 +6,8 @@ namespace EPR.Payment.Service.Common.Data.Extensions
     [ExcludeFromCodeCoverage]
     public static class MappingExpressionExtension
     {
-        public static IMappingExpression<TSource, TDestination> MapOnlyNonDefault<TSource, TDestination>(this IMappingExpression<TSource, TDestination> mappingExpression)
+        public static IMappingExpression<TSource, TDestination> MapOnlyNonDefault<TSource, TDestination>
+            (this IMappingExpression<TSource, TDestination> mappingExpression)
         {
             mappingExpression.ForAllMembers(opt => opt.Condition((src, dest, sourceProp, destinationProp, res) =>
             {

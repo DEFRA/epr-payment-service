@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
-    [DbContext(typeof(FeePaymentDataContext))]
-    partial class FeePaymentDataContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(FeesPaymentDataContext))]
+    partial class FeesPaymentDataContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

@@ -9,7 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.Common"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.UnitTests", "EPR.Payment.Service.UnitTests\EPR.Payment.Service.UnitTests.csproj", "{D9D75872-84A7-49FA-B6D4-E4667B957F6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Service.Common.Data", "EPR.Payment.Service.Common.Data\EPR.Payment.Service.Common.Data.csproj", "{E8120BBE-E9B9-437D-BA43-537A60D1B1FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.Common.Data", "EPR.Payment.Service.Common.Data\EPR.Payment.Service.Common.Data.csproj", "{E8120BBE-E9B9-437D-BA43-537A60D1B1FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{603ACB27-F7CA-4E8E-9F5E-34154C0599FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Service.Common.UnitTests", "EPR.Payment.Service.Common.UnitTests\EPR.Payment.Service.Common.UnitTests.csproj", "{7FB983DC-BD2D-45D3-8539-1166510090BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Service.Data.UnitTests", "EPR.Payment.Service.Data.UnitTests\EPR.Payment.Service.Data.UnitTests.csproj", "{DBDD3A6A-7AF8-47EC-9270-7B90D41DBB54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +39,22 @@ Global
 		{E8120BBE-E9B9-437D-BA43-537A60D1B1FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8120BBE-E9B9-437D-BA43-537A60D1B1FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8120BBE-E9B9-437D-BA43-537A60D1B1FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FB983DC-BD2D-45D3-8539-1166510090BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FB983DC-BD2D-45D3-8539-1166510090BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FB983DC-BD2D-45D3-8539-1166510090BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FB983DC-BD2D-45D3-8539-1166510090BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBDD3A6A-7AF8-47EC-9270-7B90D41DBB54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBDD3A6A-7AF8-47EC-9270-7B90D41DBB54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBDD3A6A-7AF8-47EC-9270-7B90D41DBB54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBDD3A6A-7AF8-47EC-9270-7B90D41DBB54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D9D75872-84A7-49FA-B6D4-E4667B957F6F} = {603ACB27-F7CA-4E8E-9F5E-34154C0599FA}
+		{7FB983DC-BD2D-45D3-8539-1166510090BC} = {603ACB27-F7CA-4E8E-9F5E-34154C0599FA}
+		{DBDD3A6A-7AF8-47EC-9270-7B90D41DBB54} = {603ACB27-F7CA-4E8E-9F5E-34154C0599FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0EC279C7-54F8-4894-92D8-ED41CBE2C33A}
