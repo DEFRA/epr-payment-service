@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.ResponseWriter
 {
+    [ExcludeFromCodeCoverage]
     public static class HealthCheckResponseWriter
     {
         public static Task WriteJsonResponse(HttpContext httpContext, HealthReport result)

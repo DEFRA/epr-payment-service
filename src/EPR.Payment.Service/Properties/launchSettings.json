@@ -18,12 +18,13 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Container (Dockerfile)": {
+    "Docker": {
       "commandName": "Docker",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "https://+:443;http://+:80"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://+:3000;"
       },
       "publishAllPorts": true,
       "useSSL": true

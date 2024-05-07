@@ -1,24 +1,44 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+FROM defradigital/dotnetcore-development:dotnet6.0 AS base
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+USER root
+ARG PORT=8080
+ENV ASPNETCORE_URLS=http://*:${PORT}
+EXPOSE ${PORT}
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-ARG BUILD_CONFIGURATION=Release
+RUN apk update && apk --no-cache add icu-libs
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
+
+FROM defradigital/dotnetcore-development:dotnet6.0 AS build
+USER root
+
+# Install dotnet-ef tool
+RUN dotnet tool install dotnet-ef --version 6.* --tool-path "/root/.dotnet/tools"
+
+# Add the tools folder to PATH
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
 WORKDIR /src
 COPY ["EPR.Payment.Service/EPR.Payment.Service.csproj", "EPR.Payment.Service/"]
-RUN dotnet restore "./EPR.Payment.Service/EPR.Payment.Service.csproj"
-COPY . .
+COPY ["EPR.Payment.Service.Common/EPR.Payment.Service.Common.csproj", "EPR.Payment.Service.Common/"]
+COPY ["EPR.Payment.Service.Common.Data/EPR.Payment.Service.Common.Data.csproj", "EPR.Payment.Service.Common.Data/"]
+RUN dotnet restore "EPR.Payment.Service/EPR.Payment.Service.csproj"
+
+COPY --chown=dotnet:dotnet EPR.Payment.Service/. ./EPR.Payment.Service/.
+COPY --chown=dotnet:dotnet EPR.Payment.Service.Common/. ./EPR.Payment.Service.Common/.
+COPY --chown=dotnet:dotnet EPR.Payment.Service.Common.Data/. ./EPR.Payment.Service.Common.Data/.
+
 WORKDIR "/src/EPR.Payment.Service"
-RUN dotnet build "./EPR.Payment.Service.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "EPR.Payment.Service.csproj" -c Release /p:AzureBuild=true -o /app/build
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./EPR.Payment.Service.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "EPR.Payment.Service.csproj" -c Release /p:AzureBuild=false -o /app/publish
 
 FROM base AS final
+
+# Switch to the non-root user
+USER dotnet
+
 WORKDIR /app
 COPY --from=publish /app/publish .
+USER dotnet
 ENTRYPOINT ["dotnet", "EPR.Payment.Service.dll"]

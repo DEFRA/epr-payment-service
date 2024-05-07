@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 string _environmentName = builder.Configuration.GetValue<string>("EnvironmentName") ?? "LOCAL"; ;
