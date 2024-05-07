@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(FeePaymentDataContext))]
-    [Migration("20240503091208_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20240507161903_Initial Database")]
+    partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.Fees", b =>
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.AccreditationFees", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Fees", "Lookup");
+                    b.ToTable("AccreditationFees", "Lookup");
 
                     b.HasData(
                         new
@@ -61,7 +61,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Amount = 2616m,
                             EffectiveFrom = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Large = true,
-                            Regulator = "EA"
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
@@ -69,7 +69,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Amount = 2616m,
                             EffectiveFrom = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Large = true,
-                            Regulator = "SEPA"
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
@@ -77,7 +77,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Amount = 2616m,
                             EffectiveFrom = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Large = true,
-                            Regulator = "NRW"
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
@@ -85,7 +85,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Amount = 2616m,
                             EffectiveFrom = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Large = true,
-                            Regulator = "NIEA"
+                            Regulator = "GB-NIR"
                         },
                         new
                         {
@@ -93,7 +93,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Amount = 505m,
                             EffectiveFrom = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Large = false,
-                            Regulator = "EA"
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
@@ -101,7 +101,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Amount = 505m,
                             EffectiveFrom = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Large = false,
-                            Regulator = "SEPA"
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
@@ -109,7 +109,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Amount = 505m,
                             EffectiveFrom = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Large = false,
-                            Regulator = "NRW"
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
@@ -117,7 +117,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Amount = 505m,
                             EffectiveFrom = new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Large = false,
-                            Regulator = "NIEA"
+                            Regulator = "GB-NIR"
                         });
                 });
 

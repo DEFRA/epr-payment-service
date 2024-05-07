@@ -2,10 +2,12 @@
 using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.DataModels
 {
     [Table("Payment")]
+    [ExcludeFromCodeCoverage]
     public class Payment : IdBaseEntity
     {
         public Guid UserId { get; set; }

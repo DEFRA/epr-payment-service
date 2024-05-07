@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 
 namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 {
     [Table("PaymentStatus", Schema = "Lookup")]
+    [ExcludeFromCodeCoverage]
     public class PaymentStatus
     {
         [Key]

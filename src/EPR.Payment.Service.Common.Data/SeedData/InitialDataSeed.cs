@@ -16,15 +16,15 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                 new PaymentStatus { Id = Enums.Status.Error, Status = "Error" }
                 );
 
-            modelBuilder.Entity<Fees>().HasData(
-                new Fees { Id = 1, Large = true, Regulator = "EA", Amount = 2616, EffectiveFrom = effectiveFromDate },
-                new Fees { Id = 2, Large = true, Regulator = "SEPA", Amount = 2616, EffectiveFrom = effectiveFromDate },
-                new Fees { Id = 3, Large = true, Regulator = "NRW", Amount = 2616, EffectiveFrom = effectiveFromDate },
-                new Fees { Id = 4, Large = true, Regulator = "NIEA", Amount = 2616, EffectiveFrom = effectiveFromDate },
-                new Fees { Id = 5, Large = false, Regulator = "EA", Amount = 505, EffectiveFrom = effectiveFromDate },
-                new Fees { Id = 6, Large = false, Regulator = "SEPA", Amount = 505, EffectiveFrom = effectiveFromDate },
-                new Fees { Id = 7, Large = false, Regulator = "NRW", Amount = 505, EffectiveFrom = effectiveFromDate },
-                new Fees { Id = 8, Large = false, Regulator = "NIEA", Amount = 505, EffectiveFrom = effectiveFromDate }
+            modelBuilder.Entity<AccreditationFees>().HasData(
+                new AccreditationFees { Id = 1, Large = true, Regulator = "GB-ENG", Amount = 2616, EffectiveFrom = effectiveFromDate },
+                new AccreditationFees { Id = 2, Large = true, Regulator = "GB-SCT", Amount = 2616, EffectiveFrom = effectiveFromDate },
+                new AccreditationFees { Id = 3, Large = true, Regulator = "GB-WLS", Amount = 2616, EffectiveFrom = effectiveFromDate },
+                new AccreditationFees { Id = 4, Large = true, Regulator = "GB-NIR", Amount = 2616, EffectiveFrom = effectiveFromDate },
+                new AccreditationFees { Id = 5, Large = false, Regulator = "GB-ENG", Amount = 505, EffectiveFrom = effectiveFromDate },
+                new AccreditationFees { Id = 6, Large = false, Regulator = "GB-SCT", Amount = 505, EffectiveFrom = effectiveFromDate },
+                new AccreditationFees { Id = 7, Large = false, Regulator = "GB-WLS", Amount = 505, EffectiveFrom = effectiveFromDate },
+                new AccreditationFees { Id = 8, Large = false, Regulator = "GB-NIR", Amount = 505, EffectiveFrom = effectiveFromDate }
                 );
         }
 

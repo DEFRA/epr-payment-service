@@ -2,9 +2,9 @@
 
 namespace EPR.Payment.Service.Services.Interfaces
 {
-    public interface IFeesService
+    public interface IAccreditationFeesService
     {
-        Task<GetFeesResponse?> GetFees(bool isLarge, string regulator);
+        Task<GetAccreditationFeesResponse?> GetFees(bool isLarge, string regulator);
 
         Task<decimal?> GetFeesAmount(bool isLarge, string regulator);
 

@@ -1,6 +1,6 @@
 ﻿namespace EPR.Payment.Service.Common.Dtos.Responses
 {
-    public class GetFeesResponse
+    public class GetAccreditationFeesResponse
     {
         public bool Large { get; set; }
 

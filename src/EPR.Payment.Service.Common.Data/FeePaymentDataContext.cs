@@ -2,9 +2,11 @@
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.SeedData;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data
 {
+    [ExcludeFromCodeCoverage]
     public class FeePaymentDataContext : DbContext, IPaymentDataContext
     {
         public FeePaymentDataContext()
@@ -17,7 +19,7 @@ namespace EPR.Payment.Service.Common.Data
 
         public DbSet<PaymentStatus> PaymentStatus => Set<PaymentStatus>();
         public DbSet<DataModels.Payment> Payment => Set<DataModels.Payment>();
-        public DbSet<Fees> Fees => Set<Fees>();
+        public DbSet<AccreditationFees> AccreditationFees => Set<AccreditationFees>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

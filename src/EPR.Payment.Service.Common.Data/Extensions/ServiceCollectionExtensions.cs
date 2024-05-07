@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.Common.Data.Extensions
         private static void RegisterServices(IServiceCollection services)
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddTransient<IFeesRepository, FeesRepository>();
+            services.AddTransient<IAccreditationFeesRepository, AccreditationFeesRepository>();
         }
     }
 }

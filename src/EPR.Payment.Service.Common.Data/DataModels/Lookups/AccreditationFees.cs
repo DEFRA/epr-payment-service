@@ -1,16 +1,13 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 {
-    [Table("Fees", Schema = "Lookup")]
-    public class Fees : IdBaseEntity
+    [ExcludeFromCodeCoverage]
+    [Table("AccreditationFees", Schema = "Lookup")]
+    public class AccreditationFees : IdBaseEntity
     {
         [MaxLength(200)]
         public bool Large { get; set; }

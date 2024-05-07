@@ -10,27 +10,27 @@ namespace EPR.Payment.Service.Controllers
     [Route("/api/[controller]")]
     public class FeesController : ControllerBase
     {
-        private readonly IFeesService _feesService;
+        private readonly IAccreditationFeesService _accreditationFeesService;
 
-        public FeesController(IFeesService feesService)
+        public FeesController(IAccreditationFeesService feesService)
         {
-            _feesService = feesService ?? throw new ArgumentNullException(nameof(feesService));
+            _accreditationFeesService = feesService ?? throw new ArgumentNullException(nameof(feesService));
         }
 
         // TODO : MA - This endpoint can be removed later. Remove this endpoint during clean up activity as this may not be needed.
         [MapToApiVersion(1)]
         [HttpGet]
         [Route("GetFees")]
-        [ProducesResponseType(typeof(GetFeesResponse), 200)]
+        [ProducesResponseType(typeof(GetAccreditationFeesResponse), 200)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetFees(bool isLarge, string regulator)
         {
-            var fees = await _feesService.GetFees(isLarge, regulator);
+            var accreditationFees = await _accreditationFeesService.GetFees(isLarge, regulator);
 
-            if (fees == null)
+            if (accreditationFees == null)
                 return NotFound();
 
-            return Ok(fees);
+            return Ok(accreditationFees);
         }
 
         [MapToApiVersion(1)]
@@ -40,7 +40,7 @@ namespace EPR.Payment.Service.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetFeesAmount(bool isLarge, string regulator)
         {
-            var fees = await _feesService.GetFeesAmount(isLarge, regulator);
+            var fees = await _accreditationFeesService.GetFeesAmount(isLarge, regulator);
 
             if (fees == null)
                 return NotFound();

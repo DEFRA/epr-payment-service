@@ -3,13 +3,13 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace EPR.Payment.Service.HealthCheck
 {
-    public class FeesHealthCheck : IHealthCheck
+    public class AccreditationFeesHealthCheck : IHealthCheck
     {
-        public const string HealthCheckResultDescription = "Fees Health Check";
+        public const string HealthCheckResultDescription = "Accreditation Fees Health Check";
 
-        private readonly IFeesService _feesService;
+        private readonly IAccreditationFeesService _feesService;
 
-        public FeesHealthCheck(IFeesService feesService)
+        public AccreditationFeesHealthCheck(IAccreditationFeesService feesService)
         {
             _feesService = feesService ?? throw new ArgumentNullException(nameof(feesService));
         }

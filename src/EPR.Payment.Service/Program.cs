@@ -28,7 +28,7 @@ builder.Services.AddFeePaymentDataContext(builder.Configuration.GetConnectionStr
 builder.Services
     .AddHealthChecks()
     .AddDbContextCheck<FeePaymentDataContext>()
-    .AddCheck<FeesHealthCheck>(FeesHealthCheck.HealthCheckResultDescription,
+    .AddCheck<AccreditationFeesHealthCheck>(AccreditationFeesHealthCheck.HealthCheckResultDescription,
             failureStatus: HealthStatus.Unhealthy,
             tags: new[] { "ready" }); ;
 

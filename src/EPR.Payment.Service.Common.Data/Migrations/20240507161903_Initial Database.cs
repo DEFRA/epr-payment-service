@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitialDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 name: "Lookup");
 
             migrationBuilder.CreateTable(
-                name: "Fees",
+                name: "AccreditationFees",
                 schema: "Lookup",
                 columns: table => new
                 {
@@ -27,7 +27,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Fees", x => x.Id);
+                    table.PrimaryKey("PK_AccreditationFees", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,18 +80,18 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             migrationBuilder.InsertData(
                 schema: "Lookup",
-                table: "Fees",
+                table: "AccreditationFees",
                 columns: new[] { "Id", "Amount", "EffectiveFrom", "EffectiveTo", "Large", "Regulator" },
                 values: new object[,]
                 {
-                    { 1, 2616m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, true, "EA" },
-                    { 2, 2616m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, true, "SEPA" },
-                    { 3, 2616m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, true, "NRW" },
-                    { 4, 2616m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, true, "NIEA" },
-                    { 5, 505m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, "EA" },
-                    { 6, 505m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, "SEPA" },
-                    { 7, 505m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, "NRW" },
-                    { 8, 505m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, "NIEA" }
+                    { 1, 2616m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, true, "GB-ENG" },
+                    { 2, 2616m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, true, "GB-SCT" },
+                    { 3, 2616m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, true, "GB-WLS" },
+                    { 4, 2616m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, true, "GB-NIR" },
+                    { 5, 505m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, "GB-ENG" },
+                    { 6, 505m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, "GB-SCT" },
+                    { 7, 505m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, "GB-WLS" },
+                    { 8, 505m, new DateTime(2024, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, "GB-NIR" }
                 });
 
             migrationBuilder.InsertData(
@@ -121,7 +121,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Fees",
+                name: "AccreditationFees",
                 schema: "Lookup");
 
             migrationBuilder.DropTable(

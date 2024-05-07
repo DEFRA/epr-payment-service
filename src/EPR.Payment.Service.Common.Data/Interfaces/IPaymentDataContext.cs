@@ -7,6 +7,6 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
     {
         DbSet<PaymentStatus> PaymentStatus { get; } 
         DbSet<DataModels.Payment> Payment { get; } 
-        DbSet<Fees> Fees { get; }
+        DbSet<AccreditationFees> AccreditationFees { get; }
     }
 }
