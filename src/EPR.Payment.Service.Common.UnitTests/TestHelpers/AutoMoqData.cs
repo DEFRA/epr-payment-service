@@ -1,7 +1,6 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Kernel;
-//using AutoFixture.NUnit3;
 using AutoFixture.MSTest;
 
 namespace EPR.Payment.Service.Common.UnitTests.TestHelpers
