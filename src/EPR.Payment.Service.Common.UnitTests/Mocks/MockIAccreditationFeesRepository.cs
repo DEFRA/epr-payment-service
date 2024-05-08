@@ -3,8 +3,6 @@ using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Data.Entity.Infrastructure;
-using System.Net.Sockets;
-using System.Reflection.Metadata;
 
 namespace EPR.Payment.Service.Common.UnitTests.Mocks
 {
@@ -38,16 +36,6 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
             accreditationFeesMock.As<IQueryable<AccreditationFees>>().Setup(m => m.Expression).Returns(accreditationFeesData.Expression);
             accreditationFeesMock.As<IQueryable<AccreditationFees>>().Setup(m => m.ElementType).Returns(accreditationFeesData.ElementType);
             accreditationFeesMock.As<IQueryable<AccreditationFees>>().Setup(m => m.GetEnumerator()).Returns(() => accreditationFeesData.GetEnumerator());
-
-            //accreditationFeesMock.As<IQueryable<AccreditationFees>>().Setup(m => m.Provider).Returns(accreditationFeesData.Provider);
-            //accreditationFeesMock.As<IQueryable<AccreditationFees>>().Setup(m => m.Expression).Returns(accreditationFeesData.Expression);
-            //accreditationFeesMock.As<IQueryable<AccreditationFees>>().Setup(m => m.ElementType).Returns(accreditationFeesData.ElementType);
-            //accreditationFeesMock.As<IQueryable<AccreditationFees>>().Setup(m => m.GetEnumerator()).Returns(() => accreditationFeesData.GetEnumerator());
-
-            //mock.Setup(m => m.GetAllFeesAsync()).Returns(() => accreditationFeesResponse);
-            //mock.Setup(m => m.GetFeesAmountAsync(It.IsAny<bool>(), It.IsAny<string>())).Returns(() => accreditationFeesResponse[0].Amount);
-            //mock.Setup(m => m.GetFeesAsync(It.IsAny<bool>(), It.IsAny<string>())).Returns(() => accreditationFeesResponse[0]);
-            //mock.Setup(m => m.GetFeesCount()).Returns(() => accreditationFeesResponse.Count);
 
             // Setup the mock
             return accreditationFeesMock;
