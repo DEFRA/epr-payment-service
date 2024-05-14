@@ -8,9 +8,10 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
 {
     public class MockIAccreditationFeesRepository
     {
-        public static Mock<DbSet<AccreditationFees>> GetMock()
+        public static Mock<DbSet<AccreditationFees>> GetMock(bool returnResults)
         {
             var accreditationFeesMock = new Mock<DbSet<AccreditationFees>>();
+
 
             var accreditationFeesData = new List<AccreditationFees>()
             {
@@ -22,8 +23,22 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     Regulator = "GB-ENG", 
                     EffectiveFrom = new DateTime(2024, 3, 31),
                     EffectiveTo = null
+                },
+                new AccreditationFees()
+                {
+                    Id = 2,
+                    Amount = 20.0M,
+                    Large = false,
+                    Regulator = "GB-SCT",
+                    EffectiveFrom = new DateTime(2024, 3, 31),
+                    EffectiveTo = null
                 }
             }.AsQueryable();
+
+            if (!returnResults)
+            {
+                accreditationFeesData = new List<AccreditationFees>().AsQueryable();
+            }
 
             accreditationFeesMock.As<IDbAsyncEnumerable<AccreditationFees>>()
                 .Setup(m => m.GetAsyncEnumerator())

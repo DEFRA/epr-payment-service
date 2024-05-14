@@ -13,7 +13,7 @@ namespace EPR.Payment.Service.Services
         public AccreditationFeesService(IMapper mapper, IAccreditationFeesRepository feesRepository)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository)); ;
+            _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
 
         public async Task<GetAccreditationFeesResponse?> GetFees(bool isLarge, string regulator)
