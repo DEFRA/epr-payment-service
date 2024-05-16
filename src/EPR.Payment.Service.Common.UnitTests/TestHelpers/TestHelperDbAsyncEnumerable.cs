@@ -1,9 +1,11 @@
 ﻿using System.Data.Entity.Infrastructure;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace EPR.Payment.Service.Common.UnitTests.TestHelpers
 {
-    internal class TestHelperDbAsyncEnumerable<T> : EnumerableQuery<T>, IDbAsyncEnumerable<T>, IQueryable<T>
+    [ExcludeFromCodeCoverage]
+    public class TestHelperDbAsyncEnumerable<T> : EnumerableQuery<T>, IDbAsyncEnumerable<T>, IQueryable<T>
     {
         public TestHelperDbAsyncEnumerable(IEnumerable<T> enumerable)
             : base(enumerable)

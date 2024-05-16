@@ -23,8 +23,10 @@ namespace EPR.Payment.Service.UnitTests.Services
         {
             //Arrange
             Mock<IMapper> mapperMock = new Mock<IMapper>();
+
             //Act
             var sut = new AccreditationFeesService(mapperMock.Object, _accreditationFeesRepositoryMock.Object);
+
             //Assert
             Assert.ThrowsExceptionAsync<ArgumentNullException>(() => sut.GetFees(isLarge, regulator));
         }
@@ -39,8 +41,10 @@ namespace EPR.Payment.Service.UnitTests.Services
         {
             //Arrange
             Mock<IAccreditationFeesRepository> accreditationFeesRepositoryMock = new Mock<IAccreditationFeesRepository>();
+
             //Act
             var sut = new AccreditationFeesService(_mapperMock.Object, accreditationFeesRepositoryMock.Object);
+
             //Assert
             Assert.ThrowsExceptionAsync<ArgumentNullException>(() => sut.GetFees(isLarge, regulator));
         }
@@ -60,8 +64,10 @@ namespace EPR.Payment.Service.UnitTests.Services
             //Arrange
             _accreditationFeesRepositoryMock.Setup(i => i.GetFeesAsync(It.IsAny<bool>(), It.IsAny<string>())).ReturnsAsync(_accreditationFees);
             _mapperMock.Setup(i => i.Map<GetAccreditationFeesResponse>(_accreditationFees)).Returns(_getAccreditationFeesResponse);
+
             //Act
             var result = await sut.GetFees(isLarge, regulator);
+
             //Assert
             result.Should().Be(_getAccreditationFeesResponse);
             _mapperMock.Verify(i => i.Map<GetAccreditationFeesResponse>(_accreditationFees), Times.Once);
@@ -81,8 +87,10 @@ namespace EPR.Payment.Service.UnitTests.Services
             //Arrange
             _accreditationFeesRepositoryMock.Setup(i => i.GetFeesAsync(It.IsAny<bool>(), It.IsAny<string>())).ReturnsAsync((AccreditationFees?) null);
             _mapperMock.Setup(i => i.Map<GetAccreditationFeesResponse>(null)).Returns(_getAccreditationFeesResponse);
+
             //Act
             var result = await sut.GetFees(isLarge, regulator);
+
             //Assert
             result.Should().Be(_getAccreditationFeesResponse);
             _mapperMock.Verify(i => i.Map<GetAccreditationFeesResponse>(null), Times.Once);
@@ -100,8 +108,10 @@ namespace EPR.Payment.Service.UnitTests.Services
         {
             //Arrange
             _accreditationFeesRepositoryMock.Setup(i => i.GetFeesAmountAsync(It.IsAny<bool>(), It.IsAny<string>())).ReturnsAsync(feesResult);
+
             //Act
             var result = await sut.GetFeesAmount(isLarge, regulator);
+
             //Assert
             result.Should().Be(feesResult);
         }
@@ -117,8 +127,10 @@ namespace EPR.Payment.Service.UnitTests.Services
         {
             //Arrange
             _accreditationFeesRepositoryMock.Setup(i => i.GetFeesAmountAsync(It.IsAny<bool>(), It.IsAny<string>())).ReturnsAsync((decimal?)null);
+
             //Act
             var result = await sut.GetFeesAmount(isLarge, regulator);
+
             //Assert
             result.Should().Be(null);
         }
@@ -133,8 +145,10 @@ namespace EPR.Payment.Service.UnitTests.Services
         {
             //Arrange
             _accreditationFeesRepositoryMock.Setup(i => i.GetFeesCount()).ReturnsAsync(feesCountResult);
+
             //Act
             var result = await sut.GetFeesCount();
+
             //Assert
             result.Should().Be(feesCountResult);
         }
@@ -148,8 +162,10 @@ namespace EPR.Payment.Service.UnitTests.Services
         {
             //Arrange
             _accreditationFeesRepositoryMock.Setup(i => i.GetFeesCount()).ReturnsAsync(0);
+
             //Act
             var result = await sut.GetFeesCount();
+
             //Assert
             result.Should().Be(0);
         }

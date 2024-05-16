@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.Common.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{603ACB27-F7CA-4E8E-9F5E-34154C0599FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Service.Common.UnitTests", "EPR.Payment.Service.Common.UnitTests\EPR.Payment.Service.Common.UnitTests.csproj", "{7FB983DC-BD2D-45D3-8539-1166510090BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.Common.UnitTests", "EPR.Payment.Service.Common.UnitTests\EPR.Payment.Service.Common.UnitTests.csproj", "{7FB983DC-BD2D-45D3-8539-1166510090BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Service.Data.UnitTests", "EPR.Payment.Service.Data.UnitTests\EPR.Payment.Service.Data.UnitTests.csproj", "{DBDD3A6A-7AF8-47EC-9270-7B90D41DBB54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.Data.UnitTests", "EPR.Payment.Service.Data.UnitTests\EPR.Payment.Service.Data.UnitTests.csproj", "{DBDD3A6A-7AF8-47EC-9270-7B90D41DBB54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

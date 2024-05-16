@@ -1,9 +1,11 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace EPR.Payment.Service.Common.Data.SeedData
 {
+    [ExcludeFromCodeCoverage]
     public class InitialDataSeed
     {
         public static void Seed(ModelBuilder modelBuilder)

@@ -1,9 +1,11 @@
 ﻿using System.Data.Entity.Infrastructure;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace EPR.Payment.Service.Common.UnitTests.TestHelpers
 {
-    internal class TestHelperDbAsyncQueryProvider<TEntity> : IDbAsyncQueryProvider
+    [ExcludeFromCodeCoverage]
+    public class TestHelperDbAsyncQueryProvider<TEntity> : IDbAsyncQueryProvider
     {
         private readonly IQueryProvider _inner;
 
