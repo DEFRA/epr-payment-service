@@ -10,14 +10,14 @@ namespace EPR.Payment.Service.Common.Data.Extensions
     [ExcludeFromCodeCoverage]
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddFeePaymentDataContext(this IServiceCollection services, string connectionString)
+        public static IServiceCollection AddDataContext(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<FeesPaymentDataContext>(options =>
+            services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(connectionString, o => o.CommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds))
 
             );
 
-            services.AddTransient<IPaymentDataContext, FeesPaymentDataContext>(provider => provider.GetService<FeesPaymentDataContext>()!);
+            services.AddTransient<IPaymentDataContext, DataContext>(provider => provider.GetService<DataContext>()!);
             RegisterServices(services);
             return services;
         }
@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.Common.Data.Extensions
         private static void RegisterServices(IServiceCollection services)
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddTransient<IAccreditationFeesRepository, AccreditationFeesRepository>();
+            services.AddTransient<IPaymentsRepository, PaymentsRepository>();
         }
     }
 }

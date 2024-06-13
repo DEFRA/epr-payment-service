@@ -44,4 +44,8 @@
     <ProjectReference Include="..\EPR.Payment.Service.Common.UnitTests\EPR.Payment.Service.Common.UnitTests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>

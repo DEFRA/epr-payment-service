@@ -7,16 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dtos\Responses\**" />
     <Compile Remove="Enums\**" />
     <Compile Remove="RESTServices\**" />
+    <EmbeddedResource Remove="Dtos\Responses\**" />
     <EmbeddedResource Remove="Enums\**" />
     <EmbeddedResource Remove="RESTServices\**" />
+    <None Remove="Dtos\Responses\**" />
     <None Remove="Enums\**" />
     <None Remove="RESTServices\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Dtos\Responses\GetAccreditationFeesAmountResponse.cs" />
   </ItemGroup>
 
   <ItemGroup>

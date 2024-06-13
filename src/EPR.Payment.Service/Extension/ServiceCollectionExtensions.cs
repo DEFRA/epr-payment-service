@@ -1,11 +1,6 @@
-﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
-using EPR.Payment.Service.Common.Data.Interfaces;
-using EPR.Payment.Service.Common.Data.Repositories;
-using EPR.Payment.Service.Common.Data;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
+﻿using EPR.Payment.Service.Services;
 using EPR.Payment.Service.Services.Interfaces;
-using EPR.Payment.Service.Services;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Extension
 {
@@ -15,7 +10,7 @@ namespace EPR.Payment.Service.Extension
         public static IServiceCollection AddDependencies(this IServiceCollection services)
         {
             services
-                .AddScoped<IAccreditationFeesService, AccreditationFeesService>();
+                .AddScoped<IPaymentsService, PaymentsService>();
 
             return services;
 
