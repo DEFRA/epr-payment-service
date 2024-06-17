@@ -7,13 +7,13 @@ using System.Diagnostics.CodeAnalysis;
 namespace EPR.Payment.Service.Common.Data
 {
     [ExcludeFromCodeCoverage]
-    public class DataContext : DbContext, IPaymentDataContext
+    public class PaymentDataContext : DbContext, IPaymentDataContext
     {
-        public DataContext()
+        public PaymentDataContext()
         {
         }
 
-        public DataContext(DbContextOptions options) : base(options)
+        public PaymentDataContext(DbContextOptions options) : base(options)
         {
         }
 

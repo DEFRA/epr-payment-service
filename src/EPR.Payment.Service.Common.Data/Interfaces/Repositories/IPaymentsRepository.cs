@@ -4,6 +4,6 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories
 {
     public interface IPaymentsRepository
     {
-        Task InsertPaymentStatusAsync(string paymentId, PaymentStatusInsertRequestDto paymentStatusInsertRequest);
+        Task InsertPaymentStatusAsync(Guid externalPaymentId, string paymentId, PaymentStatusInsertRequestDto paymentStatusInsertRequest);
     }
 }

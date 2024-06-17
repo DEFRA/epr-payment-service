@@ -22,7 +22,7 @@ namespace EPR.Payment.Service.UnitTests.Services
             var status = new PaymentStatusInsertRequestDto { Status = "Inserted" };
 
             //Assert
-            await service.Invoking(async x => await x.InsertPaymentStatusAsync(null, status))
+            await service.Invoking(async x => await x.InsertPaymentStatusAsync(Guid.NewGuid(), null, status))
                 .Should().ThrowAsync<ArgumentException>();
         }
 
@@ -35,7 +35,7 @@ namespace EPR.Payment.Service.UnitTests.Services
             var status = new PaymentStatusInsertRequestDto { Status = null };
 
             //Assert
-            await service.Invoking(async x => await x.InsertPaymentStatusAsync("123", status))
+            await service.Invoking(async x => await x.InsertPaymentStatusAsync(Guid.NewGuid(), "123", status))
                 .Should().ThrowAsync<ArgumentException>();
         }
 
@@ -46,9 +46,10 @@ namespace EPR.Payment.Service.UnitTests.Services
             var service = new PaymentsService(mapperMock.Object, _paymentsRepositoryMock.Object);
             var status = new PaymentStatusInsertRequestDto { Status = "Inserted" };
             var paymentId = "123";
+            var externalPaymentId = Guid.NewGuid();
 
             // Act & Assert
-            Func<Task> action = async () => await service.InsertPaymentStatusAsync(paymentId, status);
+            Func<Task> action = async () => await service.InsertPaymentStatusAsync(externalPaymentId,paymentId, status);
 
             // Assert
             await action.Should().NotThrowAsync();

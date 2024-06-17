@@ -12,12 +12,12 @@ namespace EPR.Payment.Service.Common.Data.Extensions
     {
         public static IServiceCollection AddDataContext(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<DataContext>(options =>
+            services.AddDbContext<PaymentDataContext>(options =>
                 options.UseSqlServer(connectionString, o => o.CommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds))
 
             );
 
-            services.AddTransient<IPaymentDataContext, DataContext>(provider => provider.GetService<DataContext>()!);
+            services.AddTransient<IPaymentDataContext, PaymentDataContext>(provider => provider.GetService<PaymentDataContext>()!);
             RegisterServices(services);
             return services;
         }

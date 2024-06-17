@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
 using EPR.Payment.Service.Common.Dtos.Request;
 using EPR.Payment.Service.Services.Interfaces;
@@ -15,10 +14,10 @@ namespace EPR.Payment.Service.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _paymentRepository = paymentRepository;
         }
-        public async Task InsertPaymentStatusAsync(string paymentId, PaymentStatusInsertRequestDto paymentStatusInsertRequest)
+        public async Task InsertPaymentStatusAsync(Guid externalPaymentId, string paymentId, PaymentStatusInsertRequestDto paymentStatusInsertRequest)
         {
             ValidatePaymentStatusInsertRequest(paymentId, paymentStatusInsertRequest);
-            await _paymentRepository.InsertPaymentStatusAsync(paymentId, paymentStatusInsertRequest);
+            await _paymentRepository.InsertPaymentStatusAsync(externalPaymentId, paymentId, paymentStatusInsertRequest);
         }
 
         private static void ValidatePaymentStatusInsertRequest(string paymentId, PaymentStatusInsertRequestDto paymentStatusInsertRequest)

@@ -2,12 +2,14 @@
 using EPR.Payment.Service.Common.Dtos.Request;
 using EPR.Payment.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.FeatureManagement.Mvc;
 
 namespace EPR.Payment.Service.Controllers
 {
     [ApiVersion(1)]
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("api/v{version:apiVersion}/payments")]
+    [FeatureGate("EnablePaymentsFeature")]
     public class PaymentsController : ControllerBase
     {
         private readonly IPaymentsService _paymentsService;
@@ -18,11 +20,12 @@ namespace EPR.Payment.Service.Controllers
         }
 
         [MapToApiVersion(1)]
-        [HttpPost()]
+        [HttpPost("{paymentId}/status")]
         [ProducesResponseType(200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> InsertPaymentStatus(string paymentId, PaymentStatusInsertRequestDto request)
+        [FeatureGate("EnablePaymentStatusInsert")]
+        public async Task<IActionResult> InsertPaymentStatus(Guid externalPaymentId, string paymentId, PaymentStatusInsertRequestDto paymentStatusInsertRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -30,7 +33,7 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                await _paymentsService.InsertPaymentStatusAsync(paymentId, request);
+                await _paymentsService.InsertPaymentStatusAsync(externalPaymentId, paymentId, paymentStatusInsertRequest);
                 return Ok();
             }
             catch (Exception ex)

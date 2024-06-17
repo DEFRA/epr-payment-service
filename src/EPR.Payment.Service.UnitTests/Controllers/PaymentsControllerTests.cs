@@ -24,11 +24,12 @@ namespace EPR.Payment.Service.UnitTests.Controllers
         public async Task InsertPaymentStatus_ReturnOk()
         {
             // Arrange
+            var externalPaymentId = Guid.NewGuid();
             var paymentId = "123";
             var status = new PaymentStatusInsertRequestDto { Status = "Inserted" };
 
             //Act
-            var result = await _controller.InsertPaymentStatus(paymentId, status);
+            var result = await _controller.InsertPaymentStatus(externalPaymentId, paymentId, status);
 
             //Assert
             result.Should().BeOfType<OkResult>();
@@ -38,14 +39,15 @@ namespace EPR.Payment.Service.UnitTests.Controllers
         public async Task InsertPaymentStatus_ServiceThrowsException_ReturnsInternalServerError()
         {
             // Arrange
+            var externalPaymentId = Guid.NewGuid();
             var paymentId = "123";
             var status = new PaymentStatusInsertRequestDto { };
 
-            _paymentsServiceMock.Setup(service => service.InsertPaymentStatusAsync(paymentId, status))
+            _paymentsServiceMock.Setup(service => service.InsertPaymentStatusAsync(externalPaymentId,paymentId, status))
                                .ThrowsAsync(new Exception("Test Exception"));
 
             // Act
-            var result = await _controller.InsertPaymentStatus(paymentId, status);
+            var result = await _controller.InsertPaymentStatus(externalPaymentId, paymentId, status);
 
             // Assert
             result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);

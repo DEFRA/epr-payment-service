@@ -3,8 +3,10 @@
     public enum Status
     {
         Initiated,
+        InProgress,
         Success,
         Failed,
-        Error
+        Error,
+        UserCancelled
     }
 }
