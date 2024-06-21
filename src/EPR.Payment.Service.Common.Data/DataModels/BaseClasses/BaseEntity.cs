@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace EPR.Payment.Service.Common.Data.DataModels.BaseClasses
 {
     [ExcludeFromCodeCoverage]
-    public abstract class IdBaseEntity
+    public abstract class BaseEntity
         {
             [Key]
             [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -1,9 +1,10 @@
-﻿using EPR.Payment.Service.Common.Dtos.Request;
-
-namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories
+﻿namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories
 {
     public interface IPaymentsRepository
     {
-        Task InsertPaymentStatusAsync(Guid externalPaymentId, string paymentId, PaymentStatusInsertRequestDto paymentStatusInsertRequest);
+        Task<Guid> InsertPaymentStatusAsync(DataModels.Payment entity);
+        Task UpdatePaymentStatusAsync(DataModels.Payment entity);
+        Task<DataModels.Payment> GetPaymentByExternalPaymentIdAsync(Guid externalPaymentId);
+        Task<int> GetPaymentStatusCount();
     }
 }

@@ -8,7 +8,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 {
     [Table("Payment")]
     [ExcludeFromCodeCoverage]
-    public class Payment : IdBaseEntity
+    public class Payment : BaseEntity
     {
         public Guid UserId { get; set; }
 
@@ -17,22 +17,19 @@ namespace EPR.Payment.Service.Common.Data.DataModels
         public Guid ExternalPaymentId { get; set; }
 
         [MaxLength(50)]
-        public string GovpayPaymentId { get; set; } = null!;
+        public string? GovpayPaymentId { get; set; }
 
-        [ForeignKey("Status")]
+        [ForeignKey("PaymentStatus")]
         public Enums.Status InternalStatusId { get; set; }
 
         [MaxLength(200)]
         public string Regulator { get; set; } = null!;
 
         [MaxLength(20)]
-        public string GovPayStatus { get; set; } = null!;
+        public string? GovPayStatus { get; set; }
 
-        [MaxLength(255)]
-        public string ErrorCode { get; set; } = null!;
-
-        [MaxLength(255)]
-        public string ErrorMessage { get; set; } = null!;
+        [ForeignKey("InternalError")]
+        public string? InternalErrorCode { get; set; }
 
         [MaxLength(255)]
         public string ReferenceNumber { get; set; } = null!;
@@ -53,8 +50,9 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         #region Navigation properties
 
-        public virtual PaymentStatus Status { get; set; } = null!;
+        public virtual PaymentStatus PaymentStatus { get; set; } = null!;
 
+        public virtual InternalError? InternalError { get; set; }
         #endregion Navigation properties
     }
 }

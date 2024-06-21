@@ -13,7 +13,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
         public Enums.Status Id { get; set; }
 
         [Required]
-        [MaxLength(10)]
+        [MaxLength(200)]
         public string Status { get; set; } = null!;
 
         #region Navigation properties

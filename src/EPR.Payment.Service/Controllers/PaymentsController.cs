@@ -20,12 +20,12 @@ namespace EPR.Payment.Service.Controllers
         }
 
         [MapToApiVersion(1)]
-        [HttpPost("{paymentId}/status")]
+        [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnablePaymentStatusInsert")]
-        public async Task<IActionResult> InsertPaymentStatus(Guid externalPaymentId, string paymentId, PaymentStatusInsertRequestDto paymentStatusInsertRequest)
+        public async Task<IActionResult> InsertPaymentStatus([FromBody] PaymentStatusInsertRequestDto paymentStatusInsertRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -33,7 +33,30 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                await _paymentsService.InsertPaymentStatusAsync(externalPaymentId, paymentId, paymentStatusInsertRequest);
+                var externalPaymentId = await _paymentsService.InsertPaymentStatusAsync(paymentStatusInsertRequest);
+                return Ok(externalPaymentId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [MapToApiVersion(1)]
+        [HttpPost("{externalPaymentId}/UpdatePaymentStatus")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [FeatureGate("EnablePaymentStatusUpdate")]
+        public async Task<IActionResult> UpdatePaymentStatus(Guid externalPaymentId, [FromBody] PaymentStatusUpdateRequestDto paymentStatusUpdateRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await _paymentsService.UpdatePaymentStatusAsync(externalPaymentId, paymentStatusUpdateRequest);
                 return Ok();
             }
             catch (Exception ex)

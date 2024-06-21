@@ -2,12 +2,16 @@ using Asp.Versioning;
 using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Common.Data.Extensions;
 using EPR.Payment.Service.Extension;
+using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.ResponseWriter;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,10 +38,10 @@ builder.Services.AddDataContext(builder.Configuration.GetConnectionString("Payme
 
 builder.Services
     .AddHealthChecks()
-    .AddDbContextCheck<PaymentDataContext>()
-    //.AddCheck<AccreditationFeesHealthCheck>(AccreditationFeesHealthCheck.HealthCheckResultDescription,
-    //        failureStatus: HealthStatus.Unhealthy,
-    //        tags: new[] { "ready" }); 
+    .AddDbContextCheck<AppDbContext>()
+    .AddCheck<PaymentStatusHealthCheck>(PaymentStatusHealthCheck.HealthCheckResultDescription,
+            failureStatus: HealthStatus.Unhealthy,
+            tags: new[] { "ready" }); 
 ;
 
 builder.Services.AddApiVersioning(options =>
@@ -62,11 +66,13 @@ var app = builder.Build();
 var featureManager = app.Services.GetRequiredService<IFeatureManager>();
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
-bool enablePaymentsFeature = await featureManager.IsEnabledAsync("EnablePaymentsFeature");
+bool enablePaymentsFeature = await featureManager.IsEnabledAsync("EnablePaymentsFeature"); 
 bool enablePaymentStatusInsert = await featureManager.IsEnabledAsync("EnablePaymentStatusInsert");
+bool enablePaymentStatusUpdate = await featureManager.IsEnabledAsync("EnablePaymentStatusUpdate");
 
 logger.LogInformation($"EnablePaymentsFeature: {enablePaymentsFeature}");
 logger.LogInformation($"EnablePaymentStatusInsert: {enablePaymentStatusInsert}");
+logger.LogInformation($"EnablePaymentStatusUpdate: {enablePaymentStatusUpdate}");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();

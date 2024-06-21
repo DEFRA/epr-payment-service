@@ -4,6 +4,8 @@ namespace EPR.Payment.Service.Services.Interfaces
 {
     public interface IPaymentsService
     {
-        Task InsertPaymentStatusAsync(Guid externalPaymentId, string paymentId, PaymentStatusInsertRequestDto paymentStatusInsertRequest);
+        Task<Guid> InsertPaymentStatusAsync(PaymentStatusInsertRequestDto paymentStatusInsertRequest);
+        Task UpdatePaymentStatusAsync(Guid externalPaymentId, PaymentStatusUpdateRequestDto paymentStatusUpdateRequest);
+        Task<int> GetPaymentStatusCount();
     }
 }

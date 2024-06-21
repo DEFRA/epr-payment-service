@@ -7,18 +7,23 @@ using System.Diagnostics.CodeAnalysis;
 namespace EPR.Payment.Service.Common.Data
 {
     [ExcludeFromCodeCoverage]
-    public class PaymentDataContext : DbContext, IPaymentDataContext
+    public class AppDbContext : DbContext, IPaymentDataContext
     {
-        public PaymentDataContext()
+        public AppDbContext()
         {
         }
 
-        public PaymentDataContext(DbContextOptions options) : base(options)
+        public AppDbContext(DbContextOptions options) : base(options)
         {
         }
 
         public virtual DbSet<PaymentStatus> PaymentStatus => Set<PaymentStatus>();
         public virtual DbSet<DataModels.Payment> Payment => Set<DataModels.Payment>();
+        public virtual DbSet<InternalError> InternalError => Set<InternalError>();
+        public virtual DbSet<AdditionalFees> AdditionalFees => Set<AdditionalFees>();
+        public virtual DbSet<ComplianceShemeRegitrationFees> ComplianceShemeRegitrationFees => Set<ComplianceShemeRegitrationFees>();
+        public virtual DbSet<ProducerRegitrationFees> ProducerRegitrationFees => Set<ProducerRegitrationFees>();
+        public virtual DbSet<Subsidiaries> Subsidiaries => Set<Subsidiaries>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -33,8 +33,4 @@
     <ProjectReference Include="..\EPR.Payment.Service.Common\EPR.Payment.Service.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="HealthCheck\" />
-  </ItemGroup>
-
 </Project>
