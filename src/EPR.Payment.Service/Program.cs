@@ -12,6 +12,7 @@ using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System;
+using EPR.Payment.Service.Common.Data.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +63,33 @@ builder.Services.AddFeatureManagement();
 builder.Services.AddLogging();
 
 var app = builder.Build();
+
+// Apply pending migrations at startup
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    try
+    {
+        var pendingMigrations = dbContext.Database.GetPendingMigrations().ToList();
+        if (pendingMigrations.Any())
+        {
+            Console.WriteLine("Applying pending migrations:");
+            foreach (var migration in pendingMigrations)
+            {
+                Console.WriteLine($"- {migration}");
+            }
+            dbContext.Database.Migrate();
+        }
+        else
+        {
+            Console.WriteLine("No pending migrations.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred while migrating the database: {ex.Message}");
+    }
+}
 
 var featureManager = app.Services.GetRequiredService<IFeatureManager>();
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
