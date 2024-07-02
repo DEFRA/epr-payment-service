@@ -7,11 +7,11 @@ using System.Diagnostics.CodeAnalysis;
 namespace EPR.Payment.Service.Common.Data.Profiles
 {
     [ExcludeFromCodeCoverage]
-    public class AccreditationFeesProfile : Profile
+    public class FeesProfile : Profile
     {
-        public AccreditationFeesProfile() 
+        public FeesProfile() 
         {
-            CreateMap<AccreditationFees, GetAccreditationFeesResponse>()
+            CreateMap<ProducerRegitrationFees, RegistrationFeeResponseDto>()
                 .MapOnlyNonDefault()
                 .ReverseMap()
                 .MapOnlyNonDefault();

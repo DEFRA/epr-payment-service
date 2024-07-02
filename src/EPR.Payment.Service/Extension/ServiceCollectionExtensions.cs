@@ -14,8 +14,8 @@ namespace EPR.Payment.Service.Extension
     {
         public static IServiceCollection AddDependencies(this IServiceCollection services)
         {
-            services
-                .AddScoped<IAccreditationFeesService, AccreditationFeesService>();
+            services.AddScoped<IProducerFeesService, ProducerFeesService>();
+            services.AddScoped<IComplianceSchemeFeesService, ComplianceSchemeFeesService>();
 
             return services;
 

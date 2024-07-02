@@ -17,7 +17,7 @@ namespace EPR.Payment.Service.Common.Data.Extensions
 
             );
 
-            services.AddTransient<IPaymentDataContext, FeesPaymentDataContext>(provider => provider.GetService<FeesPaymentDataContext>()!);
+            services.AddTransient<IFeesPaymentDataContext, FeesPaymentDataContext>(provider => provider.GetService<FeesPaymentDataContext>()!);
             RegisterServices(services);
             return services;
         }
@@ -25,7 +25,8 @@ namespace EPR.Payment.Service.Common.Data.Extensions
         private static void RegisterServices(IServiceCollection services)
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddTransient<IAccreditationFeesRepository, AccreditationFeesRepository>();
+            services.AddTransient<IProducerFeesRepository, ProducerFeesRepository>();
+            services.AddTransient<IComplianceSchemeFeesRepository, ComplianceSchemeFeesRepository>();
         }
     }
 }

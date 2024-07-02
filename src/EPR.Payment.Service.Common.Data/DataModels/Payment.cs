@@ -8,7 +8,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 {
     [Table("Payment")]
     [ExcludeFromCodeCoverage]
-    public class Payment : IdBaseEntity
+    public class Payment : BaseEntity
     {
         public Guid UserId { get; set; }
 

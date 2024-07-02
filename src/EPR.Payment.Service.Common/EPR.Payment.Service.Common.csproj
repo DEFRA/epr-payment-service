@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Dtos\Responses\GetAccreditationFeesAmountResponse.cs" />
+    <Compile Remove="Dtos\Responses\GetFeesAmountResponse.cs" />
   </ItemGroup>
 
   <ItemGroup>
