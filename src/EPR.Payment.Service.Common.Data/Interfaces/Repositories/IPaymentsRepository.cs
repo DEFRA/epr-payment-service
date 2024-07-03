@@ -4,7 +4,7 @@
     {
         Task<Guid> InsertPaymentStatusAsync(DataModels.Payment entity);
         Task UpdatePaymentStatusAsync(DataModels.Payment entity);
-        Task<DataModels.Payment> GetPaymentByExternalPaymentIdAsync(Guid externalPaymentId);
+        Task<DataModels.Payment> GetPaymentByIdAsync(Guid id);
         Task<int> GetPaymentStatusCount();
     }
 }

@@ -33,8 +33,8 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                var externalPaymentId = await _paymentsService.InsertPaymentStatusAsync(paymentStatusInsertRequest);
-                return Ok(externalPaymentId);
+                var Id = await _paymentsService.InsertPaymentStatusAsync(paymentStatusInsertRequest);
+                return Ok(Id);
             }
             catch (Exception ex)
             {
@@ -43,12 +43,12 @@ namespace EPR.Payment.Service.Controllers
         }
 
         [MapToApiVersion(1)]
-        [HttpPost("{externalPaymentId}/UpdatePaymentStatus")]
+        [HttpPut("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnablePaymentStatusUpdate")]
-        public async Task<IActionResult> UpdatePaymentStatus(Guid externalPaymentId, [FromBody] PaymentStatusUpdateRequestDto paymentStatusUpdateRequest)
+        public async Task<IActionResult> UpdatePaymentStatus(Guid id, [FromBody] PaymentStatusUpdateRequestDto paymentStatusUpdateRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -56,7 +56,7 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                await _paymentsService.UpdatePaymentStatusAsync(externalPaymentId, paymentStatusUpdateRequest);
+                await _paymentsService.UpdatePaymentStatusAsync(id, paymentStatusUpdateRequest);
                 return Ok();
             }
             catch (Exception ex)

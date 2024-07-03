@@ -67,10 +67,9 @@ namespace EPR.Payment.Service.UnitTests.Controllers
         public async Task UpdatePaymentStatus_ReturnOk()
         {
             // Arrange
-            var externalPaymentId = new Guid();
+            var Id = new Guid();
             var request = new PaymentStatusUpdateRequestDto
             {
-                ExternalPaymentId = externalPaymentId,
                 GovPayPaymentId = "123",
                 UpdatedByUserId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
                 UpdatedByOrganisationId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
@@ -79,7 +78,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
             };
 
             //Act
-            var result = await _controller.UpdatePaymentStatus(externalPaymentId, request);
+            var result = await _controller.UpdatePaymentStatus(Id, request);
 
             //Assert
             result.Should().BeOfType<OkResult>();
@@ -88,14 +87,14 @@ namespace EPR.Payment.Service.UnitTests.Controllers
         public async Task UpdatePaymentStatus_ServiceThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            var externalPaymentId = new Guid();
+            var Id = new Guid();
             var request = new PaymentStatusUpdateRequestDto();
 
-            _paymentsServiceMock.Setup(service => service.UpdatePaymentStatusAsync(externalPaymentId, request))
+            _paymentsServiceMock.Setup(service => service.UpdatePaymentStatusAsync(Id, request))
                                .ThrowsAsync(new Exception("Test Exception"));
 
             // Act
-            var result = await _controller.UpdatePaymentStatus(externalPaymentId, request);
+            var result = await _controller.UpdatePaymentStatus(Id, request);
 
             // Assert
             result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);

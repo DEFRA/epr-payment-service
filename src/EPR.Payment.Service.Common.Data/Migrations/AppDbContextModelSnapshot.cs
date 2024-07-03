@@ -681,20 +681,15 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Payment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(19,4)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ExternalPaymentId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("GovPayStatus")
                         .HasMaxLength(20)

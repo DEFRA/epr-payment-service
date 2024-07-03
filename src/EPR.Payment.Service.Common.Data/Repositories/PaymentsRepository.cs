@@ -18,14 +18,13 @@ namespace EPR.Payment.Service.Common.Data.Repositories
             entity.UpdatedDate = entity.CreatedDate;
             entity.UpdatedByUserId = entity.UserId;
             entity.UpdatedByOrganisationId = entity.OrganisationId;
-            entity.ExternalPaymentId = Guid.NewGuid();
 
            
             _dataContext.Payment.Add(entity);
 
             await _dataContext.SaveChangesAsync();
 
-            return entity.ExternalPaymentId;
+            return entity.Id;
         }
 
         public async Task UpdatePaymentStatusAsync(DataModels.Payment entity)
@@ -36,13 +35,13 @@ namespace EPR.Payment.Service.Common.Data.Repositories
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task<DataModels.Payment> GetPaymentByExternalPaymentIdAsync(Guid externalPaymentId)
+        public async Task<DataModels.Payment> GetPaymentByIdAsync(Guid id)
         {
-            var entity =  await _dataContext.Payment.Where(a => a.ExternalPaymentId == externalPaymentId).SingleOrDefaultAsync();
+            var entity =  await _dataContext.Payment.Where(a => a.Id == id).SingleOrDefaultAsync();
 
             if (entity == null)
             {
-                throw new NotFoundException($"Payment record not found for External Payment ID: {externalPaymentId}");
+                throw new NotFoundException($"Payment record not found for Payment ID: {id}");
             }
 
             return entity;

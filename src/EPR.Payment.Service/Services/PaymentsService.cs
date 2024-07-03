@@ -21,10 +21,10 @@ namespace EPR.Payment.Service.Services
             return await _paymentRepository.InsertPaymentStatusAsync(entity);
         }
 
-        public async Task UpdatePaymentStatusAsync(Guid externalPaymentId, PaymentStatusUpdateRequestDto paymentStatusUpdateRequest)
+        public async Task UpdatePaymentStatusAsync(Guid id, PaymentStatusUpdateRequestDto paymentStatusUpdateRequest)
         {
             ValidatePaymentStatusUpdateRequest(paymentStatusUpdateRequest);
-            var entity = await _paymentRepository.GetPaymentByExternalPaymentIdAsync(externalPaymentId);
+            var entity = await _paymentRepository.GetPaymentByIdAsync(id);
             entity = _mapper.Map(paymentStatusUpdateRequest, entity);
             await _paymentRepository.UpdatePaymentStatusAsync(entity);
         }
@@ -52,6 +52,8 @@ namespace EPR.Payment.Service.Services
                 throw new ArgumentException("Organisation ID cannot be null or empty.", nameof(paymentStatusUpdateRequest.UpdatedByOrganisationId));
             if (string.IsNullOrEmpty(paymentStatusUpdateRequest.ReferenceNumber))
                 throw new ArgumentException("Reference Number cannot be null or empty.", nameof(paymentStatusUpdateRequest.ReferenceNumber));
+            if (!string.IsNullOrEmpty(paymentStatusUpdateRequest.ErrorCode) && !new string[] { "A","B","C"}.Any(s=>s.Equals(paymentStatusUpdateRequest.ErrorCode, StringComparison.OrdinalIgnoreCase)))
+                throw new ArgumentException("Error Code must be either 'A' or 'B' or 'C' only.", nameof(paymentStatusUpdateRequest.ErrorCode));
         }
         public async Task<int> GetPaymentStatusCount()
         {

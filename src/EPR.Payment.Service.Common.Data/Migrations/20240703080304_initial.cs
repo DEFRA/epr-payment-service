@@ -120,11 +120,9 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 name: "Payment",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrganisationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExternalPaymentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GovpayPaymentId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     InternalStatusId = table.Column<int>(type: "int", nullable: false),
                     Regulator = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),

@@ -1,11 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 {

@@ -47,7 +47,6 @@ namespace EPR.Payment.Service.UnitTests.Services
 
             var expectedResult = new Guid();
             var entity = _mapper.Map<Common.Data.DataModels.Payment>(request);
-            entity.ExternalPaymentId = expectedResult;
 
             _paymentsRepositoryMock.Setup(r =>
                r.InsertPaymentStatusAsync(entity)).ReturnsAsync(expectedResult); 
@@ -73,10 +72,9 @@ namespace EPR.Payment.Service.UnitTests.Services
         public async Task UpdatePaymentStatus_WithCorrectParameters()
         {
             // Arrange
-            var externalPaymentId = new Guid(); 
+            var Id = new Guid(); 
             var request = new PaymentStatusUpdateRequestDto
             {
-                ExternalPaymentId = externalPaymentId,
                 GovPayPaymentId = "123",
                 UpdatedByUserId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
                 UpdatedByOrganisationId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
@@ -85,7 +83,7 @@ namespace EPR.Payment.Service.UnitTests.Services
             };
 
             var entity = new Common.Data.DataModels.Payment();
-            _paymentsRepositoryMock.Setup(r => r.GetPaymentByExternalPaymentIdAsync(externalPaymentId)).ReturnsAsync(entity);
+            _paymentsRepositoryMock.Setup(r => r.GetPaymentByIdAsync(Id)).ReturnsAsync(entity);
 
             entity = _mapper.Map(request, entity);
 
@@ -93,7 +91,7 @@ namespace EPR.Payment.Service.UnitTests.Services
             _paymentsRepositoryMock.Setup(r =>
                r.UpdatePaymentStatusAsync(entity));
 
-            Func<Task> action = async () => await _service.UpdatePaymentStatusAsync(externalPaymentId, request);
+            Func<Task> action = async () => await _service.UpdatePaymentStatusAsync(Id, request);
 
             // Assert
             await action.Should().NotThrowAsync();
@@ -102,10 +100,10 @@ namespace EPR.Payment.Service.UnitTests.Services
         [TestMethod]
         public async Task UpdatePaymentStatus_WhenInitialisedWithNullStatus_ThrowsArgumentNullException()
         {
-            var externalPaymentId = new Guid();
+            var Id = new Guid();
 
             // Act & Assert
-            await _service.Invoking(async x => await x.UpdatePaymentStatusAsync(externalPaymentId, null))
+            await _service.Invoking(async x => await x.UpdatePaymentStatusAsync(Id, null))
                 .Should().ThrowAsync<ArgumentException>();
         }
     }

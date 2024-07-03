@@ -10,9 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
-using System;
-using EPR.Payment.Service.Common.Data.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240621084629_initial")]
+    [Migration("20240703080304_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -684,20 +684,15 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Payment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(19,4)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ExternalPaymentId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("GovPayStatus")
                         .HasMaxLength(20)

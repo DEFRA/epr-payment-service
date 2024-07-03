@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EPR.Payment.Service.Common.Dtos.Request
 {
     public class PaymentStatusUpdateRequestDto
     {
-        [Required(ErrorMessage = "External Payment ID is required")]
-        public Guid ExternalPaymentId { get; set; }
-
         [Required(ErrorMessage = "GovPay Payment ID is required")]
         public string? GovPayPaymentId { get; set; }
 
