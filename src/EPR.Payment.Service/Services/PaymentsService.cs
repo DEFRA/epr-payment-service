@@ -38,8 +38,8 @@ namespace EPR.Payment.Service.Services
                 throw new ArgumentException("User ID cannot be null or empty.", nameof(paymentStatusInsertRequest.UserId));
             if (string.IsNullOrEmpty(paymentStatusInsertRequest.OrganisationId))
                 throw new ArgumentException("Organisation ID cannot be null or empty.", nameof(paymentStatusInsertRequest.OrganisationId));
-            if (string.IsNullOrEmpty(paymentStatusInsertRequest.ReferenceNumber))
-                throw new ArgumentException("Reference Number cannot be null or empty.", nameof(paymentStatusInsertRequest.ReferenceNumber));
+            if (string.IsNullOrEmpty(paymentStatusInsertRequest.Reference))
+                throw new ArgumentException("Reference Number cannot be null or empty.", nameof(paymentStatusInsertRequest.Reference));
         }
         private static void ValidatePaymentStatusUpdateRequest(PaymentStatusUpdateRequestDto paymentStatusUpdateRequest)
         {
@@ -50,8 +50,8 @@ namespace EPR.Payment.Service.Services
                 throw new ArgumentException("User ID cannot be null or empty.", nameof(paymentStatusUpdateRequest.UpdatedByUserId));
             if (string.IsNullOrEmpty(paymentStatusUpdateRequest.UpdatedByOrganisationId))
                 throw new ArgumentException("Organisation ID cannot be null or empty.", nameof(paymentStatusUpdateRequest.UpdatedByOrganisationId));
-            if (string.IsNullOrEmpty(paymentStatusUpdateRequest.ReferenceNumber))
-                throw new ArgumentException("Reference Number cannot be null or empty.", nameof(paymentStatusUpdateRequest.ReferenceNumber));
+            if (string.IsNullOrEmpty(paymentStatusUpdateRequest.Reference))
+                throw new ArgumentException("Reference Number cannot be null or empty.", nameof(paymentStatusUpdateRequest.Reference));
             if (!string.IsNullOrEmpty(paymentStatusUpdateRequest.ErrorCode) && !new string[] { "A","B","C"}.Any(s=>s.Equals(paymentStatusUpdateRequest.ErrorCode, StringComparison.OrdinalIgnoreCase)))
                 throw new ArgumentException("Error Code must be either 'A' or 'B' or 'C' only.", nameof(paymentStatusUpdateRequest.ErrorCode));
         }

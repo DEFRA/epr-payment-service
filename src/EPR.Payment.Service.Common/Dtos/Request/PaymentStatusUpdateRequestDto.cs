@@ -13,8 +13,8 @@ namespace EPR.Payment.Service.Common.Dtos.Request
         [Required(ErrorMessage = "Updated By Organisation ID is required")]
         public string? UpdatedByOrganisationId { get; set; }
 
-        [Required(ErrorMessage = "Reference Number is required")]
-        public string? ReferenceNumber { get; set; }
+        [Required(ErrorMessage = "Reference is required")]
+        public string? Reference { get; set; }
 
         [Required(ErrorMessage = "Status is required")]
         public Enums.Status Status { get; set; }

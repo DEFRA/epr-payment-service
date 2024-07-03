@@ -32,7 +32,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels
         public string? InternalErrorCode { get; set; }
 
         [MaxLength(255)]
-        public string ReferenceNumber { get; set; } = null!;
+        public string Reference { get; set; } = null!;
 
         [Column(TypeName = "decimal(19,4)")]
         public decimal Amount { get; set; }

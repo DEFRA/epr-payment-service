@@ -128,7 +128,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     Regulator = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     GovPayStatus = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     InternalErrorCode = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ReferenceNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Reference = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(19,4)", nullable: false),
                     ReasonForPayment = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),

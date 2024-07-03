@@ -713,7 +713,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("ReferenceNumber")
+                    b.Property<string>("Reference")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");

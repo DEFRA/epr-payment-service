@@ -10,8 +10,8 @@ namespace EPR.Payment.Service.Common.Dtos.Request
         [Required(ErrorMessage = "Organisation ID is required")]
         public string? OrganisationId { get; set; }
 
-        [Required(ErrorMessage = "Reference Number is required")]
-        public string? ReferenceNumber { get; set; }
+        [Required(ErrorMessage = "Reference is required")]
+        public string? Reference { get; set; }
 
         [Required(ErrorMessage = "Regulator is required")]
         public string? Regulator { get; set; }

@@ -38,7 +38,7 @@ namespace EPR.Payment.Service.UnitTests.Services
             {
                 UserId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
                 OrganisationId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
-                ReferenceNumber = "123",
+                Reference = "123",
                 Regulator = "Regulator",
                 Amount = 20,
                 ReasonForPayment = "Reason For Payment",
@@ -78,7 +78,7 @@ namespace EPR.Payment.Service.UnitTests.Services
                 GovPayPaymentId = "123",
                 UpdatedByUserId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
                 UpdatedByOrganisationId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
-                ReferenceNumber = "12345",
+                Reference = "12345",
                 Status = Common.Dtos.Enums.Status.InProgress
             };
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240703080304_initial")]
+    [Migration("20240703145533_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -716,7 +716,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("ReferenceNumber")
+                    b.Property<string>("Reference")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
