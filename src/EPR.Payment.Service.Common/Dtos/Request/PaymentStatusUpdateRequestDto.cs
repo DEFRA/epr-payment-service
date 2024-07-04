@@ -8,10 +8,10 @@ namespace EPR.Payment.Service.Common.Dtos.Request
         public string? GovPayPaymentId { get; set; }
 
         [Required(ErrorMessage = "Updated By User ID is required")]
-        public string? UpdatedByUserId { get; set; }
+        public Guid? UpdatedByUserId { get; set; }
 
         [Required(ErrorMessage = "Updated By Organisation ID is required")]
-        public string? UpdatedByOrganisationId { get; set; }
+        public Guid? UpdatedByOrganisationId { get; set; }
 
         [Required(ErrorMessage = "Reference is required")]
         public string? Reference { get; set; }

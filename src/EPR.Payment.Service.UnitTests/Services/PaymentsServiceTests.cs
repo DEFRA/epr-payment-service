@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AutoFixture;
+using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
 using EPR.Payment.Service.Common.Data.Profiles;
 using EPR.Payment.Service.Common.Dtos.Request;
@@ -12,12 +13,14 @@ namespace EPR.Payment.Service.UnitTests.Services
     [TestClass]
     public class PaymentsServiceTests
     {
+        private readonly IFixture _fixture;
         private readonly Mock<IPaymentsRepository> _paymentsRepositoryMock;
         private readonly IMapper _mapper;
         private IPaymentsService _service;
 
         public PaymentsServiceTests() 
         {
+            _fixture = new Fixture();
             _paymentsRepositoryMock = new Mock<IPaymentsRepository>();
             var configuration = SetupAutomapper();
             _mapper = new Mapper(configuration);
@@ -31,19 +34,10 @@ namespace EPR.Payment.Service.UnitTests.Services
         }
 
         [TestMethod]
-        public async Task InsertPaymentStatus_ValidRequest_ReturnsNewGuid()
+        public async Task InsertPaymentStatus_ReturnsWithGuid_WithValidRequest()
         {
             // Arrange
-            var request = new PaymentStatusInsertRequestDto
-            {
-                UserId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
-                OrganisationId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
-                Reference = "123",
-                Regulator = "Regulator",
-                Amount = 20,
-                ReasonForPayment = "Reason For Payment",
-                Status = Common.Dtos.Enums.Status.Initiated
-            };
+            var request = _fixture.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, new Guid()).With(x => x.OrganisationId, new Guid()).Create();
 
             var expectedResult = new Guid();
             var entity = _mapper.Map<Common.Data.DataModels.Payment>(request);
@@ -56,31 +50,35 @@ namespace EPR.Payment.Service.UnitTests.Services
             var result = await _service.InsertPaymentStatusAsync(request);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expectedResult, result);
+            result.Should().Be(expectedResult);
         }
 
         [TestMethod]
-        public async Task InsertPaymentStatus_NullRequest_ThrowsArgumentNullException()
+        public async Task InsertPaymentStatus_ReturnsArgumentException_WithNullUserId()
         {
             // Act & Assert
-            await _service.Invoking(async x => await x.InsertPaymentStatusAsync(null))
+            var request = _fixture.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, (Guid?)null).Create();
+
+            await _service.Invoking(async x => await x.InsertPaymentStatusAsync(request))
                 .Should().ThrowAsync<ArgumentException>();
         }
 
         [TestMethod]
-        public async Task UpdatePaymentStatus_WithCorrectParameters()
+        public async Task InsertPaymentStatus_ReturnsArgumentException_WithNullOrganisationId()
+        {
+            // Act & Assert
+            var request = _fixture.Build<PaymentStatusInsertRequestDto>().With(d => d.OrganisationId, (Guid?)null).Create();
+
+            await _service.Invoking(async x => await x.InsertPaymentStatusAsync(request))
+                .Should().ThrowAsync<ArgumentException>();
+        }
+
+        [TestMethod]
+        public async Task UpdatePaymentStatus_WithValidRequest()
         {
             // Arrange
-            var Id = new Guid(); 
-            var request = new PaymentStatusUpdateRequestDto
-            {
-                GovPayPaymentId = "123",
-                UpdatedByUserId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
-                UpdatedByOrganisationId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
-                Reference = "12345",
-                Status = Common.Dtos.Enums.Status.InProgress
-            };
+            var Id = new Guid();
+            var request = _fixture.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, new Guid()).With(x => x.UpdatedByOrganisationId, new Guid()).With(k => k.ErrorCode, "").Create();
 
             var entity = new Common.Data.DataModels.Payment();
             _paymentsRepositoryMock.Setup(r => r.GetPaymentByIdAsync(Id)).ReturnsAsync(entity);
@@ -98,12 +96,36 @@ namespace EPR.Payment.Service.UnitTests.Services
         }
 
         [TestMethod]
-        public async Task UpdatePaymentStatus_WhenInitialisedWithNullStatus_ThrowsArgumentNullException()
+        public async Task UpdatePaymentStatus_ThrowArgumentException_WithInValidErrorCode()
         {
+            // Arrange
             var Id = new Guid();
+            var request = _fixture.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, new Guid()).With(x => x.UpdatedByOrganisationId, new Guid()).With(k => k.ErrorCode, "X").Create();
 
+            //Assert
+            await _service.Invoking(async x => await x.UpdatePaymentStatusAsync(Id, request))
+                .Should().ThrowAsync<ArgumentException>();
+        }
+
+        [TestMethod]
+        public async Task UpdatePaymentStatus_ReturnsArgumentException_WithNullUserId()
+        {
             // Act & Assert
-            await _service.Invoking(async x => await x.UpdatePaymentStatusAsync(Id, null))
+            var id = new Guid();
+            var request = _fixture.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, (Guid?)null).Create();
+
+            await _service.Invoking(async x => await x.UpdatePaymentStatusAsync(id, request))
+                .Should().ThrowAsync<ArgumentException>();
+        }
+
+        [TestMethod]
+        public async Task UpdatePaymentStatus_ReturnsArgumentException_WithNullOrganisationId()
+        {
+            // Act & Assert
+            var id = new Guid();
+            var request = _fixture.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByOrganisationId, (Guid?)null).Create();
+
+            await _service.Invoking(async x => await x.UpdatePaymentStatusAsync(id, request))
                 .Should().ThrowAsync<ArgumentException>();
         }
     }

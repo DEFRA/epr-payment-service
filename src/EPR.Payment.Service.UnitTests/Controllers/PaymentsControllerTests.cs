@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Dtos.Request;
+﻿using AutoFixture;
+using EPR.Payment.Service.Common.Dtos.Request;
 using EPR.Payment.Service.Controllers;
 using EPR.Payment.Service.Services.Interfaces;
 using FluentAssertions;
@@ -11,29 +12,22 @@ namespace EPR.Payment.Service.UnitTests.Controllers
     [TestClass]
     public class PaymentsControllerTests
     {
+        private readonly IFixture _fixture;
         private readonly PaymentsController _controller;
         private readonly Mock<IPaymentsService> _paymentsServiceMock;
 
         public PaymentsControllerTests()
         {
+            _fixture = new Fixture();
             _paymentsServiceMock = new Mock<IPaymentsService>();
             _controller = new PaymentsController(_paymentsServiceMock.Object);
         }
 
         [TestMethod]
-        public async Task InsertPaymentStatus_ReturnOk()
+        public async Task InsertPaymentStatus_ReturnsOkWithGuid_WithValidRequest()
         {
             // Arrange
-            var request = new PaymentStatusInsertRequestDto
-            {
-                UserId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
-                OrganisationId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
-                Reference = "123",
-                Regulator = "Regulator",
-                Amount = 20,
-                ReasonForPayment = "Reason For Payment",
-                Status = Common.Dtos.Enums.Status.Initiated
-            };
+            var request = _fixture.Build<PaymentStatusInsertRequestDto>().Create();
 
             var expectedResult = new Guid();
 
@@ -44,7 +38,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers
             var result = await _controller.InsertPaymentStatus(request);
 
             //Assert
-            result.Should().BeOfType<OkObjectResult>();
+            result.Result.Should().BeOfType<OkObjectResult>()
+                .Which.Value.Should().BeEquivalentTo(expectedResult);
         }
 
         [TestMethod]
@@ -60,22 +55,15 @@ namespace EPR.Payment.Service.UnitTests.Controllers
             var result = await _controller.InsertPaymentStatus(request);
 
             // Assert
-            result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
         [TestMethod]
-        public async Task UpdatePaymentStatus_ReturnOk()
+        public async Task UpdatePaymentStatus_ReturnsOk_WithValidRequest()
         {
             // Arrange
             var Id = new Guid();
-            var request = new PaymentStatusUpdateRequestDto
-            {
-                GovPayPaymentId = "123",
-                UpdatedByUserId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
-                UpdatedByOrganisationId = "88fb2f51-2f73-4b93-9894-8a39054cf6d2",
-                Reference = "12345",
-                Status = Common.Dtos.Enums.Status.InProgress
-            };
+            var request = _fixture.Build<PaymentStatusUpdateRequestDto>().Create();
 
             //Act
             var result = await _controller.UpdatePaymentStatus(Id, request);

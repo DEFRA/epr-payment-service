@@ -34,9 +34,9 @@ namespace EPR.Payment.Service.Services
             if (paymentStatusInsertRequest == null)
                 throw new ArgumentNullException(nameof(paymentStatusInsertRequest));
 
-            if (string.IsNullOrEmpty(paymentStatusInsertRequest.UserId))
+            if (!paymentStatusInsertRequest.UserId.HasValue)
                 throw new ArgumentException("User ID cannot be null or empty.", nameof(paymentStatusInsertRequest.UserId));
-            if (string.IsNullOrEmpty(paymentStatusInsertRequest.OrganisationId))
+            if (!paymentStatusInsertRequest.OrganisationId.HasValue)
                 throw new ArgumentException("Organisation ID cannot be null or empty.", nameof(paymentStatusInsertRequest.OrganisationId));
             if (string.IsNullOrEmpty(paymentStatusInsertRequest.Reference))
                 throw new ArgumentException("Reference Number cannot be null or empty.", nameof(paymentStatusInsertRequest.Reference));
@@ -46,9 +46,9 @@ namespace EPR.Payment.Service.Services
             if (paymentStatusUpdateRequest == null)
                 throw new ArgumentNullException(nameof(paymentStatusUpdateRequest));
 
-            if (string.IsNullOrEmpty(paymentStatusUpdateRequest.UpdatedByUserId))
+            if (!paymentStatusUpdateRequest.UpdatedByUserId.HasValue)
                 throw new ArgumentException("User ID cannot be null or empty.", nameof(paymentStatusUpdateRequest.UpdatedByUserId));
-            if (string.IsNullOrEmpty(paymentStatusUpdateRequest.UpdatedByOrganisationId))
+            if (!paymentStatusUpdateRequest.UpdatedByOrganisationId.HasValue)
                 throw new ArgumentException("Organisation ID cannot be null or empty.", nameof(paymentStatusUpdateRequest.UpdatedByOrganisationId));
             if (string.IsNullOrEmpty(paymentStatusUpdateRequest.Reference))
                 throw new ArgumentException("Reference Number cannot be null or empty.", nameof(paymentStatusUpdateRequest.Reference));

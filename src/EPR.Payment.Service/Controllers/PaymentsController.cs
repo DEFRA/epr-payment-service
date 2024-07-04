@@ -21,11 +21,11 @@ namespace EPR.Payment.Service.Controllers
 
         [MapToApiVersion(1)]
         [HttpPost]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(Guid), 200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnablePaymentStatusInsert")]
-        public async Task<IActionResult> InsertPaymentStatus([FromBody] PaymentStatusInsertRequestDto paymentStatusInsertRequest)
+        public async Task<ActionResult<Guid>> InsertPaymentStatus([FromBody] PaymentStatusInsertRequestDto paymentStatusInsertRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -35,6 +35,10 @@ namespace EPR.Payment.Service.Controllers
             {
                 var Id = await _paymentsService.InsertPaymentStatusAsync(paymentStatusInsertRequest);
                 return Ok(Id);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -59,9 +63,13 @@ namespace EPR.Payment.Service.Controllers
                 await _paymentsService.UpdatePaymentStatusAsync(id, paymentStatusUpdateRequest);
                 return Ok();
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
             }
         }
     }

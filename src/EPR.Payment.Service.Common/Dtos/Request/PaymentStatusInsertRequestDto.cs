@@ -5,10 +5,10 @@ namespace EPR.Payment.Service.Common.Dtos.Request
     public class PaymentStatusInsertRequestDto
     {
         [Required(ErrorMessage = "User ID is required")]
-        public string? UserId { get; set; }
+        public Guid? UserId { get; set; }
 
         [Required(ErrorMessage = "Organisation ID is required")]
-        public string? OrganisationId { get; set; }
+        public Guid? OrganisationId { get; set; }
 
         [Required(ErrorMessage = "Reference is required")]
         public string? Reference { get; set; }
