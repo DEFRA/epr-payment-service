@@ -1,9 +1,12 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 {
+    [Table("ComplianceShemeRegitrationFees", Schema = "Lookup")]
+    [ExcludeFromCodeCoverage]
     public class ComplianceShemeRegitrationFees : BaseEntity
     {
         [MaxLength(255)]
