@@ -12,7 +12,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string _environmentName = builder.Configuration.GetValue<string>("EnvironmentName") ?? "LOCAL"; ;
+string _environmentName = builder.Configuration.GetValue<string>("EnvironmentName") ?? "LOCAL";
 
 bool IsEnvironmentLocalOrDev =
     _environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)

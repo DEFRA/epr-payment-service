@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
+﻿using EPR.Payment.Service.Common.Constants;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace EPR.Payment.Service.Common.Data.Repositories
@@ -16,7 +17,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories
 
             if (entity == null)
             {
-                throw new ArgumentException($"The payment that is being tried to be recorded is invalid.");
+                throw new ArgumentException(PaymentConstants.InvalidInputToInsertPaymentError);
             }
 
             entity.CreatedDate = DateTime.Now;
@@ -36,7 +37,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories
         {
             if (entity == null)
             {
-                throw new ArgumentException($"The payment that is being tried to be updated is invalid.");
+                throw new ArgumentException(PaymentConstants.InvalidInputToUpdatePaymentError);
             }
 
             entity.UpdatedDate = DateTime.Now;
@@ -51,7 +52,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories
 
             if (entity == null)
             {
-                throw new KeyNotFoundException($"Payment record not found for ID: {id}");
+                throw new KeyNotFoundException($"{PaymentConstants.RecordNotFoundPaymentError}: {id}");
             }
 
             return entity;

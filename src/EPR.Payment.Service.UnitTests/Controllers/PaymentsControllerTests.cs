@@ -89,7 +89,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
         }
 
         [TestMethod]
-        public async Task UpdatePaymentStatus_ValidInput_ShouldReturnOk()
+        public async Task UpdatePaymentStatus_ValidInput_ShouldReturnNoContentResult()
         {
             // Arrange
             var Id = new Guid();
@@ -99,7 +99,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
             var result = await _controller.UpdatePaymentStatus(Id, request);
 
             //Assert
-            result.Should().BeOfType<OkResult>();
+            result.Should().BeOfType<NoContentResult>();
         }
 
         [TestMethod]

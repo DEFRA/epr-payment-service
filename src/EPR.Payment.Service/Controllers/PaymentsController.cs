@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using EPR.Payment.Service.Common.Constants;
 using EPR.Payment.Service.Common.Dtos.Request;
 using EPR.Payment.Service.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -42,13 +43,13 @@ namespace EPR.Payment.Service.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{PaymentConstants.Status500InternalServerError}: {ex.Message}");
             }
         }
 
         [MapToApiVersion(1)]
         [HttpPut("{id}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnablePaymentStatusUpdate")]
@@ -61,7 +62,7 @@ namespace EPR.Payment.Service.Controllers
             try
             {
                 await _paymentsService.UpdatePaymentStatusAsync(id, paymentStatusUpdateRequest);
-                return Ok();
+                return NoContent();
             }
             catch (ArgumentException ex)
             {
@@ -69,7 +70,7 @@ namespace EPR.Payment.Service.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError,  $"{PaymentConstants.Status500InternalServerError}: {ex.Message}");
             }
         }
     }
