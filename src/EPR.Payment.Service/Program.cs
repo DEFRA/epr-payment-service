@@ -1,6 +1,5 @@
 using Asp.Versioning;
 using EPR.Payment.Service.Common.Data;
-using EPR.Payment.Service.Common.Data.Extensions;
 using EPR.Payment.Service.Extension;
 using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;

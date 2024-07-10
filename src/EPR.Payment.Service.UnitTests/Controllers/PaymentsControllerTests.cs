@@ -24,7 +24,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
         }
 
         [TestMethod]
-        public async Task InsertPaymentStatus_ReturnsOkWithGuid_WithValidRequest()
+        public async Task InsertPaymentStatus_ValidInput_ShouldReturnOkWithGuid()
         {
             // Arrange
             var request = _fixture.Build<PaymentStatusInsertRequestDto>().Create();
@@ -43,7 +43,21 @@ namespace EPR.Payment.Service.UnitTests.Controllers
         }
 
         [TestMethod]
-        public async Task InsertPaymentStatus_ServiceThrowsException_ReturnsInternalServerError()
+        public async Task InsertPaymentStatus_InValidInput_ShouldReturnBadRequest()
+        {
+            // Arrange
+            var request = new PaymentStatusInsertRequestDto();
+            _controller!.ModelState.AddModelError("Regulator", "Regulator is required");
+
+            // Act
+            var result = await _controller.InsertPaymentStatus(request);
+
+            // Assert
+            result.Result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [TestMethod]
+        public async Task InsertPaymentStatus_ServiceThrowsException_ShouldReturnInternalServerError()
         {
             // Arrange
             var request = new PaymentStatusInsertRequestDto();
@@ -59,7 +73,23 @@ namespace EPR.Payment.Service.UnitTests.Controllers
         }
 
         [TestMethod]
-        public async Task UpdatePaymentStatus_ReturnsOk_WithValidRequest()
+        public async Task InsertPaymentStatus_ArgumentExceptionThrow_ShouldReturnBadRequest()
+        {
+            // Arrange
+            var request = new PaymentStatusInsertRequestDto();
+
+            _paymentsServiceMock.Setup(service => service.InsertPaymentStatusAsync(request))
+                               .ThrowsAsync(new ArgumentException("Test Exception"));
+
+            // Act
+            var result = await _controller.InsertPaymentStatus(request);
+
+            // Assert
+            result.Result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [TestMethod]
+        public async Task UpdatePaymentStatus_ValidInput_ShouldReturnOk()
         {
             // Arrange
             var Id = new Guid();
@@ -72,17 +102,50 @@ namespace EPR.Payment.Service.UnitTests.Controllers
             result.Should().BeOfType<OkResult>();
         }
 
-        public async Task UpdatePaymentStatus_ServiceThrowsException_ReturnsInternalServerError()
+        [TestMethod]
+        public async Task UpdatePaymentStatus_InvalidInput_ShouldReturnBadRequest()
         {
             // Arrange
-            var Id = new Guid();
+            var id = Guid.NewGuid();
+            var request = new PaymentStatusUpdateRequestDto();
+            _controller!.ModelState.AddModelError("Regulator", "Regulator is required");
+
+            // Act
+            var result = await _controller.UpdatePaymentStatus(id, request);
+
+            // Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [TestMethod]
+        public async Task UpdatePaymentStatus_ArgumentExceptionThrow_ShouldReturnBadRequest()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
             var request = new PaymentStatusUpdateRequestDto();
 
-            _paymentsServiceMock.Setup(service => service.UpdatePaymentStatusAsync(Id, request))
+            _paymentsServiceMock.Setup(service => service.UpdatePaymentStatusAsync(id, request))
+                               .ThrowsAsync(new ArgumentException("Test Exception"));
+
+            // Act
+            var result = await _controller.UpdatePaymentStatus(id, request);
+
+            // Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [TestMethod]
+        public async Task UpdatePaymentStatus_ServiceThrowsException_ShouldReturnInternalServerError()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+            var request = new PaymentStatusUpdateRequestDto();
+
+            _paymentsServiceMock.Setup(service => service.UpdatePaymentStatusAsync(id, request))
                                .ThrowsAsync(new Exception("Test Exception"));
 
             // Act
-            var result = await _controller.UpdatePaymentStatus(Id, request);
+            var result = await _controller.UpdatePaymentStatus(id, request);
 
             // Assert
             result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);

@@ -16,7 +16,7 @@ namespace EPR.Payment.Service.Controllers
 
         public PaymentsController(IPaymentsService paymentsService)
         {
-            _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
+            _paymentsService = paymentsService;
         }
 
         [MapToApiVersion(1)]
@@ -69,7 +69,7 @@ namespace EPR.Payment.Service.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
     }

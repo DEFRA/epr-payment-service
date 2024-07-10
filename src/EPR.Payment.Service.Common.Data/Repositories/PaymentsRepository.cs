@@ -1,5 +1,4 @@
-﻿using EPR.Payment.Service.Common.Data.Exceptions;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
+﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace EPR.Payment.Service.Common.Data.Repositories
@@ -12,8 +11,14 @@ namespace EPR.Payment.Service.Common.Data.Repositories
             _dataContext = dataContext;
         }
 
-        public async Task<Guid> InsertPaymentStatusAsync(DataModels.Payment entity)
+        public async Task<Guid> InsertPaymentStatusAsync(DataModels.Payment? entity)
         {
+
+            if (entity == null)
+            {
+                throw new ArgumentException($"The payment that is being tried to be recorded is invalid.");
+            }
+
             entity.CreatedDate = DateTime.Now;
             entity.UpdatedDate = entity.CreatedDate;
             entity.UpdatedByUserId = entity.UserId;
@@ -27,8 +32,13 @@ namespace EPR.Payment.Service.Common.Data.Repositories
             return entity.Id;
         }
 
-        public async Task UpdatePaymentStatusAsync(DataModels.Payment entity)
+        public async Task UpdatePaymentStatusAsync(DataModels.Payment? entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentException($"The payment that is being tried to be updated is invalid.");
+            }
+
             entity.UpdatedDate = DateTime.Now;
             entity.GovPayStatus = Enum.GetName(typeof(Enums.Status), entity.InternalStatusId);
             _dataContext.Payment.Update(entity);
@@ -41,7 +51,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories
 
             if (entity == null)
             {
-                throw new NotFoundException($"Payment record not found for Payment ID: {id}");
+                throw new KeyNotFoundException($"Payment record not found for ID: {id}");
             }
 
             return entity;

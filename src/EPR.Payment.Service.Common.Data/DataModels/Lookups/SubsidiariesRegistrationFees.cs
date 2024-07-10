@@ -5,22 +5,24 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 {
-    [Table("ComplianceShemeRegitrationFees", Schema = "Lookup")]
+    [Table("SubsidiariesRegistrationFees", Schema = "Lookup")]
     [ExcludeFromCodeCoverage]
-    public class ComplianceShemeRegitrationFees : BaseEntity
+    public class SubsidiariesRegistrationFees : BaseEntity
     {
         [MaxLength(255)]
-        public string FeesType { get; set; } = null!;
+        public int MinNumberOfSubsidiaries { get; set; }
+
+        [MaxLength(255)]
+        public int MaxNumberOfSubsidiaries { get; set; }
 
         [MaxLength(255)]
         public string Description { get; set; } = null!;
 
         [MaxLength(255)]
-        public string Country { get; set; } = null!;
+        public string Regulator { get; set; } = null!;
 
         [Column(TypeName = "decimal(19,4)")]
         public decimal Amount { get; set; }
-
         public DateTime EffectiveFrom { get; set; }
         public DateTime EffectiveTo { get; set; }
     }

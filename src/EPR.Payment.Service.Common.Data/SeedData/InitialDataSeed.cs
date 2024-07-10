@@ -22,56 +22,56 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                 new PaymentStatus { Id = Enums.Status.UserCancelled, Status = "UserCancelled" }
                 );
 
-            modelBuilder.Entity<ProducerRegitrationFees>().HasData(
-                new ProducerRegitrationFees { Id = 1, ProducerType = "L", Description = "Large producer",  Country = "GB-ENG", Amount = 2620, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ProducerRegitrationFees { Id = 2, ProducerType = "L", Description = "Large producer", Country = "GB-SCT", Amount = 2620, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ProducerRegitrationFees { Id = 3, ProducerType = "L", Description = "Large producer", Country = "GB-WLS", Amount = 2620, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ProducerRegitrationFees { Id = 4, ProducerType = "L", Description = "Large producer", Country = "GB-NIR", Amount = 2620, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ProducerRegitrationFees { Id = 5, ProducerType = "S", Description = "Small producer", Country = "GB-ENG", Amount = 1216, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ProducerRegitrationFees { Id = 6, ProducerType = "S", Description = "Small producer", Country = "GB-SCT", Amount = 1216, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ProducerRegitrationFees { Id = 7, ProducerType = "S", Description = "Small producer", Country = "GB-WLS", Amount = 1216, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ProducerRegitrationFees { Id = 8, ProducerType = "S", Description = "Small producer", Country = "GB-NIR", Amount = 1216, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
+            modelBuilder.Entity<ProducerRegistrationFees>().HasData(
+                new ProducerRegistrationFees { Id = 1, ProducerType = "L", Description = "Large producer",  Regulator = "GB-ENG", Amount = 2620, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ProducerRegistrationFees { Id = 2, ProducerType = "L", Description = "Large producer", Regulator = "GB-SCT", Amount = 2620, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ProducerRegistrationFees { Id = 3, ProducerType = "L", Description = "Large producer", Regulator = "GB-WLS", Amount = 2620, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ProducerRegistrationFees { Id = 4, ProducerType = "L", Description = "Large producer", Regulator = "GB-NIR", Amount = 2620, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ProducerRegistrationFees { Id = 5, ProducerType = "S", Description = "Small producer", Regulator = "GB-ENG", Amount = 1216, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ProducerRegistrationFees { Id = 6, ProducerType = "S", Description = "Small producer", Regulator = "GB-SCT", Amount = 1216, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ProducerRegistrationFees { Id = 7, ProducerType = "S", Description = "Small producer", Regulator = "GB-WLS", Amount = 1216, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ProducerRegistrationFees { Id = 8, ProducerType = "S", Description = "Small producer", Regulator = "GB-NIR", Amount = 1216, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
                 );
 
-            modelBuilder.Entity<Subsidiaries>().HasData(
-                new Subsidiaries { Id = 1, MinSub = 1, MaxSub = 20, Description = "Up to 20", Country = "GB-ENG", Amount = 558, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new Subsidiaries { Id = 2, MinSub = 1, MaxSub = 20, Description = "Up to 20", Country = "GB-SCT", Amount = 558, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new Subsidiaries { Id = 3, MinSub = 1, MaxSub = 20, Description = "Up to 20", Country = "GB-WLS", Amount = 558, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new Subsidiaries { Id = 4, MinSub = 1, MaxSub = 20, Description = "Up to 20", Country = "GB-NIR", Amount = 558, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new Subsidiaries { Id = 5, MinSub = 21, MaxSub = 100, Description = "More then 20", Country = "GB-ENG", Amount = 140, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new Subsidiaries { Id = 6, MinSub = 21, MaxSub = 100, Description = "More then 20", Country = "GB-SCT", Amount = 140, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new Subsidiaries { Id = 7, MinSub = 21, MaxSub = 100, Description = "More then 20", Country = "GB-WLS", Amount = 140, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new Subsidiaries { Id = 8, MinSub = 21, MaxSub = 100, Description = "More then 20", Country = "GB-NIR", Amount = 140, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
+            modelBuilder.Entity<SubsidiariesRegistrationFees>().HasData(
+                new SubsidiariesRegistrationFees { Id = 1, MinNumberOfSubsidiaries = 1, MaxNumberOfSubsidiaries = 20, Description = "Up to 20", Regulator = "GB-ENG", Amount = 558, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new SubsidiariesRegistrationFees { Id = 2, MinNumberOfSubsidiaries = 1, MaxNumberOfSubsidiaries = 20, Description = "Up to 20", Regulator = "GB-SCT", Amount = 558, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new SubsidiariesRegistrationFees { Id = 3, MinNumberOfSubsidiaries = 1, MaxNumberOfSubsidiaries = 20, Description = "Up to 20", Regulator = "GB-WLS", Amount = 558, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new SubsidiariesRegistrationFees { Id = 4, MinNumberOfSubsidiaries = 1, MaxNumberOfSubsidiaries = 20, Description = "Up to 20", Regulator = "GB-NIR", Amount = 558, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new SubsidiariesRegistrationFees { Id = 5, MinNumberOfSubsidiaries = 21, MaxNumberOfSubsidiaries = 100, Description = "More then 20", Regulator = "GB-ENG", Amount = 140, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new SubsidiariesRegistrationFees { Id = 6, MinNumberOfSubsidiaries = 21, MaxNumberOfSubsidiaries = 100, Description = "More then 20", Regulator = "GB-SCT", Amount = 140, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new SubsidiariesRegistrationFees { Id = 7, MinNumberOfSubsidiaries = 21, MaxNumberOfSubsidiaries = 100, Description = "More then 20", Regulator = "GB-WLS", Amount = 140, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new SubsidiariesRegistrationFees { Id = 8, MinNumberOfSubsidiaries = 21, MaxNumberOfSubsidiaries = 100, Description = "More then 20", Regulator = "GB-NIR", Amount = 140, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
                 );
 
-            modelBuilder.Entity<AdditionalFees>().HasData(
-                new AdditionalFees { Id = 1, FeesSubType = "Resub", Description = "Resubmission", Country = "GB-ENG", Amount = 714, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new AdditionalFees { Id = 2, FeesSubType = "Resub", Description = "Resubmission", Country = "GB-SCT", Amount = 714, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new AdditionalFees { Id = 3, FeesSubType = "Resub", Description = "Resubmission", Country = "GB-WLS", Amount = 714, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new AdditionalFees { Id = 4, FeesSubType = "Resub", Description = "Resubmission", Country = "GB-NIR", Amount = 714, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new AdditionalFees { Id = 5, FeesSubType = "Late", Description = "Late", Country = "GB-ENG", Amount = 332, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new AdditionalFees { Id = 6, FeesSubType = "Late", Description = "Late", Country = "GB-SCT", Amount = 332, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new AdditionalFees { Id = 7, FeesSubType = "Late", Description = "Late", Country = "GB-WLS", Amount = 332, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new AdditionalFees { Id = 8, FeesSubType = "Late", Description = "Late", Country = "GB-NIR", Amount = 332, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
+            modelBuilder.Entity<AdditionalRegistrationFees>().HasData(
+                new AdditionalRegistrationFees { Id = 1, FeesSubType = "Resub", Description = "Resubmission", Regulator = "GB-ENG", Amount = 714, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new AdditionalRegistrationFees { Id = 2, FeesSubType = "Resub", Description = "Resubmission", Regulator = "GB-SCT", Amount = 714, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new AdditionalRegistrationFees { Id = 3, FeesSubType = "Resub", Description = "Resubmission", Regulator = "GB-WLS", Amount = 714, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new AdditionalRegistrationFees { Id = 4, FeesSubType = "Resub", Description = "Resubmission", Regulator = "GB-NIR", Amount = 714, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new AdditionalRegistrationFees { Id = 5, FeesSubType = "Late", Description = "Late", Regulator = "GB-ENG", Amount = 332, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new AdditionalRegistrationFees { Id = 6, FeesSubType = "Late", Description = "Late", Regulator = "GB-SCT", Amount = 332, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new AdditionalRegistrationFees { Id = 7, FeesSubType = "Late", Description = "Late", Regulator = "GB-WLS", Amount = 332, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new AdditionalRegistrationFees { Id = 8, FeesSubType = "Late", Description = "Late", Regulator = "GB-NIR", Amount = 332, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
                 );
 
-            modelBuilder.Entity<ComplianceShemeRegitrationFees>().HasData(
-                new ComplianceShemeRegitrationFees { Id = 1, FeesType = "Reg", Description = "Registration", Country = "GB-ENG", Amount = 13804, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 2, FeesType = "Reg", Description = "Registration", Country = "GB-SCT", Amount = 13804, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 3, FeesType = "Reg", Description = "Registration", Country = "GB-WLS", Amount = 13804, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 4, FeesType = "Reg", Description = "Registration", Country = "GB-NIR", Amount = 13804, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 5, FeesType = "L", Description = "Large Producer", Country = "GB-ENG", Amount = 1658, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 6, FeesType = "L", Description = "Large Producer", Country = "GB-SCT", Amount = 1658, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 7, FeesType = "L", Description = "Large Producer", Country = "GB-WLS", Amount = 1658, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 8, FeesType = "L", Description = "Large Producer", Country = "GB-NIR", Amount = 1658, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 9, FeesType = "S", Description = "Small Producer", Country = "GB-ENG", Amount = 631, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 10, FeesType = "S", Description = "Small Producer", Country = "GB-SCT", Amount = 631, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 11, FeesType = "S", Description = "Small Producer", Country = "GB-WLS", Amount = 631, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 12, FeesType = "S", Description = "Small Producer", Country = "GB-NIR", Amount = 631, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 13, FeesType = "On", Description = "Online Market", Country = "GB-ENG", Amount = 2579, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 14, FeesType = "On", Description = "Online Market", Country = "GB-SCT", Amount = 2579, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 15, FeesType = "On", Description = "Online Market", Country = "GB-WLS", Amount = 2579, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new ComplianceShemeRegitrationFees { Id = 16, FeesType = "On", Description = "Online Market", Country = "GB-NIR", Amount = 2579, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
+            modelBuilder.Entity<ComplianceSchemeRegistrationFees>().HasData(
+                new ComplianceSchemeRegistrationFees { Id = 1, FeesType = "Reg", Description = "Registration", Regulator = "GB-ENG", Amount = 13804, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 2, FeesType = "Reg", Description = "Registration", Regulator = "GB-SCT", Amount = 13804, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 3, FeesType = "Reg", Description = "Registration", Regulator = "GB-WLS", Amount = 13804, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 4, FeesType = "Reg", Description = "Registration", Regulator = "GB-NIR", Amount = 13804, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 5, FeesType = "L", Description = "Large Producer", Regulator = "GB-ENG", Amount = 1658, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 6, FeesType = "L", Description = "Large Producer", Regulator = "GB-SCT", Amount = 1658, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 7, FeesType = "L", Description = "Large Producer", Regulator = "GB-WLS", Amount = 1658, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 8, FeesType = "L", Description = "Large Producer", Regulator = "GB-NIR", Amount = 1658, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 9, FeesType = "S", Description = "Small Producer", Regulator = "GB-ENG", Amount = 631, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 10, FeesType = "S", Description = "Small Producer", Regulator = "GB-SCT", Amount = 631, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 11, FeesType = "S", Description = "Small Producer", Regulator = "GB-WLS", Amount = 631, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 12, FeesType = "S", Description = "Small Producer", Regulator = "GB-NIR", Amount = 631, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 13, FeesType = "On", Description = "Online Market", Regulator = "GB-ENG", Amount = 2579, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 14, FeesType = "On", Description = "Online Market", Regulator = "GB-SCT", Amount = 2579, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 15, FeesType = "On", Description = "Online Market", Regulator = "GB-WLS", Amount = 2579, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new ComplianceSchemeRegistrationFees { Id = 16, FeesType = "On", Description = "Online Market", Regulator = "GB-NIR", Amount = 2579, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
                 );
 
             modelBuilder.Entity<InternalError>().HasData(

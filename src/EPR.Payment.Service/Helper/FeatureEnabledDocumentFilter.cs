@@ -24,7 +24,7 @@ namespace EPR.Payment.Service.Helper
             {
                 foreach (var operation in path.Value.Operations)
                 {
-                    var apiDescription = context.ApiDescriptions.FirstOrDefault(desc => desc.RelativePath.Equals(path.Key.Trim('/'), System.StringComparison.InvariantCultureIgnoreCase));
+                    var apiDescription = context.ApiDescriptions.FirstOrDefault(desc => !string.IsNullOrEmpty (desc.RelativePath)  && desc.RelativePath.Equals(path.Key.Trim('/'), System.StringComparison.InvariantCultureIgnoreCase));
 
                     if (apiDescription != null)
                     {

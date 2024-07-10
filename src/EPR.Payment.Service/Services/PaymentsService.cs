@@ -11,7 +11,7 @@ namespace EPR.Payment.Service.Services
         private IMapper _mapper;
         public PaymentsService(IMapper mapper, IPaymentsRepository paymentRepository)
         {
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _mapper = mapper;
             _paymentRepository = paymentRepository;
         }
         public async Task<Guid> InsertPaymentStatusAsync(PaymentStatusInsertRequestDto paymentStatusInsertRequest)
@@ -31,9 +31,6 @@ namespace EPR.Payment.Service.Services
 
         private static void ValidatePaymentStatusInsertRequest(PaymentStatusInsertRequestDto paymentStatusInsertRequest)
         {
-            if (paymentStatusInsertRequest == null)
-                throw new ArgumentNullException(nameof(paymentStatusInsertRequest));
-
             if (!paymentStatusInsertRequest.UserId.HasValue)
                 throw new ArgumentException("User ID cannot be null or empty.", nameof(paymentStatusInsertRequest.UserId));
             if (!paymentStatusInsertRequest.OrganisationId.HasValue)
@@ -43,9 +40,6 @@ namespace EPR.Payment.Service.Services
         }
         private static void ValidatePaymentStatusUpdateRequest(PaymentStatusUpdateRequestDto paymentStatusUpdateRequest)
         {
-            if (paymentStatusUpdateRequest == null)
-                throw new ArgumentNullException(nameof(paymentStatusUpdateRequest));
-
             if (!paymentStatusUpdateRequest.UpdatedByUserId.HasValue)
                 throw new ArgumentException("User ID cannot be null or empty.", nameof(paymentStatusUpdateRequest.UpdatedByUserId));
             if (!paymentStatusUpdateRequest.UpdatedByOrganisationId.HasValue)

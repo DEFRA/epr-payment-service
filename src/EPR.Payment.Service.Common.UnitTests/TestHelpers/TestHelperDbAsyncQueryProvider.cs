@@ -24,7 +24,7 @@ namespace EPR.Payment.Service.Common.UnitTests.TestHelpers
             return new TestHelperDbAsyncEnumerable<TElement>(expression);
         }
 
-        public object Execute(Expression expression)
+        public object? Execute(Expression expression)
         {
             return _inner.Execute(expression);
         }
@@ -34,7 +34,7 @@ namespace EPR.Payment.Service.Common.UnitTests.TestHelpers
             return _inner.Execute<TResult>(expression);
         }
 
-        public Task<object> ExecuteAsync(Expression expression, CancellationToken cancellationToken)
+        public Task<object?> ExecuteAsync(Expression expression, CancellationToken cancellationToken)
         {
             return Task.FromResult(Execute(expression));
         }

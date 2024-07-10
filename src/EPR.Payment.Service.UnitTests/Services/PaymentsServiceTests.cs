@@ -3,6 +3,7 @@ using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
 using EPR.Payment.Service.Common.Data.Profiles;
 using EPR.Payment.Service.Common.Dtos.Request;
+using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services;
 using EPR.Payment.Service.Services.Interfaces;
 using FluentAssertions;
@@ -34,7 +35,7 @@ namespace EPR.Payment.Service.UnitTests.Services
         }
 
         [TestMethod]
-        public async Task InsertPaymentStatus_ReturnsWithGuid_WithValidRequest()
+        public async Task InsertPaymentStatus_ValidInput_ShouldReturnGuid()
         {
             // Arrange
             var request = _fixture.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, new Guid()).With(x => x.OrganisationId, new Guid()).Create();
@@ -54,7 +55,7 @@ namespace EPR.Payment.Service.UnitTests.Services
         }
 
         [TestMethod]
-        public async Task InsertPaymentStatus_ReturnsArgumentException_WithNullUserId()
+        public async Task InsertPaymentStatus_NullUserId_ShouldThrowArgumentException()
         {
             // Act & Assert
             var request = _fixture.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, (Guid?)null).Create();
@@ -64,7 +65,7 @@ namespace EPR.Payment.Service.UnitTests.Services
         }
 
         [TestMethod]
-        public async Task InsertPaymentStatus_ReturnsArgumentException_WithNullOrganisationId()
+        public async Task InsertPaymentStatus_NullOrganisationId_ShoulThrowArgumentException()
         {
             // Act & Assert
             var request = _fixture.Build<PaymentStatusInsertRequestDto>().With(d => d.OrganisationId, (Guid?)null).Create();
@@ -74,7 +75,17 @@ namespace EPR.Payment.Service.UnitTests.Services
         }
 
         [TestMethod]
-        public async Task UpdatePaymentStatus_WithValidRequest()
+        public async Task InsertPaymentStatus_NullReference_ShoulThrowArgumentException()
+        {
+            // Act & Assert
+            var request = _fixture.Build<PaymentStatusInsertRequestDto>().With(d => d.Reference, (string?)null).Create();
+
+            await _service.Invoking(async x => await x.InsertPaymentStatusAsync(request))
+                .Should().ThrowAsync<ArgumentException>();
+        }
+
+        [TestMethod]
+        public async Task UpdatePaymentStatus_ValidInput()
         {
             // Arrange
             var Id = new Guid();
@@ -96,7 +107,7 @@ namespace EPR.Payment.Service.UnitTests.Services
         }
 
         [TestMethod]
-        public async Task UpdatePaymentStatus_ThrowArgumentException_WithInValidErrorCode()
+        public async Task UpdatePaymentStatus_InValidErrorCode_ShouldThrowArgumentException()
         {
             // Arrange
             var Id = new Guid();
@@ -108,7 +119,7 @@ namespace EPR.Payment.Service.UnitTests.Services
         }
 
         [TestMethod]
-        public async Task UpdatePaymentStatus_ReturnsArgumentException_WithNullUserId()
+        public async Task UpdatePaymentStatus_NullUserId_ShouldThrowArgumentException()
         {
             // Act & Assert
             var id = new Guid();
@@ -119,7 +130,7 @@ namespace EPR.Payment.Service.UnitTests.Services
         }
 
         [TestMethod]
-        public async Task UpdatePaymentStatus_ReturnsArgumentException_WithNullOrganisationId()
+        public async Task UpdatePaymentStatus_NullOrganisationId_ShouldThrowArgumentException()
         {
             // Act & Assert
             var id = new Guid();
@@ -127,6 +138,45 @@ namespace EPR.Payment.Service.UnitTests.Services
 
             await _service.Invoking(async x => await x.UpdatePaymentStatusAsync(id, request))
                 .Should().ThrowAsync<ArgumentException>();
+        }
+
+        [TestMethod]
+        public async Task UpdatePaymentStatus_NullReference_ShouldThrowArgumentException()
+        {
+            // Act & Assert
+            var id = new Guid();
+            var request = _fixture.Build<PaymentStatusUpdateRequestDto>().With(d => d.Reference, (string?)null).Create();
+
+            await _service.Invoking(async x => await x.UpdatePaymentStatusAsync(id, request))
+                .Should().ThrowAsync<ArgumentException>();
+        }
+
+        [TestMethod]
+        public async Task GetPaymentStatusCount_RepositoryReturnsAResult_ShouldReturnNotNullInteger()
+        {
+            //Arrange
+            int PaymentStatusCountResult = 3;
+            _paymentsRepositoryMock.Setup(i => i.GetPaymentStatusCount()).ReturnsAsync(PaymentStatusCountResult);
+
+            //Act
+            var result = await _service.GetPaymentStatusCount();
+
+            //Assert
+            result.Should().Be(PaymentStatusCountResult);
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetPaymentStatusCount_RepositoryReturnsNoResult_ShouldReturnsNoRecords()
+        {
+            //Arrange
+            _paymentsRepositoryMock.Setup(i => i.GetPaymentStatusCount()).ReturnsAsync(0);
+
+            //Act
+            var result = await _service.GetPaymentStatusCount();
+
+            //Assert
+            result.Should().Be(0);
         }
     }
 }

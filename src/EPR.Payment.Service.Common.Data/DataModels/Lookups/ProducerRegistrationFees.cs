@@ -5,18 +5,18 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 {
-    [Table("AdditionalFees", Schema = "Lookup")]
+    [Table("ProducerRegistrationFees", Schema = "Lookup")]
     [ExcludeFromCodeCoverage]
-    public class AdditionalFees : BaseEntity
+    public class ProducerRegistrationFees : BaseEntity
     {
         [MaxLength(255)]
-        public string FeesSubType { get; set; } = null!;
+        public string ProducerType { get; set; } = null!;
 
         [MaxLength(255)]
         public string Description { get; set; } = null!;
 
         [MaxLength(255)]
-        public string Country { get; set; } = null!;
+        public string Regulator { get; set; } = null!;
 
         [Column(TypeName = "decimal(19,4)")]
         public decimal Amount { get; set; }

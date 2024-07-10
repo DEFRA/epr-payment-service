@@ -11,7 +11,7 @@ namespace EPR.Payment.Service.HealthCheck
 
         public PaymentStatusHealthCheck(IPaymentsService paymentsService)
         {
-            _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
+            _paymentsService = paymentsService;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

@@ -29,7 +29,7 @@ namespace EPR.Payment.Service.Common.Data.Extensions
             if (type == typeof(bool))
                 return false;
 
-            object defaultValue = type.IsValueType ? Activator.CreateInstance(type) : null;
+            object? defaultValue = type.IsValueType ? Activator.CreateInstance(type) : null;
             return value.Equals(defaultValue);
         }
     }

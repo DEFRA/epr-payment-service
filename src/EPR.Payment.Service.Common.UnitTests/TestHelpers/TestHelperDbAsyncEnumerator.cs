@@ -28,7 +28,7 @@ namespace EPR.Payment.Service.Common.UnitTests.TestHelpers
             get { return _inner.Current; }
         }
 
-        object IDbAsyncEnumerator.Current
+        object? IDbAsyncEnumerator.Current
         {
             get { return Current; }
         }

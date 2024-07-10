@@ -49,8 +49,4 @@
     <ProjectReference Include="..\EPR.Payment.Service.Common.Data\EPR.Payment.Service.Common.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mocks\" />
-  </ItemGroup>
-
 </Project>
