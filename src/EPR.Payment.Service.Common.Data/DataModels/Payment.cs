@@ -29,6 +29,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels
         public string? GovPayStatus { get; set; }
 
         [ForeignKey("InternalError")]
+        [MaxLength(10)]
         public string? InternalErrorCode { get; set; }
 
         [MaxLength(255)]

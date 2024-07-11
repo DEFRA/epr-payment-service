@@ -23,7 +23,8 @@ namespace EPR.Payment.Service.UnitTests.Services.HealthChecks
         public async Task PaymentStatusHealthCheck_Present_ReturnsHealthy()
         {
             //Arrange
-            _paymentsServiceMock.Setup(x => x.GetPaymentStatusCount()).ReturnsAsync(6);
+            var cancellationToken = new CancellationToken();
+            _paymentsServiceMock.Setup(x => x.GetPaymentStatusCountAsync(cancellationToken)).ReturnsAsync(6);
 
             //Act
             var result = await _paymentStatusHealthCheck.CheckHealthAsync(new HealthCheckContext(), new CancellationToken());
@@ -36,7 +37,8 @@ namespace EPR.Payment.Service.UnitTests.Services.HealthChecks
         public async Task PaymentStatusHealthCheck_Absent_ReturnsHealthy()
         {
             //Arrange
-            _paymentsServiceMock.Setup(x => x.GetPaymentStatusCount()).ReturnsAsync(0);
+            var cancellationToken = new CancellationToken();
+            _paymentsServiceMock.Setup(x => x.GetPaymentStatusCountAsync(cancellationToken)).ReturnsAsync(0);
 
             //Act
             var result = await _paymentStatusHealthCheck.CheckHealthAsync(new HealthCheckContext(), new CancellationToken());

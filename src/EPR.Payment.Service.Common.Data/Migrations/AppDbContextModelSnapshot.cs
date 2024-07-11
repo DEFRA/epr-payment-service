@@ -343,7 +343,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.InternalError", b =>
                 {
                     b.Property<string>("InternalErrorCode")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("ErrorMessage")
                         .HasMaxLength(255)
@@ -700,7 +701,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("InternalErrorCode")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("InternalStatusId")
                         .HasColumnType("int");

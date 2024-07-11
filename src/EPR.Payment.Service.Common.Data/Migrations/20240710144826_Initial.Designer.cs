@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240708082437_SpecifyLookupTables")]
-    partial class SpecifyLookupTables
+    [Migration("20240710144826_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.AdditionalFees", b =>
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.AdditionalRegistrationFees", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -35,11 +35,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(19,4)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -57,94 +52,99 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("Regulator")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("AdditionalFees", "Lookup");
+                    b.ToTable("AdditionalRegistrationFees", "Lookup");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             Amount = 714m,
-                            Country = "GB-ENG",
                             Description = "Resubmission",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesSubType = "Resub"
+                            FeesSubType = "Resub",
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
                             Id = 2,
                             Amount = 714m,
-                            Country = "GB-SCT",
                             Description = "Resubmission",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesSubType = "Resub"
+                            FeesSubType = "Resub",
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
                             Id = 3,
                             Amount = 714m,
-                            Country = "GB-WLS",
                             Description = "Resubmission",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesSubType = "Resub"
+                            FeesSubType = "Resub",
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
                             Id = 4,
                             Amount = 714m,
-                            Country = "GB-NIR",
                             Description = "Resubmission",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesSubType = "Resub"
+                            FeesSubType = "Resub",
+                            Regulator = "GB-NIR"
                         },
                         new
                         {
                             Id = 5,
                             Amount = 332m,
-                            Country = "GB-ENG",
                             Description = "Late",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesSubType = "Late"
+                            FeesSubType = "Late",
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
                             Id = 6,
                             Amount = 332m,
-                            Country = "GB-SCT",
                             Description = "Late",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesSubType = "Late"
+                            FeesSubType = "Late",
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
                             Id = 7,
                             Amount = 332m,
-                            Country = "GB-WLS",
                             Description = "Late",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesSubType = "Late"
+                            FeesSubType = "Late",
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
                             Id = 8,
                             Amount = 332m,
-                            Country = "GB-NIR",
                             Description = "Late",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesSubType = "Late"
+                            FeesSubType = "Late",
+                            Regulator = "GB-NIR"
                         });
                 });
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.ComplianceShemeRegitrationFees", b =>
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.ComplianceSchemeRegistrationFees", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -154,11 +154,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(19,4)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -176,177 +171,183 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("Regulator")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("ComplianceShemeRegitrationFees", "Lookup");
+                    b.ToTable("ComplianceSchemeRegistrationFees", "Lookup");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             Amount = 13804m,
-                            Country = "GB-ENG",
                             Description = "Registration",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "Reg"
+                            FeesType = "Reg",
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
                             Id = 2,
                             Amount = 13804m,
-                            Country = "GB-SCT",
                             Description = "Registration",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "Reg"
+                            FeesType = "Reg",
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
                             Id = 3,
                             Amount = 13804m,
-                            Country = "GB-WLS",
                             Description = "Registration",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "Reg"
+                            FeesType = "Reg",
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
                             Id = 4,
                             Amount = 13804m,
-                            Country = "GB-NIR",
                             Description = "Registration",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "Reg"
+                            FeesType = "Reg",
+                            Regulator = "GB-NIR"
                         },
                         new
                         {
                             Id = 5,
                             Amount = 1658m,
-                            Country = "GB-ENG",
                             Description = "Large Producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "L"
+                            FeesType = "L",
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
                             Id = 6,
                             Amount = 1658m,
-                            Country = "GB-SCT",
                             Description = "Large Producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "L"
+                            FeesType = "L",
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
                             Id = 7,
                             Amount = 1658m,
-                            Country = "GB-WLS",
                             Description = "Large Producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "L"
+                            FeesType = "L",
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
                             Id = 8,
                             Amount = 1658m,
-                            Country = "GB-NIR",
                             Description = "Large Producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "L"
+                            FeesType = "L",
+                            Regulator = "GB-NIR"
                         },
                         new
                         {
                             Id = 9,
                             Amount = 631m,
-                            Country = "GB-ENG",
                             Description = "Small Producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "S"
+                            FeesType = "S",
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
                             Id = 10,
                             Amount = 631m,
-                            Country = "GB-SCT",
                             Description = "Small Producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "S"
+                            FeesType = "S",
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
                             Id = 11,
                             Amount = 631m,
-                            Country = "GB-WLS",
                             Description = "Small Producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "S"
+                            FeesType = "S",
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
                             Id = 12,
                             Amount = 631m,
-                            Country = "GB-NIR",
                             Description = "Small Producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "S"
+                            FeesType = "S",
+                            Regulator = "GB-NIR"
                         },
                         new
                         {
                             Id = 13,
                             Amount = 2579m,
-                            Country = "GB-ENG",
                             Description = "Online Market",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "On"
+                            FeesType = "On",
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
                             Id = 14,
                             Amount = 2579m,
-                            Country = "GB-SCT",
                             Description = "Online Market",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "On"
+                            FeesType = "On",
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
                             Id = 15,
                             Amount = 2579m,
-                            Country = "GB-WLS",
                             Description = "Online Market",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "On"
+                            FeesType = "On",
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
                             Id = 16,
                             Amount = 2579m,
-                            Country = "GB-NIR",
                             Description = "Online Market",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FeesType = "On"
+                            FeesType = "On",
+                            Regulator = "GB-NIR"
                         });
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.InternalError", b =>
                 {
                     b.Property<string>("InternalErrorCode")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("ErrorMessage")
                         .HasMaxLength(255)
@@ -433,7 +434,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.ProducerRegitrationFees", b =>
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.ProducerRegistrationFees", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -443,11 +444,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(19,4)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -465,94 +461,99 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("Regulator")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("ProducerRegitrationFees", "Lookup");
+                    b.ToTable("ProducerRegistrationFees", "Lookup");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             Amount = 2620m,
-                            Country = "GB-ENG",
                             Description = "Large producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProducerType = "L"
+                            ProducerType = "L",
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
                             Id = 2,
                             Amount = 2620m,
-                            Country = "GB-SCT",
                             Description = "Large producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProducerType = "L"
+                            ProducerType = "L",
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
                             Id = 3,
                             Amount = 2620m,
-                            Country = "GB-WLS",
                             Description = "Large producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProducerType = "L"
+                            ProducerType = "L",
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
                             Id = 4,
                             Amount = 2620m,
-                            Country = "GB-NIR",
                             Description = "Large producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProducerType = "L"
+                            ProducerType = "L",
+                            Regulator = "GB-NIR"
                         },
                         new
                         {
                             Id = 5,
                             Amount = 1216m,
-                            Country = "GB-ENG",
                             Description = "Small producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProducerType = "S"
+                            ProducerType = "S",
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
                             Id = 6,
                             Amount = 1216m,
-                            Country = "GB-SCT",
                             Description = "Small producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProducerType = "S"
+                            ProducerType = "S",
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
                             Id = 7,
                             Amount = 1216m,
-                            Country = "GB-WLS",
                             Description = "Small producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProducerType = "S"
+                            ProducerType = "S",
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
                             Id = 8,
                             Amount = 1216m,
-                            Country = "GB-NIR",
                             Description = "Small producer",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ProducerType = "S"
+                            ProducerType = "S",
+                            Regulator = "GB-NIR"
                         });
                 });
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.Subsidiaries", b =>
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.SubsidiariesRegistrationFees", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -562,11 +563,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(19,4)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -579,106 +575,111 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<DateTime>("EffectiveTo")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MaxSub")
+                    b.Property<int>("MaxNumberOfSubsidiaries")
                         .HasMaxLength(255)
                         .HasColumnType("int");
 
-                    b.Property<int>("MinSub")
+                    b.Property<int>("MinNumberOfSubsidiaries")
                         .HasMaxLength(255)
                         .HasColumnType("int");
+
+                    b.Property<string>("Regulator")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subsidiaries", "Lookup");
+                    b.ToTable("SubsidiariesRegistrationFees", "Lookup");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             Amount = 558m,
-                            Country = "GB-ENG",
                             Description = "Up to 20",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxSub = 20,
-                            MinSub = 1
+                            MaxNumberOfSubsidiaries = 20,
+                            MinNumberOfSubsidiaries = 1,
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
                             Id = 2,
                             Amount = 558m,
-                            Country = "GB-SCT",
                             Description = "Up to 20",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxSub = 20,
-                            MinSub = 1
+                            MaxNumberOfSubsidiaries = 20,
+                            MinNumberOfSubsidiaries = 1,
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
                             Id = 3,
                             Amount = 558m,
-                            Country = "GB-WLS",
                             Description = "Up to 20",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxSub = 20,
-                            MinSub = 1
+                            MaxNumberOfSubsidiaries = 20,
+                            MinNumberOfSubsidiaries = 1,
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
                             Id = 4,
                             Amount = 558m,
-                            Country = "GB-NIR",
                             Description = "Up to 20",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxSub = 20,
-                            MinSub = 1
+                            MaxNumberOfSubsidiaries = 20,
+                            MinNumberOfSubsidiaries = 1,
+                            Regulator = "GB-NIR"
                         },
                         new
                         {
                             Id = 5,
                             Amount = 140m,
-                            Country = "GB-ENG",
                             Description = "More then 20",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxSub = 100,
-                            MinSub = 21
+                            MaxNumberOfSubsidiaries = 100,
+                            MinNumberOfSubsidiaries = 21,
+                            Regulator = "GB-ENG"
                         },
                         new
                         {
                             Id = 6,
                             Amount = 140m,
-                            Country = "GB-SCT",
                             Description = "More then 20",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxSub = 100,
-                            MinSub = 21
+                            MaxNumberOfSubsidiaries = 100,
+                            MinNumberOfSubsidiaries = 21,
+                            Regulator = "GB-SCT"
                         },
                         new
                         {
                             Id = 7,
                             Amount = 140m,
-                            Country = "GB-WLS",
                             Description = "More then 20",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxSub = 100,
-                            MinSub = 21
+                            MaxNumberOfSubsidiaries = 100,
+                            MinNumberOfSubsidiaries = 21,
+                            Regulator = "GB-WLS"
                         },
                         new
                         {
                             Id = 8,
                             Amount = 140m,
-                            Country = "GB-NIR",
                             Description = "More then 20",
                             EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EffectiveTo = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MaxSub = 100,
-                            MinSub = 21
+                            MaxNumberOfSubsidiaries = 100,
+                            MinNumberOfSubsidiaries = 21,
+                            Regulator = "GB-NIR"
                         });
                 });
 
@@ -703,7 +704,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("InternalErrorCode")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("InternalStatusId")
                         .HasColumnType("int");

@@ -16,7 +16,7 @@ namespace EPR.Payment.Service.HealthCheck
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            var paymentStatusCount = await _paymentsService.GetPaymentStatusCount();
+            var paymentStatusCount = await _paymentsService.GetPaymentStatusCountAsync(cancellationToken);
             return paymentStatusCount == 0
                 ? HealthCheckResult.Unhealthy(HealthCheckResultDescription)
                 : HealthCheckResult.Healthy(HealthCheckResultDescription);

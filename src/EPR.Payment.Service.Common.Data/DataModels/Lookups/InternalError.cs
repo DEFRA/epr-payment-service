@@ -9,6 +9,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
     public class InternalError
     {
         [Key]
+        [MaxLength(10)]
         public string InternalErrorCode { get; set; } = null!;
 
         [MaxLength(255)]

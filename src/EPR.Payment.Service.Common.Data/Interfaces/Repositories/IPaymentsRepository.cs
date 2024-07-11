@@ -2,9 +2,9 @@
 {
     public interface IPaymentsRepository
     {
-        Task<Guid> InsertPaymentStatusAsync(DataModels.Payment? entity);
-        Task UpdatePaymentStatusAsync(DataModels.Payment? entity);
-        Task<DataModels.Payment> GetPaymentByIdAsync(Guid id);
-        Task<int> GetPaymentStatusCount();
+        Task<Guid> InsertPaymentStatusAsync(DataModels.Payment? entity, CancellationToken cancellationToken);
+        Task UpdatePaymentStatusAsync(DataModels.Payment? entity, CancellationToken cancellationToken);
+        Task<DataModels.Payment> GetPaymentByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<int> GetPaymentStatusCount(CancellationToken cancellationToken);
     }
 }

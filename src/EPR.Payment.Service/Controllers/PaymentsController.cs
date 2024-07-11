@@ -2,6 +2,7 @@
 using EPR.Payment.Service.Common.Constants;
 using EPR.Payment.Service.Common.Dtos.Request;
 using EPR.Payment.Service.Services.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
 
@@ -26,7 +27,7 @@ namespace EPR.Payment.Service.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnablePaymentStatusInsert")]
-        public async Task<ActionResult<Guid>> InsertPaymentStatus([FromBody] PaymentStatusInsertRequestDto paymentStatusInsertRequest)
+        public async Task<ActionResult<Guid>> InsertPaymentStatus([FromBody] PaymentStatusInsertRequestDto paymentStatusInsertRequest, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -34,8 +35,17 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                var Id = await _paymentsService.InsertPaymentStatusAsync(paymentStatusInsertRequest);
+                var Id = await _paymentsService.InsertPaymentStatusAsync(paymentStatusInsertRequest, cancellationToken);
                 return Ok(Id);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Validation Error",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status400BadRequest
+                });
             }
             catch (ArgumentException ex)
             {
@@ -53,7 +63,7 @@ namespace EPR.Payment.Service.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnablePaymentStatusUpdate")]
-        public async Task<IActionResult> UpdatePaymentStatus(Guid id, [FromBody] PaymentStatusUpdateRequestDto paymentStatusUpdateRequest)
+        public async Task<IActionResult> UpdatePaymentStatus(Guid id, [FromBody] PaymentStatusUpdateRequestDto paymentStatusUpdateRequest, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -61,8 +71,17 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                await _paymentsService.UpdatePaymentStatusAsync(id, paymentStatusUpdateRequest);
+                await _paymentsService.UpdatePaymentStatusAsync(id, paymentStatusUpdateRequest, cancellationToken);
                 return NoContent();
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Validation Error",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status400BadRequest
+                });
             }
             catch (ArgumentException ex)
             {

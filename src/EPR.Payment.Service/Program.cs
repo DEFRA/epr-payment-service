@@ -4,6 +4,8 @@ using EPR.Payment.Service.Extension;
 using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.ResponseWriter;
+using EPR.Payment.Service.Validations;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -21,6 +23,13 @@ bool IsEnvironmentLocalOrDev =
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddFluentValidation(fv =>
+{
+    fv.RegisterValidatorsFromAssemblyContaining<PaymentStatusInsertRequestDtoValidator>();
+    fv.AutomaticValidationEnabled = false;
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(setupAction =>
