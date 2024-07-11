@@ -94,8 +94,11 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories
 
 
             //Assert
-            _dataContextMock.Verify(m => m.Payment.Add(It.IsAny<Common.Data.DataModels.Payment>()), Times.Exactly(2));
-            _dataContextMock.Verify(c => c.SaveChangesAsync(default), Times.Exactly(2));
+            using (new AssertionScope())
+            {
+                _dataContextMock.Verify(m => m.Payment.Add(It.IsAny<Common.Data.DataModels.Payment>()), Times.Exactly(2));
+                _dataContextMock.Verify(c => c.SaveChangesAsync(default), Times.Exactly(2));
+            }
         }
 
         [TestMethod]
