@@ -10,6 +10,7 @@ namespace EPR.Payment.Service.Validations
         private const string InvalidReferenceErrorMessage = "Reference cannot be null or empty.";
         private const string InvalidReasonForPaymentErrorMessage = "Reason For Payment cannot be null or empty."; 
         private const string InvalidAmountErrorMessage = "Amount For Payment cannot be null or empty.";
+        private const string LessThanAmountErrorMessage = "Amount must be less than or equal to 100000.";
         private const string InvalidStatusErrorMessage = "Status For Payment must be a valid status type.";
         public PaymentStatusInsertRequestDtoValidator()
         {
@@ -28,6 +29,9 @@ namespace EPR.Payment.Service.Validations
             RuleFor(x => x.Amount)
                 .NotEmpty()
                 .WithMessage(string.Format(InvalidAmountErrorMessage, nameof(PaymentStatusInsertRequestDto.Amount)));
+            RuleFor(x => x.Amount)
+                .LessThanOrEqualTo(100000)
+                .WithMessage(string.Format(LessThanAmountErrorMessage, nameof(PaymentStatusInsertRequestDto.Amount)));
             RuleFor(x => x.Status)
                 .IsInEnum()
                 .WithMessage(string.Format(InvalidStatusErrorMessage, nameof(PaymentStatusInsertRequestDto.Status)));
