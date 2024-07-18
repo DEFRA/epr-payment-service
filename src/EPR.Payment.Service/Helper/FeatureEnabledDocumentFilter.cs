@@ -22,40 +22,37 @@ namespace EPR.Payment.Service.Helper
 
             foreach (var path in swaggerDoc.Paths)
             {
+                Console.WriteLine($"Checking path: {path.Key}");
                 foreach (var operation in path.Value.Operations)
                 {
-                    var apiDescription = context.ApiDescriptions.FirstOrDefault(desc => !string.IsNullOrEmpty (desc.RelativePath)  && desc.RelativePath.Equals(path.Key.Trim('/'), System.StringComparison.InvariantCultureIgnoreCase));
-
+                    var apiDescription = context.ApiDescriptions.FirstOrDefault(desc => desc.RelativePath!.Equals(path.Key.Trim('/'), StringComparison.InvariantCultureIgnoreCase));
                     if (apiDescription != null)
                     {
                         var controllerActionDescriptor = apiDescription.ActionDescriptor as Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor;
                         if (controllerActionDescriptor != null)
                         {
-                            // Check for controller-level feature gate
                             var controllerTypeInfo = controllerActionDescriptor.ControllerTypeInfo;
                             var controllerFeatureGate = controllerTypeInfo.GetCustomAttributes(typeof(FeatureGateAttribute), true).Cast<FeatureGateAttribute>().FirstOrDefault();
-
                             if (controllerFeatureGate != null)
                             {
                                 var controllerFeatures = controllerFeatureGate.Features;
                                 var isControllerEnabled = await AreAllFeaturesEnabled(controllerFeatures);
-
                                 if (!isControllerEnabled)
                                 {
+                                    Console.WriteLine($"Controller feature '{string.Join(", ", controllerFeatures)}' is disabled, removing path: {path.Key}");
                                     pathsToRemove.Add(path.Key);
                                     break;
                                 }
                             }
 
-                            // Check for action-level feature gate
                             var actionFeatureGate = apiDescription.ActionDescriptor.EndpointMetadata.OfType<FeatureGateAttribute>().FirstOrDefault();
                             if (actionFeatureGate != null)
                             {
                                 var actionFeatures = actionFeatureGate.Features;
                                 var isActionEnabled = await AreAllFeaturesEnabled(actionFeatures);
-
                                 if (!isActionEnabled)
                                 {
+                                    Console.WriteLine($"Action feature '{string.Join(", ", actionFeatures)}' is disabled, removing path: {path.Key}");
                                     pathsToRemove.Add(path.Key);
                                     break;
                                 }
@@ -65,10 +62,9 @@ namespace EPR.Payment.Service.Helper
                 }
             }
 
-            // Remove collected paths
             foreach (var path in pathsToRemove)
             {
-                _logger.LogInformation($"Removing path '{path}' from Swagger documentation because the feature gate is disabled.");
+                Console.WriteLine($"Removing path '{path}' from Swagger documentation because the feature gate is disabled.");
                 swaggerDoc.Paths.Remove(path);
             }
         }
@@ -79,6 +75,7 @@ namespace EPR.Payment.Service.Helper
             {
                 if (!await _featureManager.IsEnabledAsync(feature))
                 {
+                    Console.WriteLine($"Feature '{feature}' is disabled.");
                     return false;
                 }
             }
