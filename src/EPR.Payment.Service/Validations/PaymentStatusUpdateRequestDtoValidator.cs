@@ -10,7 +10,6 @@ namespace EPR.Payment.Service.Validations
         private const string InvalidOrganisationIdErrorMessage = "Updated By Organisation ID cannot be null or empty.";
         private const string InvalidReferenceErrorMessage = "Reference cannot be null or empty.";
         private const string InvalidStatusErrorMessage = "Status cannot be null or empty.";
-        private const string InvalidErrorCodeErrorMessage = "Error Code must be one of the following: 'A', 'B', 'C' or it can be null or empty.";
         public PaymentStatusUpdateRequestDtoValidator()
         {
             RuleFor(x => x.GovPayPaymentId)
@@ -28,9 +27,6 @@ namespace EPR.Payment.Service.Validations
             RuleFor(x => x.Status)
                 .IsInEnum()
                 .WithMessage(string.Format(InvalidStatusErrorMessage, nameof(PaymentStatusUpdateRequestDto.Status)));
-            RuleFor(x => x.ErrorCode)
-                .Must(value => string.IsNullOrEmpty(value) || "ABC".Contains(value))
-                .WithMessage(string.Format(InvalidErrorCodeErrorMessage, nameof(PaymentStatusUpdateRequestDto.ErrorCode)));
         }
     }
 }

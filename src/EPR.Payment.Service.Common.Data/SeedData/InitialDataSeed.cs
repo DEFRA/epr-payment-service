@@ -73,12 +73,6 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                 new ComplianceSchemeRegistrationFees { Id = 15, FeesType = "On", Description = "Online Market", Regulator = "GB-WLS", Amount = 2579, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
                 new ComplianceSchemeRegistrationFees { Id = 16, FeesType = "On", Description = "Online Market", Regulator = "GB-NIR", Amount = 2579, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
                 );
-
-            modelBuilder.Entity<InternalError>().HasData(
-                new InternalError { InternalErrorCode = "A", GovPayErrorCode = "P0030", GovPayErrorMessage = "Cancelled" },
-                new InternalError { InternalErrorCode = "B", GovPayErrorCode = "P0020", GovPayErrorMessage = "Expired" },
-                new InternalError { InternalErrorCode = "C", GovPayErrorCode = "P0010", GovPayErrorMessage = "Rejected" }
-                );
         }
 
     }

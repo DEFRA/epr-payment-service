@@ -7,8 +7,6 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
     {
         DbSet<PaymentStatus> PaymentStatus { get; } 
         DbSet<DataModels.Payment> Payment { get; }
-
-        DbSet<InternalError> InternalError { get; }
         DbSet<AdditionalRegistrationFees> AdditionalRegistrationFees { get; }
         DbSet<ComplianceSchemeRegistrationFees> ComplianceSchemeRegistrationFees { get; }
         DbSet<ProducerRegistrationFees> ProducerRegistrationFees { get; }

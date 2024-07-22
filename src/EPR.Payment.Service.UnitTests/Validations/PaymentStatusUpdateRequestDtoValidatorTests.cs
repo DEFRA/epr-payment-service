@@ -95,14 +95,6 @@ namespace EPR.Payment.Service.UnitTests.Validations
         }
 
         [TestMethod]
-        public void Should_Have_Error_When_ErrorCode_InValid()
-        {
-            var paymentStatusUpdateRequestDto = new PaymentStatusUpdateRequestDto { ErrorCode = "X" };
-            var result = _validator.TestValidate(paymentStatusUpdateRequestDto);
-            result.ShouldHaveValidationErrorFor(x => x.ErrorCode);
-        }
-
-        [TestMethod]
         public void Should_Not_Have_Error_When_ErrorCode_Is_Null()
         {
             var paymentStatusUpdateRequestDto = new PaymentStatusUpdateRequestDto { ErrorCode = null };
@@ -114,14 +106,6 @@ namespace EPR.Payment.Service.UnitTests.Validations
         public void Should_Not_Have_Error_When_ErrorCode_Is_Empty()
         {
             var paymentStatusUpdateRequestDto = new PaymentStatusUpdateRequestDto { ErrorCode = string.Empty };
-            var result = _validator.TestValidate(paymentStatusUpdateRequestDto);
-            result.ShouldNotHaveValidationErrorFor(x => x.ErrorCode);
-        }
-
-        [TestMethod]
-        public void Should_Not_Have_Error_When_ErrorCode_Valid()
-        {
-            var paymentStatusUpdateRequestDto = new PaymentStatusUpdateRequestDto { ErrorCode = "A" };
             var result = _validator.TestValidate(paymentStatusUpdateRequestDto);
             result.ShouldNotHaveValidationErrorFor(x => x.ErrorCode);
         }

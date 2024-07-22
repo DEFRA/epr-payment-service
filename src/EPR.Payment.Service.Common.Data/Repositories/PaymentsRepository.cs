@@ -32,7 +32,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories
 
             await _dataContext.SaveChangesAsync(cancellationToken);
 
-            return entity.Id;
+            return entity.ExternalPaymentId;
         }
 
         public async Task UpdatePaymentStatusAsync(DataModels.Payment? entity, CancellationToken cancellationToken)
@@ -48,13 +48,13 @@ namespace EPR.Payment.Service.Common.Data.Repositories
             await _dataContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<DataModels.Payment> GetPaymentByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<DataModels.Payment> GetPaymentByExternalPaymentIdAsync(Guid externalPaymentId, CancellationToken cancellationToken)
         {
-            var entity =  await _dataContext.Payment.Where(a => a.Id == id).SingleOrDefaultAsync();
+            var entity =  await _dataContext.Payment.Where(a => a.ExternalPaymentId == externalPaymentId).SingleOrDefaultAsync();
 
             if (entity == null)
             {
-                throw new KeyNotFoundException($"{PaymentConstants.RecordNotFoundPaymentError}: {id}");
+                throw new KeyNotFoundException($"{PaymentConstants.RecordNotFoundPaymentError}: {externalPaymentId}");
             }
 
             return entity;

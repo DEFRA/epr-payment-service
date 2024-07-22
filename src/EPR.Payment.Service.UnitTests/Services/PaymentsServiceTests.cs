@@ -88,10 +88,10 @@ namespace EPR.Payment.Service.UnitTests.Services
         public async Task UpdatePaymentStatusAsync_ValidInput_NotThrowException([Frozen] Guid id)
         {
             // Arrange
-            var request = _fixture.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, new Guid()).With(x => x.UpdatedByOrganisationId, new Guid()).With(k => k.ErrorCode, "").Create();
+            var request = _fixture.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, new Guid()).With(x => x.UpdatedByOrganisationId, new Guid()).Create();
 
             var entity = new Common.Data.DataModels.Payment();
-            _paymentsRepositoryMock.Setup(r => r.GetPaymentByIdAsync(id, _cancellationToken)).ReturnsAsync(entity);
+            _paymentsRepositoryMock.Setup(r => r.GetPaymentByExternalPaymentIdAsync(id, _cancellationToken)).ReturnsAsync(entity);
 
             entity = _mapper.Map(request, entity);
 

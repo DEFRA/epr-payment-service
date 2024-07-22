@@ -12,7 +12,6 @@ namespace EPR.Payment.Service.Common.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
         public DbSet<PaymentStatus> PaymentStatus => Set<PaymentStatus>();
         public DbSet<DataModels.Payment> Payment => Set<DataModels.Payment>();
-        public DbSet<InternalError> InternalError => Set<InternalError>();
         public DbSet<AdditionalRegistrationFees> AdditionalRegistrationFees => Set<AdditionalRegistrationFees>();
         public DbSet<ComplianceSchemeRegistrationFees> ComplianceSchemeRegistrationFees => Set<ComplianceSchemeRegistrationFees>();
         public DbSet<ProducerRegistrationFees> ProducerRegistrationFees => Set<ProducerRegistrationFees>();
@@ -29,6 +28,10 @@ namespace EPR.Payment.Service.Common.Data
 
             modelBuilder.Entity<DataModels.Payment>()
             .HasIndex(a => a.GovpayPaymentId)
+            .IsUnique();
+
+            modelBuilder.Entity<DataModels.Payment>()
+            .HasIndex(a => a.ExternalPaymentId)
             .IsUnique();
 
             // seed the lookup tables
