@@ -25,8 +25,9 @@ namespace EPR.Payment.Service.Common.Data.Repositories
             entity.UpdatedDate = entity.CreatedDate;
             entity.UpdatedByUserId = entity.UserId;
             entity.UpdatedByOrganisationId = entity.OrganisationId;
+            entity.GovPayStatus = Enum.GetName(typeof(Enums.Status), entity.InternalStatusId);
 
-           
+
             _dataContext.Payment.Add(entity);
 
             await _dataContext.SaveChangesAsync(cancellationToken);
