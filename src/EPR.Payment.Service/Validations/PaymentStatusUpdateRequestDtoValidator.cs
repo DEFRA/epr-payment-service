@@ -17,10 +17,10 @@ namespace EPR.Payment.Service.Validations
                 .NotEmpty()
                 .WithMessage(string.Format(InvalidGovPayPaymentIdErrorMessage, nameof(PaymentStatusUpdateRequestDto.GovPayPaymentId)));
             RuleFor(x => x.UpdatedByUserId)
-                .NotEmpty()
+                .NotNull()
                 .WithMessage(string.Format(InvalidUserIdErrorMessage, nameof(PaymentStatusUpdateRequestDto.UpdatedByUserId)));
             RuleFor(x => x.UpdatedByOrganisationId)
-                .NotEmpty()
+                .NotNull()
                 .WithMessage(string.Format(InvalidOrganisationIdErrorMessage, nameof(PaymentStatusUpdateRequestDto.UpdatedByOrganisationId)));
             RuleFor(x => x.Reference)
                 .NotEmpty()
