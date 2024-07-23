@@ -31,6 +31,10 @@ namespace EPR.Payment.Service.Common.Data
             .IsUnique();
 
             modelBuilder.Entity<DataModels.Payment>()
+             .Property(x => x.ExternalPaymentId)
+             .HasDefaultValueSql("NEWID()");
+
+            modelBuilder.Entity<DataModels.Payment>()
             .HasIndex(a => a.ExternalPaymentId)
             .IsUnique();
 

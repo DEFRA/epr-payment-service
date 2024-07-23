@@ -55,27 +55,12 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InternalError",
-                schema: "Lookup",
-                columns: table => new
-                {
-                    InternalErrorCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    ErrorMessage = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    GovPayErrorCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    GovPayErrorMessage = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InternalError", x => x.InternalErrorCode);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PaymentStatus",
                 schema: "Lookup",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,11 +113,13 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrganisationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExternalPaymentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     GovpayPaymentId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     InternalStatusId = table.Column<int>(type: "int", nullable: false),
-                    Regulator = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Regulator = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     GovPayStatus = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    InternalErrorCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    ErrorCode = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    ErrorMessage = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Reference = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(19,4)", nullable: false),
                     ReasonForPayment = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
@@ -144,12 +131,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Payment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Payment_InternalError_InternalErrorCode",
-                        column: x => x.InternalErrorCode,
-                        principalSchema: "Lookup",
-                        principalTable: "InternalError",
-                        principalColumn: "InternalErrorCode");
                     table.ForeignKey(
                         name: "FK_Payment_PaymentStatus_InternalStatusId",
                         column: x => x.InternalStatusId,
@@ -201,17 +182,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             migrationBuilder.InsertData(
                 schema: "Lookup",
-                table: "InternalError",
-                columns: new[] { "InternalErrorCode", "ErrorMessage", "GovPayErrorCode", "GovPayErrorMessage" },
-                values: new object[,]
-                {
-                    { "A", null, "P0030", "Cancelled" },
-                    { "B", null, "P0020", "Expired" },
-                    { "C", null, "P0010", "Rejected" }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "Lookup",
                 table: "PaymentStatus",
                 columns: new[] { "Id", "Status" },
                 values: new object[,]
@@ -257,16 +227,17 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Payment_ExternalPaymentId",
+                table: "Payment",
+                column: "ExternalPaymentId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Payment_GovpayPaymentId",
                 table: "Payment",
                 column: "GovpayPaymentId",
                 unique: true,
                 filter: "[GovpayPaymentId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Payment_InternalErrorCode",
-                table: "Payment",
-                column: "InternalErrorCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payment_InternalStatusId",
@@ -294,10 +265,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "SubsidiariesRegistrationFees",
-                schema: "Lookup");
-
-            migrationBuilder.DropTable(
-                name: "InternalError",
                 schema: "Lookup");
 
             migrationBuilder.DropTable(

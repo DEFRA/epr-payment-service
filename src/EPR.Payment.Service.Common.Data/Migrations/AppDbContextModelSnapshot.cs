@@ -347,8 +347,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -640,66 +640,84 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(19,4)");
+                        .HasColumnType("decimal(19,4)")
+                        .HasColumnOrder(12);
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnOrder(14);
 
                     b.Property<string>("ErrorCode")
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnOrder(9);
 
                     b.Property<string>("ErrorMessage")
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnOrder(10);
 
                     b.Property<Guid>("ExternalPaymentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(4)
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("GovPayStatus")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnOrder(8);
 
                     b.Property<string>("GovpayPaymentId")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnOrder(5);
 
                     b.Property<int>("InternalStatusId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnOrder(6);
 
                     b.Property<Guid>("OrganisationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(3);
 
                     b.Property<string>("ReasonForPayment")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnOrder(13);
 
                     b.Property<string>("Reference")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnOrder(11);
 
                     b.Property<string>("Regulator")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnOrder(7);
 
                     b.Property<Guid>("UpdatedByOrganisationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(16);
 
                     b.Property<Guid>("UpdatedByUserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(15);
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnOrder(17);
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
 
                     b.HasKey("Id");
 
