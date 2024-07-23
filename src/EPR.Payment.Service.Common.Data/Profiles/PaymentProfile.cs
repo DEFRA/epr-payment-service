@@ -9,7 +9,7 @@ namespace EPR.Payment.Service.Common.Data.Profiles
         {
             CreateMap<PaymentStatusInsertRequestDto, DataModels.Payment>().ForMember(dest => dest.InternalStatusId, opt => opt.MapFrom(src => src.Status));
 
-            CreateMap<PaymentStatusUpdateRequestDto, DataModels.Payment>().ForMember(dest => dest.InternalStatusId, opt => opt.MapFrom(src => src.Status)).ForMember(dest => dest.InternalErrorCode, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.ErrorCode) ? null : src.ErrorCode));
+            CreateMap<PaymentStatusUpdateRequestDto, DataModels.Payment>().ForMember(dest => dest.InternalStatusId, opt => opt.MapFrom(src => src.Status));
 
         }
     }

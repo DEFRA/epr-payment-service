@@ -35,8 +35,8 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                var Id = await _paymentsService.InsertPaymentStatusAsync(paymentStatusInsertRequest, cancellationToken);
-                return Ok(Id);
+                var externalPaymentId = await _paymentsService.InsertPaymentStatusAsync(paymentStatusInsertRequest, cancellationToken);
+                return Ok(externalPaymentId);
             }
             catch (ValidationException ex)
             {
@@ -53,17 +53,17 @@ namespace EPR.Payment.Service.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{PaymentConstants.Status500InternalServerError}: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{PaymentConstants.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
             }
         }
 
         [MapToApiVersion(1)]
-        [HttpPut("{id}")]
+        [HttpPut("{externalPaymentId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnablePaymentStatusUpdate")]
-        public async Task<IActionResult> UpdatePaymentStatus(Guid id, [FromBody] PaymentStatusUpdateRequestDto paymentStatusUpdateRequest, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdatePaymentStatus(Guid externalPaymentId, [FromBody] PaymentStatusUpdateRequestDto paymentStatusUpdateRequest, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -71,7 +71,7 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                await _paymentsService.UpdatePaymentStatusAsync(id, paymentStatusUpdateRequest, cancellationToken);
+                await _paymentsService.UpdatePaymentStatusAsync(externalPaymentId, paymentStatusUpdateRequest, cancellationToken);
                 return NoContent();
             }
             catch (ValidationException ex)
@@ -89,7 +89,7 @@ namespace EPR.Payment.Service.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,  $"{PaymentConstants.Status500InternalServerError}: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError,  $"{PaymentConstants.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
             }
         }
     }

@@ -9,7 +9,7 @@ namespace EPR.Payment.Service.Services
     public class PaymentsService : IPaymentsService
     {
         private readonly IPaymentsRepository _paymentRepository;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
         private readonly IValidator<PaymentStatusInsertRequestDto> _paymentStatusInsertRequestValidator;
         private readonly IValidator<PaymentStatusUpdateRequestDto> _paymentStatusUpdateRequestValidator;
         public PaymentsService(IMapper mapper, 
@@ -35,7 +35,7 @@ namespace EPR.Payment.Service.Services
             return await _paymentRepository.InsertPaymentStatusAsync(entity, cancellationToken);
         }
 
-        public async Task UpdatePaymentStatusAsync(Guid id, PaymentStatusUpdateRequestDto paymentStatusUpdateRequest, CancellationToken cancellationToken)
+        public async Task UpdatePaymentStatusAsync(Guid externalPaymentId, PaymentStatusUpdateRequestDto paymentStatusUpdateRequest, CancellationToken cancellationToken)
         {
             var validatorResult = await _paymentStatusUpdateRequestValidator.ValidateAsync(paymentStatusUpdateRequest);
 
@@ -44,7 +44,7 @@ namespace EPR.Payment.Service.Services
                 throw new ValidationException(validatorResult.Errors);
             }
 
-            var entity = await _paymentRepository.GetPaymentByIdAsync(id, cancellationToken);
+            var entity = await _paymentRepository.GetPaymentByExternalPaymentIdAsync(externalPaymentId, cancellationToken);
             entity = _mapper.Map(paymentStatusUpdateRequest, entity);
             await _paymentRepository.UpdatePaymentStatusAsync(entity, cancellationToken);
         }

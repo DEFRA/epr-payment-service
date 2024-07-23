@@ -42,9 +42,9 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories
 
             var request = new Common.Data.DataModels.Payment
             {
-                Id = newId,
                 UserId = userId,
                 OrganisationId = organisationId,
+                ExternalPaymentId = newId
             };
 
             //Act
@@ -76,14 +76,14 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories
 
             var firstRequest = new Common.Data.DataModels.Payment
             {
-                Id = firstId,
+                ExternalPaymentId = firstId,
                 UserId = userId,
                 OrganisationId = organisationId,
             };
 
             var secondRequest = new Common.Data.DataModels.Payment
             {
-                Id = secondId,
+                ExternalPaymentId = secondId,
                 UserId = userId,
                 OrganisationId = organisationId,
             };
@@ -134,7 +134,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories
 
             var request = new Common.Data.DataModels.Payment
             {
-                Id = newId,
+                ExternalPaymentId = newId,
                 UserId = userId,
                 OrganisationId = organisationId,
             };
@@ -180,16 +180,16 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories
             _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
             _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object);
 
-            var id = Guid.Parse("fe40c799-c027-4a8b-9172-3343c701b4db");
+            var externalPaymentId = Guid.Parse("d0f74b07-42e1-43a7-ae9d-0e279f213278");
 
             //Act
-            var result = await _mockPaymentsRepository.GetPaymentByIdAsync(id, _cancellationToken);
+            var result = await _mockPaymentsRepository.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken);
 
             //Assert
             using (new AssertionScope())
             {
                 result.Should().NotBeNull();
-                result.Id.Should().Be(id);
+                result.ExternalPaymentId.Should().Be(externalPaymentId);
                 result.Amount.Should().Be(10.0M);
                 result.Regulator.Should().Be("Test 1 Regulator");
                 result.Reference.Should().Be("Test 1 Reference");
@@ -206,10 +206,10 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories
             _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
             _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object);
 
-            var id = Guid.Parse("c8459886-7a06-412c-9ca9-c9e9ab0aa72c");
+            var externalPaymenId = Guid.Parse("c8459886-7a06-412c-9ca9-c9e9ab0aa72c");
 
             //Act & Assert
-            await _mockPaymentsRepository.Invoking(async x => await x.GetPaymentByIdAsync(id, _cancellationToken))
+            await _mockPaymentsRepository.Invoking(async x => await x.GetPaymentByExternalPaymentIdAsync(externalPaymenId, _cancellationToken))
                 .Should().ThrowAsync<KeyNotFoundException>();
         }
 
