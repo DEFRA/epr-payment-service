@@ -41,7 +41,7 @@ builder.Services.AddSwaggerGen(setupAction =>
 });
 builder.Services.AddDependencies();
 builder.Services.AddDataContext(builder.Configuration.GetConnectionString("PaymentConnnectionString")!);
-
+builder.Services.AddApplicationInsightsTelemetry();
 builder.Services
     .AddHealthChecks()
     .AddDbContextCheck<AppDbContext>()
