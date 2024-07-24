@@ -1,0 +1,72 @@
+trigger: none
+pr: none
+pool: DEFRA-COMMON-ubuntu2004-SSV3
+
+parameters:
+  - name: teamName
+    displayName: 'Select Environment Name:    (works only with "development" as target env)'
+    default: 'DEV11'
+    type: string
+    values:
+      - DEV11
+  - name: envToDeploy
+    displayName: 'Target env to deploy:    (select "development" for DEV 1-11)'
+    default: development
+    type: string
+    values:
+      - development
+      - tst
+      - preprod
+      - prod
+- name: imageTag
+  displayName: Enter Tag for the Image (Docker tag) or Release name (Git repo tag)
+  default: ''
+  type: string
+
+variables:
+  - ${{ if eq(parameters.envToDeploy, 'development') }}:
+    - template: vars/${{ parameters.teamName }}-${{ parameters.envToDeploy }}.yaml
+  - ${{ if eq(parameters.envToDeploy, 'tst') }}:
+    - ${{ if ne(parameters.teamName, 'Team-Laps') }}:
+      - template: vars/${{ parameters.envToDeploy }}.yaml
+    - ${{ if eq(parameters.teamName, 'Team-Laps') }}:
+      - template: vars/${{ parameters.teamName }}-${{ parameters.envToDeploy }}.yaml
+  - ${{ if eq(parameters.envToDeploy, 'preprod') }}:
+    - template: vars/${{ parameters.envToDeploy }}.yaml
+  - ${{ if eq(parameters.envToDeploy, 'prod') }}:
+    - template: vars/${{ parameters.envToDeploy }}.yaml
+
+resources:
+  repositories:
+    - repository: CommonTemplates
+      name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
+      type: git
+      ref: feature/342348-update-sql-migration-pipeline
+
+    # The repo will be reference the repo by a release tag (if the branchName parameter contains 'release') otherwise it will pull down the main branch.
+    - repository: ReleaseTags
+      name: RWD-CPR-EPR4P-ADO/epr-app-config-settings
+      type: git
+      ref: ${{ replace(replace(contains(parameters.branchName, 'RELEASE'),'True',replace('refs/tags/RELEASETAG','RELEASETAG', parameters.branchName)),'False','main') }}
+
+jobs:
+  - job: RunSQLMigrationScript
+    displayName: Executing Migration Script
+    ${{ if contains(parameters.branchName, 'RELEASE') }}:
+      variables:
+        # Release tags reference
+        - template: pipelines/image-tags/${{ parameters.envToDeploy }}.yaml@ReleaseTags
+        - ${{ if eq(parameters.envToDeploy, 'development') }}:
+          - template: pipelines/image-tags/${{ parameters.teamName }}-${{ parameters.envToDeploy }}.yaml@ReleaseTags
+    steps:
+      - template: templates/docker-run-sql-migration.yaml@CommonTemplates
+        parameters:
+          azureSubscription: $(acr.Subscription)
+          solutionFolder: $(solutionFolder)
+          projectFolder: $(projectFolder)
+          azureContainerRegistryName: $(acr.azureContainerRegistryName)
+          repositoryName: $(acr.repositoryName)
+          ${{ if contains(parameters.branchName, 'RELEASE') }}:
+            branchName: $(DEVRWDWEBWAx407)
+          ${{ else }}:
+            branchName: ${{ parameters.branchName }}
