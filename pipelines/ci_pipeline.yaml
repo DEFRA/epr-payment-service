@@ -30,9 +30,9 @@ variables:
   - name: solutionFolder
     value: src
   - name: projectFolder
-    value: EPR.Accreditation.API
+    value: EPR.Payment.Service
   - name: testProjectFolder
-    value: 'EPR.Accreditation.API.UnitTests'
+    value: 'EPR.Payment.Service.UnitTests'
   - name: sonarQubeProjectKey
     value: epr-payment-service
   - name: sonarQubeProjectName
@@ -47,7 +47,7 @@ resources:
     - repository: CommonTemplates
       name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
       type: git
-      ref: upgrade-net-8
+      ref: main
 
 extends:
   template: epr-build-pipeline.yaml@CommonTemplates
