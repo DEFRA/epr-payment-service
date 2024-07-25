@@ -33,6 +33,8 @@ variables:
     value: EPR.Payment.Service
   - name: testProjectFolder
     value: 'EPR.Payment.Service.UnitTests'
+  - name: DataFolder
+    value: EPR.Payment.Service.Common.Data
   - name: sonarQubeProjectKey
     value: epr-payment-service
   - name: sonarQubeProjectName
