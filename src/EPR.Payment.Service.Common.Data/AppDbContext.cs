@@ -7,9 +7,15 @@ using System.Diagnostics.CodeAnalysis;
 namespace EPR.Payment.Service.Common.Data
 {
     [ExcludeFromCodeCoverage]
-    public class AppDbContext : DbContext, IAppDbContext
+    public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
+        public AppDbContext()
+        {
+        }
+              
+        public AppDbContext(DbContextOptions options) : base(options)
+        {
+        }
         public DbSet<PaymentStatus> PaymentStatus => Set<PaymentStatus>();
         public DbSet<DataModels.Payment> Payment => Set<DataModels.Payment>();
         public DbSet<AdditionalRegistrationFees> AdditionalRegistrationFees => Set<AdditionalRegistrationFees>();
@@ -21,7 +27,7 @@ namespace EPR.Payment.Service.Common.Data
         {
             optionsBuilder.UseSqlServer();
         }
-
+    
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
