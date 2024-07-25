@@ -33,6 +33,8 @@ variables:
     value: EPR.Payment.Service
   - name: testProjectFolder
     value: 'EPR.Payment.Service.UnitTests'
+  - name: DataFolder
+    value: 'EPR.Payment.Service.Common.Data'
   - name: sonarQubeProjectKey
     value: epr-payment-service
   - name: sonarQubeProjectName
@@ -47,13 +49,14 @@ resources:
     - repository: CommonTemplates
       name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
       type: git
-      ref: upgrade-net-8
+      ref: feature/migration-SQL-Script
 
 extends:
   template: epr-build-pipeline.yaml@CommonTemplates
   parameters:
     solutionFolder: ${{ variables.solutionFolder }}
     projectFolder: ${{ variables.projectFolder }}
+    DataFolder: ${{ variables.DataFolder }}
     testProjectFolder: ${{ variables.testProjectFolder }}
     sonarQubeProjectKey: ${{ variables.sonarQubeProjectKey }}
     sonarQubeProjectName: ${{ variables.sonarQubeProjectName }}
