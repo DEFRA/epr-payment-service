@@ -26,3 +26,8 @@ appsettings.Test.json
 /node_modules
 /bin/Debug
 /obj
+/src/TestResults
+/src/EPR.Payment.Service/appsettings.Development.json
+/src/EPR.Payment.Service.Common.UnitTests/TestResults/f3c58f14-a749-4ddb-a109-62324f6e04c2/coverage.cobertura.xml
+/src/EPR.Payment.Service.Data.UnitTests/TestResults/2c6bb957-fb53-47df-94cb-fce42412f931/coverage.cobertura.xml
+/src/EPR.Payment.Service.UnitTests/TestResults/04d1bfc0-3d89-4dac-8294-059d6beceb48/coverage.cobertura.xml
