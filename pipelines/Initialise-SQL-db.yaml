@@ -3,21 +3,21 @@ pr: none
 pool: DEFRA-COMMON-ubuntu2004-SSV3
 
 parameters:
-  - name: teamName
-    displayName: 'Select Environment Name:    (works only with "development" as target env)'
-    default: 'DEV11'
-    type: string
-    values:
-      - DEV11
-  - name: envToDeploy
-    displayName: 'Target env to deploy:    (select "development" for DEV 1-11)'
-    default: development
-    type: string
-    values:
-      - development
-      - tst
-      - preprod
-      - prod
+- name: teamName
+  displayName: 'Select Environment Name:    (works only with "development" as target env)'
+  default: 'DEV11'
+  type: string
+  values:
+    - DEV11
+- name: envToDeploy
+  displayName: 'Target Environment to deploy:'
+  default: development
+  type: string
+  values:
+    - development
+    - tst
+    - preprod
+    - prod
 - name: imageTag
   displayName: Enter Tag for the Image (Docker tag) or Release name (Git repo tag)
   default: ''
