@@ -70,4 +70,4 @@ extends:
     buildMigrationScript: true
     serviceName: $(serviceName)
     sonarqubeInstance: ${{ parameters.sonarqubeInstance }}
-    dotnetVersion: ${{ variables.dotnetVersion8 }}
+    dotnetVersion: ${{ variables.dotnetVersion }}

@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace EPR.Payment.Service.Common.Data
 {
     [ExcludeFromCodeCoverage]
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IAppDbContext
     {
         public AppDbContext()
         {
