@@ -18,10 +18,14 @@ parameters:
     - tst
     - preprod
     - prod
-- name: imageTag
-  displayName: Enter Tag for the Image (Docker tag) or Release name (Git repo tag)
-  default: ''
+- name: solutionFolder
   type: string
+  default: src
+
+- name: branchName
+  displayName: 'Enter main branch for corresponding migration script (e.g. main-20230627.1) or Release name (e.g. Release-2.8.2)'
+  type: string
+  default: ''
 
 variables:
   - ${{ if eq(parameters.envToDeploy, 'development') }}:
@@ -41,7 +45,7 @@ resources:
     - repository: CommonTemplates
       name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
       type: git
-      ref: feature/342348-update-sql-migration-pipeline
+      ref: main
 
     # The repo will be reference the repo by a release tag (if the branchName parameter contains 'release') otherwise it will pull down the main branch.
     - repository: ReleaseTags
