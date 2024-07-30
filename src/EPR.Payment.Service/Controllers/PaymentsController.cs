@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using EPR.Payment.Service.Common.Constants;
 using EPR.Payment.Service.Common.Dtos.Request;
+using EPR.Payment.Service.Common.Dtos.Response;
 using EPR.Payment.Service.Services.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -90,6 +91,42 @@ namespace EPR.Payment.Service.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,  $"{PaymentConstants.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
+            }
+        }
+
+        [MapToApiVersion(1)]
+        [HttpGet("{externalPaymentId}")]
+        [ProducesResponseType(typeof(PaymentResponseDto), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [FeatureGate("EnableGetPaymentByExternalPaymentId")]
+        public async Task<IActionResult> GetPaymentByExternalPaymentId(Guid externalPaymentId, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var paymentResponse = await _paymentsService.GetPaymentByExternalPaymentIdAsync(externalPaymentId, cancellationToken);
+                return Ok(paymentResponse);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Validation Error",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{PaymentConstants.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
             }
         }
     }
