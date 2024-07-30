@@ -5,6 +5,6 @@ variables:
   acr.repositoryName: 'eprpaymentbackendrepository'
   serviceName: 'devrwdwebwab425'
   kvName: DEVRWDINFKV1401
-  sqlDBserver: 'devrwddbssqb1401.database.windows.net'
+  sqlDBserver: 'devrwddbssq1401.database.windows.net'
   sqlDB: 'Feespayment'
   acr.Subscription: 'AZD-RWD-DEV1'
