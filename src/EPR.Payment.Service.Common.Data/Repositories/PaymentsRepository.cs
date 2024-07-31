@@ -48,7 +48,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories
             await _dataContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<DataModels.Payment> GetPaymentByExternalPaymentIdAsync(Guid externalPaymentId, CancellationToken cancellationToken)
+        public async Task<DataModels.Payment?> GetPaymentByExternalPaymentIdAsync(Guid externalPaymentId, CancellationToken cancellationToken)
         {
             var entity =  await _dataContext.Payment.Where(a => a.ExternalPaymentId == externalPaymentId).SingleOrDefaultAsync();
 

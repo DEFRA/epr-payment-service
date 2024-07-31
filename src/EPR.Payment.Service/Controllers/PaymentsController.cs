@@ -102,27 +102,19 @@ namespace EPR.Payment.Service.Controllers
         [FeatureGate("EnableGetPaymentByExternalPaymentId")]
         public async Task<IActionResult> GetPaymentByExternalPaymentId(Guid externalPaymentId, CancellationToken cancellationToken)
         {
-            if (!ModelState.IsValid)
+            if (externalPaymentId == Guid.Empty)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Validation Error",
+                    Detail = "ExternalPaymentId cannot be empty.",
+                    Status = StatusCodes.Status400BadRequest
+                });
             }
             try
             {
                 var paymentResponse = await _paymentsService.GetPaymentByExternalPaymentIdAsync(externalPaymentId, cancellationToken);
                 return Ok(paymentResponse);
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "Validation Error",
-                    Detail = ex.Message,
-                    Status = StatusCodes.Status400BadRequest
-                });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

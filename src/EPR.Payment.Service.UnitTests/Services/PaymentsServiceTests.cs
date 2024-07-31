@@ -4,10 +4,12 @@ using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
 using EPR.Payment.Service.Common.Data.Profiles;
 using EPR.Payment.Service.Common.Dtos.Request;
+using EPR.Payment.Service.Common.Dtos.Response;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services;
 using EPR.Payment.Service.Services.Interfaces;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using FluentValidation;
 using FluentValidation.Results;
 using Moq;
@@ -130,7 +132,7 @@ namespace EPR.Payment.Service.UnitTests.Services
         [TestMethod]
         [AutoMoqData]
         public async Task GetPaymentStatusCountAsync_RepositoryReturnsAResult_ShouldReturnNotNullInteger([Frozen] int paymentStatusCountResult)
-        {
+        { 
             //Arrange
             _paymentsRepositoryMock.Setup(i => i.GetPaymentStatusCount(_cancellationToken)).ReturnsAsync(paymentStatusCountResult);
 
@@ -152,6 +154,48 @@ namespace EPR.Payment.Service.UnitTests.Services
 
             //Assert
             result.Should().Be(0);
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetPaymentByExternalPaymentIdAsync_RepositoryReturnsAResult_ShouldReturnMappedObject(
+            [Frozen] Common.Data.DataModels.Payment paymentEntity,
+            Guid externalPaymentId
+            )
+        {
+            //Arrange
+            _paymentsRepositoryMock.Setup(i => i.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken)).ReturnsAsync(paymentEntity);
+
+            var expectedResult = _mapper.Map<PaymentResponseDto>(paymentEntity);
+
+            //Act
+            var result = await _service.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken);
+
+            //Assert
+            using (new AssertionScope())
+            {
+                result.GovPayPaymentId.Should().Be(expectedResult.GovPayPaymentId);
+                result.UpdatedByOrganisationId.Should().Be(expectedResult.UpdatedByOrganisationId);
+                result.UpdatedByUserId.Should().Be(expectedResult.UpdatedByUserId);
+            }
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetPaymentByExternalPaymentIdAsync_RepositoryReturnsAResult_ShouldReturnNullMappedObject(
+            Guid externalPaymentId
+            )
+        {
+            //Arrange
+            _paymentsRepositoryMock.Setup(i => i.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken)).ReturnsAsync((Common.Data.DataModels.Payment?)null);
+
+            var expectedResult = _mapper.Map<PaymentResponseDto>(null);
+
+            //Act
+            var result = await _service.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken);
+
+            //Assert
+            result.Should().Be(expectedResult);
         }
     }
 }
