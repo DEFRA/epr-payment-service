@@ -7,10 +7,10 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
     {
         DbSet<PaymentStatus> PaymentStatus { get; } 
         DbSet<DataModels.Payment> Payment { get; }
-        DbSet<AdditionalRegistrationFees> AdditionalRegistrationFees { get; }
-        DbSet<ComplianceSchemeRegistrationFees> ComplianceSchemeRegistrationFees { get; }
-        DbSet<ProducerRegistrationFees> ProducerRegistrationFees { get; }
-        DbSet<SubsidiariesRegistrationFees> SubsidiariesRegistrationFees { get; }
+        DbSet<Group> Group { get; }
+        DbSet<SubGroup> SubGroup { get; }
+        DbSet<Regulator> Regulator { get; }
+        DbSet<RegistrationFees> RegistrationFees { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

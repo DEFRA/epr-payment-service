@@ -12,10 +12,10 @@ namespace EPR.Payment.Service.Common.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
         public DbSet<PaymentStatus> PaymentStatus => Set<PaymentStatus>();
         public DbSet<DataModels.Payment> Payment => Set<DataModels.Payment>();
-        public DbSet<AdditionalRegistrationFees> AdditionalRegistrationFees => Set<AdditionalRegistrationFees>();
-        public DbSet<ComplianceSchemeRegistrationFees> ComplianceSchemeRegistrationFees => Set<ComplianceSchemeRegistrationFees>();
-        public DbSet<ProducerRegistrationFees> ProducerRegistrationFees => Set<ProducerRegistrationFees>();
-        public DbSet<SubsidiariesRegistrationFees> SubsidiariesRegistrationFees => Set<SubsidiariesRegistrationFees>();
+        public DbSet<Group> Group => Set<Group>();
+        public DbSet<SubGroup> SubGroup => Set<SubGroup>();
+        public DbSet<Regulator> Regulator => Set<Regulator>();
+        public DbSet<RegistrationFees> RegistrationFees => Set<RegistrationFees>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
