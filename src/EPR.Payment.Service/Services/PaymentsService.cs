@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
 using EPR.Payment.Service.Common.Dtos.Request;
+using EPR.Payment.Service.Common.Dtos.Response;
 using EPR.Payment.Service.Services.Interfaces;
 using FluentValidation;
 
@@ -51,6 +52,12 @@ namespace EPR.Payment.Service.Services
         public async Task<int> GetPaymentStatusCountAsync(CancellationToken cancellationToken)
         {
             return await _paymentRepository.GetPaymentStatusCount(cancellationToken);
+        }
+
+        public async Task<PaymentResponseDto> GetPaymentByExternalPaymentIdAsync(Guid externalPaymentId, CancellationToken cancellationToken)
+        {
+            var entity = await _paymentRepository.GetPaymentByExternalPaymentIdAsync(externalPaymentId, cancellationToken);
+            return _mapper.Map<PaymentResponseDto>(entity);
         }
 
     }

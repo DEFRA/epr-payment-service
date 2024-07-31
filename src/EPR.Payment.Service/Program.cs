@@ -102,10 +102,12 @@ var logger = app.Services.GetRequiredService<ILogger<Program>>();
 bool enablePaymentsFeature = await featureManager.IsEnabledAsync("EnablePaymentsFeature"); 
 bool enablePaymentStatusInsert = await featureManager.IsEnabledAsync("EnablePaymentStatusInsert");
 bool enablePaymentStatusUpdate = await featureManager.IsEnabledAsync("EnablePaymentStatusUpdate");
+bool enableGetPaymentByExternalPaymentId = await featureManager.IsEnabledAsync("EnableGetPaymentByExternalPaymentId");
 
 logger.LogInformation($"EnablePaymentsFeature: {enablePaymentsFeature}");
 logger.LogInformation($"EnablePaymentStatusInsert: {enablePaymentStatusInsert}");
 logger.LogInformation($"EnablePaymentStatusUpdate: {enablePaymentStatusUpdate}");
+logger.LogInformation($"EnableGetPaymentByExternalPaymentId: {enableGetPaymentByExternalPaymentId}");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
