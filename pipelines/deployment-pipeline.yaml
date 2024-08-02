@@ -1,0 +1,76 @@
+trigger: none
+pr: none
+pool: DEFRA-COMMON-ubuntu2004-SSV3
+
+parameters:
+- name: teamName
+  displayName: 'Select Environment Name:    (works only with "development" as target env)'
+  default: 'DEV11'
+  type: string
+  values:
+    - DEV4
+    - DEV11
+- name: envToDeploy
+  displayName: 'Target Environment to deploy:    (select "development" for DEV 1-11)'
+  default: development
+  type: string
+  values:
+    - development
+    - tst
+    - preprod
+    - prod
+- name: imageTag
+  displayName: Enter Tag for the Image (Docker tag) or Release name (Git repo tag)
+  default: ''
+  type: string
+
+variables:
+  - ${{ if eq(parameters.envToDeploy, 'development') }}:
+    - name: env
+      value: DEV1
+    - template: vars/${{ parameters.teamName }}-${{ parameters.envToDeploy }}.yaml
+  - ${{ elseif eq(parameters.envToDeploy, 'tst') }}:
+    - name: env
+      value: TST1
+    - template: vars/${{ parameters.envToDeploy }}.yaml
+  - ${{ elseif eq(parameters.envToDeploy, 'preprod') }}:
+    - name: env
+      value: PRE1
+    - template: vars/${{ parameters.envToDeploy }}.yaml
+  - ${{ elseif eq(parameters.envToDeploy, 'prod') }}:
+    - name: env
+      value: PRD1
+    - template: vars/${{ parameters.envToDeploy }}.yaml
+# Release tags reference
+  - template: pipelines/image-tags/${{ parameters.envToDeploy }}.yaml@ReleaseTags
+  - ${{ if eq(parameters.envToDeploy, 'development') }}:
+    - template: pipelines/image-tags/${{ parameters.teamName }}-${{ parameters.envToDeploy }}.yaml@ReleaseTags
+
+resources:
+  repositories:
+    - repository: CommonTemplates
+      name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
+      type: git
+      ref: main
+
+    # The repo will be reference the repo by a release tag (if the imageTag parameter contains 'release') otherwise it will pull down the main branch.
+    - repository: ReleaseTags
+      name: RWD-CPR-EPR4P-ADO/epr-app-config-settings
+      type: git
+      ref: ${{ replace(replace(contains(parameters.imageTag, 'RELEASE'),'True',replace('refs/tags/RELEASETAG','RELEASETAG', parameters.imageTag)),'False','main') }}
+
+extends:
+  template: epr-funcs-deployment-pipeline.yaml@CommonTemplates
+  parameters:
+    ${{ if contains(parameters.imageTag, 'RELEASE') }}:
+      imageTag: $(DEVRWDWEBFAx405)
+    ${{ else }}:
+      imageTag: ${{ parameters.imageTag }}
+    azureSubscription: $(azureSubscription)
+    acrName: $(acr.azureContainerRegistryName)
+    registryName: $(acr.repositoryName)
+    serviceName: $(serviceName)
+    ${{ if eq(parameters.envToDeploy, 'development') }}:
+      targetEnvironment: 'development'
+    ${{ else }}:
+      targetEnvironment: '$(env)'
