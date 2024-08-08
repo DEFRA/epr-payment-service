@@ -3,4 +3,4 @@ variables:
   docker.imageName: 'eprpaymentbackend'
   acr.azureContainerRegistryName: 'prdrwdinfac1401'
   acr.repositoryName: 'eprpaymentbackendrepository'
-  serviceName: 'prdrwdwebwab425'
+  serviceName: 'prdrwdwebwa1425'
