@@ -31,4 +31,10 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+	<ItemGroup>
+		<SonarQubeSetting Include="sonar.coverage.exclusions">
+			<value>Scripts/*.*,Migrations/*.* </value>
+		</SonarQubeSetting>
+	</ItemGroup>
+
 </Project>

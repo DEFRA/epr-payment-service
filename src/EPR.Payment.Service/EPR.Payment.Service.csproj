@@ -35,4 +35,10 @@
     <ProjectReference Include="..\EPR.Payment.Service.Common\EPR.Payment.Service.Common.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<SonarQubeSetting Include="sonar.coverage.exclusions">
+			<value>Program.cs</value>
+		</SonarQubeSetting>
+	</ItemGroup>
+
 </Project>
