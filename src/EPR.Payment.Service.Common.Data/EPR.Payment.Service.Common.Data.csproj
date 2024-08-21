@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <SonarQubeCpdExclusions>..\EPR.Payment.Service.Common.Data\Scripts\*.*,..\EPR.Payment.Service.Common.Data\Migrations\*.*</SonarQubeCpdExclusions>
+
   </PropertyGroup>
     <Target Name="GenerateSqlScript" AfterTargets="AfterBuild" Condition="$(AzureBuild) != true">
         <Exec Condition="$(Configuration) == Release" Command="dotnet-ef migrations script --configuration Release --verbose --no-build --context EPR.Payment.Service.Common.Data.AppDbContext --idempotent --output Scripts/migrations.sql" />
