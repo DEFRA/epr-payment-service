@@ -16,7 +16,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
             {
                 new Data.DataModels.Payment()
                 {
-                    Id = Guid.Parse("fe40c799-c027-4a8b-9172-3343c701b4db"),
+                    Id = 1,
                     ExternalPaymentId = Guid.Parse("d0f74b07-42e1-43a7-ae9d-0e279f213278"),
                     OrganisationId = Guid.NewGuid(),
                     UserId = Guid.NewGuid(),
@@ -32,7 +32,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 },
                new Data.DataModels.Payment()
                 {
-                    Id = Guid.Parse("bda648e6-ea8e-40dc-af00-ba65079e9e27"),
+                    Id = 2,
                     ExternalPaymentId = Guid.Parse("dab3d8e1-409b-4b40-a610-1b41843e4710"),
                     OrganisationId = Guid.NewGuid(),
                     UserId = Guid.NewGuid(),

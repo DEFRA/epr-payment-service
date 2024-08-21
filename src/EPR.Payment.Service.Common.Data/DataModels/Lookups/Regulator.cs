@@ -14,10 +14,10 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
     [ExcludeFromCodeCoverage]
     public class Regulator : BaseEntity
     {
-        [MaxLength(50)]
+        [Column(TypeName = "varchar(50)")]
         public string Type { get; set; } = null!;
 
-        [MaxLength(255)]
+        [Column(TypeName = "varchar(255)")]
         public string Description { get; set; } = null!;
 
         #region Navigation properties

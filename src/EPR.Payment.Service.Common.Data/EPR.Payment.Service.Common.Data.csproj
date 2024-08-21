@@ -27,10 +27,6 @@
     <ProjectReference Include="..\EPR.Payment.Service.Common\EPR.Payment.Service.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
 			<value>Scripts/*.*,Migrations/*.* </value>
