@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	  <SonarQubeCpdExclusions>..\EPR.Payment.Service.Common.Data\Scripts\*.*,..\EPR.Payment.Service.Common.Data\Migrations\*.*</SonarQubeCpdExclusions>
+	  <SonarQubeCpdExclusions>Scripts/**,Migrations/**</SonarQubeCpdExclusions>
 
   </PropertyGroup>
     <Target Name="GenerateSqlScript" AfterTargets="AfterBuild" Condition="$(AzureBuild) != true">
@@ -31,7 +31,10 @@
 
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
-			<value>..\EPR.Payment.Service.Common.Data\Scripts\*.*,..\EPR.Payment.Service.Common.Data\Migrations\*.* </value>
+			<value>Scripts/**,Migrations/**</value>
+		</SonarQubeSetting>
+		<SonarQubeSetting Include="sonar.cpd.exclusions">
+			<Value>Scripts/**,Migrations/**</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
 
