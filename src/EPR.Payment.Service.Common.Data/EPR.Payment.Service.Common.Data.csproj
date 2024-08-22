@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <SonarQubeCpdExclusions>Scripts/**,Migrations/**</SonarQubeCpdExclusions>
+
   </PropertyGroup>
     <Target Name="GenerateSqlScript" AfterTargets="AfterBuild" Condition="$(AzureBuild) != true">
         <Exec Condition="$(Configuration) == Release" Command="dotnet-ef migrations script --configuration Release --verbose --no-build --context EPR.Payment.Service.Common.Data.AppDbContext --idempotent --output Scripts/migrations.sql" />
@@ -27,13 +29,12 @@
     <ProjectReference Include="..\EPR.Payment.Service.Common\EPR.Payment.Service.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
-			<value>Scripts/*.*,Migrations/*.* </value>
+			<value>Scripts/**,Migrations/**</value>
+		</SonarQubeSetting>
+		<SonarQubeSetting Include="sonar.cpd.exclusions">
+			<Value>Scripts/**,Migrations/**</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
 

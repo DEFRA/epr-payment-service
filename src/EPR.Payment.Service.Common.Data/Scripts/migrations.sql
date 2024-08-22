@@ -534,3 +534,205 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075038_RemoveTable'
+)
+BEGIN
+    DROP TABLE [Payment];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075038_RemoveTable'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240821075038_RemoveTable', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    DECLARE @var0 sysname;
+    SELECT @var0 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[SubGroup]') AND [c].[name] = N'Type');
+    IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[SubGroup] DROP CONSTRAINT [' + @var0 + '];');
+    ALTER TABLE [Lookup].[SubGroup] ALTER COLUMN [Type] varchar(50) NOT NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    DECLARE @var1 sysname;
+    SELECT @var1 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[SubGroup]') AND [c].[name] = N'Description');
+    IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[SubGroup] DROP CONSTRAINT [' + @var1 + '];');
+    ALTER TABLE [Lookup].[SubGroup] ALTER COLUMN [Description] varchar(255) NOT NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    DECLARE @var2 sysname;
+    SELECT @var2 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[Regulator]') AND [c].[name] = N'Type');
+    IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Regulator] DROP CONSTRAINT [' + @var2 + '];');
+    ALTER TABLE [Lookup].[Regulator] ALTER COLUMN [Type] varchar(50) NOT NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    DECLARE @var3 sysname;
+    SELECT @var3 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[Regulator]') AND [c].[name] = N'Description');
+    IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Regulator] DROP CONSTRAINT [' + @var3 + '];');
+    ALTER TABLE [Lookup].[Regulator] ALTER COLUMN [Description] varchar(255) NOT NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    DECLARE @var4 sysname;
+    SELECT @var4 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[PaymentStatus]') AND [c].[name] = N'Status');
+    IF @var4 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[PaymentStatus] DROP CONSTRAINT [' + @var4 + '];');
+    ALTER TABLE [Lookup].[PaymentStatus] ALTER COLUMN [Status] varchar(20) NOT NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    DECLARE @var5 sysname;
+    SELECT @var5 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[Group]') AND [c].[name] = N'Type');
+    IF @var5 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Group] DROP CONSTRAINT [' + @var5 + '];');
+    ALTER TABLE [Lookup].[Group] ALTER COLUMN [Type] varchar(50) NOT NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    DECLARE @var6 sysname;
+    SELECT @var6 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[Group]') AND [c].[name] = N'Description');
+    IF @var6 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Group] DROP CONSTRAINT [' + @var6 + '];');
+    ALTER TABLE [Lookup].[Group] ALTER COLUMN [Description] varchar(255) NOT NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    CREATE TABLE [Payment] (
+        [Id] int NOT NULL IDENTITY,
+        [UserId] uniqueidentifier NOT NULL,
+        [OrganisationId] uniqueidentifier NOT NULL,
+        [ExternalPaymentId] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [GovpayPaymentId] varchar(50) NULL,
+        [InternalStatusId] int NOT NULL,
+        [Regulator] varchar(20) NOT NULL,
+        [GovPayStatus] varchar(20) NULL,
+        [ErrorCode] varchar(255) NULL,
+        [ErrorMessage] varchar(255) NULL,
+        [Reference] nvarchar(255) NOT NULL,
+        [Amount] decimal(19,4) NOT NULL,
+        [ReasonForPayment] nvarchar(255) NOT NULL,
+        [CreatedDate] datetime2 NOT NULL,
+        [UpdatedByUserId] uniqueidentifier NOT NULL,
+        [UpdatedByOrganisationId] uniqueidentifier NOT NULL,
+        [UpdatedDate] datetime2 NOT NULL,
+        CONSTRAINT [PK_Payment] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_Payment_PaymentStatus_InternalStatusId] FOREIGN KEY ([InternalStatusId]) REFERENCES [Lookup].[PaymentStatus] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_Payment_ExternalPaymentId] ON [Payment] ([ExternalPaymentId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    EXEC(N'CREATE UNIQUE INDEX [IX_Payment_GovpayPaymentId] ON [Payment] ([GovpayPaymentId]) WHERE [GovpayPaymentId] IS NOT NULL');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    CREATE INDEX [IX_Payment_InternalStatusId] ON [Payment] ([InternalStatusId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240821075639_ChangeColumnType', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
