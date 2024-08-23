@@ -17,6 +17,8 @@ namespace EPR.Payment.Service.Extension
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<IPaymentsRepository, PaymentsRepository>();
             services.AddScoped<IPaymentsService, PaymentsService>();
+            services.AddTransient<IRegistrationFeesRepository, RegistrationFeesRepository>();
+            services.AddScoped<IRegistrationFeesService, RegistrationFeesService>();
 
             return services;
 
