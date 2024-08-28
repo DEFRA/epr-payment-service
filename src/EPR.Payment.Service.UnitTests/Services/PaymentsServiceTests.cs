@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.MSTest;
 using AutoMapper;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Profiles;
 using EPR.Payment.Service.Common.Dtos.Request;
 using EPR.Payment.Service.Common.Dtos.Response;
@@ -72,7 +72,7 @@ namespace EPR.Payment.Service.UnitTests.Services
             // Arrange
             var request = _fixture.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, (Guid?)null).With(d => d.OrganisationId, (Guid?)null).Create();
 
-            var validationFailures = new List<ValidationFailure> 
+            var validationFailures = new List<ValidationFailure>
             {
                 new ValidationFailure(nameof(request.UserId), "User ID cannot be null or empty."),
                 new ValidationFailure(nameof(request.OrganisationId), "Organisation ID cannot be null or empty.")
@@ -132,7 +132,7 @@ namespace EPR.Payment.Service.UnitTests.Services
         [TestMethod]
         [AutoMoqData]
         public async Task GetPaymentStatusCountAsync_RepositoryReturnsAResult_ShouldReturnNotNullInteger([Frozen] int paymentStatusCountResult)
-        { 
+        {
             //Arrange
             _paymentsRepositoryMock.Setup(i => i.GetPaymentStatusCount(_cancellationToken)).ReturnsAsync(paymentStatusCountResult);
 

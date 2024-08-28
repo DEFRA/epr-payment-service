@@ -1,6 +1,6 @@
 ﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Data.Interfaces;
-using EPR.Payment.Service.Common.Data.Repositories;
+using EPR.Payment.Service.Common.Data.Repositories.Payments;
 using EPR.Payment.Service.Common.UnitTests.Mocks;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using FluentAssertions;
@@ -10,7 +10,7 @@ using Moq;
 using Moq.EntityFrameworkCore;
 using System.Data.Entity;
 
-namespace EPR.Payment.Service.Data.UnitTests.Repositories
+namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
 {
     [TestClass]
     public class PaymentsRepositoryTests
@@ -30,7 +30,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories
         [TestMethod]
         [AutoMoqData]
         public async Task InsertPaymentStatusAsync_ValidInput_ShouldReturnGuid(
-            [Frozen] Mock<IAppDbContext> _dataContextMock, 
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] PaymentsRepository _mockPaymentsRepository,
             [Frozen] Guid newId,
             [Frozen] Guid userId,

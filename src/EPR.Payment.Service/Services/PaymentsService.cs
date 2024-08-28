@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Request;
 using EPR.Payment.Service.Common.Dtos.Response;
 using EPR.Payment.Service.Services.Interfaces;
@@ -13,9 +13,9 @@ namespace EPR.Payment.Service.Services
         private readonly IMapper _mapper;
         private readonly IValidator<PaymentStatusInsertRequestDto> _paymentStatusInsertRequestValidator;
         private readonly IValidator<PaymentStatusUpdateRequestDto> _paymentStatusUpdateRequestValidator;
-        public PaymentsService(IMapper mapper, 
-            IPaymentsRepository paymentRepository, 
-            IValidator<PaymentStatusInsertRequestDto> paymentStatusInsertRequestValidator, 
+        public PaymentsService(IMapper mapper,
+            IPaymentsRepository paymentRepository,
+            IValidator<PaymentStatusInsertRequestDto> paymentStatusInsertRequestValidator,
             IValidator<PaymentStatusUpdateRequestDto> paymentStatusUpdateRequestValidator)
         {
             _mapper = mapper;

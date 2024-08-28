@@ -1,4 +1,4 @@
-﻿namespace EPR.Payment.Service.Common.Constants
+﻿namespace EPR.Payment.Service.Common.Constants.Payments
 {
     public static class PaymentConstants
     {

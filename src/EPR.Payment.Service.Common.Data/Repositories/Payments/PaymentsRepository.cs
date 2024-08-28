@@ -1,9 +1,9 @@
-﻿using EPR.Payment.Service.Common.Constants;
+﻿using EPR.Payment.Service.Common.Constants.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using Microsoft.EntityFrameworkCore;
 
-namespace EPR.Payment.Service.Common.Data.Repositories
+namespace EPR.Payment.Service.Common.Data.Repositories.Payments
 {
     public class PaymentsRepository : IPaymentsRepository
     {
@@ -50,7 +50,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories
 
         public async Task<DataModels.Payment?> GetPaymentByExternalPaymentIdAsync(Guid externalPaymentId, CancellationToken cancellationToken)
         {
-            var entity =  await _dataContext.Payment.Where(a => a.ExternalPaymentId == externalPaymentId).SingleOrDefaultAsync();
+            var entity = await _dataContext.Payment.Where(a => a.ExternalPaymentId == externalPaymentId).SingleOrDefaultAsync();
 
             if (entity == null)
             {
