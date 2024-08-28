@@ -1,4 +1,4 @@
-﻿namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories
+﻿namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments
 {
     public interface IPaymentsRepository
     {

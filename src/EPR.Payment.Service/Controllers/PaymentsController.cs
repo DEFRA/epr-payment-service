@@ -1,5 +1,5 @@
 ﻿using Asp.Versioning;
-using EPR.Payment.Service.Common.Constants;
+using EPR.Payment.Service.Common.Constants.Payments;
 using EPR.Payment.Service.Common.Dtos.Request;
 using EPR.Payment.Service.Common.Dtos.Response;
 using EPR.Payment.Service.Services.Interfaces;
@@ -90,7 +90,7 @@ namespace EPR.Payment.Service.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,  $"{PaymentConstants.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{PaymentConstants.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
             }
         }
 

@@ -4,8 +4,8 @@ using EPR.Payment.Service.Services;
 using EPR.Payment.Service.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories;
-using EPR.Payment.Service.Common.Data.Repositories;
+using EPR.Payment.Service.Common.Data.Repositories.Payments;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 
 namespace EPR.Payment.Service.Extension
 {
