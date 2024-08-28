@@ -2,7 +2,7 @@
 {
     public static class SubsidiariesConstants
     {
-        public const string UpTo20 = "UpTo20";
-        public const string MoreThan20 = "MoreThan20";
+        public const string UpTo20 = "upto20";
+        public const string MoreThan20 = "morethan20";
     }
 }

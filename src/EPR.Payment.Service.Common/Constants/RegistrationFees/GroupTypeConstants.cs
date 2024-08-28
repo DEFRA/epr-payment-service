@@ -2,7 +2,7 @@
 {
     public static class GroupTypeConstants
     {
-        public const string ProducerType = "ProducerType";
-        public const string ProducerSubsidiaries = "ProducerSubsidiaries";
+        public const string ProducerType = "producertype";
+        public const string ProducerSubsidiaries = "producersubsidiaries";
     }
 }

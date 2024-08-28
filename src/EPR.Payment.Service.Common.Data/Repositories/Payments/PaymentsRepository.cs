@@ -50,7 +50,9 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
 
         public async Task<DataModels.Payment?> GetPaymentByExternalPaymentIdAsync(Guid externalPaymentId, CancellationToken cancellationToken)
         {
-            var entity = await _dataContext.Payment.Where(a => a.ExternalPaymentId == externalPaymentId).SingleOrDefaultAsync();
+            var entity = await _dataContext.Payment
+                .Where(a => a.ExternalPaymentId == externalPaymentId)
+                .SingleOrDefaultAsync(cancellationToken); // Pass the cancellationToken here
 
             if (entity == null)
             {
@@ -62,7 +64,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
 
         public async Task<int> GetPaymentStatusCount(CancellationToken cancellationToken)
         {
-            return await _dataContext.PaymentStatus.CountAsync();
+            return await _dataContext.PaymentStatus.CountAsync(cancellationToken);
         }
     }
 }
