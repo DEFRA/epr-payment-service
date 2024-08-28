@@ -1,5 +1,6 @@
 ﻿using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EPR.Payment.Service.Common.UnitTests.ValueObjects.RegistrationFees
@@ -14,8 +15,11 @@ namespace EPR.Payment.Service.Common.UnitTests.ValueObjects.RegistrationFees
             var regulator = RegulatorType.Create("GB-ENG");
 
             // Assert
-            regulator.Should().NotBeNull();
-            regulator.Value.Should().Be("GB-ENG");
+            using (new AssertionScope())
+            {
+                regulator.Should().NotBeNull();
+                regulator.Value.Should().Be("GB-ENG");
+            }
         }
 
         [TestMethod]
@@ -44,7 +48,7 @@ namespace EPR.Payment.Service.Common.UnitTests.ValueObjects.RegistrationFees
         public void Create_NullRegulator_ShouldThrowArgumentException()
         {
             // Act
-            Action act = () => RegulatorType.Create(null);
+            Action act = () => RegulatorType.Create(null!);
 
             // Assert
             act.Should().Throw<ArgumentException>()
@@ -59,8 +63,11 @@ namespace EPR.Payment.Service.Common.UnitTests.ValueObjects.RegistrationFees
             var regulator2 = RegulatorType.Create("GB-ENG");
 
             // Act & Assert
-            regulator1.Equals(regulator2).Should().BeTrue();
-            regulator1.Should().Be(regulator2);
+            using (new AssertionScope())
+            {
+                regulator1.Equals(regulator2).Should().BeTrue();
+                regulator1.Should().Be(regulator2);
+            }
         }
 
         [TestMethod]
@@ -71,8 +78,11 @@ namespace EPR.Payment.Service.Common.UnitTests.ValueObjects.RegistrationFees
             var regulator2 = RegulatorType.Create("GB-SCT");
 
             // Act & Assert
-            regulator1.Equals(regulator2).Should().BeFalse();
-            regulator1.Should().NotBe(regulator2);
+            using (new AssertionScope())
+            {
+                regulator1.Equals(regulator2).Should().BeFalse();
+                regulator1.Should().NotBe(regulator2);
+            }
         }
 
         [TestMethod]
@@ -113,11 +123,14 @@ namespace EPR.Payment.Service.Common.UnitTests.ValueObjects.RegistrationFees
         [TestMethod]
         public void PredefinedProperties_ShouldReturnCorrectValues()
         {
-            // Assert
-            RegulatorType.GBEng.Value.Should().Be("GB-ENG");
-            RegulatorType.GBSct.Value.Should().Be("GB-SCT");
-            RegulatorType.GBWls.Value.Should().Be("GB-WLS");
-            RegulatorType.GBNir.Value.Should().Be("GB-NIR");
+            using (new AssertionScope())
+            {
+                // Assert
+                RegulatorType.GBEng.Value.Should().Be("GB-ENG");
+                RegulatorType.GBSct.Value.Should().Be("GB-SCT");
+                RegulatorType.GBWls.Value.Should().Be("GB-WLS");
+                RegulatorType.GBNir.Value.Should().Be("GB-NIR");
+            }
         }
     }
 }
