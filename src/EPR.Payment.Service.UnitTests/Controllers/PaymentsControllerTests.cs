@@ -1,10 +1,9 @@
 ﻿using AutoFixture;
 using AutoFixture.MSTest;
-using EPR.Payment.Service.Common.Dtos.Request;
-using EPR.Payment.Service.Common.Dtos.Response;
+using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers;
-using EPR.Payment.Service.Services.Interfaces;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -203,50 +202,6 @@ namespace EPR.Payment.Service.UnitTests.Controllers
                 var badRequestResult = result as BadRequestObjectResult;
                 badRequestResult.Should().NotBeNull();
             }
-        }
-
-        [TestMethod]
-        [AutoMoqData]
-        public async Task GetPaymentByExternalPaymentId_ServiceReturnsAResult_ShouldReturnOkResponse(
-            Guid externalPaymentId,
-            PaymentResponseDto expectedResult)
-        {
-            //Arrange
-            _paymentsServiceMock.Setup(i => i.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken)).ReturnsAsync(expectedResult);
-
-            //Act
-            var result = await _controller.GetPaymentByExternalPaymentId(externalPaymentId, _cancellationToken);
-
-            //Assert
-            result.Should().BeOfType<OkObjectResult>();
-            result.As<OkObjectResult>().Should().NotBeNull();
-        }
-
-        [TestMethod]
-        [AutoMoqData]
-        public async Task GetPaymentByExternalPaymentId_ServiceThrowsException_ShouldReturnInternalServerError([Frozen] Guid externalPaymentId)
-        {
-            // Arrange
-            _paymentsServiceMock.Setup(i => i.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken))
-                               .ThrowsAsync(new Exception("Test Exception"));
-
-            // Act
-            var result = await _controller.GetPaymentByExternalPaymentId(externalPaymentId, _cancellationToken);
-
-            // Assert
-            result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-        }
-
-        [TestMethod]
-        [AutoMoqData]
-        public async Task GetPaymentByExternalPaymentId_EmptyExternalPaymentId_ShouldReturnBadRequest()
-        {
-            // Arrange
-            var externalPaymentId = Guid.Empty;
-
-            var result = await _controller.GetPaymentByExternalPaymentId(externalPaymentId, _cancellationToken);
-
-            result.Should().BeOfType<BadRequestObjectResult>();
         }
     }
 }

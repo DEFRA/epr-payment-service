@@ -1,4 +1,4 @@
-﻿namespace EPR.Payment.Service.Common.Dtos.Request
+﻿namespace EPR.Payment.Service.Common.Dtos.Request.Payments
 {
     public class PaymentStatusInsertRequestDto
     {
@@ -14,6 +14,6 @@
 
         public string? ReasonForPayment { get; set; }
 
-        public Enums.Status Status { get; set; } 
+        public Enums.Status Status { get; set; }
     }
 }

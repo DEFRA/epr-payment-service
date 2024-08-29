@@ -1,4 +1,4 @@
-﻿namespace EPR.Payment.Service.Common.Dtos.Response
+﻿namespace EPR.Payment.Service.Common.Dtos.Response.Payments
 {
     public class PaymentResponseDto
     {

@@ -1,14 +1,16 @@
-﻿namespace EPR.Payment.Service.Common.ValueObjects.RegistrationFees
+﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
+
+namespace EPR.Payment.Service.Common.ValueObjects.RegistrationFees
 {
     public sealed class RegulatorType
     {
         // Predefined valid regulator types
         private static readonly HashSet<string> ValidRegulators = new(StringComparer.OrdinalIgnoreCase)
         {
-            "GB-ENG", // England
-            "GB-SCT", // Scotland
-            "GB-WLS", // Wales
-            "GB-NIR"  // Northern Ireland
+            RegulatorConstants.GBENG,
+            RegulatorConstants.GBSCT,
+            RegulatorConstants.GBWLS,
+            RegulatorConstants.GBNIR
         };
 
         // Property to store the actual regulator type string
