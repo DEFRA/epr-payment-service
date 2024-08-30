@@ -287,5 +287,38 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 response.FeeBreakdowns.Should().NotContain(f => f.Description.Contains("Subsidiaries Fee"));
             }
         }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GenerateFeeBreakdown_WithWholeNumberPence_CreatesCorrectBreakdown(
+            [Frozen] RegistrationFeesResponseDto response,
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            response.BaseFee = 262000.0000m; // £2,620.0000 in pence
+            request.NumberOfSubsidiaries = 10;
+            request.Regulator = "GB-ENG";
+            response.FeeBreakdowns = new List<FeeBreakdown>();
+
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800.0000m); // £558.0000 in pence per subsidiary
+
+            // Act
+            await _feeBreakdownGenerator.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                response.FeeBreakdowns.Should().HaveCount(2);
+
+                // Description should now only display whole pounds
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£2620)")
+                    .Which.Amount.Should().Be(262000.0000m); // Amount remains accurate with full precision (even though it's .0000)
+
+                // Description should now only display whole pounds
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 10 Subsidiaries Fee (£558 each)")
+                    .Which.Amount.Should().Be(558000.0000m); // 10 subsidiaries at £558.0000 each, amount remains accurate with full precision
+            }
+        }
     }
 }

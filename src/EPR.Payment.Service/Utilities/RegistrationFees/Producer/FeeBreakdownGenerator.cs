@@ -22,7 +22,7 @@ namespace EPR.Payment.Service.Utilities.RegistrationFees.Producer
             {
                 response.FeeBreakdowns.Add(new FeeBreakdown
                 {
-                    Description = $"Base Fee (£{response.BaseFee / 100:0})", // Remove decimal points
+                    Description = $"Base Fee (£{Math.Truncate(response.BaseFee / 100m)})", // Convert to pounds and truncate decimals
                     Amount = response.BaseFee
                 });
             }
@@ -42,7 +42,7 @@ namespace EPR.Payment.Service.Utilities.RegistrationFees.Producer
                     var first20Fee = first20SubsidiariesCount * first20SubsidiaryRate;
                     response.FeeBreakdowns.Add(new FeeBreakdown
                     {
-                        Description = $"First {first20SubsidiariesCount} Subsidiaries Fee (£{first20SubsidiaryRate / 100:0} each)",
+                        Description = $"First {first20SubsidiariesCount} Subsidiaries Fee (£{Math.Truncate(first20SubsidiaryRate / 100m)} each)", // Convert to pounds and truncate decimals
                         Amount = first20Fee
                     });
                 }
@@ -52,7 +52,7 @@ namespace EPR.Payment.Service.Utilities.RegistrationFees.Producer
                     var additionalFee = additionalSubsidiariesCount * additionalSubsidiaryRate;
                     response.FeeBreakdowns.Add(new FeeBreakdown
                     {
-                        Description = $"Next {additionalSubsidiariesCount} Subsidiaries Fee (£{additionalSubsidiaryRate / 100:0} each)",
+                        Description = $"Next {additionalSubsidiariesCount} Subsidiaries Fee (£{Math.Truncate(additionalSubsidiaryRate / 100m)} each)", // Convert to pounds and truncate decimals
                         Amount = additionalFee
                     });
                 }
