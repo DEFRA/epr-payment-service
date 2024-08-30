@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
         }
 
         [TestMethod]
-        public void Constructor_ShouldThrowArgumentNullException_WhenFeesRepositoryIsNull()
+        public void Constructor_WhenFeesRepositoryIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
             IProducerFeesRepository? nullRepository = null;
@@ -39,7 +39,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
         }
 
         [TestMethod]
-        public void Constructor_ShouldInitializeBaseFeeCalculationStrategy_WhenFeesRepositoryIsNotNull()
+        public void Constructor_WhenFeesRepositoryIsNotNull_ShouldInitializeBaseFeeCalculationStrategy()
         {
             // Arrange
             var feesRepositoryMock = _fixture.Create<Mock<IProducerFeesRepository>>();
@@ -57,7 +57,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeeAsync_ValidProducerType_ReturnsBaseFee(
+        public async Task CalculateFeeAsync_WhenValidProducerType_ReturnsBaseFee(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
             BaseFeeCalculationStrategy strategy)
         {
@@ -82,7 +82,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeeAsync_RegulatorIsNull_ThrowsArgumentException(
+        public async Task CalculateFeeAsync_WhenRegulatorIsNull_ThrowsArgumentException(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
             BaseFeeCalculationStrategy strategy)
         {
@@ -99,7 +99,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeeAsync_ProducerTypeIsEmpty_ReturnsZeroBaseFee(
+        public async Task CalculateFeeAsync_WhenProducerTypeIsEmpty_ReturnsZeroBaseFee(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
             BaseFeeCalculationStrategy strategy)
         {
@@ -119,7 +119,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeeAsync_RegulatorIsEmpty_ThrowsArgumentException(
+        public async Task CalculateFeeAsync_WhenRegulatorIsEmpty_ThrowsArgumentException(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
             BaseFeeCalculationStrategy strategy)
         {

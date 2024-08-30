@@ -2,7 +2,7 @@
 {
     public class ProducerRegistrationFeesRequestDto
     {
-        public string ProducerType { get; set; } = string.Empty; // "L" for Large, "S" for Small, empty indicates no base fee
+        public string ProducerType { get; set; } = string.Empty; // "large" or "small", case insensitive, empty indicates no base fee
 
         public int NumberOfSubsidiaries { get; set; } // Any integer >= 0
 
