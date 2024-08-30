@@ -16,7 +16,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
     {
         [TestMethod]
         [AutoMoqData]
-        public void Constructor_ShouldThrowArgumentNullException_WhenFeesRepositoryIsNull()
+        public void Constructor_WhenFeesRepositoryIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
             IProducerFeesRepository? nullRepository = null;
@@ -31,7 +31,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public void Constructor_ShouldInitializeSubsidiariesFeeCalculationStrategy_WhenFeesRepositoryIsNotNull()
+        public void Constructor_WhenFeesRepositoryIsNotNull_ShouldInitializeSubsidiariesFeeCalculationStrategy()
         {
             // Arrange
             var feesRepositoryMock = new Mock<IProducerFeesRepository>();
@@ -49,7 +49,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeeAsync_LargeProducerWith50Subsidiaries_ReturnsCorrectSubsidiariesFee(
+        public async Task CalculateFeeAsync_WhenLargeProducerWith50Subsidiaries_ReturnsCorrectSubsidiariesFee(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
             SubsidiariesFeeCalculationStrategy strategy)
         {
@@ -77,7 +77,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeeAsync_SubsidiariesCountIsZero_ThrowsArgumentException(
+        public async Task CalculateFeeAsync_WhenSubsidiariesCountIsZero_ReturnsZeroFee(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
             SubsidiariesFeeCalculationStrategy strategy)
         {
@@ -97,7 +97,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeeAsync_SubsidiariesCountIsNegative_ThrowsArgumentException(
+        public async Task CalculateFeeAsync_WhenSubsidiariesCountIsNegative_ThrowsArgumentException(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
             SubsidiariesFeeCalculationStrategy strategy)
         {
@@ -114,7 +114,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeeAsync_RegulatorIsNullOrEmpty_ThrowsArgumentException(
+        public async Task CalculateFeeAsync_WhenRegulatorIsNullOrEmpty_ThrowsArgumentException(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
             SubsidiariesFeeCalculationStrategy strategy)
         {
@@ -131,7 +131,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeeAsync_SmallProducerWith10Subsidiaries_ReturnsCorrectFee(
+        public async Task CalculateFeeAsync_WhenSmallProducerWith10Subsidiaries_ReturnsCorrectFee(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
             SubsidiariesFeeCalculationStrategy strategy)
         {

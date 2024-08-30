@@ -40,7 +40,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         }
 
         [TestMethod]
-        public void Constructor_ShouldThrowArgumentNullException_WhenBaseFeeCalculationStrategyIsNull()
+        public void Constructor_WhenBaseFeeCalculationStrategyIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
             IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>? baseFeeCalculationStrategy = null;
@@ -57,7 +57,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         }
 
         [TestMethod]
-        public void Constructor_ShouldThrowArgumentNullException_WhenSubsidiariesFeeCalculationStrategyIsNull()
+        public void Constructor_WhenSubsidiariesFeeCalculationStrategyIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
             IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>? subsidiariesFeeCalculationStrategy = null;
@@ -74,7 +74,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         }
 
         [TestMethod]
-        public void Constructor_ShouldThrowArgumentNullException_WhenValidatorIsNull()
+        public void Constructor_WhenValidatorIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
             IValidator<ProducerRegistrationFeesRequestDto>? validator = null;
@@ -91,7 +91,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         }
 
         [TestMethod]
-        public void Constructor_ShouldThrowArgumentNullException_WhenFeeBreakdownGeneratorIsNull()
+        public void Constructor_WhenFeeBreakdownGeneratorIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
             IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto>? feeBreakdownGenerator = null;
@@ -108,7 +108,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         }
 
         [TestMethod]
-        public void Constructor_ShouldInitializeProducerFeesCalculatorService_WhenAllDependenciesAreNotNull()
+        public void Constructor_WhenAllDependenciesAreNotNull_ShouldInitializeProducerFeesCalculatorService()
         {
             // Act
             var service = new ProducerFeesCalculatorService(
@@ -127,7 +127,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_LargeProducerWith50Subsidiaries_ReturnsCorrectFees(
+        public async Task CalculateFeesAsync_WhenLargeProducerWith50Subsidiaries_ReturnsCorrectFees(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
@@ -160,7 +160,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_LargeProducerWith10Subsidiaries_ReturnsCorrectFees(
+        public async Task CalculateFeesAsync_WhenLargeProducerWith10Subsidiaries_ReturnsCorrectFees(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
@@ -193,7 +193,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_LargeProducerWithNoBaseFeeAnd50Subsidiaries_ReturnsCorrectFees(
+        public async Task CalculateFeesAsync_WhenLargeProducerWithNoBaseFeeAnd50Subsidiaries_ReturnsCorrectFees(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
@@ -226,7 +226,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_SmallProducerWith25Subsidiaries_ReturnsCorrectFees(
+        public async Task CalculateFeesAsync_WhenSmallProducerWith25Subsidiaries_ReturnsCorrectFees(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
@@ -259,7 +259,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_SmallProducerWith20Subsidiaries_ReturnsCorrectFees(
+        public async Task CalculateFeesAsync_WhenSmallProducerWith20Subsidiaries_ReturnsCorrectFees(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
@@ -292,7 +292,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_LargeProducerWithNoSubsidiaries_ReturnsBaseFeeOnly(
+        public async Task CalculateFeesAsync_WhenLargeProducerWithNoSubsidiaries_ReturnsBaseFeeOnly(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
@@ -325,7 +325,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_InvalidRequest_ThrowsValidationException(
+        public async Task CalculateFeesAsync_WhenInvalidRequest_ThrowsValidationException(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
@@ -352,7 +352,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_ThrowsInvalidOperationException_WhenArgumentExceptionOccurs(
+        public async Task CalculateFeesAsync_WhenArgumentExceptionOccurs_ThrowsInvalidOperationException(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
@@ -374,7 +374,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_CallsGenerateFeeBreakdown_WhenNoExceptionOccurs(
+        public async Task CalculateFeesAsync_WhenNoExceptionOccurs_CallsGenerateFeeBreakdown(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange

@@ -30,7 +30,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
         }
 
         [TestMethod]
-        public void Constructor_ShouldThrowArgumentNullException_WhenFeesRepositoryIsNull()
+        public void Constructor_WhenFeesRepositoryIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
             IProducerFeesRepository? nullRepository = null;
@@ -44,7 +44,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
         }
 
         [TestMethod]
-        public void Constructor_ShouldInitializeFeeBreakdownGenerator_WhenFeesRepositoryIsNotNull()
+        public void Constructor_WhenFeesRepositoryIsNotNull_ShouldInitializeFeeBreakdownGenerator()
         {
             // Arrange
             var feesRepositoryMock = _fixture.Create<Mock<IProducerFeesRepository>>();
@@ -62,7 +62,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_LargeProducerWith50Subsidiaries_CreatesCorrectBreakdown(
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWith50Subsidiaries_CreatesCorrectBreakdown(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -101,7 +101,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_LargeProducerWith10Subsidiaries_CreatesCorrectBreakdown(
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWith10Subsidiaries_CreatesCorrectBreakdown(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -132,7 +132,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_LargeProducerWithNoBaseFeeAnd50Subsidiaries_CreatesCorrectBreakdown(
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWithNoBaseFeeAnd50Subsidiaries_CreatesCorrectBreakdown(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -168,7 +168,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_SmallProducerWith25Subsidiaries_CreatesCorrectBreakdown(
+        public async Task GenerateFeeBreakdown_WhenSmallProducerWith25Subsidiaries_CreatesCorrectBreakdown(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -205,7 +205,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_SmallProducerWith20Subsidiaries_CreatesCorrectBreakdown(
+        public async Task GenerateFeeBreakdown_WhenSmallProducerWith20Subsidiaries_CreatesCorrectBreakdown(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -236,7 +236,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_LargeProducerWithNoSubsidiaries_CreatesBaseFeeOnly(
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWithNoSubsidiaries_CreatesBaseFeeOnly(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -263,7 +263,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_SmallProducerWithNoSubsidiaries_CreatesBaseFeeOnly(
+        public async Task GenerateFeeBreakdown_WhenSmallProducerWithNoSubsidiaries_CreatesBaseFeeOnly(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -282,7 +282,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 response.FeeBreakdowns.Should().HaveCount(1);
 
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£1216)")
-                .Which.Amount.Should().Be(121600);
+                .Which.Amount.Should().Be(121600m);
 
                 response.FeeBreakdowns.Should().NotContain(f => f.Description.Contains("Subsidiaries Fee"));
             }
