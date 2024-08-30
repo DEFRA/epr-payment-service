@@ -18,7 +18,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
     public class FeeBreakdownGeneratorTests
     {
         private Mock<IProducerFeesRepository> _feesRepositoryMock = null!;
-        private IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto> _feeBreakdownGenerator = null!;
+        private IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto>? _feeBreakdownGenerator = null;
         private IFixture _fixture = null!;
 
         [TestInitialize]

@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.Services.Payments
         }
         public async Task<Guid> InsertPaymentStatusAsync(PaymentStatusInsertRequestDto paymentStatusInsertRequest, CancellationToken cancellationToken)
         {
-            var validatorResult = await _paymentStatusInsertRequestValidator.ValidateAsync(paymentStatusInsertRequest);
+            var validatorResult = await _paymentStatusInsertRequestValidator.ValidateAsync(paymentStatusInsertRequest, cancellationToken);
 
             if (!validatorResult.IsValid)
             {
@@ -38,7 +38,7 @@ namespace EPR.Payment.Service.Services.Payments
 
         public async Task UpdatePaymentStatusAsync(Guid externalPaymentId, PaymentStatusUpdateRequestDto paymentStatusUpdateRequest, CancellationToken cancellationToken)
         {
-            var validatorResult = await _paymentStatusUpdateRequestValidator.ValidateAsync(paymentStatusUpdateRequest);
+            var validatorResult = await _paymentStatusUpdateRequestValidator.ValidateAsync(paymentStatusUpdateRequest, cancellationToken);
 
             if (!validatorResult.IsValid)
             {
