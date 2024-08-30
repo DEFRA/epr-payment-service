@@ -3,28 +3,28 @@ using AutoFixture.MSTest;
 using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Profiles;
-using EPR.Payment.Service.Common.Dtos.Request;
-using EPR.Payment.Service.Common.Dtos.Response;
+using EPR.Payment.Service.Common.Dtos.Request.Payments;
+using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
-using EPR.Payment.Service.Services;
-using EPR.Payment.Service.Services.Interfaces;
+using EPR.Payment.Service.Services.Interfaces.Payments;
+using EPR.Payment.Service.Services.Payments;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
 using FluentValidation.Results;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Services
+namespace EPR.Payment.Service.UnitTests.Services.Payments
 {
     [TestClass]
     public class PaymentsServiceTests
     {
-        private IFixture _fixture = null!;
+        private IFixture? _fixture = null;
         private Mock<IPaymentsRepository> _paymentsRepositoryMock = null!;
-        private IMapper _mapper = null!;
+        private IMapper? _mapper = null;
         private Mock<IValidator<PaymentStatusInsertRequestDto>> _paymentStatusInsertRequestDtoMock = null!;
         private Mock<IValidator<PaymentStatusUpdateRequestDto>> _paymentStatusUpdateRequestDtoMock = null!;
-        private IPaymentsService _service = null!;
+        private IPaymentsService? _service = null;
 
         private CancellationToken _cancellationToken;
 
@@ -41,7 +41,7 @@ namespace EPR.Payment.Service.UnitTests.Services
             _service = new PaymentsService(_mapper, _paymentsRepositoryMock.Object, _paymentStatusInsertRequestDtoMock.Object, _paymentStatusUpdateRequestDtoMock.Object);
         }
 
-        private MapperConfiguration SetupAutomapper()
+        private static MapperConfiguration SetupAutomapper()
         {
             var myProfile = new PaymentProfile();
             return new MapperConfiguration(c => c.AddProfile(myProfile));
@@ -52,7 +52,7 @@ namespace EPR.Payment.Service.UnitTests.Services
         public async Task InsertPaymentStatusAsync_ValidInput_ShouldReturnGuid([Frozen] Guid expectedResult)
         {
             // Arrange
-            var request = _fixture.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, new Guid()).With(x => x.OrganisationId, new Guid()).Create();
+            var request = _fixture?.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, new Guid()).With(x => x.OrganisationId, new Guid()).Create();
 
             _paymentStatusInsertRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
 

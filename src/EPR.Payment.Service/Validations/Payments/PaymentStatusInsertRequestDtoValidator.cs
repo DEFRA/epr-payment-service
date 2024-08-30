@@ -1,7 +1,7 @@
-﻿using EPR.Payment.Service.Common.Dtos.Request;
+﻿using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using FluentValidation;
 
-namespace EPR.Payment.Service.Validations
+namespace EPR.Payment.Service.Validations.Payments
 {
     public class PaymentStatusInsertRequestDtoValidator : AbstractValidator<PaymentStatusInsertRequestDto>
     {

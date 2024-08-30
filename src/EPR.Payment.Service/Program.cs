@@ -4,7 +4,7 @@ using EPR.Payment.Service.Extension;
 using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.ResponseWriter;
-using EPR.Payment.Service.Validations;
+using EPR.Payment.Service.Validations.Payments;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;

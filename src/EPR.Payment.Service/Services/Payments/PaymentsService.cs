@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
-using EPR.Payment.Service.Common.Dtos.Request;
-using EPR.Payment.Service.Common.Dtos.Response;
-using EPR.Payment.Service.Services.Interfaces;
+using EPR.Payment.Service.Common.Dtos.Request.Payments;
+using EPR.Payment.Service.Common.Dtos.Response.Payments;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 using FluentValidation;
 
-namespace EPR.Payment.Service.Services
+namespace EPR.Payment.Service.Services.Payments
 {
     public class PaymentsService : IPaymentsService
     {
@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.Services
         }
         public async Task<Guid> InsertPaymentStatusAsync(PaymentStatusInsertRequestDto paymentStatusInsertRequest, CancellationToken cancellationToken)
         {
-            var validatorResult = await _paymentStatusInsertRequestValidator.ValidateAsync(paymentStatusInsertRequest);
+            var validatorResult = await _paymentStatusInsertRequestValidator.ValidateAsync(paymentStatusInsertRequest, cancellationToken);
 
             if (!validatorResult.IsValid)
             {
@@ -38,7 +38,7 @@ namespace EPR.Payment.Service.Services
 
         public async Task UpdatePaymentStatusAsync(Guid externalPaymentId, PaymentStatusUpdateRequestDto paymentStatusUpdateRequest, CancellationToken cancellationToken)
         {
-            var validatorResult = await _paymentStatusUpdateRequestValidator.ValidateAsync(paymentStatusUpdateRequest);
+            var validatorResult = await _paymentStatusUpdateRequestValidator.ValidateAsync(paymentStatusUpdateRequest, cancellationToken);
 
             if (!validatorResult.IsValid)
             {

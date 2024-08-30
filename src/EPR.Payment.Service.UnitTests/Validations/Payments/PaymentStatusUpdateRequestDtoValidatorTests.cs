@@ -1,8 +1,8 @@
-﻿using EPR.Payment.Service.Common.Dtos.Request;
+﻿using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Validations;
 using FluentValidation.TestHelper;
 
-namespace EPR.Payment.Service.UnitTests.Validations
+namespace EPR.Payment.Service.UnitTests.Validations.Payments
 {
     [TestClass]
     public class PaymentStatusUpdateRequestDtoValidatorTests

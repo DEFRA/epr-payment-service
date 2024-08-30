@@ -1,4 +1,4 @@
-﻿namespace EPR.Payment.Service.Common.Dtos.Request
+﻿namespace EPR.Payment.Service.Common.Dtos.Request.Payments
 {
     public class PaymentStatusUpdateRequestDto
     {

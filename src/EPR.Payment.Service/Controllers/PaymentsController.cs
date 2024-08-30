@@ -1,8 +1,8 @@
 ﻿using Asp.Versioning;
 using EPR.Payment.Service.Common.Constants.Payments;
-using EPR.Payment.Service.Common.Dtos.Request;
-using EPR.Payment.Service.Common.Dtos.Response;
-using EPR.Payment.Service.Services.Interfaces;
+using EPR.Payment.Service.Common.Dtos.Request.Payments;
+using EPR.Payment.Service.Common.Dtos.Response.Payments;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;

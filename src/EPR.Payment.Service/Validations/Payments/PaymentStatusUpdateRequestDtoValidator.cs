@@ -1,4 +1,4 @@
-﻿using EPR.Payment.Service.Common.Dtos.Request;
+﻿using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using FluentValidation;
 
 namespace EPR.Payment.Service.Validations
