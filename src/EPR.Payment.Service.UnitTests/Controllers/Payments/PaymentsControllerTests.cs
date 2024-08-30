@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Controllers
+namespace EPR.Payment.Service.UnitTests.Controllers.Payments
 {
     [TestClass]
     public class PaymentsControllerTests
@@ -102,7 +102,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
             var request = _fixture.Build<PaymentStatusInsertRequestDto>().Create();
 
             var validationException = new ValidationException("Validation error");
-            _paymentsServiceMock.Setup(s => s.InsertPaymentStatusAsync(It.IsAny<PaymentStatusInsertRequestDto>(), _cancellationToken)).ThrowsAsync(validationException); 
+            _paymentsServiceMock.Setup(s => s.InsertPaymentStatusAsync(It.IsAny<PaymentStatusInsertRequestDto>(), _cancellationToken)).ThrowsAsync(validationException);
 
             // Act
             var result = await _controller.InsertPaymentStatus(request, _cancellationToken);

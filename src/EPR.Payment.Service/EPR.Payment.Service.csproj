@@ -41,4 +41,8 @@
 		</SonarQubeSetting>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Strategies\RegistrationFees\Factories\" />
+	</ItemGroup>
+
 </Project>

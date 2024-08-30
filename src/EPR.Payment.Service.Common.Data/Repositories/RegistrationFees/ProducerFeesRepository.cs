@@ -20,11 +20,11 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             var currentDate = DateTime.UtcNow;
 
             var fee = await _dataContext.RegistrationFees
-                .Where(r => string.Equals(r.Group.Type, GroupTypeConstants.ProducerType, StringComparison.OrdinalIgnoreCase)
-                            && string.Equals(r.SubGroup.Type, producer, StringComparison.OrdinalIgnoreCase)
-                            && string.Equals(r.Regulator.Type, regulator.Value, StringComparison.OrdinalIgnoreCase)
-                            && r.EffectiveFrom <= currentDate
-                            && r.EffectiveTo >= currentDate)
+                .Where(r => r.Group.Type.ToLower() == GroupTypeConstants.ProducerType.ToLower() &&
+                            r.SubGroup.Type.ToLower() == producer.ToLower() &&
+                            r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
+                            r.EffectiveFrom <= currentDate &&
+                            r.EffectiveTo >= currentDate)
                 .OrderByDescending(r => r.EffectiveFrom) // Ensure the most recent EffectiveFrom is selected
                 .Select(r => r.Amount)
                 .FirstOrDefaultAsync(cancellationToken);
@@ -40,11 +40,11 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             var currentDate = DateTime.UtcNow;
 
             var fee = await _dataContext.RegistrationFees
-                .Where(r => string.Equals(r.Group.Type, GroupTypeConstants.ProducerSubsidiaries, StringComparison.OrdinalIgnoreCase)
-                            && string.Equals(r.SubGroup.Type, SubsidiariesConstants.UpTo20, StringComparison.OrdinalIgnoreCase)
-                            && string.Equals(r.Regulator.Type, regulator.Value, StringComparison.OrdinalIgnoreCase)
-                            && r.EffectiveFrom <= currentDate
-                            && r.EffectiveTo >= currentDate)
+                .Where(r => r.Group.Type.ToLower() == GroupTypeConstants.ProducerSubsidiaries.ToLower() &&
+                            r.SubGroup.Type.ToLower() == SubsidiariesConstants.UpTo20.ToLower() &&
+                            r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
+                            r.EffectiveFrom <= currentDate &&
+                            r.EffectiveTo >= currentDate)
                 .OrderByDescending(r => r.EffectiveFrom) // Ensure the most recent EffectiveFrom is selected
                 .Select(r => r.Amount)
                 .FirstOrDefaultAsync(cancellationToken);
@@ -60,11 +60,11 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             var currentDate = DateTime.UtcNow;
 
             var fee = await _dataContext.RegistrationFees
-                .Where(r => string.Equals(r.Group.Type, GroupTypeConstants.ProducerSubsidiaries, StringComparison.OrdinalIgnoreCase)
-                            && string.Equals(r.SubGroup.Type, SubsidiariesConstants.MoreThan20, StringComparison.OrdinalIgnoreCase)
-                            && string.Equals(r.Regulator.Type, regulator.Value, StringComparison.OrdinalIgnoreCase)
-                            && r.EffectiveFrom <= currentDate
-                            && r.EffectiveTo >= currentDate)
+                .Where(r => r.Group.Type.ToLower() == GroupTypeConstants.ProducerSubsidiaries.ToLower() &&
+                            r.SubGroup.Type.ToLower() == SubsidiariesConstants.MoreThan20.ToLower() &&
+                            r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
+                            r.EffectiveFrom <= currentDate &&
+                            r.EffectiveTo >= currentDate)
                 .OrderByDescending(r => r.EffectiveFrom) // Ensure the most recent EffectiveFrom is selected
                 .Select(r => r.Amount)
                 .FirstOrDefaultAsync(cancellationToken);

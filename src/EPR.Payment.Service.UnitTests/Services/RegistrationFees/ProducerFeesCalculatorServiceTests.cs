@@ -1,10 +1,12 @@
 ﻿using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
+using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
 using EPR.Payment.Service.Services.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
 using EPR.Payment.Service.Utilities.RegistrationFees.Interfaces;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -17,8 +19,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
     [TestClass]
     public class ProducerFeesCalculatorServiceTests
     {
-        private Mock<IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>> _baseFeeCalculationStrategyMock = null!;
-        private Mock<IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>> _subsidiariesFeeCalculationStrategyMock = null!;
+        private Mock<IProducerFeesRepository> _feesRepositoryMock = null!;
         private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
         private Mock<IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto>> _feeBreakdownGeneratorMock = null!;
         private IProducerFeesCalculatorService _calculatorService = null!;
@@ -26,14 +27,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         [TestInitialize]
         public void TestInitialize()
         {
-            _baseFeeCalculationStrategyMock = new Mock<IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
-            _subsidiariesFeeCalculationStrategyMock = new Mock<IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
+            _feesRepositoryMock = new Mock<IProducerFeesRepository>();
             _validatorMock = new Mock<IValidator<ProducerRegistrationFeesRequestDto>>();
             _feeBreakdownGeneratorMock = new Mock<IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto>>();
 
+            var baseFeeCalculationStrategy = new BaseFeeCalculationStrategy(_feesRepositoryMock.Object);
+            var subsidiariesFeeCalculationStrategy = new SubsidiariesFeeCalculationStrategy(_feesRepositoryMock.Object);
+
             _calculatorService = new ProducerFeesCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _subsidiariesFeeCalculationStrategyMock.Object,
+                baseFeeCalculationStrategy,
+                subsidiariesFeeCalculationStrategy,
                 _validatorMock.Object,
                 _feeBreakdownGeneratorMock.Object
             );
@@ -43,12 +46,12 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         public void Constructor_ShouldThrowArgumentNullException_WhenBaseFeeCalculationStrategyIsNull()
         {
             // Arrange
-            IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>? baseFeeCalculationStrategy = null;
+            BaseFeeCalculationStrategy? baseFeeCalculationStrategy = null;
 
             // Act
             Action act = () => new ProducerFeesCalculatorService(
                 baseFeeCalculationStrategy!,
-                _subsidiariesFeeCalculationStrategyMock.Object,
+                new SubsidiariesFeeCalculationStrategy(_feesRepositoryMock.Object),
                 _validatorMock.Object,
                 _feeBreakdownGeneratorMock.Object);
 
@@ -60,11 +63,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         public void Constructor_ShouldThrowArgumentNullException_WhenSubsidiariesFeeCalculationStrategyIsNull()
         {
             // Arrange
-            IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>? subsidiariesFeeCalculationStrategy = null;
+            SubsidiariesFeeCalculationStrategy? subsidiariesFeeCalculationStrategy = null;
 
             // Act
             Action act = () => new ProducerFeesCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
+                new BaseFeeCalculationStrategy(_feesRepositoryMock.Object),
                 subsidiariesFeeCalculationStrategy!,
                 _validatorMock.Object,
                 _feeBreakdownGeneratorMock.Object);
@@ -81,8 +84,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
             // Act
             Action act = () => new ProducerFeesCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _subsidiariesFeeCalculationStrategyMock.Object,
+                new BaseFeeCalculationStrategy(_feesRepositoryMock.Object),
+                new SubsidiariesFeeCalculationStrategy(_feesRepositoryMock.Object),
                 validator!,
                 _feeBreakdownGeneratorMock.Object);
 
@@ -98,8 +101,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
             // Act
             Action act = () => new ProducerFeesCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _subsidiariesFeeCalculationStrategyMock.Object,
+                new BaseFeeCalculationStrategy(_feesRepositoryMock.Object),
+                new SubsidiariesFeeCalculationStrategy(_feesRepositoryMock.Object),
                 _validatorMock.Object,
                 feeBreakdownGenerator!);
 
@@ -112,8 +115,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         {
             // Act
             var service = new ProducerFeesCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _subsidiariesFeeCalculationStrategyMock.Object,
+                new BaseFeeCalculationStrategy(_feesRepositoryMock.Object),
+                new SubsidiariesFeeCalculationStrategy(_feesRepositoryMock.Object),
                 _validatorMock.Object,
                 _feeBreakdownGeneratorMock.Object);
 
@@ -135,11 +138,14 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             request.NumberOfSubsidiaries = 50;
             request.Regulator = "GB-ENG";
 
-            _baseFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(It.IsAny<string>(), It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(262000m); // £2,620 represented in pence
 
-            _subsidiariesFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(1536000m); // Total subsidiaries fee for 50 subsidiaries represented in pence
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            _feesRepositoryMock.Setup(repo => repo.GetAdditionalSubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(14000m); // £140 in pence per subsidiary
 
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
@@ -168,11 +174,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             request.NumberOfSubsidiaries = 10;
             request.Regulator = "GB-ENG";
 
-            _baseFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(It.IsAny<string>(), It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(262000m); // £2,620 represented in pence
 
-            _subsidiariesFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(558000m); // 10 subsidiaries at £558 each represented in pence
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
@@ -201,11 +207,14 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             request.NumberOfSubsidiaries = 50;
             request.Regulator = "GB-ENG";
 
-            _baseFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(It.IsAny<string>(), It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(0m); // No base fee for any ProducerType
 
-            _subsidiariesFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(1536000m); // Total subsidiaries fee for 50 subsidiaries represented in pence
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            _feesRepositoryMock.Setup(repo => repo.GetAdditionalSubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(14000m); // £140 in pence per subsidiary
 
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
@@ -234,11 +243,14 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             request.NumberOfSubsidiaries = 25;
             request.Regulator = "GB-ENG";
 
-            _baseFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(It.IsAny<string>(), It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(121600m); // £1,216 represented in pence
 
-            _subsidiariesFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(1186000m); // Total subsidiaries fee for 25 subsidiaries represented in pence
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            _feesRepositoryMock.Setup(repo => repo.GetAdditionalSubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(14000m); // £140 in pence per subsidiary
 
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
@@ -267,11 +279,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             request.NumberOfSubsidiaries = 20;
             request.Regulator = "GB-ENG";
 
-            _baseFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(It.IsAny<string>(), It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(121600m); // £1,216 represented in pence
 
-            _subsidiariesFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(1116000m); // 20 subsidiaries at £558 each represented in pence
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
@@ -300,11 +312,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             request.NumberOfSubsidiaries = 0;
             request.Regulator = "GB-ENG";
 
-            _baseFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(It.IsAny<string>(), It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(262000m); // £2,620 represented in pence
-
-            _subsidiariesFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(0m); // No subsidiaries fee
 
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
@@ -356,7 +365,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
-            _baseFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(It.IsAny<string>(), It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new ArgumentException("Invalid argument"));
 
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
@@ -382,11 +391,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             request.NumberOfSubsidiaries = 10;
             request.Regulator = "GB-ENG";
 
-            _baseFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(It.IsAny<string>(), It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(262000m); // £2,620 represented in pence
 
-            _subsidiariesFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(558000m); // 10 subsidiaries at £558 each represented in pence
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());

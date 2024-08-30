@@ -2,7 +2,7 @@
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
 using EPR.Payment.Service.Utilities.RegistrationFees.Interfaces;
 using FluentValidation;
 
@@ -10,14 +10,14 @@ namespace EPR.Payment.Service.Services.RegistrationFees
 {
     public class ProducerFeesCalculatorService : IProducerFeesCalculatorService
     {
-        private readonly IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto> _baseFeeCalculationStrategy;
-        private readonly IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto> _subsidiariesFeeCalculationStrategy;
+        private readonly BaseFeeCalculationStrategy _baseFeeCalculationStrategy;
+        private readonly SubsidiariesFeeCalculationStrategy _subsidiariesFeeCalculationStrategy;
         private readonly IValidator<ProducerRegistrationFeesRequestDto> _validator;
         private readonly IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto> _feeBreakdownGenerator;
 
         public ProducerFeesCalculatorService(
-            IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto> baseFeeCalculationStrategy,
-            IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto> subsidiariesFeeCalculationStrategy,
+            BaseFeeCalculationStrategy baseFeeCalculationStrategy,
+            SubsidiariesFeeCalculationStrategy subsidiariesFeeCalculationStrategy,
             IValidator<ProducerRegistrationFeesRequestDto> validator,
             IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto> feeBreakdownGenerator)
         {
