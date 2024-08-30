@@ -315,9 +315,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             _feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(It.IsAny<string>(), It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(262000m); // £2,620 represented in pence
 
-            _subsidiariesFeeCalculationStrategyMock.Setup(s => s.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(0m); // No subsidiaries fee
-
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
