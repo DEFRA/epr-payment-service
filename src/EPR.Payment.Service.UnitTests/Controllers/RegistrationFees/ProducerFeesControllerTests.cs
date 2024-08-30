@@ -36,7 +36,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
 
         [TestMethod]
         [AutoMoqData]
-        public void Constructor_ProducerFeesCalculatorServiceIsNull_ThrowsArgumentNullException()
+        public void Constructor_WhenProducerFeesCalculatorServiceIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             IProducerFeesCalculatorService? producerFeesCalculatorService = null;
@@ -50,7 +50,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
 
         [TestMethod]
         [AutoMoqData]
-        public void Constructor_ValidatorIsNull_ThrowsArgumentNullException()
+        public void Constructor_WhenValidatorIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             IValidator<ProducerRegistrationFeesRequestDto>? validator = null;
@@ -64,7 +64,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_ValidRequest_ReturnsOkResultWithCalculatedFees(
+        public async Task CalculateFeesAsync_WhenValidRequest_ReturnsOkResultWithCalculatedFees(
             [Frozen] ProducerRegistrationFeesRequestDto request,
             [Frozen] RegistrationFeesResponseDto response)
         {
@@ -87,7 +87,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_RequestValidationFails_ReturnsBadRequestWithValidationErrorDetails(
+        public async Task CalculateFeesAsync_WhenRequestValidationFails_ReturnsBadRequestWithValidationErrorDetails(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
@@ -114,7 +114,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_CalculationThrowsValidationException_ReturnsBadRequestWithValidationExceptionDetails(
+        public async Task CalculateFeesAsync_WhenCalculationThrowsValidationException_ReturnsBadRequestWithValidationExceptionDetails(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
@@ -140,7 +140,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_CalculationThrowsArgumentException_ReturnsBadRequestWithArgumentExceptionDetails(
+        public async Task CalculateFeesAsync_WhenCalculationThrowsArgumentException_ReturnsBadRequestWithArgumentExceptionDetails(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
@@ -165,7 +165,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_CalculationThrowsException_ReturnsInternalServerErrorWithExceptionDetails(
+        public async Task CalculateFeesAsync_WhenCalculationThrowsException_ReturnsInternalServerErrorWithExceptionDetails(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
