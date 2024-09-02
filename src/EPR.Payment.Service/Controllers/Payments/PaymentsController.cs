@@ -19,7 +19,7 @@ namespace EPR.Payment.Service.Controllers
 
         public PaymentsController(IPaymentsService paymentsService)
         {
-            _paymentsService = paymentsService;
+            _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
         }
 
         [MapToApiVersion(1)]

@@ -15,22 +15,22 @@ namespace EPR.Payment.Service.Validations.Payments
         {
             RuleFor(x => x.UserId)
                 .NotNull()
-                .WithMessage(string.Format(InvalidUserIdErrorMessage, nameof(PaymentStatusInsertRequestDto.UserId)));
+                .WithMessage(InvalidUserIdErrorMessage);
             RuleFor(x => x.OrganisationId)
                 .NotNull()
-                .WithMessage(string.Format(InvalidOrganisationIdErrorMessage, nameof(PaymentStatusInsertRequestDto.OrganisationId)));
+                .WithMessage(InvalidOrganisationIdErrorMessage);
             RuleFor(x => x.Reference)
                 .NotEmpty()
-                .WithMessage(string.Format(InvalidReferenceErrorMessage, nameof(PaymentStatusInsertRequestDto.Reference)));
+                .WithMessage(InvalidReferenceErrorMessage);
             RuleFor(x => x.ReasonForPayment)
                 .NotEmpty()
-                .WithMessage(string.Format(InvalidReasonForPaymentErrorMessage, nameof(PaymentStatusInsertRequestDto.ReasonForPayment)));
+                .WithMessage(InvalidReasonForPaymentErrorMessage);
             RuleFor(x => x.Amount)
                 .NotNull()
-                .WithMessage(string.Format(InvalidAmountErrorMessage, nameof(PaymentStatusInsertRequestDto.Amount)));
+                .WithMessage(InvalidAmountErrorMessage);
             RuleFor(x => x.Status)
                 .IsInEnum()
-                .WithMessage(string.Format(InvalidStatusErrorMessage, nameof(PaymentStatusInsertRequestDto.Status)));
+                .WithMessage(InvalidStatusErrorMessage);
         }
     }
 }

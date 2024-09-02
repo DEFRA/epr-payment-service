@@ -17,7 +17,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
     [TestClass]
     public class PaymentsControllerTests
     {
-        private IFixture _fixture = null!;
+        private Fixture _fixture = null!;
         private PaymentsController _controller = null!;
         private Mock<IPaymentsService> _paymentsServiceMock = null!;
         private CancellationToken _cancellationToken;

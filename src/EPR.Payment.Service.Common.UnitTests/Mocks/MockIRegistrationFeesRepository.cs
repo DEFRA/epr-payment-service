@@ -80,7 +80,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type="ReSubmitting", Description = "Re-submitting a report" },
                 Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
                 Amount = 100m, 
-                EffectiveFrom = DateTime.UtcNow.AddDays(5), // Not effective yet, future record
+                EffectiveFrom = DateTime.UtcNow.AddDays(-20), // Not effective yet, future record
                 EffectiveTo = DateTime.UtcNow.AddDays(20) // Future expiration
             }
         }.AsQueryable();

@@ -6,7 +6,6 @@ using EPR.Payment.Service.Common.Data.Profiles;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
-using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Payments;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -19,12 +18,12 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
     [TestClass]
     public class PaymentsServiceTests
     {
-        private IFixture? _fixture = null;
+        private Fixture? _fixture = null!;
         private Mock<IPaymentsRepository> _paymentsRepositoryMock = null!;
-        private IMapper? _mapper = null;
+        private Mapper? _mapper = null!;
         private Mock<IValidator<PaymentStatusInsertRequestDto>> _paymentStatusInsertRequestDtoMock = null!;
         private Mock<IValidator<PaymentStatusUpdateRequestDto>> _paymentStatusUpdateRequestDtoMock = null!;
-        private IPaymentsService? _service = null;
+        private PaymentsService? _service = null!;
 
         private CancellationToken _cancellationToken;
 
@@ -52,7 +51,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public async Task InsertPaymentStatusAsync_ValidInput_ShouldReturnGuid([Frozen] Guid expectedResult)
         {
             // Arrange
-            var request = _fixture?.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, new Guid()).With(x => x.OrganisationId, new Guid()).Create();
+            var request = _fixture!.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, new Guid()).With(x => x.OrganisationId, new Guid()).Create();
 
             _paymentStatusInsertRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
 
@@ -60,7 +59,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
                r.InsertPaymentStatusAsync(It.IsAny<Common.Data.DataModels.Payment>(), _cancellationToken)).ReturnsAsync(expectedResult);
 
             // Act
-            var result = await _service.InsertPaymentStatusAsync(request, _cancellationToken);
+            var result = await _service!.InsertPaymentStatusAsync(request, _cancellationToken);
 
             // Assert
             result.Should().Be(expectedResult);
@@ -70,7 +69,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public async Task InsertPaymentStatusAsync_ValiditonFails_ShouldThrowValidationException()
         {
             // Arrange
-            var request = _fixture.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, (Guid?)null).With(d => d.OrganisationId, (Guid?)null).Create();
+            var request = _fixture!.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, (Guid?)null).With(d => d.OrganisationId, (Guid?)null).Create();
 
             var validationFailures = new List<ValidationFailure>
             {
@@ -81,7 +80,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             _paymentStatusInsertRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult(validationFailures));
 
             // Act & Assert
-            await _service.Invoking(async x => await x.InsertPaymentStatusAsync(request, _cancellationToken))
+            await _service.Invoking(async x => await x!.InsertPaymentStatusAsync(request, _cancellationToken))
                 .Should().ThrowAsync<ValidationException>();
         }
 
@@ -90,12 +89,12 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public async Task UpdatePaymentStatusAsync_ValidInput_NotThrowException([Frozen] Guid id)
         {
             // Arrange
-            var request = _fixture.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, new Guid()).With(x => x.UpdatedByOrganisationId, new Guid()).Create();
+            var request = _fixture!.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, new Guid()).With(x => x.UpdatedByOrganisationId, new Guid()).Create();
 
             var entity = new Common.Data.DataModels.Payment();
             _paymentsRepositoryMock.Setup(r => r.GetPaymentByExternalPaymentIdAsync(id, _cancellationToken)).ReturnsAsync(entity);
 
-            entity = _mapper.Map(request, entity);
+            entity = _mapper!.Map(request, entity);
 
             // Act
             _paymentsRepositoryMock.Setup(r =>
@@ -103,7 +102,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
 
             _paymentStatusUpdateRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
 
-            Func<Task> action = async () => await _service.UpdatePaymentStatusAsync(id, request, _cancellationToken);
+            Func<Task> action = async () => await _service!.UpdatePaymentStatusAsync(id, request, _cancellationToken);
 
             // Assert
             await action.Should().NotThrowAsync();
@@ -114,7 +113,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public async Task UpdatePaymentStatusAsync_ValiditonFails_ShouldThrowValidationException([Frozen] Guid id)
         {
             // Arrange
-            var request = _fixture.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, (Guid?)null).With(d => d.UpdatedByOrganisationId, (Guid?)null).Create();
+            var request = _fixture!.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, (Guid?)null).With(d => d.UpdatedByOrganisationId, (Guid?)null).Create();
 
             var validationFailures = new List<ValidationFailure>
             {
@@ -125,7 +124,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             _paymentStatusUpdateRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult(validationFailures));
 
             // Act & Assert
-            await _service.Invoking(async x => await x.UpdatePaymentStatusAsync(id, request, _cancellationToken))
+            await _service.Invoking(async x => await x!.UpdatePaymentStatusAsync(id, request, _cancellationToken))
                 .Should().ThrowAsync<ValidationException>();
         }
 
@@ -137,7 +136,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             _paymentsRepositoryMock.Setup(i => i.GetPaymentStatusCount(_cancellationToken)).ReturnsAsync(paymentStatusCountResult);
 
             //Act
-            var result = await _service.GetPaymentStatusCountAsync(_cancellationToken);
+            var result = await _service!.GetPaymentStatusCountAsync(_cancellationToken);
 
             //Assert
             result.Should().Be(paymentStatusCountResult);
@@ -150,7 +149,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             _paymentsRepositoryMock.Setup(i => i.GetPaymentStatusCount(_cancellationToken)).ReturnsAsync(0);
 
             //Act
-            var result = await _service.GetPaymentStatusCountAsync(_cancellationToken);
+            var result = await _service!.GetPaymentStatusCountAsync(_cancellationToken);
 
             //Assert
             result.Should().Be(0);
@@ -166,10 +165,10 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             //Arrange
             _paymentsRepositoryMock.Setup(i => i.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken)).ReturnsAsync(paymentEntity);
 
-            var expectedResult = _mapper.Map<PaymentResponseDto>(paymentEntity);
+            var expectedResult = _mapper!.Map<PaymentResponseDto>(paymentEntity);
 
             //Act
-            var result = await _service.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken);
+            var result = await _service!.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken);
 
             //Assert
             using (new AssertionScope())
@@ -189,10 +188,10 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             //Arrange
             _paymentsRepositoryMock.Setup(i => i.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken)).ReturnsAsync((Common.Data.DataModels.Payment?)null);
 
-            var expectedResult = _mapper.Map<PaymentResponseDto>(null);
+            var expectedResult = _mapper!.Map<PaymentResponseDto>(null);
 
             //Act
-            var result = await _service.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken);
+            var result = await _service!.GetPaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken);
 
             //Assert
             result.Should().Be(expectedResult);
