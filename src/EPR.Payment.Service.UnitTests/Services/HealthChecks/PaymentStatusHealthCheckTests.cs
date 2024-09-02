@@ -1,8 +1,8 @@
 ﻿using EPR.Payment.Service.HealthCheck;
-using EPR.Payment.Service.Services.Interfaces;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Moq;
 using FluentAssertions;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 
 namespace EPR.Payment.Service.UnitTests.Services.HealthChecks
 {
