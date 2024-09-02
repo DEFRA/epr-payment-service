@@ -10,6 +10,7 @@ using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
 using EPR.Payment.Service.Services.Payments;
 using EPR.Payment.Service.Services.RegistrationFees;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
 using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
 using EPR.Payment.Service.Utilities.RegistrationFees.Interfaces;
 using EPR.Payment.Service.Utilities.RegistrationFees.Producer;
@@ -25,9 +26,10 @@ namespace EPR.Payment.Service.Extension
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            // Register the specific strategies explicitly
-            services.AddScoped<BaseFeeCalculationStrategy>();
-            services.AddScoped<SubsidiariesFeeCalculationStrategy>();
+            // Register the specific implementations of IFeeCalculationStrategy
+            services.AddScoped<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>, BaseFeeCalculationStrategy>();
+            services.AddScoped<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>, SubsidiariesFeeCalculationStrategy>();
+
 
             // Register the fee breakdown generator
             services.AddScoped<IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto>, FeeBreakdownGenerator>();
