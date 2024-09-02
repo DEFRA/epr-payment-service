@@ -41,8 +41,6 @@ namespace EPR.Payment.Service.Extension
             // Register the main services
             services.AddScoped<IProducerFeesCalculatorService, ProducerFeesCalculatorService>();
             services.AddScoped<IPaymentsService, PaymentsService>();
-            services.AddTransient<IRegistrationFeesRepository, RegistrationFeesRepository>();
-            services.AddScoped<IRegistrationFeesService, RegistrationFeesService>();
 
             return services;
         }

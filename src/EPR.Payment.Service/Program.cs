@@ -106,8 +106,9 @@ bool enablePaymentStatusInsert = await featureManager.IsEnabledAsync("EnablePaym
 bool enablePaymentStatusUpdate = await featureManager.IsEnabledAsync("EnablePaymentStatusUpdate");
 bool enableGetPaymentByExternalPaymentId = await featureManager.IsEnabledAsync("EnableGetPaymentByExternalPaymentId");
 
-bool enableRegistrationFeesFeature = await featureManager.IsEnabledAsync("EnableRegistrationFeesFeature");
+bool enableRegistrationFeesFeature = await featureManager.IsEnabledAsync("EnableRegistrationFeesFeature"); 
 bool enableProducerResubmissionAmount = await featureManager.IsEnabledAsync("EnableProducerResubmissionAmount");
+bool enableRegistrationFeesCalculation = await featureManager.IsEnabledAsync("EnableRegistrationFeesCalculation"); 
 
 logger.LogInformation($"EnablePaymentsFeature: {enablePaymentsFeature}");
 logger.LogInformation($"EnablePaymentStatusInsert: {enablePaymentStatusInsert}");
@@ -117,6 +118,7 @@ logger.LogInformation($"EnableGetPaymentByExternalPaymentId: {enableGetPaymentBy
 
 logger.LogInformation($"EnableRegistrationFeesFeature: {enableRegistrationFeesFeature}");
 logger.LogInformation($"EnableProducerResubmissionAmount: {enableProducerResubmissionAmount}");
+logger.LogInformation($"EnableRegistrationFeesCalculation: {enableRegistrationFeesCalculation}");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();

@@ -74,5 +74,24 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 
             return fee;
         }
+
+        public async Task<decimal?> GetProducerResubmissionAmountByRegulatorAsync(string regulator, CancellationToken cancellationToken)
+        {
+            var fee = await _dataContext.RegistrationFees.
+                Where(a =>
+                          a.Group.Type.ToLower() == GroupTypeConstants.ProducerResubmission.ToLower() &&
+                          a.SubGroup.Type.ToLower() == ProducerResubmissionConstants.ReSubmitting.ToLower() &&
+                          a.Regulator.Type.ToLower() == regulator.ToLower())
+                .OrderByDescending(r => r.EffectiveFrom) 
+                .Select(r => r.Amount)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (fee == 0)
+            {
+                throw new KeyNotFoundException($"{ProducerResubmissionConstants.RecordNotFoundProducerResubmissionFeeError}: {regulator}");
+            }
+
+            return fee;
+        }
     }
 }

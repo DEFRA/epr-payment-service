@@ -1,4 +1,4 @@
-﻿using EPR.Payment.Service.Common.Data.Enums;
+﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using Moq;
 using System.Data.Entity;
@@ -8,49 +8,116 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
 {
     public class MockIRegistrationFeesRepository
     {
-        public static Mock<DbSet<Data.DataModels.Lookups.RegistrationFees>> GetRegistrationFeesMock()
+        public static Mock<DbSet<Common.Data.DataModels.Lookups.RegistrationFees>> GetRegistrationFeesMock()
         {
-            var registrationFeesMock = new Mock<DbSet<Data.DataModels.Lookups.RegistrationFees>>();
+            var registrationFeesMock = new Mock<DbSet<Common.Data.DataModels.Lookups.RegistrationFees>>();
 
-            var registrationFeesMockData = new List<Data.DataModels.Lookups.RegistrationFees>()
+            var registrationFeesData = new List<Common.Data.DataModels.Lookups.RegistrationFees>
+        {
+            // Large Producer - Base Fee (Currently Active)
+            new Common.Data.DataModels.Lookups.RegistrationFees
             {
-                new Data.DataModels.Lookups.RegistrationFees()
-                {
-                    Id = 1,
-                    GroupId = (int)Group.ProducerResubmission,
-                    SubGroupId = (int)SubGroup.ReSubmitting,
-                    RegulatorId = 1,
-                    Amount = 100,
-                    EffectiveFrom = DateTime.Now,
-                    EffectiveTo = DateTime.Now,
-                    Regulator = new Data.DataModels.Lookups.Regulator { Id = 1, Type = "Test-Regulator-1", Description = "Test Regulator 1" }
-                },
-               new Data.DataModels.Lookups.RegistrationFees()
-                {
-                    Id = 2,
-                    GroupId = (int)Group.ProducerType,
-                    SubGroupId = (int)SubGroup.Small,
-                    RegulatorId = 2,
-                    Amount = 100,
-                    EffectiveFrom = DateTime.Now,
-                    EffectiveTo = DateTime.Now,
-                    Regulator = new Data.DataModels.Lookups.Regulator { Id = 2, Type = "Test-Regulator-2", Description = "Test Regulator 2" }
-                }
-            }.AsQueryable();
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type="Large", Description = "Large producer" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
+                Amount = 262000m, // £2,620 represented in pence (262000 pence)
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
+                EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
+            },
+            // Large Producer - Base Fee (Expired)
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type="Large", Description = "Large producer" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
+                Amount = 240000m, // £2,400 represented in pence (240000 pence)
+                EffectiveFrom = DateTime.UtcNow.AddDays(-30), // Effective 30 days ago
+                EffectiveTo = DateTime.UtcNow.AddDays(-15) // Expired 15 days ago
+            },
+            // Small Producer - Base Fee (Currently Active)
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type= "Small", Description = "Small producer" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
+                Amount = 121600m, // £1,216 represented in pence (121600 pence)
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
+                EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
+            },
+            // First 20 Subsidiaries - Fee (Currently Active)
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerSubsidiaries, Description = "Producer Subsidiaries" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type=SubsidiariesConstants.UpTo20, Description = "Up to 20" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
+                Amount = 55800m, // £558 represented in pence per subsidiary (55800 pence)
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
+                EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
+            },
+            // Additional Subsidiaries - Fee (Currently Active)
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerSubsidiaries, Description = "Producer Subsidiaries" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubsidiariesConstants.MoreThan20, Description = "More than 20" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
+                Amount = 14000m, // £140 represented in pence per additional subsidiary (14000 pence)
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
+                EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
+            },
+            // Large Producer - Base Fee (Future Effective)
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type="Large", Description = "Large producer" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
+                Amount = 300000m, // £3,000 represented in pence (300000 pence)
+                EffectiveFrom = DateTime.UtcNow.AddDays(5), // Not effective yet, future record
+                EffectiveTo = DateTime.UtcNow.AddDays(20) // Future expiration
+            },
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerResubmission, Description = "Producer re-submitting a report" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type="ReSubmitting", Description = "Re-submitting a report" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
+                Amount = 100m, 
+                EffectiveFrom = DateTime.UtcNow.AddDays(5), // Not effective yet, future record
+                EffectiveTo = DateTime.UtcNow.AddDays(20) // Future expiration
+            }
+        }.AsQueryable();
 
-            registrationFeesMock.As<IDbAsyncEnumerable<Data.DataModels.Lookups.RegistrationFees>>()
+            registrationFeesMock.As<IDbAsyncEnumerable<Common.Data.DataModels.Lookups.RegistrationFees>>()
                 .Setup(m => m.GetAsyncEnumerator())
-                .Returns(new TestHelperDbAsyncEnumerator<Data.DataModels.Lookups.RegistrationFees>(registrationFeesMockData.GetEnumerator()));
+                .Returns(new TestHelperDbAsyncEnumerator<Common.Data.DataModels.Lookups.RegistrationFees>(registrationFeesData.GetEnumerator()));
 
-            registrationFeesMock.As<IQueryable<Data.DataModels.Lookups.RegistrationFees>>()
+            registrationFeesMock.As<IQueryable<Common.Data.DataModels.Lookups.RegistrationFees>>()
                 .Setup(m => m.Provider)
-                .Returns(new TestHelperDbAsyncQueryProvider<Data.DataModels.Lookups.RegistrationFees>(registrationFeesMockData.Provider));
+                .Returns(new TestHelperDbAsyncQueryProvider<Common.Data.DataModels.Lookups.RegistrationFees>(registrationFeesData.Provider));
 
-            registrationFeesMock.As<IQueryable<Data.DataModels.Lookups.RegistrationFees>>().Setup(m => m.Expression).Returns(registrationFeesMockData.Expression);
-            registrationFeesMock.As<IQueryable<Data.DataModels.Lookups.RegistrationFees>>().Setup(m => m.ElementType).Returns(registrationFeesMockData.ElementType);
-            registrationFeesMock.As<IQueryable<Data.DataModels.Lookups.RegistrationFees>>().Setup(m => m.GetEnumerator()).Returns(() => registrationFeesMockData.GetEnumerator());
+            registrationFeesMock.As<IQueryable<Common.Data.DataModels.Lookups.RegistrationFees>>().Setup(m => m.Expression).Returns(registrationFeesData.Expression);
+            registrationFeesMock.As<IQueryable<Common.Data.DataModels.Lookups.RegistrationFees>>().Setup(m => m.ElementType).Returns(registrationFeesData.ElementType);
+            registrationFeesMock.As<IQueryable<Common.Data.DataModels.Lookups.RegistrationFees>>().Setup(m => m.GetEnumerator()).Returns(() => registrationFeesData.GetEnumerator());
 
-            // Setup the mock
+            return registrationFeesMock;
+        }
+
+        public static Mock<DbSet<Common.Data.DataModels.Lookups.RegistrationFees>> GetEmptyRegistrationFeesMock()
+        {
+            var registrationFeesMock = new Mock<DbSet<Common.Data.DataModels.Lookups.RegistrationFees>>();
+
+            var emptyData = new List<Common.Data.DataModels.Lookups.RegistrationFees>().AsQueryable();
+
+            registrationFeesMock.As<IDbAsyncEnumerable<Common.Data.DataModels.Lookups.RegistrationFees>>()
+                .Setup(m => m.GetAsyncEnumerator())
+                .Returns(new TestHelperDbAsyncEnumerator<Common.Data.DataModels.Lookups.RegistrationFees>(emptyData.GetEnumerator()));
+
+            registrationFeesMock.As<IQueryable<Common.Data.DataModels.Lookups.RegistrationFees>>()
+                .Setup(m => m.Provider)
+                .Returns(new TestHelperDbAsyncQueryProvider<Common.Data.DataModels.Lookups.RegistrationFees>(emptyData.Provider));
+
+            registrationFeesMock.As<IQueryable<Common.Data.DataModels.Lookups.RegistrationFees>>().Setup(m => m.Expression).Returns(emptyData.Expression);
+            registrationFeesMock.As<IQueryable<Common.Data.DataModels.Lookups.RegistrationFees>>().Setup(m => m.ElementType).Returns(emptyData.ElementType);
+            registrationFeesMock.As<IQueryable<Common.Data.DataModels.Lookups.RegistrationFees>>().Setup(m => m.GetEnumerator()).Returns(() => emptyData.GetEnumerator());
+
             return registrationFeesMock;
         }
     }
