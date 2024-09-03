@@ -10,8 +10,8 @@ namespace EPR.Payment.Service.Common.Data.SeedData
     {
         public static void Seed(ModelBuilder modelBuilder)
         {
-            DateTime effectiveFromDate = DateTime.ParseExact("01/01/2025", "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            DateTime effectiveToDate = DateTime.ParseExact("31/12/2025", "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            DateTime effectiveFromDate = DateTime.ParseExact("01/01/2024 00:00:00", "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            DateTime effectiveToDate = DateTime.ParseExact("31/12/2025 23:59:59", "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
 
             modelBuilder.Entity<PaymentStatus>().HasData(
                 new PaymentStatus { Id = Enums.Status.Initiated, Status = "Initiated" },
