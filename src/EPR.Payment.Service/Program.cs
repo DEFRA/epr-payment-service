@@ -4,7 +4,8 @@ using EPR.Payment.Service.Extension;
 using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.ResponseWriter;
-using EPR.Payment.Service.Validations;
+using EPR.Payment.Service.Validations.Payments;
+using EPR.Payment.Service.Validations.RegistrationFees;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ builder.Services.AddControllers();
 builder.Services.AddFluentValidation(fv =>
 {
     fv.RegisterValidatorsFromAssemblyContaining<PaymentStatusInsertRequestDtoValidator>();
+    fv.RegisterValidatorsFromAssemblyContaining<ProducerRegistrationFeesRequestDtoValidator>();
     fv.AutomaticValidationEnabled = false;
 });
 
@@ -47,7 +49,7 @@ builder.Services
     .AddDbContextCheck<AppDbContext>()
     .AddCheck<PaymentStatusHealthCheck>(PaymentStatusHealthCheck.HealthCheckResultDescription,
             failureStatus: HealthStatus.Unhealthy,
-            tags: new[] { "ready" }); 
+            tags: new[] { "ready" });
 ;
 
 builder.Services.AddApiVersioning(options =>
@@ -99,13 +101,14 @@ using (var scope = app.Services.CreateScope())
 var featureManager = app.Services.GetRequiredService<IFeatureManager>();
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
-bool enablePaymentsFeature = await featureManager.IsEnabledAsync("EnablePaymentsFeature"); 
+bool enablePaymentsFeature = await featureManager.IsEnabledAsync("EnablePaymentsFeature");
 bool enablePaymentStatusInsert = await featureManager.IsEnabledAsync("EnablePaymentStatusInsert");
 bool enablePaymentStatusUpdate = await featureManager.IsEnabledAsync("EnablePaymentStatusUpdate");
 bool enableGetPaymentByExternalPaymentId = await featureManager.IsEnabledAsync("EnableGetPaymentByExternalPaymentId");
 
-bool enableRegistrationFeesFeature = await featureManager.IsEnabledAsync("EnableRegistrationFeesFeature");
+bool enableRegistrationFeesFeature = await featureManager.IsEnabledAsync("EnableRegistrationFeesFeature"); 
 bool enableProducerResubmissionAmount = await featureManager.IsEnabledAsync("EnableProducerResubmissionAmount");
+bool enableRegistrationFeesCalculation = await featureManager.IsEnabledAsync("EnableRegistrationFeesCalculation"); 
 
 logger.LogInformation($"EnablePaymentsFeature: {enablePaymentsFeature}");
 logger.LogInformation($"EnablePaymentStatusInsert: {enablePaymentStatusInsert}");
@@ -115,6 +118,7 @@ logger.LogInformation($"EnableGetPaymentByExternalPaymentId: {enableGetPaymentBy
 
 logger.LogInformation($"EnableRegistrationFeesFeature: {enableRegistrationFeesFeature}");
 logger.LogInformation($"EnableProducerResubmissionAmount: {enableProducerResubmissionAmount}");
+logger.LogInformation($"EnableRegistrationFeesCalculation: {enableRegistrationFeesCalculation}");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
