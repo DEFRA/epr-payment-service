@@ -189,10 +189,10 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
             using (new AssertionScope())
             {
                 result.Should().NotBeNull();
-                result.ExternalPaymentId.Should().Be(externalPaymentId);
-                result.Amount.Should().Be(10.0M);
-                result.Regulator.Should().Be("Test 1 Regulator");
-                result.Reference.Should().Be("Test 1 Reference");
+                result!.ExternalPaymentId.Should().Be(externalPaymentId);
+                result!.Amount.Should().Be(10.0M);
+                result!.Regulator.Should().Be("Test 1 Regulator");
+                result!.Reference.Should().Be("Test 1 Reference");
             }
         }
 

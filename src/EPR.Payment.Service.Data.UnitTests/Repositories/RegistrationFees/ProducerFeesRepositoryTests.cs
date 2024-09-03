@@ -6,6 +6,7 @@ using EPR.Payment.Service.Common.UnitTests.Mocks;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.EntityFrameworkCore;
@@ -23,7 +24,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
         public void TestInitialize()
         {
             _cancellationToken = new CancellationToken();
-            _registrationFeesMock = MockIPaymentRepository.GetRegistrationFeesMock();
+            _registrationFeesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
         }
 
         [TestMethod]
@@ -33,7 +34,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
             // Arrange
-            var feesMock = MockIPaymentRepository.GetRegistrationFeesMock();
+            var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
 
             // Act
@@ -83,7 +84,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
             // Arrange
-            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIPaymentRepository.GetEmptyRegistrationFeesMock().Object);
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
 
             // Act
             Func<Task> act = async () => await _producerFeesRepository.GetBaseFeeAsync("Large", RegulatorType.Create("GB-ENG"), _cancellationToken);
@@ -100,7 +101,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
             // Arrange
-            var feesMock = MockIPaymentRepository.GetRegistrationFeesMock();
+            var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
             var oldFee = feesMock?.Object?.First(f => f.SubGroup.Type == "Large" && f.Amount == 262000m);
             var newFee = new Common.Data.DataModels.Lookups.RegistrationFees
             {
@@ -267,7 +268,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
             // Arrange
-            var feesMock = MockIPaymentRepository.GetRegistrationFeesMock();
+            var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
             var oldFee = feesMock.Object.First(f => f.SubGroup.Type == SubsidiariesConstants.UpTo20 && f.Amount == 55800m);
             var newFee = new Common.Data.DataModels.Lookups.RegistrationFees
             {
@@ -298,7 +299,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
             // Arrange
-            var feesMock = MockIPaymentRepository.GetRegistrationFeesMock();
+            var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
 
             // Act
@@ -315,7 +316,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
             // Arrange
-            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIPaymentRepository.GetEmptyRegistrationFeesMock().Object);
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
 
             // Act
             Func<Task> act = async () => await _producerFeesRepository.GetAdditionalSubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
@@ -386,7 +387,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
             // Arrange
-            var feesMock = MockIPaymentRepository.GetRegistrationFeesMock();
+            var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
             var oldFee = feesMock.Object.First(f => f.SubGroup.Type == SubsidiariesConstants.MoreThan20 && f.Amount == 14000m);
             var newFee = new Common.Data.DataModels.Lookups.RegistrationFees
             {
@@ -408,6 +409,44 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
             // Assert
             result.Should().Be(16000m); // The most recent valid fee should be returned
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetProducerResubmissionAmountByRegulatorAsync_RegistrationFeesExist_ShouldReturnAmount(
+           [Frozen] Mock<IAppDbContext> _dataContextMock,
+           [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            //Arrange
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
+            _producerFeesRepository = new ProducerFeesRepository(_dataContextMock.Object);
+
+            var regulator = "GB-ENG";
+
+            //Act
+            var result = await _producerFeesRepository.GetProducerResubmissionAmountByRegulatorAsync(regulator, _cancellationToken);
+
+            //Assert
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+                result.Should().Be(100);
+            }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetProducerResubmissionAmountByRegulatorAsync_RegistrationFeesDoesNotExist_ShouldThrowKeyNotFoundException(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            //Arrange
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
+            _producerFeesRepository = new ProducerFeesRepository(_dataContextMock.Object);
+
+            var regulator = "Test-Reg";
+
+            //Act & Assert
+            await _producerFeesRepository.Invoking(async x => await x.GetProducerResubmissionAmountByRegulatorAsync(regulator, _cancellationToken))
+                .Should().ThrowAsync<KeyNotFoundException>();
         }
     }
 }

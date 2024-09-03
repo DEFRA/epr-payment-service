@@ -1,4 +1,5 @@
 ﻿using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
@@ -21,11 +22,13 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         private Mock<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>> _subsidiariesFeeCalculationStrategyMock = null!;
         private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
         private Mock<IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto>> _feeBreakdownGeneratorMock = null!;
-        private IProducerFeesCalculatorService? _calculatorService = null;
+        private ProducerFeesCalculatorService? _calculatorService = null;
+        private Mock<IProducerFeesRepository> _producerFeesRepositoryMock = null!;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _producerFeesRepositoryMock = new Mock<IProducerFeesRepository>();
             _baseFeeCalculationStrategyMock = new Mock<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
             _validatorMock = new Mock<IValidator<ProducerRegistrationFeesRequestDto>>();
@@ -35,7 +38,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
-                _feeBreakdownGeneratorMock.Object
+                _feeBreakdownGeneratorMock.Object,
+                _producerFeesRepositoryMock.Object
             );
         }
 
@@ -50,7 +54,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 baseFeeCalculationStrategy!,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
-                _feeBreakdownGeneratorMock.Object);
+                _feeBreakdownGeneratorMock.Object,
+                _producerFeesRepositoryMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'baseFeeCalculationStrategy')");
@@ -67,7 +72,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 _baseFeeCalculationStrategyMock.Object,
                 subsidiariesFeeCalculationStrategy!,
                 _validatorMock.Object,
-                _feeBreakdownGeneratorMock.Object);
+                _feeBreakdownGeneratorMock.Object,
+                _producerFeesRepositoryMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'subsidiariesFeeCalculationStrategy')");
@@ -84,7 +90,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 validator!,
-                _feeBreakdownGeneratorMock.Object);
+                _feeBreakdownGeneratorMock.Object,
+                _producerFeesRepositoryMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");
@@ -101,7 +108,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
-                feeBreakdownGenerator!);
+                feeBreakdownGenerator!,
+                _producerFeesRepositoryMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'feeBreakdownGenerator')");
@@ -115,7 +123,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
-                _feeBreakdownGeneratorMock.Object);
+                _feeBreakdownGeneratorMock.Object,
+                _producerFeesRepositoryMock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -125,8 +134,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             }
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod, AutoMoqData]
         public async Task CalculateFeesAsync_WhenLargeProducerWith50Subsidiaries_ReturnsCorrectFees(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -145,7 +153,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 .Returns(new ValidationResult());
 
             // Act
-            var result = await _calculatorService.CalculateFeesAsync(request, CancellationToken.None);
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
             // Assert
             _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
@@ -158,8 +166,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             }
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod, AutoMoqData]
         public async Task CalculateFeesAsync_WhenLargeProducerWith10Subsidiaries_ReturnsCorrectFees(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -178,7 +185,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 .Returns(new ValidationResult());
 
             // Act
-            var result = await _calculatorService.CalculateFeesAsync(request, CancellationToken.None);
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
             // Assert
             _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
@@ -191,8 +198,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             }
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod, AutoMoqData]
         public async Task CalculateFeesAsync_WhenLargeProducerWithNoBaseFeeAnd50Subsidiaries_ReturnsCorrectFees(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -211,7 +217,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 .Returns(new ValidationResult());
 
             // Act
-            var result = await _calculatorService.CalculateFeesAsync(request, CancellationToken.None);
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
             // Assert
             _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
@@ -224,8 +230,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             }
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod, AutoMoqData]
         public async Task CalculateFeesAsync_WhenSmallProducerWith25Subsidiaries_ReturnsCorrectFees(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -244,7 +249,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 .Returns(new ValidationResult());
 
             // Act
-            var result = await _calculatorService.CalculateFeesAsync(request, CancellationToken.None);
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
             // Assert
             _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
@@ -257,8 +262,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             }
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod, AutoMoqData]
         public async Task CalculateFeesAsync_WhenSmallProducerWith20Subsidiaries_ReturnsCorrectFees(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -277,7 +281,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 .Returns(new ValidationResult());
 
             // Act
-            var result = await _calculatorService.CalculateFeesAsync(request, CancellationToken.None);
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
             // Assert
             _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
@@ -290,8 +294,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             }
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod, AutoMoqData]
         public async Task CalculateFeesAsync_WhenLargeProducerWithNoSubsidiaries_ReturnsBaseFeeOnly(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -307,7 +310,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 .Returns(new ValidationResult());
 
             // Act
-            var result = await _calculatorService.CalculateFeesAsync(request, CancellationToken.None);
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
             // Assert
             _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
@@ -320,8 +323,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             }
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod, AutoMoqData]
         public async Task CalculateFeesAsync_WhenInvalidRequest_ThrowsValidationException(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -343,12 +345,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             // Act & Assert
             await Assert.ThrowsExceptionAsync<ValidationException>(async () =>
             {
-                await _calculatorService.CalculateFeesAsync(request, CancellationToken.None);
+                await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
             });
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod, AutoMoqData]
         public async Task CalculateFeesAsync_WhenArgumentExceptionOccurs_ThrowsInvalidOperationException(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -362,15 +363,14 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             // Act & Assert
             var exception = await Assert.ThrowsExceptionAsync<InvalidOperationException>(async () =>
             {
-                await _calculatorService.CalculateFeesAsync(request, CancellationToken.None);
+                await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
             });
 
             exception.Message.Should().Be("An error occurred while calculating fees.");
             exception.InnerException.Should().BeOfType<ArgumentException>();
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod, AutoMoqData]
         public async Task CalculateFeesAsync_WhenNoExceptionOccurs_CallsGenerateFeeBreakdown(
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
@@ -389,10 +389,58 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 .Returns(new ValidationResult());
 
             // Act
-            var result = await _calculatorService.CalculateFeesAsync(request, CancellationToken.None);
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
             // Assert
             _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
+        }
+        [TestMethod, AutoMoqData]
+        public async Task GetProducerResubmissionAmountByRegulatorAsync_RepositoryReturnsAResult_ShouldReturnAmount(
+            [Frozen] string regulator,
+            [Frozen] decimal expectedAmount
+            )
+        {
+            //Arrange
+            _producerFeesRepositoryMock.Setup(i => i.GetProducerResubmissionAmountByRegulatorAsync(regulator, CancellationToken.None)).ReturnsAsync(expectedAmount);
+
+            //Act
+            var result = await _calculatorService!.GetProducerResubmissionAmountByRegulatorAsync(regulator, CancellationToken.None);
+
+            //Assert
+            result.Should().Be(expectedAmount);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetProducerResubmissionAmountByRegulatorAsync_RepositoryReturnsAResult_ShouldReturnNullMappedObject(
+            [Frozen] string regulator
+            )
+        {
+            //Arrange
+            _producerFeesRepositoryMock.Setup(i => i.GetProducerResubmissionAmountByRegulatorAsync(regulator, CancellationToken.None)).ReturnsAsync((decimal?)null);
+
+            //Act
+            var result = await _calculatorService!.GetProducerResubmissionAmountByRegulatorAsync(regulator, CancellationToken.None);
+
+            //Assert
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task GetProducerResubmissionAmountByRegulatorAsync_EmptyRegulator_ThrowsArgumentException()
+        {
+            // Act & Assert
+            await _calculatorService.Invoking(async s => await s!.GetProducerResubmissionAmountByRegulatorAsync(string.Empty, new CancellationToken()))
+                .Should().ThrowAsync<ArgumentException>()
+                .WithMessage("regulator cannot be null or empty (Parameter 'regulator')");
+        }
+
+        [TestMethod]
+        public async Task GetProducerResubmissionAmountByRegulatorAsync_NullRegulator_ThrowsArgumentException()
+        {
+            // Act & Assert
+            await _calculatorService.Invoking(async s => await s!.GetProducerResubmissionAmountByRegulatorAsync(null!, new CancellationToken()))
+                .Should().ThrowAsync<ArgumentException>()
+                .WithMessage("regulator cannot be null or empty (Parameter 'regulator')");
         }
     }
 }
