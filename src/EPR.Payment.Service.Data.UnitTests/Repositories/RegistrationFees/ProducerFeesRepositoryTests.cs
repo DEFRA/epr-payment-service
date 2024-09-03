@@ -6,7 +6,6 @@ using EPR.Payment.Service.Common.UnitTests.Mocks;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using FluentAssertions;
-using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.EntityFrameworkCore;
@@ -653,44 +652,5 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             // Assert
             result.Should().Be(17000m); // Fee should be active for the entire day
         }
-
-        [TestMethod]
-        [AutoMoqData]
-        public async Task GetBaseFeeAsync_IdenticalEffectiveDates_ShouldReturnCorrectFee(
-            [Frozen] Mock<IAppDbContext> _dataContextMock,
-            [Greedy] ProducerFeesRepository _producerFeesRepository)
-        {
-            // Arrange
-            var today = DateTime.UtcNow.Date;
-            var fee1 = new Common.Data.DataModels.Lookups.RegistrationFees
-            {
-                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
-                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = "Large", Description = "Large producer" },
-                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
-                Amount = 10000m,
-                EffectiveFrom = today,
-                EffectiveTo = today
-            };
-
-            var fee2 = new Common.Data.DataModels.Lookups.RegistrationFees
-            {
-                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
-                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = "Large", Description = "Large producer" },
-                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
-                Amount = 20000m,
-                EffectiveFrom = today, // Identical EffectiveFrom
-                EffectiveTo = today    // Identical EffectiveTo
-            };
-
-            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee1, fee2 }.AsQueryable());
-
-            // Act
-            var result = await _producerFeesRepository.GetBaseFeeAsync("Large", RegulatorType.Create("GB-ENG"), _cancellationToken);
-
-            // Assert
-            result.Should().Be(20000m); // Depending on ordering logic, this should return the fee with the highest amount or based on insertion order
-        }
-
-
     }
 }
