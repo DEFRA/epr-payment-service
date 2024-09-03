@@ -79,7 +79,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 .ReturnsAsync(14000m); // £140 in pence per subsidiary
 
             // Act
-            await _feeBreakdownGenerator.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -115,7 +115,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
             // Act
-            await _feeBreakdownGenerator.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -149,7 +149,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 .ReturnsAsync(14000m); // £140 in pence per subsidiary
 
             // Act
-            await _feeBreakdownGenerator.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -185,7 +185,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 .ReturnsAsync(14000m); // £140 in pence per subsidiary
 
             // Act
-            await _feeBreakdownGenerator.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -219,7 +219,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
             // Act
-            await _feeBreakdownGenerator.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -247,7 +247,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
             response.FeeBreakdowns = new List<FeeBreakdown>();
 
             // Act
-            await _feeBreakdownGenerator.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -274,7 +274,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
             response.FeeBreakdowns = new List<FeeBreakdown>();
 
             // Act
-            await _feeBreakdownGenerator.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -304,7 +304,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 .ReturnsAsync(55800.0000m); // £558.0000 in pence per subsidiary
 
             // Act
-            await _feeBreakdownGenerator.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())

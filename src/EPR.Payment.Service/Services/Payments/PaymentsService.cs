@@ -18,10 +18,10 @@ namespace EPR.Payment.Service.Services.Payments
             IValidator<PaymentStatusInsertRequestDto> paymentStatusInsertRequestValidator,
             IValidator<PaymentStatusUpdateRequestDto> paymentStatusUpdateRequestValidator)
         {
-            _mapper = mapper;
-            _paymentRepository = paymentRepository;
-            _paymentStatusInsertRequestValidator = paymentStatusInsertRequestValidator;
-            _paymentStatusUpdateRequestValidator = paymentStatusUpdateRequestValidator;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
+            _paymentStatusInsertRequestValidator = paymentStatusInsertRequestValidator ?? throw new ArgumentNullException(nameof(paymentStatusInsertRequestValidator));
+            _paymentStatusUpdateRequestValidator = paymentStatusUpdateRequestValidator ?? throw new ArgumentNullException(nameof(paymentStatusUpdateRequestValidator));
         }
         public async Task<Guid> InsertPaymentStatusAsync(PaymentStatusInsertRequestDto paymentStatusInsertRequest, CancellationToken cancellationToken)
         {
