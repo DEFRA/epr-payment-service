@@ -411,6 +411,249 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             result.Should().Be(16000m); // The most recent valid fee should be returned
         }
 
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetBaseFeeAsync_OnEffectiveFromDate_ShouldReturnBaseFee(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            var today = DateTime.UtcNow.Date;
+            var fee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = "Large", Description = "Large producer" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 202000m, // Random new fee to ensure this is picked up
+                EffectiveFrom = today, // Active starting today
+                EffectiveTo = today.AddDays(10)
+            };
+
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
+
+            // Act
+            var result = await _producerFeesRepository.GetBaseFeeAsync("Large", RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            result.Should().Be(202000m); // Fee should be returned since today matches EffectiveFrom
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetBaseFeeAsync_OnEffectiveToDate_ShouldReturnBaseFee(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            var today = DateTime.UtcNow.Date;
+            var fee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = "Large", Description = "Large producer" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 302000m, // Random new fee to ensure this is picked up
+                EffectiveFrom = today.AddDays(-10), // Became active 10 days ago
+                EffectiveTo = today // Expires today
+            };
+
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
+
+            // Act
+            var result = await _producerFeesRepository.GetBaseFeeAsync("Large", RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            result.Should().Be(302000m); // Fee should be returned since today matches EffectiveTo
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetBaseFeeAsync_FeeActiveForEntireDay_ShouldReturnBaseFee(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            var today = DateTime.UtcNow.Date;
+            var fee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = "Large", Description = "Large producer" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 102000m, // Random new fee to ensure this is picked up
+                EffectiveFrom = today,
+                EffectiveTo = today
+            };
+
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
+
+            // Act
+            var result = await _producerFeesRepository.GetBaseFeeAsync("Large", RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            result.Should().Be(102000m); // Fee should be active for the entire day
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetFirst20SubsidiariesFeeAsync_OnEffectiveFromDate_ShouldReturnFee(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            var today = DateTime.UtcNow.Date;
+            var fee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerSubsidiaries, Description = "Producer Subsidiaries" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubsidiariesConstants.UpTo20, Description = "Up to 20" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 55000m, // New fee to ensure this is picked up
+                EffectiveFrom = today, // Active starting today
+                EffectiveTo = today.AddDays(10)
+            };
+
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
+
+            // Act
+            var result = await _producerFeesRepository.GetFirst20SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            result.Should().Be(55000m); // Fee should be returned since today matches EffectiveFrom
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetFirst20SubsidiariesFeeAsync_OnEffectiveToDate_ShouldReturnFee(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            var today = DateTime.UtcNow.Date;
+            var fee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerSubsidiaries, Description = "Producer Subsidiaries" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubsidiariesConstants.UpTo20, Description = "Up to 20" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 56000m, // New fee to ensure this is picked up
+                EffectiveFrom = today.AddDays(-10), // Became active 10 days ago
+                EffectiveTo = today // Expires today
+            };
+
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
+
+            // Act
+            var result = await _producerFeesRepository.GetFirst20SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            result.Should().Be(56000m); // Fee should be returned since today matches EffectiveTo
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetFirst20SubsidiariesFeeAsync_FeeActiveForEntireDay_ShouldReturnFee(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            var today = DateTime.UtcNow.Date;
+            var fee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerSubsidiaries, Description = "Producer Subsidiaries" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubsidiariesConstants.UpTo20, Description = "Up to 20" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 57000m, // New fee to ensure this is picked up
+                EffectiveFrom = today,
+                EffectiveTo = today
+            };
+
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
+
+            // Act
+            var result = await _producerFeesRepository.GetFirst20SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            result.Should().Be(57000m); // Fee should be active for the entire day
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetAdditionalSubsidiariesFeeAsync_OnEffectiveFromDate_ShouldReturnFee(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            var today = DateTime.UtcNow.Date;
+            var fee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerSubsidiaries, Description = "Producer Subsidiaries" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubsidiariesConstants.MoreThan20, Description = "More than 20" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 15000m, // New fee to ensure this is picked up
+                EffectiveFrom = today, // Active starting today
+                EffectiveTo = today.AddDays(10)
+            };
+
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
+
+            // Act
+            var result = await _producerFeesRepository.GetAdditionalSubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            result.Should().Be(15000m); // Fee should be returned since today matches EffectiveFrom
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetAdditionalSubsidiariesFeeAsync_OnEffectiveToDate_ShouldReturnFee(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            var today = DateTime.UtcNow.Date;
+            var fee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerSubsidiaries, Description = "Producer Subsidiaries" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubsidiariesConstants.MoreThan20, Description = "More than 20" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 16000m, // New fee to ensure this is picked up
+                EffectiveFrom = today.AddDays(-10), // Became active 10 days ago
+                EffectiveTo = today // Expires today
+            };
+
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
+
+            // Act
+            var result = await _producerFeesRepository.GetAdditionalSubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            result.Should().Be(16000m); // Fee should be returned since today matches EffectiveTo
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetAdditionalSubsidiariesFeeAsync_FeeActiveForEntireDay_ShouldReturnFee(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            var today = DateTime.UtcNow.Date;
+            var fee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerSubsidiaries, Description = "Producer Subsidiaries" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubsidiariesConstants.MoreThan20, Description = "More than 20" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 17000m, // New fee to ensure this is picked up
+                EffectiveFrom = today,
+                EffectiveTo = today
+            };
+
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
+
+            // Act
+            var result = await _producerFeesRepository.GetAdditionalSubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            result.Should().Be(17000m); // Fee should be active for the entire day
+        }
+
         [TestMethod, AutoMoqData]
         public async Task GetProducerResubmissionAmountByRegulatorAsync_RegistrationFeesExist_ShouldReturnAmount(
            [Frozen] Mock<IAppDbContext> _dataContextMock,

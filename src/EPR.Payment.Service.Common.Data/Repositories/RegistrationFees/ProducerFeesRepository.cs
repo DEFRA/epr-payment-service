@@ -17,14 +17,14 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 
         public async Task<decimal> GetBaseFeeAsync(string producer, RegulatorType regulator, CancellationToken cancellationToken)
         {
-            var currentDate = DateTime.UtcNow;
+            var currentDate = DateTime.UtcNow.Date; // Only the date part, time is set to 00:00:00
 
             var fee = await _dataContext.RegistrationFees
                 .Where(r => r.Group.Type.ToLower() == GroupTypeConstants.ProducerType.ToLower() &&
                             r.SubGroup.Type.ToLower() == producer.ToLower() &&
                             r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
-                            r.EffectiveFrom <= currentDate &&
-                            r.EffectiveTo >= currentDate)
+                            r.EffectiveFrom.Date <= currentDate &&
+                            r.EffectiveTo.Date >= currentDate)
                 .OrderByDescending(r => r.EffectiveFrom) // Ensure the most recent EffectiveFrom is selected
                 .Select(r => r.Amount)
                 .FirstOrDefaultAsync(cancellationToken);
@@ -37,14 +37,14 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 
         public async Task<decimal> GetFirst20SubsidiariesFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
-            var currentDate = DateTime.UtcNow;
+            var currentDate = DateTime.UtcNow.Date; // Only the date part, time is set to 00:00:00
 
             var fee = await _dataContext.RegistrationFees
                 .Where(r => r.Group.Type.ToLower() == GroupTypeConstants.ProducerSubsidiaries.ToLower() &&
                             r.SubGroup.Type.ToLower() == SubsidiariesConstants.UpTo20.ToLower() &&
                             r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
-                            r.EffectiveFrom <= currentDate &&
-                            r.EffectiveTo >= currentDate)
+                            r.EffectiveFrom.Date <= currentDate &&
+                            r.EffectiveTo.Date >= currentDate)
                 .OrderByDescending(r => r.EffectiveFrom) // Ensure the most recent EffectiveFrom is selected
                 .Select(r => r.Amount)
                 .FirstOrDefaultAsync(cancellationToken);
@@ -57,14 +57,14 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 
         public async Task<decimal> GetAdditionalSubsidiariesFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
-            var currentDate = DateTime.UtcNow;
+            var currentDate = DateTime.UtcNow.Date; // Only the date part, time is set to 00:00:00
 
             var fee = await _dataContext.RegistrationFees
                 .Where(r => r.Group.Type.ToLower() == GroupTypeConstants.ProducerSubsidiaries.ToLower() &&
                             r.SubGroup.Type.ToLower() == SubsidiariesConstants.MoreThan20.ToLower() &&
                             r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
-                            r.EffectiveFrom <= currentDate &&
-                            r.EffectiveTo >= currentDate)
+                            r.EffectiveFrom.Date <= currentDate &&
+                            r.EffectiveTo.Date >= currentDate)
                 .OrderByDescending(r => r.EffectiveFrom) // Ensure the most recent EffectiveFrom is selected
                 .Select(r => r.Amount)
                 .FirstOrDefaultAsync(cancellationToken);
