@@ -28,7 +28,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees
             Summary = "Gets the resubmission amount for a producer",
             Description = "Retrieves the resubmission amount for a producer based on the specified regulator."
         )]
-        public async Task<IActionResult> GetProducerResubmissionAmountByRegulator(string regulator, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetResubmissionAsync(string regulator, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(regulator))
             {

@@ -23,12 +23,10 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
         private Mock<IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto>> _feeBreakdownGeneratorMock = null!;
         private ProducerFeesCalculatorService? _calculatorService = null;
-        private Mock<IProducerFeesRepository> _producerFeesRepositoryMock = null!;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _producerFeesRepositoryMock = new Mock<IProducerFeesRepository>();
             _baseFeeCalculationStrategyMock = new Mock<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
             _validatorMock = new Mock<IValidator<ProducerRegistrationFeesRequestDto>>();

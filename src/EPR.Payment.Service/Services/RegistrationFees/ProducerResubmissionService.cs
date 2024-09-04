@@ -14,6 +14,11 @@ namespace EPR.Payment.Service.Services.RegistrationFees
 
         public async Task<decimal?> GetResubmissionAsync(string regulator, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrEmpty(regulator))
+            {
+                throw new ArgumentException("Regulator cannot be null or empty", nameof(regulator));
+            }
+
             return await _resubmissionAmountStrategy.GetResubmissionAsync(regulator, cancellationToken);
         }
     }
