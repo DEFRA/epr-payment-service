@@ -38,4 +38,14 @@
 		</SonarQubeSetting>
 	</ItemGroup>
 
+	<ItemGroup>
+		<Compile Update="Migrations\*.cs">
+			<SonarQubeExclude>true</SonarQubeExclude>
+		</Compile>
+		<Compile Update="Scripts\migrations.sql">
+			<SonarQubeExclude>true</SonarQubeExclude>
+		</Compile>
+	</ItemGroup>
+
+
 </Project>
