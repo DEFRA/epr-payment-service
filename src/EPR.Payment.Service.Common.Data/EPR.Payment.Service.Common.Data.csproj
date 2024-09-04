@@ -39,7 +39,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<Compile Include="Migrations\*.cs">
+		<Compile Update="Migrations\*.cs">
 			<SonarQubeExclude>true</SonarQubeExclude>
 		</Compile>
 		<None Include="Scripts\**\*">
