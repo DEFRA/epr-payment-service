@@ -42,7 +42,7 @@
 		<Compile Update="Migrations\*.cs">
 			<SonarQubeExclude>true</SonarQubeExclude>
 		</Compile>
-		<None Include="Scripts\**\*">
+		<None Update="Scripts\**\*">
 			<SonarQubeExclude>true</SonarQubeExclude>
 		</None>
 	</ItemGroup>
