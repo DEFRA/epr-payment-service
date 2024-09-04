@@ -37,12 +37,12 @@
 			<Value>Scripts/**,Migrations/**</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
-
+	
 	<ItemGroup>
 		<Compile Update="Migrations\*.cs">
 			<SonarQubeExclude>true</SonarQubeExclude>
 		</Compile>
-		<Compile Update="Scripts\migrations.sql">
+		<Compile Update="Scripts\**\*">
 			<SonarQubeExclude>true</SonarQubeExclude>
 		</Compile>
 	</ItemGroup>
