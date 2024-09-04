@@ -2,7 +2,6 @@
 using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
@@ -31,7 +30,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
             IProducerFeesRepository? nullRepository = null;
 
             // Act
-            Action act = () => new BaseFeeCalculationStrategy(nullRepository!);
+            Action act = () => new DefaultResubmissionAmountStrategy(nullRepository!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -39,19 +38,19 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
         }
 
         [TestMethod]
-        public void Constructor_WhenFeesRepositoryIsNotNull_ShouldInitializeBaseFeeCalculationStrategy()
+        public void Constructor_WhenFeesRepositoryIsNotNull_ShouldInitializeResubmissionAmountStrategy()
         {
             // Arrange
             var feesRepositoryMock = _fixture.Create<Mock<IProducerFeesRepository>>();
 
             // Act
-            var strategy = new BaseFeeCalculationStrategy(feesRepositoryMock.Object);
+            var strategy = new DefaultResubmissionAmountStrategy(feesRepositoryMock.Object);
 
             // Assert
             using (new AssertionScope())
             {
                 strategy.Should().NotBeNull();
-                strategy.Should().BeAssignableTo<IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
+                strategy.Should().BeAssignableTo<IResubmissionAmountStrategy>();
             }
         }
 

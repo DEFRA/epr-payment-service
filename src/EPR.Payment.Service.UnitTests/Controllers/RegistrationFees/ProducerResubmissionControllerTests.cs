@@ -3,6 +3,7 @@ using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -33,8 +34,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees
             );
 
             // Assert
-            controller.Should().NotBeNull();
-            controller.Should().BeAssignableTo<ProducerResubmissionController>();
+            using (new AssertionScope())
+            {
+                controller.Should().NotBeNull();
+                controller.Should().BeAssignableTo<ProducerResubmissionController>();
+            }
         }
 
         [TestMethod]
@@ -63,23 +67,54 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees
             var result = await _controller.GetResubmissionAsync(regulator, _cancellationToken);
 
             //Assert
-            result.Should().BeOfType<OkObjectResult>();
-            result.As<OkObjectResult>().Should().NotBeNull();
+            using (new AssertionScope())
+            {
+                result.Should().BeOfType<OkObjectResult>();
+                result.As<OkObjectResult>().Should().NotBeNull();
+            }
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetResubmissionAsync_ServiceThrowsException_ShouldReturnInternalServerError(
+        public async Task GetResubmissionAsync_ServiceThrowsExceptionWithInnerException_ShouldReturnInternalServerError(
             [Frozen] string regulator)
         {
             // Arrange
+            var innerExceptionMessage = "Inner exception message";
+            var ex = new Exception("Outer exception", new Exception(innerExceptionMessage));
             _registrationFeesServiceMock.Setup(i => i.GetResubmissionAsync(regulator, _cancellationToken))
-                               .ThrowsAsync(new Exception("Test Exception"));
+                               .ThrowsAsync(ex);
 
             // Act
             var result = await _controller.GetResubmissionAsync(regulator, _cancellationToken);
 
             // Assert
-            result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+                result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            }
+
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionAsync_ServiceThrowsExceptionWithoutInnerException_ShouldReturnInternalServerError(
+            [Frozen] string regulator)
+        {
+            // Arrange
+            var ex = new Exception("Outer exception");
+            _registrationFeesServiceMock.Setup(i => i.GetResubmissionAsync(regulator, _cancellationToken))
+                               .ThrowsAsync(ex);
+
+            // Act
+            var result = await _controller.GetResubmissionAsync(regulator, _cancellationToken);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+                result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            }
+
         }
 
         [TestMethod]

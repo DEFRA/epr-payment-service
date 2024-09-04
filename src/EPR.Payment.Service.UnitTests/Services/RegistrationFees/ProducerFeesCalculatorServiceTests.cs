@@ -1,5 +1,4 @@
 ﻿using AutoFixture.MSTest;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
@@ -386,61 +385,5 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             // Assert
             _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
         }
-
-        // PAUL THIS TEST WILL NEED TO BE REVIEWED
-        //[TestMethod, AutoMoqData]
-        //public async Task GetProducerResubmissionAmountByRegulatorAsync_RepositoryReturnsAResult_ShouldReturnAmount(
-        //    [Frozen] string regulator,
-        //    [Frozen] decimal expectedAmount
-        //    )
-        //{
-        //    //Arrange
-        //    _producerFeesRepositoryMock.Setup(i => i.GetProducerResubmissionAmountByRegulatorAsync(RegulatorType.Create(regulator), CancellationToken.None)).ReturnsAsync(expectedAmount);
-
-        //    //Act
-        //    var result = await _calculatorService!.GetProducerResubmissionAmountByRegulatorAsync(regulator, CancellationToken.None);
-
-        //    //Assert
-        //    result.Should().Be(expectedAmount);
-        //}
-
-
-        // PAUL THIS TEST WILL NEED TO BE REVIEWED
-        //[TestMethod, AutoMoqData]
-        //public async Task GetProducerResubmissionAmountByRegulatorAsync_RepositoryReturnsAResult_ShouldReturnNullMappedObject(
-        //    [Frozen] string regulator
-        //    )
-        //{
-        //    //Arrange
-        //    _producerFeesRepositoryMock.Setup(i => i.GetProducerResubmissionAmountByRegulatorAsync(RegulatorType.Create(regulator), CancellationToken.None)).ReturnsAsync((decimal?)null);
-
-        //    //Act
-        //    var result = await _calculatorService!.GetProducerResubmissionAmountByRegulatorAsync(regulator, CancellationToken.None);
-
-        //    //Assert
-        //    result.Should().BeNull();
-        //}
-
-
-        // PAUL THIS TEST WILL NEED TO BE REVIEWED
-        //[TestMethod]
-        //public async Task GetProducerResubmissionAmountByRegulatorAsync_EmptyRegulator_ThrowsArgumentException()
-        //{
-        //    // Act & Assert
-        //    await _calculatorService.Invoking(async s => await s!.GetProducerResubmissionAmountByRegulatorAsync(string.Empty, new CancellationToken()))
-        //        .Should().ThrowAsync<ArgumentException>()
-        //        .WithMessage("regulator cannot be null or empty (Parameter 'regulator')");
-        //}
-
-        // PAUL THIS TEST WILL NEED TO BE REVIEWED
-        //[TestMethod]
-        //public async Task GetProducerResubmissionAmountByRegulatorAsync_NullRegulator_ThrowsArgumentException()
-        //{
-        //    // Act & Assert
-        //    await _calculatorService.Invoking(async s => await s!.GetProducerResubmissionAmountByRegulatorAsync(null!, new CancellationToken()))
-        //        .Should().ThrowAsync<ArgumentException>()
-        //        .WithMessage("regulator cannot be null or empty (Parameter 'regulator')");
-        //}
-        //}
     }
 }
