@@ -1237,3 +1237,503 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 1;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 2;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 3;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 4;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 5;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 6;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 7;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 8;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 9;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 10;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 11;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 12;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 13;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 14;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 15;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 16;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 17;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 18;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 19;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 20;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 21;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 22;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 23;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 24;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 25;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 26;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 27;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 28;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 29;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 30;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 31;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 32;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 33;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 34;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 35;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 36;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 37;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 38;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 39;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 40;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 41;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 42;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 43;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveFrom] = ''2024-01-01T00:00:00.0000000Z'', [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 44;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240903101544_UpdateRegistrationFeesDates', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+

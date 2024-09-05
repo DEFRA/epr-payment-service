@@ -20,8 +20,20 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
         [Column(TypeName = "decimal(19,4)")]
         public decimal Amount { get; set; }
 
-        public DateTime EffectiveFrom { get; set; }
-        public DateTime EffectiveTo { get; set; }
+        private DateTime _effectiveFrom;
+        private DateTime _effectiveTo;
+
+        public DateTime EffectiveFrom
+        {
+            get => _effectiveFrom;
+            set => _effectiveFrom = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime();
+        }
+
+        public DateTime EffectiveTo
+        {
+            get => _effectiveTo;
+            set => _effectiveTo = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime();
+        }
 
         #region Navigation properties
 
