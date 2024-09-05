@@ -1,4 +1,4 @@
-﻿using EPR.Payment.Service.Services.Interfaces;
+﻿using EPR.Payment.Service.Services.Interfaces.Payments;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace EPR.Payment.Service.HealthCheck

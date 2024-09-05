@@ -5,12 +5,11 @@ using System.Data.Entity.Infrastructure;
 
 namespace EPR.Payment.Service.Common.UnitTests.Mocks
 {
-    public class MockIPaymentRepository
+    public static class MockIPaymentRepository
     {
         public static Mock<DbSet<Data.DataModels.Payment>> GetPaymentMock()
         {
             var paymentMock = new Mock<DbSet<Data.DataModels.Payment>>();
-
 
             var paymentMockData = new List<Data.DataModels.Payment>()
             {
@@ -60,14 +59,12 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
             paymentMock.As<IQueryable<Data.DataModels.Payment>>().Setup(m => m.ElementType).Returns(paymentMockData.ElementType);
             paymentMock.As<IQueryable<Data.DataModels.Payment>>().Setup(m => m.GetEnumerator()).Returns(() => paymentMockData.GetEnumerator());
 
-            // Setup the mock
             return paymentMock;
         }
 
         public static Mock<DbSet<Data.DataModels.Lookups.PaymentStatus>> GetPaymentStatusMock(bool returnResults)
         {
             var paymentStatusMock = new Mock<DbSet<Data.DataModels.Lookups.PaymentStatus>>();
-
 
             var paymentStatusMockData = new List<Data.DataModels.Lookups.PaymentStatus>()
             {
@@ -105,7 +102,6 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
             paymentStatusMock.As<IQueryable<Data.DataModels.Lookups.PaymentStatus>>().Setup(m => m.ElementType).Returns(paymentStatusMockData.ElementType);
             paymentStatusMock.As<IQueryable<Data.DataModels.Lookups.PaymentStatus>>().Setup(m => m.GetEnumerator()).Returns(() => paymentStatusMockData.GetEnumerator());
 
-            // Setup the mock
             return paymentStatusMock;
         }
     }
