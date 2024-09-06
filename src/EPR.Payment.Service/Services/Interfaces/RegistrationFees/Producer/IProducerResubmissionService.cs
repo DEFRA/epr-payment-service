@@ -1,4 +1,4 @@
-﻿namespace EPR.Payment.Service.Services.Interfaces.RegistrationFees
+﻿namespace EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer
 {
     public interface IProducerResubmissionService
     {

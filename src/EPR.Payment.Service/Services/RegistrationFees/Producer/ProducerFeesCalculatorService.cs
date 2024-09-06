@@ -1,12 +1,12 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Utilities.RegistrationFees.Interfaces;
 using FluentValidation;
 
-namespace EPR.Payment.Service.Services.RegistrationFees
+namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 {
     public class ProducerFeesCalculatorService : IProducerFeesCalculatorService
     {

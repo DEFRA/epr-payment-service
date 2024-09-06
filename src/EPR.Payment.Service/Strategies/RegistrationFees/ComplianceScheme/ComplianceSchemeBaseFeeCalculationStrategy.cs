@@ -1,15 +1,15 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme;
 
-namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
+namespace EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme
 {
-    public class DefaultResubmissionAmountStrategy : IResubmissionAmountStrategy
+    public class ComplianceSchemeBaseFeeCalculationStrategy : IComplianceSchemeBaseFeeCalculationStrategy
     {
-        private readonly IProducerFeesRepository _feesRepository;
+        private readonly IComplianceSchemeFeesRepository _feesRepository;
 
-        public DefaultResubmissionAmountStrategy(IProducerFeesRepository feesRepository)
+        public ComplianceSchemeBaseFeeCalculationStrategy(IComplianceSchemeFeesRepository feesRepository)
         {
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
@@ -18,19 +18,19 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
         {
             if (string.IsNullOrEmpty(regulator))
             {
-                throw new ArgumentException("Regulator cannot be null or empty", nameof(regulator));
+                throw new ArgumentException(ComplianceSchemeFeeCalculationExceptions.RegulatorMissing);
             }
 
             var regulatorType = RegulatorType.Create(regulator);
 
-            var fee = await _feesRepository.GetResubmissionAsync(regulatorType, cancellationToken);
+            var baseFee = await _feesRepository.GetBaseFeeAsync(regulatorType, cancellationToken);
 
-            if (fee == 0)
+            if (baseFee == 0)
             {
                 throw new KeyNotFoundException(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, regulator));
             }
 
-            return fee;
+            return baseFee;
         }
     }
 }

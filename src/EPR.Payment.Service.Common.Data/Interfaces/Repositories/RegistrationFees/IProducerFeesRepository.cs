@@ -10,6 +10,6 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFe
 
         Task<decimal> GetAdditionalSubsidiariesFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
 
-        Task<decimal?> GetResubmissionAsync(RegulatorType regulator, CancellationToken cancellationToken);
+        Task<decimal> GetResubmissionAsync(RegulatorType regulator, CancellationToken cancellationToken);
     }
 }
