@@ -191,5 +191,31 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees
                 internalServerErrorResult.Value.Should().Be($"{ComplianceSchemeFeeCalculationExceptions.RetrievalError}: {exceptionMessage}");
             }
         }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetBaseFeeAsync_WhenUnexpectedExceptionOccurs_ShouldReturnInternalServerError()
+        {
+            // Arrange
+            var regulator = "GB-ENG";
+            var exceptionMessage = "Unexpected error";
+
+            _regulatorValidatorMock.Setup(v => v.Validate(It.IsAny<string>()))
+                .Returns(new ValidationResult());
+
+            _complianceSchemeBaseFeeServiceMock.Setup(s => s.GetComplianceSchemeBaseFeeAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception(exceptionMessage));
+
+            // Act
+            var result = await _controller.GetBaseFeeAsync(regulator, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                var internalServerErrorResult = result.Should().BeOfType<ObjectResult>().Which;
+                internalServerErrorResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+                internalServerErrorResult.Value.Should().Be($"{ComplianceSchemeFeeCalculationExceptions.RetrievalError}: {exceptionMessage}");
+            }
+        }
     }
 }
