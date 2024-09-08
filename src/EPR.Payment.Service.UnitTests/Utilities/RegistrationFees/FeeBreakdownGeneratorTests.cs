@@ -62,13 +62,14 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_WhenLargeProducerWith50Subsidiaries_CreatesCorrectBreakdown(
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWith50SubsidiariesWithoutOnlineMarket_CreatesCorrectBreakdown(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
             response.BaseFee = 262000m; // £2,620 in pence
             request.NumberOfSubsidiaries = 50;
+            request.IsOnlineMarketplace = false;
             request.Regulator = "GB-ENG";
             response.FeeBreakdowns = new List<FeeBreakdown>();
 
@@ -101,13 +102,58 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_WhenLargeProducerWith10Subsidiaries_CreatesCorrectBreakdown(
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWith50SubsidiariesWithOnlineMarket_CreatesCorrectBreakdown(
+            [Frozen] RegistrationFeesResponseDto response,
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            response.BaseFee = 262000m; // £2,620 in pence
+            request.NumberOfSubsidiaries = 50;
+            request.IsOnlineMarketplace = true;
+            response.OnlineMarket = 257900m; // £2,579 in pence
+            request.Regulator = "GB-ENG";
+            response.FeeBreakdowns = new List<FeeBreakdown>();
+
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            _feesRepositoryMock.Setup(repo => repo.GetAdditionalSubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(14000m); // £140 in pence per subsidiary
+
+            // Act
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                // Verify the count
+                response.FeeBreakdowns.Should().HaveCount(4);
+
+                // Verify individual breakdowns
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£2620)")
+                    .Which.Amount.Should().Be(262000m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                     .Which.Amount.Should().Be(257900m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 20 Subsidiaries Fee (£558 each)")
+                    .Which.Amount.Should().Be(1116000m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Next 30 Subsidiaries Fee (£140 each)")
+                    .Which.Amount.Should().Be(420000m);
+            }
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWith10SubsidiariesWithoutOnlineMarket_CreatesCorrectBreakdown(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
             response.BaseFee = 262000m; // £2,620 in pence
             request.NumberOfSubsidiaries = 10;
+            request.IsOnlineMarketplace = false;
             request.Regulator = "GB-ENG";
             response.FeeBreakdowns = new List<FeeBreakdown>();
 
@@ -132,13 +178,50 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_WhenLargeProducerWithNoBaseFeeAnd50Subsidiaries_CreatesCorrectBreakdown(
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWith10SubsidiariesWithOnlineMarket_CreatesCorrectBreakdown(
+            [Frozen] RegistrationFeesResponseDto response,
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            response.BaseFee = 262000m; // £2,620 in pence
+            request.NumberOfSubsidiaries = 10;
+            request.IsOnlineMarketplace = true;
+            response.OnlineMarket = 257900m; // £2,579 in pence
+            request.Regulator = "GB-ENG";
+            response.FeeBreakdowns = new List<FeeBreakdown>();
+
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            // Act
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                response.FeeBreakdowns.Should().HaveCount(3);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£2620)")
+                    .Which.Amount.Should().Be(262000m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                    .Which.Amount.Should().Be(257900m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 10 Subsidiaries Fee (£558 each)")
+                    .Which.Amount.Should().Be(558000m); // 10 subsidiaries at £558 each
+            }
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWithNoBaseFeeAnd50SubsidiariesWithoutOnlineMarket_CreatesCorrectBreakdown(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
             response.BaseFee = 0m; // No base fee
             request.NumberOfSubsidiaries = 50;
+            request.IsOnlineMarketplace = false;
             request.Regulator = "GB-ENG";
             response.FeeBreakdowns = new List<FeeBreakdown>();
 
@@ -168,12 +251,54 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_WhenSmallProducerWith25Subsidiaries_CreatesCorrectBreakdown(
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWithNoBaseFeeAnd50SubsidiariesWithOnlineMarket_CreatesCorrectBreakdown(
+            [Frozen] RegistrationFeesResponseDto response,
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            response.BaseFee = 0m; // No base fee
+            request.NumberOfSubsidiaries = 50;
+            request.IsOnlineMarketplace = true;
+            response.OnlineMarket = 257900m; // £2,579 in pence
+            request.Regulator = "GB-ENG";
+            response.FeeBreakdowns = new List<FeeBreakdown>();
+
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            _feesRepositoryMock.Setup(repo => repo.GetAdditionalSubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(14000m); // £140 in pence per subsidiary
+
+            // Act
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                response.FeeBreakdowns.Should().HaveCount(3);
+
+                response.FeeBreakdowns.Should().NotContain(f => f.Description == "Base Fee");
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                    .Which.Amount.Should().Be(257900m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 20 Subsidiaries Fee (£558 each)")
+                    .Which.Amount.Should().Be(1116000m); // 20 subsidiaries at £558 each
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Next 30 Subsidiaries Fee (£140 each)")
+                    .Which.Amount.Should().Be(420000m); // 30 subsidiaries at £140 each
+            }
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GenerateFeeBreakdown_WhenSmallProducerWith25SubsidiariesWithoutOnlineMarket_CreatesCorrectBreakdown(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
             response.BaseFee = 121600m; // £1,216 in pence
+            request.IsOnlineMarketplace = false;
             request.NumberOfSubsidiaries = 25;
             request.Regulator = "GB-ENG";
             response.FeeBreakdowns = new List<FeeBreakdown>();
@@ -205,12 +330,55 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_WhenSmallProducerWith20Subsidiaries_CreatesCorrectBreakdown(
+        public async Task GenerateFeeBreakdown_WhenSmallProducerWith25SubsidiariesWithOnlineMarket_CreatesCorrectBreakdown(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
             response.BaseFee = 121600m; // £1,216 in pence
+            request.IsOnlineMarketplace = true;
+            response.OnlineMarket = 257900m; // £2,579 in pence
+            request.NumberOfSubsidiaries = 25;
+            request.Regulator = "GB-ENG";
+            response.FeeBreakdowns = new List<FeeBreakdown>();
+
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            _feesRepositoryMock.Setup(repo => repo.GetAdditionalSubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(14000m); // £140 in pence per subsidiary
+
+            // Act
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                response.FeeBreakdowns.Should().HaveCount(4);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£1216)")
+                    .Which.Amount.Should().Be(121600m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                    .Which.Amount.Should().Be(257900m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 20 Subsidiaries Fee (£558 each)")
+                    .Which.Amount.Should().Be(1116000m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Next 5 Subsidiaries Fee (£140 each)")
+                    .Which.Amount.Should().Be(70000m);
+            }
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GenerateFeeBreakdown_WhenSmallProducerWith20SubsidiariesWithoutOnlineMarket_CreatesCorrectBreakdown(
+            [Frozen] RegistrationFeesResponseDto response,
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            response.BaseFee = 121600m; // £1,216 in pence
+            request.IsOnlineMarketplace = false;
             request.NumberOfSubsidiaries = 20;
             request.Regulator = "GB-ENG";
             response.FeeBreakdowns = new List<FeeBreakdown>();
@@ -236,12 +404,49 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_WhenLargeProducerWithNoSubsidiaries_CreatesBaseFeeOnly(
+        public async Task GenerateFeeBreakdown_WhenSmallProducerWith20SubsidiariesWithOnlineMarket_CreatesCorrectBreakdown(
+        [Frozen] RegistrationFeesResponseDto response,
+        [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            response.BaseFee = 121600m; // £1,216 in pence
+            request.IsOnlineMarketplace = true;
+            response.OnlineMarket = 257900m; // £2,579 in pence
+            request.NumberOfSubsidiaries = 20;
+            request.Regulator = "GB-ENG";
+            response.FeeBreakdowns = new List<FeeBreakdown>();
+
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            // Act
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                response.FeeBreakdowns.Should().HaveCount(3);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£1216)")
+                    .Which.Amount.Should().Be(121600m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                    .Which.Amount.Should().Be(257900m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 20 Subsidiaries Fee (£558 each)")
+                    .Which.Amount.Should().Be(1116000m);
+            }
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWithNoSubsidiariesWithoutOnlineMarket_CreatesBaseFeeOnly(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
             response.BaseFee = 262000m; // £2,620 in pence
+            request.IsOnlineMarketplace = false;
             request.NumberOfSubsidiaries = 0;
             request.Regulator = "GB-ENG";
             response.FeeBreakdowns = new List<FeeBreakdown>();
@@ -263,12 +468,45 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_WhenSmallProducerWithNoSubsidiaries_CreatesBaseFeeOnly(
+        public async Task GenerateFeeBreakdown_WhenLargeProducerWithNoSubsidiariesWithOnlineMarket_CreatesBaseFeeOnly(
+        [Frozen] RegistrationFeesResponseDto response,
+        [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            response.BaseFee = 262000m; // £2,620 in pence
+            request.IsOnlineMarketplace = true;
+            response.OnlineMarket = 257900m; // £2,579 in pence
+            request.NumberOfSubsidiaries = 0;
+            request.Regulator = "GB-ENG";
+            response.FeeBreakdowns = new List<FeeBreakdown>();
+
+            // Act
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                response.FeeBreakdowns.Should().HaveCount(2);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£2620)")
+                .Which.Amount.Should().Be(262000m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                    .Which.Amount.Should().Be(257900m);
+
+                response.FeeBreakdowns.Should().NotContain(f => f.Description.Contains("Subsidiaries Fee"));
+            }
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GenerateFeeBreakdown_WhenSmallProducerWithNoSubsidiariesWithoutOnlineMarket_CreatesBaseFeeOnly(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
             response.BaseFee = 121600m; // £1,216 in pence
+            request.IsOnlineMarketplace = false;
             request.NumberOfSubsidiaries = 0;
             request.Regulator = "GB-ENG";
             response.FeeBreakdowns = new List<FeeBreakdown>();
@@ -290,12 +528,45 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GenerateFeeBreakdown_WithWholeNumberPence_CreatesCorrectBreakdown(
+        public async Task GenerateFeeBreakdown_WhenSmallProducerWithNoSubsidiariesWithOnlineMarket_CreatesBaseFeeOnly(
+            [Frozen] RegistrationFeesResponseDto response,
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            response.BaseFee = 121600m; // £1,216 in pence
+            request.IsOnlineMarketplace = true;
+            response.OnlineMarket = 257900m; // £2,579 in pence
+            request.NumberOfSubsidiaries = 0;
+            request.Regulator = "GB-ENG";
+            response.FeeBreakdowns = new List<FeeBreakdown>();
+
+            // Act
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                response.FeeBreakdowns.Should().HaveCount(2);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£1216)")
+                .Which.Amount.Should().Be(121600m);
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                    .Which.Amount.Should().Be(257900m);
+
+                response.FeeBreakdowns.Should().NotContain(f => f.Description.Contains("Subsidiaries Fee"));
+            }
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GenerateFeeBreakdown_WithWholeNumberPenceWithoutOnlineMarket_CreatesCorrectBreakdown(
             [Frozen] RegistrationFeesResponseDto response,
             [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
             response.BaseFee = 262000.0000m; // £2,620.0000 in pence
+            request.IsOnlineMarketplace = false;
             request.NumberOfSubsidiaries = 10;
             request.Regulator = "GB-ENG";
             response.FeeBreakdowns = new List<FeeBreakdown>();
@@ -314,6 +585,45 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 // Description should now only display whole pounds
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£2620)")
                     .Which.Amount.Should().Be(262000.0000m); // Amount remains accurate with full precision (even though it's .0000)
+
+                // Description should now only display whole pounds
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 10 Subsidiaries Fee (£558 each)")
+                    .Which.Amount.Should().Be(558000.0000m); // 10 subsidiaries at £558.0000 each, amount remains accurate with full precision
+            }
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GenerateFeeBreakdown_WithWholeNumberPenceWithOnlineMarket_CreatesCorrectBreakdown(
+            [Frozen] RegistrationFeesResponseDto response,
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            response.BaseFee = 262000.0000m; // £2,620.0000 in pence
+            request.IsOnlineMarketplace = true;
+            response.OnlineMarket = 257900.0000m; // £2,579 in pence
+            request.NumberOfSubsidiaries = 10;
+            request.Regulator = "GB-ENG";
+            response.FeeBreakdowns = new List<FeeBreakdown>();
+
+            _feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800.0000m); // £558.0000 in pence per subsidiary
+
+            // Act
+            await _feeBreakdownGenerator!.GenerateFeeBreakdownAsync(response, request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                response.FeeBreakdowns.Should().HaveCount(3);
+
+                // Description should now only display whole pounds
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£2620)")
+                    .Which.Amount.Should().Be(262000.0000m); // Amount remains accurate with full precision (even though it's .0000)
+
+
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                    .Which.Amount.Should().Be(257900.0000m);
 
                 // Description should now only display whole pounds
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 10 Subsidiaries Fee (£558 each)")

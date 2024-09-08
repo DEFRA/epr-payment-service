@@ -14,17 +14,20 @@ namespace EPR.Payment.Service.Services.RegistrationFees
         private readonly ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto> _subsidiariesFeeCalculationStrategy;
         private readonly IValidator<ProducerRegistrationFeesRequestDto> _validator;
         private readonly IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto> _feeBreakdownGenerator;
+        private readonly IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto> _onlineMarketCalculationStrategy;
 
         public ProducerFeesCalculatorService(
             IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto> baseFeeCalculationStrategy,
             ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto> subsidiariesFeeCalculationStrategy,
             IValidator<ProducerRegistrationFeesRequestDto> validator,
-            IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto> feeBreakdownGenerator)
+            IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto> feeBreakdownGenerator,
+            IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto> onlineMarketCalculationStrategy)
         {
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _feeBreakdownGenerator = feeBreakdownGenerator ?? throw new ArgumentNullException(nameof(feeBreakdownGenerator));
+            _onlineMarketCalculationStrategy = onlineMarketCalculationStrategy ?? throw new ArgumentNullException(nameof(onlineMarketCalculationStrategy));
         }
 
         public async Task<RegistrationFeesResponseDto> CalculateFeesAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
@@ -35,8 +38,9 @@ namespace EPR.Payment.Service.Services.RegistrationFees
             try
             {
                 response.BaseFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
+                response.OnlineMarket = await _onlineMarketCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
                 response.SubsidiariesFee = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
-                response.TotalFee = response.BaseFee + response.SubsidiariesFee;
+                response.TotalFee = response.BaseFee + response.OnlineMarket + response.SubsidiariesFee;
 
                 await _feeBreakdownGenerator.GenerateFeeBreakdownAsync(response, request, cancellationToken);
             }

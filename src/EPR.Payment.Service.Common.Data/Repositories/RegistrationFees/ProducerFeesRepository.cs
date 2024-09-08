@@ -75,6 +75,26 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             return fee;
         }
 
+        public async Task<decimal> GetOnlineMarketFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        {
+            var currentDate = DateTime.UtcNow.Date; // Only the date part, time is set to 00:00:00
+
+            var fee = await _dataContext.RegistrationFees
+                .Where(r => r.Group.Type.ToLower() == GroupTypeConstants.ProducerType.ToLower() &&
+                            r.SubGroup.Type.ToLower() == SubGroupTypeConstants.OnlineMarket.ToLower() &&
+                            r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
+                            r.EffectiveFrom.Date <= currentDate &&
+                            r.EffectiveTo.Date >= currentDate)
+                .OrderByDescending(r => r.EffectiveFrom) // Ensure the most recent EffectiveFrom is selected
+                .Select(r => r.Amount)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (fee == 0)
+                throw new KeyNotFoundException($"{ProducerFeesRepositoryConstants.InvalidOnlineMarketRegulatorError}: {regulator}");
+
+            return fee;
+        }
+
         public async Task<decimal?> GetResubmissionAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
             var currentDate = DateTime.UtcNow.Date; // Only the date part, time is set to 00:00:00
@@ -82,7 +102,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             var fee = await _dataContext.RegistrationFees.
                 Where(a =>
                           a.Group.Type.ToLower() == GroupTypeConstants.ProducerResubmission.ToLower() &&
-                          a.SubGroup.Type.ToLower() == ProducerResubmissionConstants.ReSubmitting.ToLower() &&
+                          a.SubGroup.Type.ToLower() == SubGroupTypeConstants.ReSubmitting.ToLower() &&
                           a.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
                           a.EffectiveFrom.Date <= currentDate &&
                           a.EffectiveTo.Date >= currentDate)

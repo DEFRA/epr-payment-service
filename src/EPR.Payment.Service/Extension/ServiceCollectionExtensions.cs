@@ -29,6 +29,7 @@ namespace EPR.Payment.Service.Extension
             // Register the specific implementations of IFeeCalculationStrategy
             services.AddScoped<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>, BaseFeeCalculationStrategy>();
             services.AddScoped<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>, SubsidiariesFeeCalculationStrategy>();
+            services.AddScoped<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto>, OnlineMarketCalculationStrategy>();
             services.AddScoped<IResubmissionAmountStrategy, DefaultResubmissionAmountStrategy>();
 
 
