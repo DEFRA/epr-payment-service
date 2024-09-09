@@ -188,58 +188,5 @@ namespace EPR.Payment.Service.UnitTests.Controllers
                 internalServerErrorResult.Value.Should().Be($"{ProducerFeesCalculationExceptions.FeeCalculationError}: {exceptionMessage}");
             }
         }
-
-        [TestMethod, AutoMoqData]
-        public async Task GetProducerResubmissionAmountByRegulator_ServiceReturnsAResult_ShouldReturnOkResponse(
-            [Frozen] string regulator,
-            [Frozen] decimal expectedAmount)
-        {
-            //Arrange
-            _producerFeesCalculatorServiceMock.Setup(i => i.GetProducerResubmissionAmountByRegulatorAsync(regulator, CancellationToken.None)).ReturnsAsync(expectedAmount);
-
-            //Act
-            var result = await _controller.GetProducerResubmissionAmountByRegulator(regulator, CancellationToken.None);
-
-            //Assert
-            result.Should().BeOfType<OkObjectResult>();
-            result.As<OkObjectResult>().Should().NotBeNull();
-        }
-
-        [TestMethod, AutoMoqData]
-        public async Task GetProducerResubmissionAmountByRegulator_ServiceThrowsException_ShouldReturnInternalServerError(
-            [Frozen] string regulator)
-        {
-            // Arrange
-            _producerFeesCalculatorServiceMock.Setup(i => i.GetProducerResubmissionAmountByRegulatorAsync(regulator, CancellationToken.None))
-                               .ThrowsAsync(new Exception("Test Exception"));
-
-            // Act
-            var result = await _controller.GetProducerResubmissionAmountByRegulator(regulator, CancellationToken.None);
-
-            // Assert
-            result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-        }
-
-        [TestMethod]
-        public async Task GetProducerResubmissionAmountByRegulator_EmptyRegulator_ShouldReturnBadRequest()
-        {
-            // Arrange
-            string regulator = string.Empty;
-
-            var result = await _controller.GetProducerResubmissionAmountByRegulator(regulator, CancellationToken.None);
-
-            result.Should().BeOfType<BadRequestObjectResult>();
-        }
-
-        [TestMethod]
-        public async Task GetProducerResubmissionAmountByRegulator_NullRegulator_ShouldReturnBadRequest()
-        {
-            // Arrange
-            string regulator = null!;
-
-            var result = await _controller.GetProducerResubmissionAmountByRegulator(regulator, CancellationToken.None);
-
-            result.Should().BeOfType<BadRequestObjectResult>();
-        }
     }
 }

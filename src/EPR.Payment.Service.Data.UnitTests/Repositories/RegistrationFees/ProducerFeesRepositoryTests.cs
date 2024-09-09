@@ -655,7 +655,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetProducerResubmissionAmountByRegulatorAsync_RegistrationFeesExist_ShouldReturnAmount(
+        public async Task GetResubmissionAsync_RegistrationFeesExist_ShouldReturnAmount(
            [Frozen] Mock<IAppDbContext> _dataContextMock,
            [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -663,10 +663,10 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
             _producerFeesRepository = new ProducerFeesRepository(_dataContextMock.Object);
 
-            var regulator = "GB-ENG";
+            var regulator = RegulatorType.Create("GB-ENG");
 
             //Act
-            var result = await _producerFeesRepository.GetProducerResubmissionAmountByRegulatorAsync(regulator, _cancellationToken);
+            var result = await _producerFeesRepository.GetResubmissionAsync(regulator, _cancellationToken);
 
             //Assert
             using (new AssertionScope())
@@ -677,18 +677,17 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetProducerResubmissionAmountByRegulatorAsync_RegistrationFeesDoesNotExist_ShouldThrowKeyNotFoundException(
+        public async Task GetResubmissionAsync_RegistrationFeesDoesNotExist_ShouldThrowKeyNotFoundException(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
             //Arrange
+            var regulator = RegulatorType.Create("GB-SCT");
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
             _producerFeesRepository = new ProducerFeesRepository(_dataContextMock.Object);
 
-            var regulator = "Test-Reg";
-
             //Act & Assert
-            await _producerFeesRepository.Invoking(async x => await x.GetProducerResubmissionAmountByRegulatorAsync(regulator, _cancellationToken))
+            await _producerFeesRepository.Invoking(async x => await x.GetResubmissionAsync(regulator, _cancellationToken))
                 .Should().ThrowAsync<KeyNotFoundException>();
         }
     }

@@ -29,6 +29,7 @@ namespace EPR.Payment.Service.Extension
             // Register the specific implementations of IFeeCalculationStrategy
             services.AddScoped<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>, BaseFeeCalculationStrategy>();
             services.AddScoped<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>, SubsidiariesFeeCalculationStrategy>();
+            services.AddScoped<IResubmissionAmountStrategy, DefaultResubmissionAmountStrategy>();
 
 
             // Register the fee breakdown generator
@@ -40,6 +41,7 @@ namespace EPR.Payment.Service.Extension
 
             // Register the main services
             services.AddScoped<IProducerFeesCalculatorService, ProducerFeesCalculatorService>();
+            services.AddScoped<IProducerResubmissionService, ProducerResubmissionService>();
             services.AddScoped<IPaymentsService, PaymentsService>();
 
             return services;
