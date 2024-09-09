@@ -1,10 +1,11 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -68,36 +69,17 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
             feesRepositoryMock.Setup(i => i.GetResubmissionAsync(regulatorType, CancellationToken.None)).ReturnsAsync(expectedAmount);
 
             //Act
-            var result = await strategy.GetResubmissionAsync(regulator, CancellationToken.None);
+            var result = await strategy.CalculateFeeAsync(regulator, CancellationToken.None);
 
             //Assert
             result.Should().Be(expectedAmount);
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetResubmissionAsync_RepositoryReturnsAResult_ShouldReturnNull(
-            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
-            DefaultResubmissionAmountStrategy strategy
-            )
-        {
-            //Arrange
-            string regulator = "GB-ENG";
-            var regulatorType = RegulatorType.Create(regulator);
-
-            feesRepositoryMock.Setup(i => i.GetResubmissionAsync(regulatorType, CancellationToken.None)).ReturnsAsync((decimal?)null);
-
-            //Act
-            var result = await strategy.GetResubmissionAsync(regulator, CancellationToken.None);
-
-            //Assert
-            result.Should().BeNull();
-        }
-
-        [TestMethod, AutoMoqData]
         public async Task GetResubmissionAsync_EmptyRegulator_ThrowsArgumentException(DefaultResubmissionAmountStrategy strategy)
         {
             // Act & Assert
-            await strategy.Invoking(async s => await s!.GetResubmissionAsync(string.Empty, new CancellationToken()))
+            await strategy.Invoking(async s => await s!.CalculateFeeAsync(string.Empty, new CancellationToken()))
                 .Should().ThrowAsync<ArgumentException>()
                 .WithMessage("regulator cannot be null or empty (Parameter 'regulator')");
         }
@@ -106,9 +88,30 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
         public async Task GetResubmissionAsync_NullRegulator_ThrowsArgumentException(DefaultResubmissionAmountStrategy strategy)
         {
             // Act & Assert
-            await strategy.Invoking(async s => await s!.GetResubmissionAsync(null!, new CancellationToken()))
+            await strategy.Invoking(async s => await s!.CalculateFeeAsync(null!, new CancellationToken()))
                 .Should().ThrowAsync<ArgumentException>()
                 .WithMessage("regulator cannot be null or empty (Parameter 'regulator')");
         }
+
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeeAsync_WhenFeeIsZero_ThrowsKeyNotFoundException(
+            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
+            DefaultResubmissionAmountStrategy strategy)
+        {
+            // Arrange
+            string regulator = "GB-ENG";
+            var regulatorType = RegulatorType.Create(regulator);
+
+            feesRepositoryMock.Setup(repo => repo.GetResubmissionAsync(regulatorType, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(0m); // Setup the repository to return 0 fee
+
+            // Act
+            Func<Task> act = async () => await strategy.CalculateFeeAsync(regulator, CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<KeyNotFoundException>()
+                .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, regulator));
+        }
+
     }
 }
