@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -75,7 +76,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             return fee;
         }
 
-        public async Task<decimal?> GetResubmissionAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        public async Task<decimal> GetResubmissionAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
             var currentDate = DateTime.UtcNow.Date; // Only the date part, time is set to 00:00:00
 

@@ -1,4 +1,4 @@
-﻿namespace EPR.Payment.Service.Common.Constants.RegistrationFees
+﻿namespace EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions
 {
     public static class ProducerFeesCalculationExceptions
     {

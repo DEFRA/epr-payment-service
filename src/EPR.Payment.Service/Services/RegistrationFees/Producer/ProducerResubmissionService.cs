@@ -1,7 +1,7 @@
-﻿using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+﻿using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 
-namespace EPR.Payment.Service.Services.RegistrationFees
+namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 {
     public class ProducerResubmissionService : IProducerResubmissionService
     {
@@ -19,7 +19,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees
                 throw new ArgumentException("Regulator cannot be null or empty", nameof(regulator));
             }
 
-            return await _resubmissionAmountStrategy.GetResubmissionAsync(regulator, cancellationToken);
+            return await _resubmissionAmountStrategy.CalculateFeeAsync(regulator, cancellationToken);
         }
     }
 }

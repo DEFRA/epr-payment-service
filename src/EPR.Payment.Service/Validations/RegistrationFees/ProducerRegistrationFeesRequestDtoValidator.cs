@@ -1,5 +1,5 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using FluentValidation;
 
 namespace EPR.Payment.Service.Validations.RegistrationFees
@@ -23,20 +23,7 @@ namespace EPR.Payment.Service.Validations.RegistrationFees
                 .WithMessage(ValidationMessages.NumberOfSubsidiariesRequiredWhenProducerTypeEmpty);
             RuleFor(x => x.Regulator)
                 .NotEmpty().WithMessage(ValidationMessages.RegulatorRequired)
-                .Must(IsValidRegulator).WithMessage(ValidationMessages.RegulatorInvalid);
-        }
-
-        private bool IsValidRegulator(string regulator)
-        {
-            var validRegulators = new List<string>
-            {
-                RegulatorConstants.GBENG,
-                RegulatorConstants.GBSCT,
-                RegulatorConstants.GBWLS,
-                RegulatorConstants.GBNIR
-            };
-
-            return validRegulators.Contains(regulator);
+                .Must(RegulatorValidationHelper.IsValidRegulator).WithMessage(ValidationMessages.RegulatorInvalid);
         }
     }
 }

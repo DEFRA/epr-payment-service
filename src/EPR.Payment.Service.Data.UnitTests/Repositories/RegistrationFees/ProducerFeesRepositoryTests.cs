@@ -1,5 +1,5 @@
 ﻿using AutoFixture.MSTest;
-using EPR.Payment.Service.Common.Constants.RegistrationFees;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.Mocks;
@@ -671,7 +671,6 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             //Assert
             using (new AssertionScope())
             {
-                result.Should().NotBeNull();
                 result.Should().Be(100);
             }
         }

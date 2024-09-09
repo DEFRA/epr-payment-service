@@ -1,8 +1,8 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 
 namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
 {

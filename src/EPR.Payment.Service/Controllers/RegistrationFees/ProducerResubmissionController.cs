@@ -1,6 +1,6 @@
 ﻿using Asp.Versioning;
-using EPR.Payment.Service.Common.Constants.RegistrationFees;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

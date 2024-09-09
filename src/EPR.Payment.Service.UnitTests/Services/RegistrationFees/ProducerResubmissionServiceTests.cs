@@ -1,9 +1,8 @@
 ﻿using AutoFixture.MSTest;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
-using EPR.Payment.Service.Services.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Services.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Moq;
@@ -62,28 +61,13 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             )
         {
             //Arrange
-            _resubmissionAmountStrategyMock.Setup(i => i.GetResubmissionAsync(regulator, CancellationToken.None)).ReturnsAsync(expectedAmount);
+            _resubmissionAmountStrategyMock.Setup(i => i.CalculateFeeAsync(regulator, CancellationToken.None)).ReturnsAsync(expectedAmount);
 
             //Act
             var result = await _resubmissionService!.GetResubmissionAsync(regulator, CancellationToken.None);
 
             //Assert
             result.Should().Be(expectedAmount);
-        }
-
-        [TestMethod, AutoMoqData]
-        public async Task GetResubmissionAsync_RepositoryReturnsAResult_ShouldReturnNull(
-            [Frozen] string regulator
-            )
-        {
-            //Arrange
-            _resubmissionAmountStrategyMock.Setup(i => i.GetResubmissionAsync(regulator, CancellationToken.None)).ReturnsAsync((decimal?)null);
-
-            //Act
-            var result = await _resubmissionService!.GetResubmissionAsync(regulator, CancellationToken.None);
-
-            //Assert
-            result.Should().BeNull();
         }
 
         [TestMethod]
