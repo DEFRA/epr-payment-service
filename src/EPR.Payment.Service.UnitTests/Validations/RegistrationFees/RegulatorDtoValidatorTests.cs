@@ -34,7 +34,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_NullRegulator_ShouldHaveError()
         {
             // Arrange
-            var dto = new RegulatorDto { Regulator = null };
+            var dto = new RegulatorDto { Regulator = null! };
 
             // Act
             var result = _validator.TestValidate(dto);

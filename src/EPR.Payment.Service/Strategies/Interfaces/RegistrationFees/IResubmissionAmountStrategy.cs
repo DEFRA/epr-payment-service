@@ -4,6 +4,6 @@ namespace EPR.Payment.Service.Strategies.Interfaces.RegistrationFees
 {
     public interface IResubmissionAmountStrategy
     {
-        Task<decimal?> GetResubmissionAsync(RegulatorDto producerResubmissionFeeRequestDto, CancellationToken cancellationToken);
+        Task<decimal?> GetResubmissionAsync(RegulatorDto request, CancellationToken cancellationToken);
     }
 }
