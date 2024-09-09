@@ -1,4 +1,5 @@
 ﻿using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.RegistrationFees.Producer;
@@ -68,6 +69,21 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
             //Assert
             result.Should().Be(expectedAmount);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionAsync_RepositoryReturnsAResult_ShouldReturnNull(
+            [Frozen] string regulator
+            )
+        {
+            //Arrange
+            _resubmissionAmountStrategyMock.Setup(i => i.GetResubmissionAsync(regulator, CancellationToken.None)).ReturnsAsync((decimal?)null);
+
+            //Act
+            var result = await _resubmissionService!.GetResubmissionAsync(regulator, CancellationToken.None);
+
+            //Assert
+            result.Should().BeNull();
         }
 
         [TestMethod]
