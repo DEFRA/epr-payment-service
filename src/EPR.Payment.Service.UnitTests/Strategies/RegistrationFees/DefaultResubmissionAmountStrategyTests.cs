@@ -2,6 +2,7 @@
 using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
@@ -62,13 +63,13 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
             )
         {
             //Arrange
-            string regulator = "GB-ENG";
-            var regulatorType = RegulatorType.Create(regulator);
+            var producerResubmissionFeeRequestDto = new RegulatorDto { Regulator = "GB-ENG" };
+            var regulatorType = RegulatorType.Create(producerResubmissionFeeRequestDto.Regulator);
 
             feesRepositoryMock.Setup(i => i.GetResubmissionAsync(regulatorType, CancellationToken.None)).ReturnsAsync(expectedAmount);
 
             //Act
-            var result = await strategy.GetResubmissionAsync(regulator, CancellationToken.None);
+            var result = await strategy.GetResubmissionAsync(producerResubmissionFeeRequestDto, CancellationToken.None);
 
             //Assert
             result.Should().Be(expectedAmount);
@@ -81,13 +82,13 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
             )
         {
             //Arrange
-            string regulator = "GB-ENG";
-            var regulatorType = RegulatorType.Create(regulator);
+            var producerResubmissionFeeRequestDto = new RegulatorDto { Regulator = "GB-ENG" };
+            var regulatorType = RegulatorType.Create(producerResubmissionFeeRequestDto.Regulator);
 
             feesRepositoryMock.Setup(i => i.GetResubmissionAsync(regulatorType, CancellationToken.None)).ReturnsAsync((decimal?)null);
 
             //Act
-            var result = await strategy.GetResubmissionAsync(regulator, CancellationToken.None);
+            var result = await strategy.GetResubmissionAsync(producerResubmissionFeeRequestDto, CancellationToken.None);
 
             //Assert
             result.Should().BeNull();
@@ -97,18 +98,20 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
         public async Task GetResubmissionAsync_EmptyRegulator_ThrowsArgumentException(DefaultResubmissionAmountStrategy strategy)
         {
             // Act & Assert
-            await strategy.Invoking(async s => await s!.GetResubmissionAsync(string.Empty, new CancellationToken()))
+            var producerResubmissionFeeRequestDto = new RegulatorDto { Regulator = string.Empty };
+            await strategy.Invoking(async s => await s!.GetResubmissionAsync(producerResubmissionFeeRequestDto, new CancellationToken()))
                 .Should().ThrowAsync<ArgumentException>()
-                .WithMessage("regulator cannot be null or empty (Parameter 'regulator')");
+                .WithMessage("Regulator cannot be null or empty");
         }
 
         [TestMethod, AutoMoqData]
         public async Task GetResubmissionAsync_NullRegulator_ThrowsArgumentException(DefaultResubmissionAmountStrategy strategy)
         {
             // Act & Assert
-            await strategy.Invoking(async s => await s!.GetResubmissionAsync(null!, new CancellationToken()))
+            var producerResubmissionFeeRequestDto = new RegulatorDto { Regulator = null! };
+            await strategy.Invoking(async s => await s!.GetResubmissionAsync(producerResubmissionFeeRequestDto, new CancellationToken()))
                 .Should().ThrowAsync<ArgumentException>()
-                .WithMessage("regulator cannot be null or empty (Parameter 'regulator')");
+                .WithMessage("Regulator cannot be null or empty");
         }
     }
 }
