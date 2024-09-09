@@ -62,10 +62,9 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             ComplianceSchemeBaseFeeCalculationStrategy strategy)
         {
             // Arrange
-            var regulator = "GB-ENG";
-            var regulatorType = RegulatorType.Create(regulator);
+            var regulator = RegulatorType.Create("GB-ENG");
 
-            feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(regulatorType, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(regulator, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1380400m); // £13,804 in pence
 
             // Act
@@ -77,46 +76,14 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeeAsync_WhenRegulatorIsNull_ThrowsArgumentException(
-            [Frozen] Mock<IComplianceSchemeFeesRepository> feesRepositoryMock,
-            ComplianceSchemeBaseFeeCalculationStrategy strategy)
-        {
-            // Act
-            Func<Task> act = async () => await strategy.CalculateFeeAsync(null!, CancellationToken.None);
-
-            // Assert
-            await act.Should().ThrowAsync<ArgumentException>()
-                .WithMessage(ComplianceSchemeFeeCalculationExceptions.RegulatorMissing);
-        }
-
-        [TestMethod]
-        [AutoMoqData]
-        public async Task CalculateFeeAsync_WhenRegulatorIsEmpty_ThrowsArgumentException(
-            [Frozen] Mock<IComplianceSchemeFeesRepository> feesRepositoryMock,
-            ComplianceSchemeBaseFeeCalculationStrategy strategy)
-        {
-            // Arrange
-            var emptyRegulator = string.Empty;
-
-            // Act
-            Func<Task> act = async () => await strategy.CalculateFeeAsync(emptyRegulator, CancellationToken.None);
-
-            // Assert
-            await act.Should().ThrowAsync<ArgumentException>()
-                .WithMessage(ComplianceSchemeFeeCalculationExceptions.RegulatorMissing);
-        }
-
-        [TestMethod]
-        [AutoMoqData]
         public async Task CalculateFeeAsync_WhenBaseFeeIsZero_ThrowsKeyNotFoundException(
             [Frozen] Mock<IComplianceSchemeFeesRepository> feesRepositoryMock,
             ComplianceSchemeBaseFeeCalculationStrategy strategy)
         {
             // Arrange
-            var regulator = "GB-ENG";
-            var regulatorType = RegulatorType.Create(regulator);
+            var regulator = RegulatorType.Create("GB-ENG");
 
-            feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(regulatorType, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(regulator, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(0m); // Simulate a scenario where the fee is zero
 
             // Act
@@ -124,7 +91,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, regulator));
+                .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, regulator.Value));
         }
     }
 }

@@ -14,20 +14,13 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
 
-        public async Task<decimal> CalculateFeeAsync(string regulator, CancellationToken cancellationToken)
+        public async Task<decimal> CalculateFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(regulator))
-            {
-                throw new ArgumentException(ComplianceSchemeFeeCalculationExceptions.RegulatorMissing);
-            }
-
-            var regulatorType = RegulatorType.Create(regulator);
-
-            var baseFee = await _feesRepository.GetBaseFeeAsync(regulatorType, cancellationToken);
+            var baseFee = await _feesRepository.GetBaseFeeAsync(regulator, cancellationToken);
 
             if (baseFee == 0)
             {
-                throw new KeyNotFoundException(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, regulator));
+                throw new KeyNotFoundException(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, regulator.Value));
             }
 
             return baseFee;

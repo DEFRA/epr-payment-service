@@ -1,6 +1,8 @@
-﻿namespace EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme
+﻿using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
+
+namespace EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme
 {
-    public interface IComplianceSchemeBaseFeeCalculationStrategy : IFeeCalculationStrategy<string>
+    public interface IComplianceSchemeBaseFeeCalculationStrategy : IFeeCalculationStrategy<RegulatorType>
     {
     }
 }

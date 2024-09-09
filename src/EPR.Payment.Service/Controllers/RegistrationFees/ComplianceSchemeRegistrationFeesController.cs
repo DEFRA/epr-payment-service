@@ -1,5 +1,7 @@
 ﻿using Asp.Versioning;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -15,22 +17,22 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees
     public class ComplianceSchemeRegistrationFeesController : ControllerBase
     {
         private readonly IComplianceSchemeBaseFeeService _complianceSchemeBaseFeeService;
-        private readonly IValidator<string> _regulatorValidator;
+        private readonly IValidator<RegulatorDto> _regulatorDtoValidator;
 
         public ComplianceSchemeRegistrationFeesController(
             IComplianceSchemeBaseFeeService complianceSchemeBaseFeeService,
-            IValidator<string> regulatorValidator)
+            IValidator<RegulatorDto> regulatorDtoValidator)
         {
             _complianceSchemeBaseFeeService = complianceSchemeBaseFeeService ?? throw new ArgumentNullException(nameof(complianceSchemeBaseFeeService));
-            _regulatorValidator = regulatorValidator ?? throw new ArgumentNullException(nameof(regulatorValidator));
+            _regulatorDtoValidator = regulatorDtoValidator ?? throw new ArgumentNullException(nameof(regulatorDtoValidator));
         }
 
         [MapToApiVersion(1)]
         [HttpGet("{regulator}")]
         [SwaggerOperation(
-            Summary = "Retrieves the base fee for a compliance scheme",
-            Description = "Retrieves the base fee based on the specified regulator."
-        )]
+    Summary = "Retrieves the base fee for a compliance scheme",
+    Description = "Retrieves the base fee based on the specified regulator."
+)]
         [SwaggerResponse(200, "Returns the base fee", typeof(decimal))]
         [SwaggerResponse(400, "Bad request due to validation errors or invalid input")]
         [SwaggerResponse(500, "Internal server error occurred while retrieving the base fee")]
@@ -38,12 +40,9 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableComplianceSchemeBaseFees")]
-        public async Task<IActionResult> GetBaseFeeAsync(
-            [FromRoute] string regulator,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> GetBaseFeeAsync([FromRoute] RegulatorDto regulatorDto, CancellationToken cancellationToken)
         {
-            // Manually validate the regulator string
-            var validationResult = _regulatorValidator.Validate(regulator);
+            var validationResult = _regulatorDtoValidator.Validate(regulatorDto);
 
             if (!validationResult.IsValid)
             {
@@ -57,7 +56,8 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees
 
             try
             {
-                var fee = await _complianceSchemeBaseFeeService.GetComplianceSchemeBaseFeeAsync(regulator, cancellationToken);
+                var regulatorType = RegulatorType.Create(regulatorDto.Regulator);
+                var fee = await _complianceSchemeBaseFeeService.GetComplianceSchemeBaseFeeAsync(regulatorType, cancellationToken);
                 return Ok(new { BaseFee = fee });
             }
             catch (ValidationException ex)
