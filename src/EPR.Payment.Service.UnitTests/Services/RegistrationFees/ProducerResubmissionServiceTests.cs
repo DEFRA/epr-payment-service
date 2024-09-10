@@ -1,10 +1,13 @@
 ﻿using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.RegistrationFees.Producer;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using FluentValidation;
+using FluentValidation.Results;
 using Moq;
 
 namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
@@ -14,23 +17,27 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
     {
         private Mock<IResubmissionAmountStrategy> _resubmissionAmountStrategyMock = null!;
         private ProducerResubmissionService? _resubmissionService = null;
+        private Mock<IValidator<RegulatorDto>> _producerResubmissionFeeRequestDtoMock = null!;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _resubmissionAmountStrategyMock = new Mock<IResubmissionAmountStrategy>();
+            _producerResubmissionFeeRequestDtoMock = new Mock<IValidator<RegulatorDto>>();
 
             _resubmissionService = new ProducerResubmissionService(
-                _resubmissionAmountStrategyMock.Object
+                _resubmissionAmountStrategyMock.Object,
+                _producerResubmissionFeeRequestDtoMock.Object
             );
         }
 
         [TestMethod]
-        public void Constructor_WhenDependencyINotNull_ShouldInitializeProducerResubmissionService()
+        public void Constructor_WhenAllDependenciesAreNotNull_ShouldInitializeProducerResubmissionService()
         {
             // Act
             var service = new ProducerResubmissionService(
-                _resubmissionAmountStrategyMock.Object);
+                _resubmissionAmountStrategyMock.Object,
+                _producerResubmissionFeeRequestDtoMock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -48,44 +55,58 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
             // Act
             Action act = () => new ProducerResubmissionService(
-                resubmissionAmountStrategy!);
+                resubmissionAmountStrategy!,
+                _producerResubmissionFeeRequestDtoMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'resubmissionAmountStrategy')");
         }
 
+        [TestMethod]
+        public void Constructor_WhenProducerResubmissionFeeRequestDtoValidatorIsNull_ShouldThrowArgumentNullException()
+        {
+            // Act
+            Action act = () => new ProducerResubmissionService(
+                _resubmissionAmountStrategyMock.Object,
+                null!);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'producerResubmissionRequestValidator')");
+        }
+
         [TestMethod, AutoMoqData]
         public async Task GetResubmissionAsync_RepositoryReturnsAResult_ShouldReturnAmount(
-            [Frozen] string regulator,
+            [Frozen] RegulatorDto request,
             [Frozen] decimal expectedAmount
             )
         {
             //Arrange
-            _resubmissionAmountStrategyMock.Setup(i => i.CalculateFeeAsync(regulator, CancellationToken.None)).ReturnsAsync(expectedAmount);
+            _producerResubmissionFeeRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
+
+            _resubmissionAmountStrategyMock.Setup(i => i.GetResubmissionAsync(request, CancellationToken.None)).ReturnsAsync(expectedAmount);
 
             //Act
-            var result = await _resubmissionService!.GetResubmissionAsync(regulator, CancellationToken.None);
+            var result = await _resubmissionService!.GetResubmissionAsync(request, CancellationToken.None);
 
             //Assert
             result.Should().Be(expectedAmount);
         }
 
-        [TestMethod]
-        public async Task GetResubmissionAsync_EmptyRegulator_ThrowsArgumentException()
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionAsync_ValiditonFails_ShouldThrowValidationException([Frozen] RegulatorDto request)
         {
-            // Act & Assert
-            await _resubmissionService.Invoking(async s => await s!.GetResubmissionAsync(string.Empty, new CancellationToken()))
-                .Should().ThrowAsync<ArgumentException>()
-                .WithMessage("regulator cannot be null or empty (Parameter 'regulator')");
-        }
+            // Arrange
 
-        [TestMethod]
-        public async Task GetResubmissionAsync_NullRegulator_ThrowsArgumentException()
-        {
+            var validationFailures = new List<ValidationFailure>
+            {
+                new ValidationFailure(nameof(request.Regulator), "Regulator is required.")
+            };
+
+            _producerResubmissionFeeRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult(validationFailures));
+
             // Act & Assert
-            await _resubmissionService.Invoking(async s => await s!.GetResubmissionAsync(null!, new CancellationToken()))
-                .Should().ThrowAsync<ArgumentException>()
-                .WithMessage("regulator cannot be null or empty (Parameter 'regulator')");
+            await _resubmissionService.Invoking(async x => await x!.GetResubmissionAsync(request, CancellationToken.None))
+                .Should().ThrowAsync<ValidationException>();
         }
     }
 }

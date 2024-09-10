@@ -4,6 +4,7 @@ using FluentValidation.TestHelper;
 
 namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
 {
+
     [TestClass]
     public class RegulatorDtoValidatorTests
     {
