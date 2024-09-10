@@ -6,19 +6,19 @@ using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 
 namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
 {
-    public class BaseFeeCalculationStrategy : IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>
+    public class OnlineMarketCalculationStrategy : IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto>
     {
         private readonly IProducerFeesRepository _feesRepository;
 
-        public BaseFeeCalculationStrategy(IProducerFeesRepository feesRepository)
+        public OnlineMarketCalculationStrategy(IProducerFeesRepository feesRepository)
         {
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
 
         public async Task<decimal> CalculateFeeAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
         {
-            // If ProducerType is empty, return a base fee of zero
-            if (string.IsNullOrEmpty(request.ProducerType))
+            // If Online Market is false, return zero
+            if (!request.IsOnlineMarketplace)
                 return 0m;
 
             // Ensure Regulator is not null or empty
@@ -26,7 +26,7 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
                 throw new ArgumentException(ProducerFeesCalculationExceptions.RegulatorMissing);
 
             var regulator = RegulatorType.Create(request.Regulator);
-            return await _feesRepository.GetBaseFeeAsync(request.ProducerType, regulator, cancellationToken);
+            return await _feesRepository.GetOnlineMarketFeeAsync(regulator, cancellationToken);
         }
     }
 }

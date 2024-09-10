@@ -1,4 +1,4 @@
-﻿namespace EPR.Payment.Service.Common.Constants.RegistrationFees
+﻿namespace EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps
 {
     public static class GroupTypeConstants
     {

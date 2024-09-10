@@ -1,5 +1,5 @@
 ﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Utilities.RegistrationFees.Interfaces;
@@ -24,6 +24,16 @@ namespace EPR.Payment.Service.Utilities.RegistrationFees.Producer
                 {
                     Description = $"Base Fee (£{Math.Truncate(response.BaseFee / 100m)})", // Convert to pounds and truncate decimals
                     Amount = response.BaseFee
+                });
+            }
+
+            // Online Market Fee Breakdown
+            if (request.IsOnlineMarketplace)
+            {
+                response.FeeBreakdowns.Add(new FeeBreakdown
+                {
+                    Description = $"Online Marketplace Fee (£{Math.Truncate(response.OnlineMarket / 100m)})", // Convert to pounds and truncate decimals
+                    Amount = response.OnlineMarket
                 });
             }
 

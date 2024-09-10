@@ -1,6 +1,8 @@
 ﻿using Asp.Versioning;
-using EPR.Payment.Service.Common.Constants.RegistrationFees;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -20,7 +22,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees
             _producerResubmissionService = producerResubmissionService ?? throw new ArgumentNullException(nameof(producerResubmissionService));
         }
 
-        [HttpGet("{regulator}")]
+        [HttpGet]
         [ProducesResponseType(typeof(decimal?), 200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -28,25 +30,33 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees
             Summary = "Gets the resubmission amount for a producer",
             Description = "Retrieves the resubmission amount for a producer based on the specified regulator."
         )]
-        public async Task<IActionResult> GetResubmissionAsync(string regulator, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetResubmissionAsync([FromQuery] RegulatorDto request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(regulator))
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var resubmissionAmount = await _producerResubmissionService.GetResubmissionAsync(request, cancellationToken);
+                return Ok(resubmissionAmount);
+            }
+            catch (ValidationException ex)
             {
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Validation Error",
-                    Detail = "Regulator cannot be null or empty.",
+                    Detail = ex.Message,
                     Status = StatusCodes.Status400BadRequest
                 });
             }
-            try
+            catch (ArgumentException ex)
             {
-                var resubmissionAmount = await _producerResubmissionService.GetResubmissionAsync(regulator, cancellationToken);
-                return Ok(resubmissionAmount);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{ProducerResubmissionConstants.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ProducerResubmissionExceptions.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
             }
         }
     }
