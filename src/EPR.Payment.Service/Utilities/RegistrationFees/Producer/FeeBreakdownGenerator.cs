@@ -32,7 +32,7 @@ namespace EPR.Payment.Service.Utilities.RegistrationFees.Producer
             {
                 response.FeeBreakdowns.Add(new FeeBreakdown
                 {
-                    Description = $"Online Market Fee (£{Math.Truncate(response.OnlineMarket / 100m)})", // Convert to pounds and truncate decimals
+                    Description = $"Online Marketplace Fee (£{Math.Truncate(response.OnlineMarket / 100m)})", // Convert to pounds and truncate decimals
                     Amount = response.OnlineMarket
                 });
             }

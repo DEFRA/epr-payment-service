@@ -133,7 +133,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£2620)")
                     .Which.Amount.Should().Be(262000m);
 
-                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Marketplace Fee (£2579)")
                      .Which.Amount.Should().Be(257900m);
 
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 20 Subsidiaries Fee (£558 each)")
@@ -204,7 +204,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£2620)")
                     .Which.Amount.Should().Be(262000m);
 
-                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Marketplace Fee (£2579)")
                     .Which.Amount.Should().Be(257900m);
 
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 10 Subsidiaries Fee (£558 each)")
@@ -279,7 +279,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
 
                 response.FeeBreakdowns.Should().NotContain(f => f.Description == "Base Fee");
 
-                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Marketplace Fee (£2579)")
                     .Which.Amount.Should().Be(257900m);
 
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 20 Subsidiaries Fee (£558 each)")
@@ -359,7 +359,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£1216)")
                     .Which.Amount.Should().Be(121600m);
 
-                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Marketplace Fee (£2579)")
                     .Which.Amount.Should().Be(257900m);
 
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 20 Subsidiaries Fee (£558 each)")
@@ -430,7 +430,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£1216)")
                     .Which.Amount.Should().Be(121600m);
 
-                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Marketplace Fee (£2579)")
                     .Which.Amount.Should().Be(257900m);
 
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "First 20 Subsidiaries Fee (£558 each)")
@@ -491,7 +491,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£2620)")
                 .Which.Amount.Should().Be(262000m);
 
-                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Marketplace Fee (£2579)")
                     .Which.Amount.Should().Be(257900m);
 
                 response.FeeBreakdowns.Should().NotContain(f => f.Description.Contains("Subsidiaries Fee"));
@@ -551,7 +551,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                 response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Base Fee (£1216)")
                 .Which.Amount.Should().Be(121600m);
 
-                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Marketplace Fee (£2579)")
                     .Which.Amount.Should().Be(257900m);
 
                 response.FeeBreakdowns.Should().NotContain(f => f.Description.Contains("Subsidiaries Fee"));
@@ -622,7 +622,7 @@ namespace EPR.Payment.Service.UnitTests.Utilities.RegistrationFees
                     .Which.Amount.Should().Be(262000.0000m); // Amount remains accurate with full precision (even though it's .0000)
 
 
-                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Market Fee (£2579)")
+                response.FeeBreakdowns.Should().ContainSingle(f => f.Description == "Online Marketplace Fee (£2579)")
                     .Which.Amount.Should().Be(257900.0000m);
 
                 // Description should now only display whole pounds
