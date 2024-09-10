@@ -15,20 +15,20 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
 
-        public async Task<decimal?> GetResubmissionAsync(RegulatorDto request, CancellationToken cancellationToken)
+        public async Task<decimal> CalculateFeeAsync(RegulatorDto request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.Regulator))
             {
                 throw new ArgumentException("Regulator cannot be null or empty");
             }
 
-            var regulatorType = RegulatorType.Create(regulator);
+            var regulatorType = RegulatorType.Create(request.Regulator);
 
             var fee = await _feesRepository.GetResubmissionAsync(regulatorType, cancellationToken);
 
             if (fee == 0)
             {
-                throw new KeyNotFoundException(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, regulator));
+                throw new KeyNotFoundException(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, request.Regulator));
             }
 
             return fee;
