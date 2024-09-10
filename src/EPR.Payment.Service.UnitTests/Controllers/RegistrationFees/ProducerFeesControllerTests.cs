@@ -1,12 +1,12 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
-using EPR.Payment.Service.Common.Constants.RegistrationFees;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;

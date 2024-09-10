@@ -1,4 +1,4 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using Moq;
 using System.Data.Entity;

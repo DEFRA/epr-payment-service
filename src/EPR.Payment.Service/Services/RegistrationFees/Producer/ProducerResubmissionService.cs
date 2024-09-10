@@ -1,10 +1,10 @@
 ﻿using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EPR.Payment.Service.Services.RegistrationFees
+namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 {
     public class ProducerResubmissionService : IProducerResubmissionService
     {
@@ -26,7 +26,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees
                 throw new ValidationException(validatorResult.Errors);
             }
 
-            return await _resubmissionAmountStrategy.GetResubmissionAsync(request, cancellationToken);
+            return await _resubmissionAmountStrategy.CalculateFeeAsync(request, cancellationToken);
         }
     }
 }
