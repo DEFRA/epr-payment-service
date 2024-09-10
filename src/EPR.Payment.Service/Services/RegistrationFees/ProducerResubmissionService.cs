@@ -17,7 +17,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees
             _producerResubmissionRequestValidator = producerResubmissionRequestValidator ?? throw new ArgumentNullException(nameof(producerResubmissionRequestValidator));
         }
 
-        public async Task<decimal?> GetResubmissionAsync([FromBody] RegulatorDto request, CancellationToken cancellationToken)
+        public async Task<decimal?> GetResubmissionAsync(RegulatorDto request, CancellationToken cancellationToken)
         {
             var validatorResult = await _producerResubmissionRequestValidator.ValidateAsync(request, cancellationToken);
 
