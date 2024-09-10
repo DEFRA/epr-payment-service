@@ -4,7 +4,7 @@ using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Data.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
