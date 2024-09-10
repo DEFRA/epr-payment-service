@@ -1,9 +1,12 @@
 ﻿using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Dtos.Request.Payments;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -57,14 +60,14 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees
 
         [TestMethod, AutoMoqData]
         public async Task GetResubmissionAsync_ServiceReturnsAResult_ShouldReturnOkResponse(
-            [Frozen] string regulator,
+            [Frozen] RegulatorDto producerResubmissionFeeRequestDto,
             [Frozen] decimal expectedAmount)
         {
             //Arrange
-            _registrationFeesServiceMock.Setup(i => i.GetResubmissionAsync(regulator, _cancellationToken)).ReturnsAsync(expectedAmount);
+            _registrationFeesServiceMock.Setup(i => i.GetResubmissionAsync(producerResubmissionFeeRequestDto, _cancellationToken)).ReturnsAsync(expectedAmount);
 
             //Act
-            var result = await _controller.GetResubmissionAsync(regulator, _cancellationToken);
+            var result = await _controller.GetResubmissionAsync(producerResubmissionFeeRequestDto, _cancellationToken);
 
             //Assert
             using (new AssertionScope())
@@ -76,16 +79,16 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees
 
         [TestMethod, AutoMoqData]
         public async Task GetResubmissionAsync_ServiceThrowsExceptionWithInnerException_ShouldReturnInternalServerError(
-            [Frozen] string regulator)
+            [Frozen] RegulatorDto producerResubmissionFeeRequestDto)
         {
             // Arrange
             var innerExceptionMessage = "Inner exception message";
             var ex = new Exception("Outer exception", new Exception(innerExceptionMessage));
-            _registrationFeesServiceMock.Setup(i => i.GetResubmissionAsync(regulator, _cancellationToken))
+            _registrationFeesServiceMock.Setup(i => i.GetResubmissionAsync(producerResubmissionFeeRequestDto, _cancellationToken))
                                .ThrowsAsync(ex);
 
             // Act
-            var result = await _controller.GetResubmissionAsync(regulator, _cancellationToken);
+            var result = await _controller.GetResubmissionAsync(producerResubmissionFeeRequestDto, _cancellationToken);
 
             // Assert
             using (new AssertionScope())
@@ -98,15 +101,15 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees
 
         [TestMethod, AutoMoqData]
         public async Task GetResubmissionAsync_ServiceThrowsExceptionWithoutInnerException_ShouldReturnInternalServerError(
-            [Frozen] string regulator)
+            [Frozen] RegulatorDto producerResubmissionFeeRequestDto)
         {
             // Arrange
             var ex = new Exception("Outer exception");
-            _registrationFeesServiceMock.Setup(i => i.GetResubmissionAsync(regulator, _cancellationToken))
+            _registrationFeesServiceMock.Setup(i => i.GetResubmissionAsync(producerResubmissionFeeRequestDto, _cancellationToken))
                                .ThrowsAsync(ex);
 
             // Act
-            var result = await _controller.GetResubmissionAsync(regulator, _cancellationToken);
+            var result = await _controller.GetResubmissionAsync(producerResubmissionFeeRequestDto, _cancellationToken);
 
             // Assert
             using (new AssertionScope())
@@ -118,25 +121,52 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees
         }
 
         [TestMethod]
-        public async Task GetResubmissionAsync_EmptyRegulator_ShouldReturnBadRequest()
+        public async Task GetResubmissionAsync_InValidRequest_ShouldReturnBadRequest()
         {
             // Arrange
-            string regulator = string.Empty;
+            var request = new RegulatorDto();
+            _controller!.ModelState.AddModelError("Regulator", "Regulator is required");
 
-            var result = await _controller.GetResubmissionAsync(regulator, _cancellationToken);
+            // Act
+            var result = await _controller.GetResubmissionAsync(request, _cancellationToken);
 
+            // Assert
             result.Should().BeOfType<BadRequestObjectResult>();
         }
 
         [TestMethod]
-        public async Task GetResubmissionAsync_NullRegulator_ShouldReturnBadRequest()
+        public async Task GetResubmissionAsync_ArgumentExceptionThrow_ShouldReturnBadRequest()
         {
             // Arrange
-            string regulator = null!;
+            var request = new RegulatorDto();
 
-            var result = await _controller.GetResubmissionAsync(regulator, _cancellationToken);
+            _registrationFeesServiceMock.Setup(service => service.GetResubmissionAsync(request, _cancellationToken))
+                               .ThrowsAsync(new ArgumentException("Test Exception"));
 
+            // Act
+            var result = await _controller.GetResubmissionAsync(request, _cancellationToken);
+
+            // Assert
             result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionAsync_ThrowsValidationException_ShouldReturnBadRequest([Frozen] RegulatorDto request)
+        {
+            // Arrange
+            _registrationFeesServiceMock.Setup(s => s.GetResubmissionAsync(It.IsAny<RegulatorDto>(), _cancellationToken)).ThrowsAsync(new ValidationException("Validation error"));
+
+            // Act
+            var result = await _controller.GetResubmissionAsync(request, _cancellationToken);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.Should().BeOfType<BadRequestObjectResult>();
+
+                var badRequestResult = result as BadRequestObjectResult;
+                badRequestResult.Should().NotBeNull();
+            }
         }
     }
 }
