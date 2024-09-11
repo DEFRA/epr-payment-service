@@ -1,8 +1,7 @@
-﻿namespace EPR.Payment.Service.Common.Constants.RegistrationFees
+﻿namespace EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions
 {
-    public static class ProducerResubmissionConstants
+    public static class ProducerResubmissionExceptions
     {
-        public const string ReSubmitting = "ReSubmitting";
         public const string RecordNotFoundProducerResubmissionFeeError = "Producer Resubmission Registration Fee record not found for this regulator";
         public const string RegulatorCanNotBeNullOrEmpty = "regulator cannot be null or empty";
         public const string Status500InternalServerError = "Internal server error";

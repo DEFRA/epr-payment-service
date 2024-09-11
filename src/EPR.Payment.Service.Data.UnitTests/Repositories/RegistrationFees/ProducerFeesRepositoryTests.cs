@@ -195,6 +195,94 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
+        public async Task GetOnlineMarketFeeAsync_ValidInput_ShouldReturnOnlineMarketFee(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
+
+            // Act
+            var result = await _producerFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            result.Should().Be(257900m); // £2,579 represented in pence (257900 pence)
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetOnlineMarketFeeAsync_EmptyDatabase_ShouldThrowKeyNotFoundException(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
+
+            // Act
+            Func<Task> act = async () => await _producerFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<KeyNotFoundException>()
+                .WithMessage("Producer Online Market Fee record not found for regulator: GB-ENG");
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetOnlineMarketFeeAsync_DayBeforeEffectiveFromDate_ShouldThrowKeyNotFoundException(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+            var futureFee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.OnlineMarket, Description = "Online Market" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG" },
+                Amount = 257900m,
+                EffectiveFrom = DateTime.UtcNow.AddDays(1),
+                EffectiveTo = DateTime.UtcNow.AddDays(10)
+            };
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { futureFee }.AsQueryable());
+
+            // Act
+            Func<Task> act = async () => await _producerFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<KeyNotFoundException>()
+                .WithMessage("Producer Online Market Fee record not found for regulator: GB-ENG");
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task GetOnlineMarketFeeAsync_DayAfterEffectiveToDate_ShouldThrowKeyNotFoundException(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ProducerFeesRepository _producerFeesRepository)
+        {
+            // Arrange
+
+            var expiredFee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.OnlineMarket, Description = "Online Market" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG" },
+                Amount = 257900m,
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10),
+                EffectiveTo = DateTime.UtcNow.AddDays(-1)
+            };
+
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { expiredFee }.AsQueryable());
+
+            // Act
+            Func<Task> act = async () => await _producerFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<KeyNotFoundException>()
+                .WithMessage("Producer Online Market Fee record not found for regulator: GB-ENG");
+        }
+
+        [TestMethod]
+        [AutoMoqData]
         public async Task GetFirst20SubsidiariesFeeAsync_ValidInput_ShouldReturnFeePerSubsidiary(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)

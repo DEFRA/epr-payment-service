@@ -1,5 +1,5 @@
 ﻿using Asp.Versioning;
-using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using FluentValidation;
@@ -56,7 +56,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{ProducerResubmissionConstants.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ProducerResubmissionExceptions.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
             }
         }
     }

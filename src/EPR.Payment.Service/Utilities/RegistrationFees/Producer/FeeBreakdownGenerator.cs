@@ -27,6 +27,16 @@ namespace EPR.Payment.Service.Utilities.RegistrationFees.Producer
                 });
             }
 
+            // Online Market Fee Breakdown
+            if (request.IsOnlineMarketplace)
+            {
+                response.FeeBreakdowns.Add(new FeeBreakdown
+                {
+                    Description = $"Online Marketplace Fee (£{Math.Truncate(response.OnlineMarket / 100m)})", // Convert to pounds and truncate decimals
+                    Amount = response.OnlineMarket
+                });
+            }
+
             // Subsidiaries Fee Breakdown
             if (request.NumberOfSubsidiaries > 0)
             {
