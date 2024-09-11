@@ -65,7 +65,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetAdditionalSubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetAdditionalUpTo100SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(14000m); // £140 in pence per additional subsidiary
 
             // Act
@@ -73,6 +73,37 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
 
             // Assert
             result.Should().Be(1536000m); // £15,360 in pence
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task CalculateFeeAsync_WhenLargeProducerWith101Subsidiaries_ReturnsCorrectSubsidiariesFee(
+    [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
+    SubsidiariesFeeCalculationStrategy strategy)
+        {
+            // Arrange
+            var request = new ProducerRegistrationFeesRequestDto
+            {
+                NumberOfSubsidiaries = 101,
+                Regulator = "GB-ENG"
+            };
+
+            var regulator = RegulatorType.Create(request.Regulator);
+
+            feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            feesRepositoryMock.Setup(repo => repo.GetAdditionalUpTo100SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(14000m); // £140 in pence per additional subsidiary
+
+            feesRepositoryMock.Setup(repo => repo.GetAdditionalMoreThan100SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(0m); // £0 in pence per additional subsidiary
+
+            // Act
+            var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
+
+            // Assert
+            result.Should().Be(2236000m); // £22,360 in pence
         }
 
         [TestMethod]

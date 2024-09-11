@@ -24,17 +24,19 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
                 return 0m;
 
             var regulator = RegulatorType.Create(request.Regulator);
-            var feePerSubsidiary = await _feesRepository.GetFirst20SubsidiariesFeeAsync(regulator, cancellationToken);
+            var baseFee = await _feesRepository.GetFirst20SubsidiariesFeeAsync(regulator, cancellationToken);
 
-            if (request.NumberOfSubsidiaries > 20)
-            {
-                var additionalFee = await _feesRepository.GetAdditionalSubsidiariesFeeAsync(regulator, cancellationToken);
-                return feePerSubsidiary * 20 + additionalFee * (request.NumberOfSubsidiaries - 20);
-            }
-            else
-            {
-                return feePerSubsidiary * request.NumberOfSubsidiaries;
-            }
+            if (request.NumberOfSubsidiaries <= 20)
+                return baseFee * request.NumberOfSubsidiaries;
+
+            var upTo100Fee = await _feesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(regulator, cancellationToken);
+
+            if (request.NumberOfSubsidiaries <= 100)
+                return baseFee * 20 + upTo100Fee * (request.NumberOfSubsidiaries - 20);
+
+            var moreThan100Fee = await _feesRepository.GetAdditionalMoreThan100SubsidiariesFeeAsync(regulator, cancellationToken);
+
+            return baseFee * 20 + upTo100Fee * 80 + moreThan100Fee * (request.NumberOfSubsidiaries - 100);
         }
     }
 }
