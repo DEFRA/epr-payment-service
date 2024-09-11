@@ -2,9 +2,9 @@
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
-using EPR.Payment.Service.Services.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Services.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Utilities.RegistrationFees.Interfaces;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -18,6 +18,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
     public class ProducerFeesCalculatorServiceTests
     {
         private Mock<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>> _baseFeeCalculationStrategyMock = null!;
+        private Mock<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto>> _onlineMarketCalculationStrategyMock = null!;
         private Mock<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>> _subsidiariesFeeCalculationStrategyMock = null!;
         private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
         private Mock<IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto>> _feeBreakdownGeneratorMock = null!;
@@ -27,6 +28,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         public void TestInitialize()
         {
             _baseFeeCalculationStrategyMock = new Mock<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
+            _onlineMarketCalculationStrategyMock = new Mock<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
             _validatorMock = new Mock<IValidator<ProducerRegistrationFeesRequestDto>>();
             _feeBreakdownGeneratorMock = new Mock<IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto>>();
@@ -35,7 +37,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
-                _feeBreakdownGeneratorMock.Object
+                _feeBreakdownGeneratorMock.Object,
+                _onlineMarketCalculationStrategyMock.Object
             );
         }
 
@@ -50,7 +53,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 baseFeeCalculationStrategy!,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
-                _feeBreakdownGeneratorMock.Object);
+                _feeBreakdownGeneratorMock.Object,
+                _onlineMarketCalculationStrategyMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'baseFeeCalculationStrategy')");
@@ -67,7 +71,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 _baseFeeCalculationStrategyMock.Object,
                 subsidiariesFeeCalculationStrategy!,
                 _validatorMock.Object,
-                _feeBreakdownGeneratorMock.Object);
+                _feeBreakdownGeneratorMock.Object,
+                _onlineMarketCalculationStrategyMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'subsidiariesFeeCalculationStrategy')");
@@ -84,7 +89,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 validator!,
-                _feeBreakdownGeneratorMock.Object);
+                _feeBreakdownGeneratorMock.Object,
+                _onlineMarketCalculationStrategyMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");
@@ -101,10 +107,30 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
-                feeBreakdownGenerator!);
+                feeBreakdownGenerator!,
+                _onlineMarketCalculationStrategyMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'feeBreakdownGenerator')");
+        }
+
+
+        [TestMethod]
+        public void Constructor_WhenOnlineMarketCalculationStrategyIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto>? onlineMarketCalculationStrategy = null;
+
+            // Act
+            Action act = () => new ProducerFeesCalculatorService(
+                _baseFeeCalculationStrategyMock.Object,
+                _subsidiariesFeeCalculationStrategyMock.Object,
+                _validatorMock.Object,
+                _feeBreakdownGeneratorMock.Object,
+                onlineMarketCalculationStrategy!);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'onlineMarketCalculationStrategy')");
         }
 
         [TestMethod]
@@ -115,7 +141,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
-                _feeBreakdownGeneratorMock.Object);
+                _feeBreakdownGeneratorMock.Object,
+                _onlineMarketCalculationStrategyMock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -137,6 +164,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(262000m); // £2,620 represented in pence
 
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(0m); // Online Market fee in pence
+
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1536000m); // Total subsidiaries fee in pence
 
@@ -152,8 +182,45 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             using (new AssertionScope())
             {
                 result.BaseFee.Should().Be(262000m); // £2,620 represented in pence
+                result.OnlineMarket.Should().Be(0m); // Online Market fee in pence
                 result.SubsidiariesFee.Should().Be(1536000m); // Total subsidiaries fee in pence
                 result.TotalFee.Should().Be(1798000m); // Total fee in pence
+            }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeesAsync_WhenLargeProducerWith50SubsidiariesWithOnline_ReturnsCorrectFees(
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            request.ProducerType = "Large";
+            request.NumberOfSubsidiaries = 50;
+            request.Regulator = "GB-ENG";
+
+            _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(262000m); // £2,620 represented in pence
+
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(257900m); // Online Market fee in pence
+
+            _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1536000m); // Total subsidiaries fee in pence
+
+            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
+                .Returns(new ValidationResult());
+
+            // Act
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
+
+            using (new AssertionScope())
+            {
+                result.BaseFee.Should().Be(262000m); // £2,620 represented in pence
+                result.OnlineMarket.Should().Be(257900m); // Online Market fee in pence
+                result.SubsidiariesFee.Should().Be(1536000m); // Total subsidiaries fee in pence
+                result.TotalFee.Should().Be(2055900m); // Total fee in pence
             }
         }
 
@@ -168,6 +235,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(262000m); // £2,620 represented in pence
+
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(0m); // Online Market fee in pence
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(558000m); // Total subsidiaries fee in pence
@@ -184,8 +254,45 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             using (new AssertionScope())
             {
                 result.BaseFee.Should().Be(262000m); // £2,620 represented in pence
+                result.OnlineMarket.Should().Be(0m); // Online Market fee in pence
                 result.SubsidiariesFee.Should().Be(558000m); // Total subsidiaries fee in pence for 10 subsidiaries
                 result.TotalFee.Should().Be(820000m); // Total fee in pence
+            }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeesAsync_WhenLargeProducerWith10SubsidiariesWithOnline_ReturnsCorrectFees(
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            request.ProducerType = "Large";
+            request.NumberOfSubsidiaries = 10;
+            request.Regulator = "GB-ENG";
+
+            _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(262000m); // £2,620 represented in pence
+
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(257900m); // Online Market fee in pence
+
+            _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(558000m); // Total subsidiaries fee in pence
+
+            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
+                .Returns(new ValidationResult());
+
+            // Act
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
+
+            using (new AssertionScope())
+            {
+                result.BaseFee.Should().Be(262000m); // £2,620 represented in pence
+                result.OnlineMarket.Should().Be(257900m); // Online Market fee in pence
+                result.SubsidiariesFee.Should().Be(558000m); // Total subsidiaries fee in pence for 10 subsidiaries
+                result.TotalFee.Should().Be(1077900m); // Total fee in pence
             }
         }
 
@@ -200,6 +307,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(0m); // No base fee for any ProducerType
+
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(0m); // Online Market fee in pence
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1536000m); // Total subsidiaries fee in pence
@@ -216,8 +326,45 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             using (new AssertionScope())
             {
                 result.BaseFee.Should().Be(0m); // No base fee
+                result.OnlineMarket.Should().Be(0m); // Online Market fee in pence
                 result.SubsidiariesFee.Should().Be(1536000m); // Total subsidiaries fee in pence
                 result.TotalFee.Should().Be(1536000m); // Total fee in pence (since no base fee)
+            }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeesAsync_WhenLargeProducerWithNoBaseFeeAnd50SubsidiariesWithOnline_ReturnsCorrectFees(
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            request.ProducerType = ""; // ProducerType is empty to indicate no base fee
+            request.NumberOfSubsidiaries = 50;
+            request.Regulator = "GB-ENG";
+
+            _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(0m); // No base fee for any ProducerType
+
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(257900m); // Online Market fee in pence
+
+            _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1536000m); // Total subsidiaries fee in pence
+
+            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
+                .Returns(new ValidationResult());
+
+            // Act
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
+
+            using (new AssertionScope())
+            {
+                result.BaseFee.Should().Be(0m); // No base fee
+                result.OnlineMarket.Should().Be(257900m); // Online Market fee in pence
+                result.SubsidiariesFee.Should().Be(1536000m); // Total subsidiaries fee in pence
+                result.TotalFee.Should().Be(1793900m); // Total fee in pence (since no base fee)
             }
         }
 
@@ -232,6 +379,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(121600m); // £1,216 represented in pence
+
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(0m); // Online Market fee in pence
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1186000m); // Total subsidiaries fee in pence
@@ -248,8 +398,45 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             using (new AssertionScope())
             {
                 result.BaseFee.Should().Be(121600m); // £1,216 represented in pence
+                result.OnlineMarket.Should().Be(0m); // Online Market fee in pence
                 result.SubsidiariesFee.Should().Be(1186000m); // Total subsidiaries fee in pence
                 result.TotalFee.Should().Be(1307600m); // Total fee in pence
+            }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeesAsync_WhenSmallProducerWith25SubsidiariesWithOnline_ReturnsCorrectFees(
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            request.ProducerType = "Small";
+            request.NumberOfSubsidiaries = 25;
+            request.Regulator = "GB-ENG";
+
+            _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(121600m); // £1,216 represented in pence
+
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(257900m); // Online Market fee in pence
+
+            _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1186000m); // Total subsidiaries fee in pence
+
+            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
+                .Returns(new ValidationResult());
+
+            // Act
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
+
+            using (new AssertionScope())
+            {
+                result.BaseFee.Should().Be(121600m); // £1,216 represented in pence
+                result.OnlineMarket.Should().Be(257900m); // Online Market fee in pence
+                result.SubsidiariesFee.Should().Be(1186000m); // Total subsidiaries fee in pence
+                result.TotalFee.Should().Be(1565500m); // Total fee in pence
             }
         }
 
@@ -264,6 +451,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(121600m); // £1,216 represented in pence
+
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(0m); // Online Market fee in pence
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1116000m); // Total subsidiaries fee in pence for 20 subsidiaries
@@ -280,8 +470,45 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             using (new AssertionScope())
             {
                 result.BaseFee.Should().Be(121600m); // £1,216 represented in pence
+                result.OnlineMarket.Should().Be(0m); // Online Market fee in pence
                 result.SubsidiariesFee.Should().Be(1116000m); // Total subsidiaries fee in pence for 20 subsidiaries
                 result.TotalFee.Should().Be(1237600m); // Total fee in pence
+            }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeesAsync_WhenSmallProducerWith20SubsidiariesWithOnline_ReturnsCorrectFees(
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            request.ProducerType = "Small";
+            request.NumberOfSubsidiaries = 20;
+            request.Regulator = "GB-ENG";
+
+            _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(121600m); // £1,216 represented in pence
+
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(257900m); // Online Market fee in pence
+
+            _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1116000m); // Total subsidiaries fee in pence for 20 subsidiaries
+
+            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
+                .Returns(new ValidationResult());
+
+            // Act
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
+
+            using (new AssertionScope())
+            {
+                result.BaseFee.Should().Be(121600m); // £1,216 represented in pence
+                result.OnlineMarket.Should().Be(257900m); // Online Market fee in pence
+                result.SubsidiariesFee.Should().Be(1116000m); // Total subsidiaries fee in pence for 20 subsidiaries
+                result.TotalFee.Should().Be(1495500m); // Total fee in pence
             }
         }
 
@@ -297,6 +524,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(262000m); // £2,620 represented in pence
 
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(0m); // Online Market fee in pence
+
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
@@ -309,8 +539,43 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             using (new AssertionScope())
             {
                 result.BaseFee.Should().Be(262000m); // £2,620 represented in pence
+                result.OnlineMarket.Should().Be(0m); // Online Market fee in pence
                 result.SubsidiariesFee.Should().Be(0m); // No subsidiaries fee
                 result.TotalFee.Should().Be(262000m); // Total fee in pence (base fee only)
+            }
+        }
+
+
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeesAsync_WhenLargeProducerWithNoSubsidiariesWithOnline_ReturnsBaseFeeOnly(
+            [Frozen] ProducerRegistrationFeesRequestDto request)
+        {
+            // Arrange
+            request.ProducerType = "Large";
+            request.NumberOfSubsidiaries = 0;
+            request.Regulator = "GB-ENG";
+
+            _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(262000m); // £2,620 represented in pence
+
+            _onlineMarketCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+               .ReturnsAsync(257900m); // Online Market fee in pence
+
+            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
+                .Returns(new ValidationResult());
+
+            // Act
+            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            _feeBreakdownGeneratorMock.Verify(g => g.GenerateFeeBreakdownAsync(result, request, CancellationToken.None), Times.Once);
+
+            using (new AssertionScope())
+            {
+                result.BaseFee.Should().Be(262000m); // £2,620 represented in pence
+                result.OnlineMarket.Should().Be(257900m); // Online Market fee in pence
+                result.SubsidiariesFee.Should().Be(0m); // No subsidiaries fee
+                result.TotalFee.Should().Be(519900m); // Total fee in pence (base fee only)
             }
         }
 

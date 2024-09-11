@@ -3,7 +3,7 @@ using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.RegistrationFees;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;

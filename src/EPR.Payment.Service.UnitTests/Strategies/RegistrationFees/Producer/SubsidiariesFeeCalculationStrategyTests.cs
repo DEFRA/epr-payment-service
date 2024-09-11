@@ -9,7 +9,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
+namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
 {
     [TestClass]
     public class SubsidiariesFeeCalculationStrategyTests

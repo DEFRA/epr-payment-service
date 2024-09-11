@@ -1,9 +1,9 @@
 ﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
-using EPR.Payment.Service.Services.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Services.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -83,7 +83,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             //Arrange
             _producerResubmissionFeeRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
 
-            _resubmissionAmountStrategyMock.Setup(i => i.GetResubmissionAsync(request, CancellationToken.None)).ReturnsAsync(expectedAmount);
+            _resubmissionAmountStrategyMock.Setup(i => i.CalculateFeeAsync(request, CancellationToken.None)).ReturnsAsync(expectedAmount);
 
             //Act
             var result = await _resubmissionService!.GetResubmissionAsync(request, CancellationToken.None);

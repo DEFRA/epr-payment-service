@@ -1737,3 +1737,432 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 257900.0, [GroupId] = 1, [SubGroupId] = 4
+    WHERE [Id] = 9;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 257900.0, [GroupId] = 1, [SubGroupId] = 4
+    WHERE [Id] = 10;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 257900.0, [GroupId] = 1, [SubGroupId] = 4
+    WHERE [Id] = 11;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 257900.0, [GroupId] = 1, [SubGroupId] = 4
+    WHERE [Id] = 12;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 165800.0, [SubGroupId] = 1
+    WHERE [Id] = 13;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 165800.0, [SubGroupId] = 1
+    WHERE [Id] = 14;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 165800.0, [SubGroupId] = 1
+    WHERE [Id] = 15;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 165800.0, [SubGroupId] = 1
+    WHERE [Id] = 16;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 63100.0, [SubGroupId] = 2
+    WHERE [Id] = 17;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 63100.0, [SubGroupId] = 2
+    WHERE [Id] = 18;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 63100.0, [SubGroupId] = 2
+    WHERE [Id] = 19;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 63100.0, [SubGroupId] = 2
+    WHERE [Id] = 20;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 1380400.0, [SubGroupId] = 3
+    WHERE [Id] = 21;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 1380400.0, [SubGroupId] = 3
+    WHERE [Id] = 22;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 1380400.0, [SubGroupId] = 3
+    WHERE [Id] = 23;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 1380400.0, [SubGroupId] = 3
+    WHERE [Id] = 24;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 257900.0, [GroupId] = 2, [SubGroupId] = 4
+    WHERE [Id] = 25;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 257900.0, [GroupId] = 2, [SubGroupId] = 4
+    WHERE [Id] = 26;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 257900.0, [GroupId] = 2, [SubGroupId] = 4
+    WHERE [Id] = 27;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 257900.0, [GroupId] = 2, [SubGroupId] = 4
+    WHERE [Id] = 28;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 55800.0, [SubGroupId] = 5
+    WHERE [Id] = 29;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 55800.0, [SubGroupId] = 5
+    WHERE [Id] = 30;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 55800.0, [SubGroupId] = 5
+    WHERE [Id] = 31;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 55800.0, [SubGroupId] = 5
+    WHERE [Id] = 32;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 14000.0, [GroupId] = 3, [SubGroupId] = 6
+    WHERE [Id] = 33;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 14000.0, [GroupId] = 3, [SubGroupId] = 6
+    WHERE [Id] = 34;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 14000.0, [GroupId] = 3, [SubGroupId] = 6
+    WHERE [Id] = 35;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 14000.0, [GroupId] = 3, [SubGroupId] = 6
+    WHERE [Id] = 36;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 55800.0, [SubGroupId] = 5
+    WHERE [Id] = 37;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 55800.0, [SubGroupId] = 5
+    WHERE [Id] = 38;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 55800.0, [SubGroupId] = 5
+    WHERE [Id] = 39;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 55800.0, [SubGroupId] = 5
+    WHERE [Id] = 40;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 14000.0, [GroupId] = 4, [SubGroupId] = 6
+    WHERE [Id] = 41;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 14000.0, [GroupId] = 4, [SubGroupId] = 6
+    WHERE [Id] = 42;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 14000.0, [GroupId] = 4, [SubGroupId] = 6
+    WHERE [Id] = 43;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 14000.0, [GroupId] = 4, [SubGroupId] = 6
+    WHERE [Id] = 44;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
+        SET IDENTITY_INSERT [Lookup].[RegistrationFees] ON;
+    EXEC(N'INSERT INTO [Lookup].[RegistrationFees] ([Id], [Amount], [EffectiveFrom], [EffectiveTo], [GroupId], [RegulatorId], [SubGroupId])
+    VALUES (45, 71400.0, ''2024-01-01T00:00:00.0000000Z'', ''2025-12-31T23:59:59.0000000Z'', 5, 1, 7),
+    (46, 71400.0, ''2024-01-01T00:00:00.0000000Z'', ''2025-12-31T23:59:59.0000000Z'', 5, 2, 7),
+    (47, 71400.0, ''2024-01-01T00:00:00.0000000Z'', ''2025-12-31T23:59:59.0000000Z'', 5, 3, 7),
+    (48, 71400.0, ''2024-01-01T00:00:00.0000000Z'', ''2025-12-31T23:59:59.0000000Z'', 5, 4, 7)');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
+        SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20240905115928_AddOnlineMarketToProducer', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
