@@ -3,6 +3,7 @@
     public class RegistrationFeesResponseDto
     {
         public decimal BaseFee { get; set; } = 0; // Default to 0 if not applicable
+        public decimal OnlineMarket { get; set; } = 0; // Default to 0 if not applicable
         public decimal SubsidiariesFee { get; set; } = 0; // Default to 0 if not applicable
         public decimal TotalFee { get; set; } // Total fee will be computed
         public List<FeeBreakdown> FeeBreakdowns { get; set; } = new();

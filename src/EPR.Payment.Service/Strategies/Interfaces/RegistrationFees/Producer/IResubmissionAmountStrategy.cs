@@ -1,6 +1,8 @@
-﻿namespace EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer
+﻿using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+
+namespace EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer
 {
-    public interface IResubmissionAmountStrategy : IFeeCalculationStrategy<string>
+    public interface IResubmissionAmountStrategy : IFeeCalculationStrategy<RegulatorDto>
     {
     }
 }

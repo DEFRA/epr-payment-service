@@ -11,10 +11,10 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
+namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
 {
     [TestClass]
-    public class BaseFeeCalculationStrategyTests
+    public class OnlineMarketCalculationStrategyTests
     {
         private IFixture _fixture = null!;
 
@@ -31,7 +31,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
             IProducerFeesRepository? nullRepository = null;
 
             // Act
-            Action act = () => new BaseFeeCalculationStrategy(nullRepository!);
+            Action act = () => new OnlineMarketCalculationStrategy(nullRepository!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -39,13 +39,13 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
         }
 
         [TestMethod]
-        public void Constructor_WhenFeesRepositoryIsNotNull_ShouldInitializeBaseFeeCalculationStrategy()
+        public void Constructor_WhenFeesRepositoryIsNotNull_ShouldInitializeOnlineMarketCalculationStrategy()
         {
             // Arrange
             var feesRepositoryMock = _fixture.Create<Mock<IProducerFeesRepository>>();
 
             // Act
-            var strategy = new BaseFeeCalculationStrategy(feesRepositoryMock.Object);
+            var strategy = new OnlineMarketCalculationStrategy(feesRepositoryMock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -55,41 +55,57 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
             }
         }
 
-        [TestMethod]
-        [AutoMoqData]
-        public async Task CalculateFeeAsync_WhenValidProducerType_ReturnsBaseFee(
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeeAsync_WhenOnlineMarketplaceIsTrueMarketWithValidRegulator_ReturnsOnlineMarketFee(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
-            BaseFeeCalculationStrategy strategy)
+            OnlineMarketCalculationStrategy strategy)
         {
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
-                ProducerType = "Large",
+                IsOnlineMarketplace = true,
                 Regulator = "GB-ENG"
             };
 
             var regulator = RegulatorType.Create("GB-ENG");
 
-            feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync("Large", regulator, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(262000m); // £2,620 in pence
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(257900m);
 
             // Act
             var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
 
             // Assert
-            result.Should().Be(262000m); // £2,620 in pence
+            result.Should().Be(257900m);
         }
 
-        [TestMethod]
-        [AutoMoqData]
-        public async Task CalculateFeeAsync_WhenRegulatorIsNull_ThrowsArgumentException(
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeeAsync_WhenOnlineMarketplaceIsFalse_ReturnsZeroFee(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
-            BaseFeeCalculationStrategy strategy)
+            OnlineMarketCalculationStrategy strategy)
         {
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
-                ProducerType = "Large",
+                IsOnlineMarketplace = false,
+                Regulator = "GB-ENG"
+            };
+
+            // Act
+            var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
+
+            // Assert
+            result.Should().Be(0m);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeeAsync_WhenOnlineMarketplaceIsTrueMarketRegulatorIsNull_ThrowsArgumentException(
+            OnlineMarketCalculationStrategy strategy)
+        {
+            // Arrange
+            var request = new ProducerRegistrationFeesRequestDto
+            {
+                IsOnlineMarketplace = true,
                 Regulator = null! // Regulator is null
             };
 
@@ -97,36 +113,14 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees
             await Assert.ThrowsExceptionAsync<ArgumentException>(() => strategy.CalculateFeeAsync(request, CancellationToken.None));
         }
 
-        [TestMethod]
-        [AutoMoqData]
-        public async Task CalculateFeeAsync_WhenProducerTypeIsEmpty_ReturnsZeroBaseFee(
-            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
-            BaseFeeCalculationStrategy strategy)
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeeAsync_WhenOnlineMarketplaceIsTrueMarketRegulatorIsEmpty_ThrowsArgumentException(
+            OnlineMarketCalculationStrategy strategy)
         {
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
-                ProducerType = string.Empty, // ProducerType is empty
-                Regulator = "GB-ENG" // Valid Regulator
-            };
-
-            // Act
-            var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
-
-            // Assert
-            result.Should().Be(0m); // Ensure that the result is zero
-        }
-
-        [TestMethod]
-        [AutoMoqData]
-        public async Task CalculateFeeAsync_WhenRegulatorIsEmpty_ThrowsArgumentException(
-            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
-            BaseFeeCalculationStrategy strategy)
-        {
-            // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
-            {
-                ProducerType = "Large",
+                IsOnlineMarketplace = true,
                 Regulator = string.Empty // Regulator is empty
             };
 

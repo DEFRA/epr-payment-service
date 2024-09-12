@@ -1,5 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 
@@ -14,20 +15,20 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
 
-        public async Task<decimal> CalculateFeeAsync(string regulator, CancellationToken cancellationToken)
+        public async Task<decimal> CalculateFeeAsync(RegulatorDto request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(regulator))
+            if (string.IsNullOrEmpty(request.Regulator))
             {
-                throw new ArgumentException("Regulator cannot be null or empty", nameof(regulator));
+                throw new ArgumentException("Regulator cannot be null or empty");
             }
 
-            var regulatorType = RegulatorType.Create(regulator);
+            var regulatorType = RegulatorType.Create(request.Regulator);
 
             var fee = await _feesRepository.GetResubmissionAsync(regulatorType, cancellationToken);
 
             if (fee == 0)
             {
-                throw new KeyNotFoundException(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, regulator));
+                throw new KeyNotFoundException(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, request.Regulator));
             }
 
             return fee;
