@@ -8,7 +8,9 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFe
 
         Task<decimal> GetFirst20SubsidiariesFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
 
-        Task<decimal> GetAdditionalSubsidiariesFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
+        Task<decimal> GetAdditionalUpTo100SubsidiariesFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
+
+        Task<decimal> GetAdditionalMoreThan100SubsidiariesFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
 
         Task<decimal> GetOnlineMarketFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
 
