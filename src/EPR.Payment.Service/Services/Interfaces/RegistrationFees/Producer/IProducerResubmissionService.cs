@@ -4,6 +4,6 @@ namespace EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer
 {
     public interface IProducerResubmissionService
     {
-        Task<decimal?> GetResubmissionAsync(RegulatorDto regulator, CancellationToken cancellationToken);
+        Task<decimal?> GetResubmissionAsync(RegulatorDto request, CancellationToken cancellationToken);
     }
 }

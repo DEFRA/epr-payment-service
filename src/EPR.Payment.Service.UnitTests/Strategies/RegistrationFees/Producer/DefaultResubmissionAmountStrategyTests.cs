@@ -111,7 +111,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Act & Assert
             await strategy.Invoking(async s => await s!.CalculateFeeAsync(producerResubmissionFeeRequestDto, new CancellationToken()))
                 .Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, producerResubmissionFeeRequestDto.Regulator));
+                .WithMessage(string.Format(ProducerFeesCalculationExceptions.InvalidRegulatorError, producerResubmissionFeeRequestDto.Regulator));
         }
 
     }

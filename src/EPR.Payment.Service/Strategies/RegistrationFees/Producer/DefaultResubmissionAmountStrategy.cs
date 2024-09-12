@@ -28,7 +28,7 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
 
             if (fee == 0)
             {
-                throw new KeyNotFoundException(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidRegulatorError, request.Regulator));
+                throw new KeyNotFoundException(string.Format(ProducerFeesCalculationExceptions.InvalidRegulatorError, request.Regulator));
             }
 
             return fee;
