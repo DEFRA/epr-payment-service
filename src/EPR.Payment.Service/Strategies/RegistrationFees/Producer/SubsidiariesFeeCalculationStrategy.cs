@@ -44,7 +44,7 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             return CalculateFeeForMoreThan100Subsidiaries(baseFee, upTo100Fee, moreThan100Fee, request.NumberOfSubsidiaries);
         }
 
-        private void ValidateRequest(ProducerRegistrationFeesRequestDto request)
+        private static void ValidateRequest(ProducerRegistrationFeesRequestDto request)
         {
             if (request.NumberOfSubsidiaries < 0 || string.IsNullOrEmpty(request.Regulator))
             {
@@ -52,17 +52,17 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             }
         }
 
-        private decimal CalculateFeeForUpTo20Subsidiaries(decimal baseFee, int numberOfSubsidiaries)
+        private static decimal CalculateFeeForUpTo20Subsidiaries(decimal baseFee, int numberOfSubsidiaries)
         {
             return baseFee * numberOfSubsidiaries;
         }
 
-        private decimal CalculateFeeForUpTo100Subsidiaries(decimal baseFee, decimal upTo100Fee, int numberOfSubsidiaries)
+        private static decimal CalculateFeeForUpTo100Subsidiaries(decimal baseFee, decimal upTo100Fee, int numberOfSubsidiaries)
         {
             return baseFee * 20 + upTo100Fee * (numberOfSubsidiaries - 20);
         }
 
-        private decimal CalculateFeeForMoreThan100Subsidiaries(decimal baseFee, decimal upTo100Fee, decimal moreThan100Fee, int numberOfSubsidiaries)
+        private static decimal CalculateFeeForMoreThan100Subsidiaries(decimal baseFee, decimal upTo100Fee, decimal moreThan100Fee, int numberOfSubsidiaries)
         {
             return baseFee * 20 + upTo100Fee * 80 + moreThan100Fee * (numberOfSubsidiaries - 100);
         }

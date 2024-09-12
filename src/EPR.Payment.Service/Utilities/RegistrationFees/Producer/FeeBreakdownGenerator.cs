@@ -97,7 +97,7 @@ namespace EPR.Payment.Service.Utilities.RegistrationFees.Producer
             response.FeeBreakdowns.Add(CreateFeeBreakdown(description, amount));
         }
 
-        private FeeBreakdown CreateFeeBreakdown(string description, decimal amount) => new FeeBreakdown
+        private static FeeBreakdown CreateFeeBreakdown(string description, decimal amount) => new FeeBreakdown
         {
             Description = description,
             Amount = amount
