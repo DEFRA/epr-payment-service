@@ -64,6 +64,16 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
             },
+            // Additional More Than 100 Subsidiaries - Fee (Currently Active)
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerSubsidiaries, Description = "Producer Subsidiaries" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubsidiariesConstants.MoreThan100, Description = "More than 100" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
+                Amount = 1, // £0.01 represented in pence per additional subsidiary (1 pence)
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
+                EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
+            },
             // Large Producer - Base Fee (Future Effective)
             new Common.Data.DataModels.Lookups.RegistrationFees
             {
@@ -89,7 +99,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerResubmission, Description = "Producer re-submitting a report" },
                 SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type="ReSubmitting", Description = "Re-submitting a report" },
                 Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
-                Amount = 100m, 
+                Amount = 100m,
                 EffectiveFrom = DateTime.UtcNow.AddDays(-20), // Not effective yet, future record
                 EffectiveTo = DateTime.UtcNow.AddDays(20) // Future expiration
             }
