@@ -55,6 +55,16 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
             },
+            // Additional More Than 100 Subsidiaries - Fee (Currently Active)
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerSubsidiaries, Description = "Producer Subsidiaries" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubsidiariesConstants.MoreThan100, Description = "More than 100" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
+                Amount = 1, // £0.01 represented in pence per additional subsidiary (1 pence)
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
+                EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
+            },
             // Additional Subsidiaries - Fee (Currently Active)
             new Common.Data.DataModels.Lookups.RegistrationFees
             {
