@@ -27,7 +27,7 @@ namespace EPR.Payment.Service.Utilities.RegistrationFees.Producer
             if (response.BaseFee <= 0) return;
 
             response.FeeBreakdowns.Add(CreateFeeBreakdown(
-                $"Base Fee (£{Math.Truncate(response.BaseFee / 100m)})",
+                $"Producer Registration Fee (£{Math.Truncate(response.BaseFee / 100m)})",
                 response.BaseFee));
         }
 
@@ -36,7 +36,7 @@ namespace EPR.Payment.Service.Utilities.RegistrationFees.Producer
             if (!request.IsOnlineMarketplace) return;
 
             response.FeeBreakdowns.Add(CreateFeeBreakdown(
-                $"Online Market Fee (£{Math.Truncate(response.OnlineMarket / 100m)})",
+                $"Online Marketplace Fee (£{Math.Truncate(response.OnlineMarket / 100m)})",
                 response.OnlineMarket));
         }
 
@@ -79,13 +79,12 @@ namespace EPR.Payment.Service.Utilities.RegistrationFees.Producer
 
             if (additionalUpTo100Count > 0)
             {
-                var endRange = additionalMoreThan100Count > 0 ? 100 : numberOfSubsidiaries;
-                AddFeeBreakdown(response, additionalUpTo100Count, additionalUpTo100Rate, $"21st to {endRange}th Subsidiaries Fee (£{Math.Truncate(additionalUpTo100Rate / 100m)} each)");
+                AddFeeBreakdown(response, additionalUpTo100Count, additionalUpTo100Rate, $"Next {additionalUpTo100Count} Subsidiaries Fee (£{Math.Truncate(additionalUpTo100Rate / 100m)} each)");
             }
 
             if (additionalMoreThan100Count > 0)
             {
-                AddFeeBreakdown(response, additionalMoreThan100Count, additionalMoreThan100Rate, $"101st to {numberOfSubsidiaries}th Subsidiaries Fee (£{Math.Truncate(additionalMoreThan100Rate / 100m)} each)");
+                AddFeeBreakdown(response, additionalMoreThan100Count, additionalMoreThan100Rate, $"Next {additionalMoreThan100Count} Subsidiaries Fee (£{Math.Truncate(additionalMoreThan100Rate / 100m)} each)");
             }
         }
 
