@@ -17,24 +17,55 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
 
         public async Task<decimal> CalculateFeeAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
         {
-            if (request.NumberOfSubsidiaries < 0 || string.IsNullOrEmpty(request.Regulator))
-                throw new ArgumentException(ProducerFeesCalculationExceptions.InvalidSubsidiariesNumber);
+            ValidateRequest(request);
 
             if (request.NumberOfSubsidiaries == 0)
+            {
                 return 0m;
+            }
 
             var regulator = RegulatorType.Create(request.Regulator);
-            var feePerSubsidiary = await _feesRepository.GetFirst20SubsidiariesFeeAsync(regulator, cancellationToken);
+            var baseFee = await _feesRepository.GetFirst20SubsidiariesFeeAsync(regulator, cancellationToken);
 
-            if (request.NumberOfSubsidiaries > 20)
+            if (request.NumberOfSubsidiaries <= 20)
             {
-                var additionalFee = await _feesRepository.GetAdditionalSubsidiariesFeeAsync(regulator, cancellationToken);
-                return feePerSubsidiary * 20 + additionalFee * (request.NumberOfSubsidiaries - 20);
+                return CalculateFeeForUpTo20Subsidiaries(baseFee, request.NumberOfSubsidiaries);
             }
-            else
+
+            var upTo100Fee = await _feesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(regulator, cancellationToken);
+
+            if (request.NumberOfSubsidiaries <= 100)
             {
-                return feePerSubsidiary * request.NumberOfSubsidiaries;
+                return CalculateFeeForUpTo100Subsidiaries(baseFee, upTo100Fee, request.NumberOfSubsidiaries);
+            }
+
+            var moreThan100Fee = await _feesRepository.GetAdditionalMoreThan100SubsidiariesFeeAsync(regulator, cancellationToken);
+
+            return CalculateFeeForMoreThan100Subsidiaries(baseFee, upTo100Fee, moreThan100Fee, request.NumberOfSubsidiaries);
+        }
+
+        private static void ValidateRequest(ProducerRegistrationFeesRequestDto request)
+        {
+            if (request.NumberOfSubsidiaries < 0 || string.IsNullOrEmpty(request.Regulator))
+            {
+                throw new ArgumentException(ProducerFeesCalculationExceptions.InvalidSubsidiariesNumber);
             }
         }
+
+        private static decimal CalculateFeeForUpTo20Subsidiaries(decimal baseFee, int numberOfSubsidiaries)
+        {
+            return baseFee * numberOfSubsidiaries;
+        }
+
+        private static decimal CalculateFeeForUpTo100Subsidiaries(decimal baseFee, decimal upTo100Fee, int numberOfSubsidiaries)
+        {
+            return baseFee * 20 + upTo100Fee * (numberOfSubsidiaries - 20);
+        }
+
+        private static decimal CalculateFeeForMoreThan100Subsidiaries(decimal baseFee, decimal upTo100Fee, decimal moreThan100Fee, int numberOfSubsidiaries)
+        {
+            return baseFee * 20 + upTo100Fee * 80 + moreThan100Fee * (numberOfSubsidiaries - 100);
+        }
     }
+
 }
