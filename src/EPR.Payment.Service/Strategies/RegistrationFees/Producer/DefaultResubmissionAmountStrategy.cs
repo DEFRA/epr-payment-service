@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
@@ -22,7 +23,15 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             }
 
             var regulatorType = RegulatorType.Create(request.Regulator);
-            return await _feesRepository.GetResubmissionAsync(regulatorType, cancellationToken);
+
+            var fee = await _feesRepository.GetResubmissionAsync(regulatorType, cancellationToken);
+
+            if (fee == 0)
+            {
+                throw new KeyNotFoundException(string.Format(ProducerFeesCalculationExceptions.InvalidRegulatorError, request.Regulator));
+            }
+
+            return fee;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
@@ -94,5 +95,24 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 .Should().ThrowAsync<ArgumentException>()
                 .WithMessage("Regulator cannot be null or empty");
         }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionAsync_ZeroFee_ThrowsKeyNotFoundException(
+            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
+            DefaultResubmissionAmountStrategy strategy)
+        {
+            // Arrange
+            var producerResubmissionFeeRequestDto = new RegulatorDto { Regulator = "GB-ENG" };
+            var regulatorType = RegulatorType.Create(producerResubmissionFeeRequestDto.Regulator);
+
+            // Set up the repository mock to return 0 fee
+            feesRepositoryMock.Setup(i => i.GetResubmissionAsync(regulatorType, CancellationToken.None)).ReturnsAsync(0m);
+
+            // Act & Assert
+            await strategy.Invoking(async s => await s!.CalculateFeeAsync(producerResubmissionFeeRequestDto, new CancellationToken()))
+                .Should().ThrowAsync<KeyNotFoundException>()
+                .WithMessage(string.Format(ProducerFeesCalculationExceptions.InvalidRegulatorError, producerResubmissionFeeRequestDto.Regulator));
+        }
+
     }
 }

@@ -34,7 +34,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_NullRegulator_ShouldHaveError()
         {
             // Arrange
-            var dto = new RegulatorDto { Regulator = null! };
+            var dto = new RegulatorDto { Regulator = null };
 
             // Act
             var result = _validator.TestValidate(dto);
@@ -88,6 +88,48 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Regulator)
                   .WithErrorMessage("Regulator must be in uppercase.");
+        }
+
+        [TestMethod]
+        public void Validate_RegulatorWithLeadingTrailingSpaces_ShouldHaveError()
+        {
+            // Arrange
+            var dto = new RegulatorDto { Regulator = " GB-ENG " }; // With spaces
+
+            // Act
+            var result = _validator.TestValidate(dto);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.Regulator)
+                  .WithErrorMessage("Invalid regulator parameter.");
+        }
+
+        [TestMethod]
+        public void Validate_RegulatorTooShort_ShouldHaveError()
+        {
+            // Arrange
+            var dto = new RegulatorDto { Regulator = "GB" }; // Assuming a minimum length constraint
+
+            // Act
+            var result = _validator.TestValidate(dto);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.Regulator)
+                  .WithErrorMessage("Invalid regulator parameter.");
+        }
+
+        [TestMethod]
+        public void Validate_RegulatorTooLong_ShouldHaveError()
+        {
+            // Arrange
+            var dto = new RegulatorDto { Regulator = "GB-ENG-TOOLONG" }; // Assuming a maximum length constraint
+
+            // Act
+            var result = _validator.TestValidate(dto);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.Regulator)
+                  .WithErrorMessage("Invalid regulator parameter.");
         }
     }
 }
