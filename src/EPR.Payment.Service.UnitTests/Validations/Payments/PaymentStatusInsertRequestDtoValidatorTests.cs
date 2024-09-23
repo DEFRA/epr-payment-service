@@ -80,14 +80,6 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         }
 
         [TestMethod]
-        public void Should_Have_Error_When_Amount_Is_Null()
-        {
-            var paymentStatusInsertRequestDto = new PaymentStatusInsertRequestDto { Amount = null };
-            var result = _validator.TestValidate(paymentStatusInsertRequestDto);
-            result.ShouldHaveValidationErrorFor(x => x.Amount);
-        }
-
-        [TestMethod]
         public void Should_Not_Have_Error_When_Amount_Is_Valid()
         {
             var paymentStatusInsertRequestDto = new PaymentStatusInsertRequestDto { Amount = 10 };

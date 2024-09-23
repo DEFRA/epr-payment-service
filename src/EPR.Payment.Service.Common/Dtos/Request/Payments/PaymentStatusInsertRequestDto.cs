@@ -10,7 +10,7 @@
 
         public string? Regulator { get; set; }
 
-        public int? Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public string? ReasonForPayment { get; set; }
 
