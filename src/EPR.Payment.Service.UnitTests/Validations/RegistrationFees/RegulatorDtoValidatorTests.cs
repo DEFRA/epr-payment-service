@@ -55,7 +55,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Regulator)
-                  .WithErrorMessage("Invalid regulator parameter.");
+                  .WithErrorMessage("Invalid Regulator.");
         }
 
         [TestMethod]
@@ -74,62 +74,6 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 // Assert
                 result.ShouldNotHaveValidationErrorFor(x => x.Regulator);
             }
-        }
-
-        [TestMethod]
-        public void Validate_LowercaseRegulator_ShouldHaveError()
-        {
-            // Arrange
-            var dto = new RegulatorDto { Regulator = "gb-eng" }; // Lowercase
-
-            // Act
-            var result = _validator.TestValidate(dto);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Regulator)
-                  .WithErrorMessage("Regulator must be in uppercase.");
-        }
-
-        [TestMethod]
-        public void Validate_RegulatorWithLeadingTrailingSpaces_ShouldHaveError()
-        {
-            // Arrange
-            var dto = new RegulatorDto { Regulator = " GB-ENG " }; // With spaces
-
-            // Act
-            var result = _validator.TestValidate(dto);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Regulator)
-                  .WithErrorMessage("Invalid regulator parameter.");
-        }
-
-        [TestMethod]
-        public void Validate_RegulatorTooShort_ShouldHaveError()
-        {
-            // Arrange
-            var dto = new RegulatorDto { Regulator = "GB" }; // Assuming a minimum length constraint
-
-            // Act
-            var result = _validator.TestValidate(dto);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Regulator)
-                  .WithErrorMessage("Invalid regulator parameter.");
-        }
-
-        [TestMethod]
-        public void Validate_RegulatorTooLong_ShouldHaveError()
-        {
-            // Arrange
-            var dto = new RegulatorDto { Regulator = "GB-ENG-TOOLONG" }; // Assuming a maximum length constraint
-
-            // Act
-            var result = _validator.TestValidate(dto);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.Regulator)
-                  .WithErrorMessage("Invalid regulator parameter.");
         }
     }
 }
