@@ -28,7 +28,7 @@ namespace EPR.Payment.Service.Controllers
         }
 
         [MapToApiVersion(1)]
-        [HttpPost("registration-fees")]
+        [HttpPost("registration-fee")]
         [SwaggerOperation(
             Summary = "Calculates the registration fees for a producer",
             Description = "Calculates the total fees including base fee, subsidiaries fee, and any additional fees for an online marketplace producer."
