@@ -28,7 +28,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees
         }
 
         [MapToApiVersion(1)]
-        [HttpGet]
+        [HttpGet("registration-fee")]
         [SwaggerOperation(
             Summary = "Retrieves the base fee for a compliance scheme",
             Description = "Retrieves the base fee based on the specified regulator."

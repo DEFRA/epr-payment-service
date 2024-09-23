@@ -12,7 +12,7 @@ namespace EPR.Payment.Service.Controllers
 {
     [ApiVersion(1)]
     [ApiController]
-    [Route("api/v{version:apiVersion}/registration-fees")]
+    [Route("api/v{version:apiVersion}/producer")]
     [FeatureGate("EnableRegistrationFeesFeature")]
     public class ProducerFeesController : ControllerBase
     {
@@ -28,7 +28,7 @@ namespace EPR.Payment.Service.Controllers
         }
 
         [MapToApiVersion(1)]
-        [HttpPost]
+        [HttpPost("registration-fees")]
         [SwaggerOperation(
             Summary = "Calculates the registration fees for a producer",
             Description = "Calculates the total fees including base fee, subsidiaries fee, and any additional fees for an online marketplace producer."
