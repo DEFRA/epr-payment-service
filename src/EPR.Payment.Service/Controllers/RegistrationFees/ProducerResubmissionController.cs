@@ -11,7 +11,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees
 {
     [ApiVersion(1)]
     [ApiController]
-    [Route("api/v{version:apiVersion}/resubmissions")]
+    [Route("api/v{version:apiVersion}/producer")]
     [FeatureGate("EnableProducerResubmissionAmount")]
     public class ProducerResubmissionController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees
             _producerResubmissionService = producerResubmissionService ?? throw new ArgumentNullException(nameof(producerResubmissionService));
         }
 
-        [HttpGet]
+        [HttpGet("resubmission-fee")]
         [ProducesResponseType(typeof(decimal?), 200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
