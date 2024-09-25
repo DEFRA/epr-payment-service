@@ -25,7 +25,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ProducerType = "X",
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
-                IsOnlineMarketplace = false
+                IsProducerOnlineMarketplace = false,
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -45,7 +46,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
-                IsOnlineMarketplace = false
+                IsProducerOnlineMarketplace = false,
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -64,7 +66,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ProducerType = "large",  // Lowercase
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
-                IsOnlineMarketplace = false
+                IsProducerOnlineMarketplace = false,
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -83,7 +86,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ProducerType = "SMALL",
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
-                IsOnlineMarketplace = false
+                IsProducerOnlineMarketplace = false,
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -102,7 +106,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ProducerType = "small",  // Lowercase
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
-                IsOnlineMarketplace = false
+                IsProducerOnlineMarketplace = false,
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -121,7 +126,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = -5,
                 Regulator = RegulatorConstants.GBENG,
-                IsOnlineMarketplace = false
+                IsProducerOnlineMarketplace = false,
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -141,7 +147,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
                 Regulator = string.Empty,
-                IsOnlineMarketplace = false
+                IsProducerOnlineMarketplace = false,
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -161,7 +168,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ProducerType = string.Empty, // No base fee required
                 NumberOfSubsidiaries = 0,
                 Regulator = RegulatorConstants.GBENG,
-                IsOnlineMarketplace = false
+                IsProducerOnlineMarketplace = false,
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -181,7 +189,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
-                IsOnlineMarketplace = false
+                IsProducerOnlineMarketplace = false,
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -202,7 +211,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ProducerType = string.Empty, // No base fee required
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
-                IsOnlineMarketplace = false
+                IsProducerOnlineMarketplace = false,
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -226,7 +236,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                     ProducerType = "LARGE",
                     NumberOfSubsidiaries = 10,
                     Regulator = regulator,
-                    IsOnlineMarketplace = false
+                    IsProducerOnlineMarketplace = false,
+                    ApplicationReferenceNumber = "A123"
                 };
 
                 // Act
@@ -235,6 +246,50 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 // Assert
                 result.ShouldNotHaveValidationErrorFor(x => x.Regulator);
             }
+        }
+
+
+        [TestMethod]
+        public void Validate_EmptyApplicationReferenceNumber_ShouldHaveError()
+        {
+            // Arrange
+            var request = new ProducerRegistrationFeesRequestDto
+            {
+                ProducerType = "LARGE",
+                NumberOfSubsidiaries = 10,
+                Regulator = RegulatorConstants.GBENG,
+                IsProducerOnlineMarketplace = false,
+                ApplicationReferenceNumber = string.Empty
+            };
+
+            // Act
+            var result = _validator.TestValidate(request);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.ApplicationReferenceNumber)
+                  .WithErrorMessage(ValidationMessages.ApplicationReferenceNumberRequired);
+        }
+
+        [TestMethod]
+        public void Validate_NoOfSubsidiariesOnlineMarketplaceLessThanZero_ShouldHaveError()
+        {
+            // Arrange
+            var request = new ProducerRegistrationFeesRequestDto
+            {
+                ProducerType = "LARGE",
+                NumberOfSubsidiaries = 0,
+                Regulator = RegulatorConstants.GBENG,
+                IsProducerOnlineMarketplace = false,
+                NoOfSubsidiariesOnlineMarketplace = -5,
+                ApplicationReferenceNumber = "A123"
+            };
+
+            // Act
+            var result = _validator.TestValidate(request);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.NoOfSubsidiariesOnlineMarketplace)
+                  .WithErrorMessage(ValidationMessages.NumberOfSubsidiariesRange);
         }
     }
 }

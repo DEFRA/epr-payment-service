@@ -1,6 +1,7 @@
 ﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
@@ -43,7 +44,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             using (new AssertionScope())
             {
                 strategy.Should().NotBeNull();
-                strategy.Should().BeAssignableTo<IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
+                strategy.Should().BeAssignableTo<IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>>();
             }
         }
 
@@ -57,10 +58,15 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var request = new ProducerRegistrationFeesRequestDto
             {
                 NumberOfSubsidiaries = 50,
-                Regulator = "GB-ENG"
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "A123",
+                NoOfSubsidiariesOnlineMarketplace = 0
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
+
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(257900m); // £2579 in pence per Online Market Subsidiary
 
             feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
@@ -72,23 +78,65 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
 
             // Assert
-            result.Should().Be(1536000m); // £15,360 in pence
+            result.FeeBreakdowns.Select(i => i.TotalPrice).Sum().Should().Be(1536000m); // £15,360 in pence
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task CalculateFeeAsync_WhenLargeProducerWith50SubsidiariesAndWithOMP_ReturnsCorrectSubsidiariesFee(
+            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
+            SubsidiariesFeeCalculationStrategy strategy)
+        {
+            // Arrange
+            var request = new ProducerRegistrationFeesRequestDto
+            {
+                NumberOfSubsidiaries = 50,
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "A123",
+                NoOfSubsidiariesOnlineMarketplace = 2
+            };
+
+            var regulator = RegulatorType.Create(request.Regulator);
+
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(257900m); // £2579 in pence per Online Market Subsidiary
+
+            feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            feesRepositoryMock.Setup(repo => repo.GetAdditionalUpTo100SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(14000m); // £140 in pence per additional subsidiary
+
+            // Act
+            var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.TotalSubsidiariesOMPFees.Should().Be(515800m);// £5,158 in pence
+                result.FeeBreakdowns.Select(i => i.TotalPrice).Sum().Should().Be(1536000m); // £15,360 in pence
+            }
         }
 
         [TestMethod]
         [AutoMoqData]
         public async Task CalculateFeeAsync_WhenLargeProducerWith101Subsidiaries_ReturnsCorrectSubsidiariesFee(
-    [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
-    SubsidiariesFeeCalculationStrategy strategy)
+            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
+            SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
                 NumberOfSubsidiaries = 101,
-                Regulator = "GB-ENG"
+                Regulator = "GB-ENG",
+                NoOfSubsidiariesOnlineMarketplace = 0,
+                ApplicationReferenceNumber = "A123"
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
+
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(257900m); // £2579 in pound per Online Market Subsidiary
 
             feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
@@ -103,7 +151,47 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
 
             // Assert
-            result.Should().Be(2236000m); // £22,360 in pence
+            result.FeeBreakdowns.Select(i => i.TotalPrice).Sum().Should().Be(2236000m); // £22,360 in pence
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task CalculateFeeAsync_WhenLargeProducerWith101SubsidiariesAndWithOMP_ReturnsCorrectSubsidiariesFee(
+            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
+            SubsidiariesFeeCalculationStrategy strategy)
+        {
+            // Arrange
+            var request = new ProducerRegistrationFeesRequestDto
+            {
+                NumberOfSubsidiaries = 101,
+                Regulator = "GB-ENG",
+                NoOfSubsidiariesOnlineMarketplace = 2,
+                ApplicationReferenceNumber = "A123"
+            };
+
+            var regulator = RegulatorType.Create(request.Regulator);
+
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(257900m); // £2579 in pound per Online Market Subsidiary
+
+            feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            feesRepositoryMock.Setup(repo => repo.GetAdditionalUpTo100SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(14000m); // £140 in pence per additional subsidiary
+
+            feesRepositoryMock.Setup(repo => repo.GetAdditionalMoreThan100SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(0m); // £0 in pence per additional subsidiary
+
+            // Act
+            var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.TotalSubsidiariesOMPFees.Should().Be(515800m);// £5,158 in pence
+                result.FeeBreakdowns.Select(i => i.TotalPrice).Sum().Should().Be(2236000m); // £22,360 in pence
+            }
         }
 
         [TestMethod]
@@ -116,14 +204,15 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var request = new ProducerRegistrationFeesRequestDto
             {
                 NumberOfSubsidiaries = 0,
-                Regulator = "GB-ENG"
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
             var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
 
             // Assert
-            result.Should().Be(0m);
+            result.FeeBreakdowns.Select(i => i.TotalPrice).Sum().Should().Be(0m);
         }
 
         [TestMethod]
@@ -136,7 +225,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var request = new ProducerRegistrationFeesRequestDto
             {
                 NumberOfSubsidiaries = -5,
-                Regulator = "GB-ENG"
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act & Assert
@@ -153,7 +243,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var request = new ProducerRegistrationFeesRequestDto
             {
                 NumberOfSubsidiaries = 10,
-                Regulator = null!
+                Regulator = null!,
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act & Assert
@@ -170,10 +261,14 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var request = new ProducerRegistrationFeesRequestDto
             {
                 NumberOfSubsidiaries = 10,
-                Regulator = "GB-ENG"
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "A123"
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
+
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(257900m); // £2579 in pence per Online Market Subsidiary
 
             feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
@@ -182,7 +277,41 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
 
             // Assert
-            result.Should().Be(558000m); // 10 subsidiaries at £558 each
+            result.FeeBreakdowns.Select(i => i.TotalPrice).Sum().Should().Be(558000m); // 10 subsidiaries at £558 each
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task CalculateFeeAsync_WhenSmallProducerWith10SubsidiariesWithOMP_ReturnsCorrectFee(
+            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
+            SubsidiariesFeeCalculationStrategy strategy)
+        {
+            // Arrange
+            var request = new ProducerRegistrationFeesRequestDto
+            {
+                NumberOfSubsidiaries = 10,
+                Regulator = "GB-ENG",
+                NoOfSubsidiariesOnlineMarketplace = 2,
+                ApplicationReferenceNumber = "A123"
+            };
+
+            var regulator = RegulatorType.Create(request.Regulator);
+
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(257900m); // £2579 in pence per Online Market Subsidiary
+
+            feesRepositoryMock.Setup(repo => repo.GetFirst20SubsidiariesFeeAsync(regulator, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(55800m); // £558 in pence per subsidiary
+
+            // Act
+            var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.TotalSubsidiariesOMPFees.Should().Be(515800m);// £5,158 in pence
+                result.FeeBreakdowns.Select(i => i.TotalPrice).Sum().Should().Be(558000m); // 10 subsidiaries at £558 each
+            }
         }
     }
 }

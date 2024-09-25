@@ -15,14 +15,14 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
     [TestClass]
     public class ProducerResubmissionServiceTests
     {
-        private Mock<IResubmissionAmountStrategy> _resubmissionAmountStrategyMock = null!;
+        private Mock<IResubmissionAmountStrategy<RegulatorDto, decimal>> _resubmissionAmountStrategyMock = null!;
         private ProducerResubmissionService? _resubmissionService = null;
         private Mock<IValidator<RegulatorDto>> _producerResubmissionFeeRequestDtoMock = null!;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _resubmissionAmountStrategyMock = new Mock<IResubmissionAmountStrategy>();
+            _resubmissionAmountStrategyMock = new Mock<IResubmissionAmountStrategy<RegulatorDto, decimal>>();
             _producerResubmissionFeeRequestDtoMock = new Mock<IValidator<RegulatorDto>>();
 
             _resubmissionService = new ProducerResubmissionService(
@@ -51,7 +51,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         public void Constructor_WhenResubmissionAmountStrategyIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
-            IResubmissionAmountStrategy? resubmissionAmountStrategy = null;
+            IResubmissionAmountStrategy<RegulatorDto, decimal>? resubmissionAmountStrategy = null;
 
             // Act
             Action act = () => new ProducerResubmissionService(

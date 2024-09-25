@@ -2,7 +2,7 @@
 
 namespace EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer
 {
-    public interface IResubmissionAmountStrategy : IFeeCalculationStrategy<RegulatorDto>
+    public interface IResubmissionAmountStrategy<TRequestDto, TResponseDto> : IFeeCalculationStrategy<TRequestDto, TResponseDto>
     {
     }
 }

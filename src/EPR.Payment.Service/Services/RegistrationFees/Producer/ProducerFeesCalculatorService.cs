@@ -3,30 +3,26 @@ using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
-using EPR.Payment.Service.Utilities.RegistrationFees.Interfaces;
 using FluentValidation;
 
 namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 {
     public class ProducerFeesCalculatorService : IProducerFeesCalculatorService
     {
-        private readonly IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto> _baseFeeCalculationStrategy;
-        private readonly ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto> _subsidiariesFeeCalculationStrategy;
+        private readonly IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _baseFeeCalculationStrategy;
+        private readonly ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown> _subsidiariesFeeCalculationStrategy;
         private readonly IValidator<ProducerRegistrationFeesRequestDto> _validator;
-        private readonly IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto> _feeBreakdownGenerator;
-        private readonly IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto> _onlineMarketCalculationStrategy;
+        private readonly IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _onlineMarketCalculationStrategy;
 
         public ProducerFeesCalculatorService(
-            IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto> baseFeeCalculationStrategy,
-            ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto> subsidiariesFeeCalculationStrategy,
+            IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> baseFeeCalculationStrategy,
+            ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown> subsidiariesFeeCalculationStrategy,
             IValidator<ProducerRegistrationFeesRequestDto> validator,
-            IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto> feeBreakdownGenerator,
-            IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto> onlineMarketCalculationStrategy)
+            IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> onlineMarketCalculationStrategy)
         {
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _feeBreakdownGenerator = feeBreakdownGenerator ?? throw new ArgumentNullException(nameof(feeBreakdownGenerator));
             _onlineMarketCalculationStrategy = onlineMarketCalculationStrategy ?? throw new ArgumentNullException(nameof(onlineMarketCalculationStrategy));
         }
 
@@ -37,12 +33,13 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 
             try
             {
-                response.BaseFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
-                response.OnlineMarket = await _onlineMarketCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
-                response.SubsidiariesFee = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
-                response.TotalFee = response.BaseFee + response.OnlineMarket + response.SubsidiariesFee;
-
-                await _feeBreakdownGenerator.GenerateFeeBreakdownAsync(response, request, cancellationToken);
+                response.ProducerRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
+                response.ProducerOnlineMarketPlaceFee = await _onlineMarketCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
+                response.SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
+                response.SubsidiariesFee = response.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + response.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
+                response.TotalFee = response.ProducerRegistrationFee + response.ProducerOnlineMarketPlaceFee + response.SubsidiariesFee;
+                response.PreviousPayment = 0;
+                response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
             }
             catch (ArgumentException ex)
             {

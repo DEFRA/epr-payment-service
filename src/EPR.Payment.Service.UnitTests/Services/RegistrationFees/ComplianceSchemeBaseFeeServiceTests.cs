@@ -15,13 +15,13 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
     [TestClass]
     public class ComplianceSchemeBaseFeeServiceTests
     {
-        private Mock<IComplianceSchemeBaseFeeCalculationStrategy> _baseFeeCalculationStrategyMock = null!;
+        private Mock<IComplianceSchemeBaseFeeCalculationStrategy<RegulatorType, decimal>> _baseFeeCalculationStrategyMock = null!;
         private ComplianceSchemeBaseFeeService? _baseFeeService = null!;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _baseFeeCalculationStrategyMock = new Mock<IComplianceSchemeBaseFeeCalculationStrategy>();
+            _baseFeeCalculationStrategyMock = new Mock<IComplianceSchemeBaseFeeCalculationStrategy<RegulatorType, decimal>>();
             _baseFeeService = new ComplianceSchemeBaseFeeService(_baseFeeCalculationStrategyMock.Object);
         }
 
@@ -29,7 +29,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         public void Constructor_WhenBaseFeeCalculationStrategyIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
-            IComplianceSchemeBaseFeeCalculationStrategy? baseFeeCalculationStrategy = null;
+            IComplianceSchemeBaseFeeCalculationStrategy<RegulatorType, decimal>? baseFeeCalculationStrategy = null;
 
             // Act
             Action act = () => new ComplianceSchemeBaseFeeService(baseFeeCalculationStrategy!);

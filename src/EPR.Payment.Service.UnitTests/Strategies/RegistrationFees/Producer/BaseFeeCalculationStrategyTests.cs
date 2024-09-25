@@ -51,7 +51,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             using (new AssertionScope())
             {
                 strategy.Should().NotBeNull();
-                strategy.Should().BeAssignableTo<IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
+                strategy.Should().BeAssignableTo<IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             }
         }
 
@@ -65,7 +65,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
-                Regulator = "GB-ENG"
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "A123"
             };
 
             var regulator = RegulatorType.Create("GB-ENG");
@@ -90,7 +91,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
-                Regulator = null! // Regulator is null
+                Regulator = null!, // Regulator is null
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act & Assert
@@ -107,7 +109,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = string.Empty, // ProducerType is empty
-                Regulator = "GB-ENG" // Valid Regulator
+                Regulator = "GB-ENG", // Valid Regulator
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -127,7 +130,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
-                Regulator = string.Empty // Regulator is empty
+                Regulator = string.Empty, // Regulator is empty
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act & Assert

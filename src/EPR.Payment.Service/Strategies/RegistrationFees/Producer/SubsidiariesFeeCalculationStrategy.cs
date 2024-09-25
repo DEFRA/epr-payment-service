@@ -1,12 +1,13 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 
 namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
 {
-    public class SubsidiariesFeeCalculationStrategy : ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>
+    public class SubsidiariesFeeCalculationStrategy : ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>
     {
         private readonly IProducerFeesRepository _feesRepository;
 
@@ -15,33 +16,35 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
 
-        public async Task<decimal> CalculateFeeAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
+        public async Task<SubsidiariesFeeBreakdown> CalculateFeeAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
         {
             ValidateRequest(request);
 
-            if (request.NumberOfSubsidiaries == 0)
-            {
-                return 0m;
-            }
-
             var regulator = RegulatorType.Create(request.Regulator);
-            var baseFee = await _feesRepository.GetFirst20SubsidiariesFeeAsync(regulator, cancellationToken);
+            var unitOMPFees = await _feesRepository.GetOnlineMarketFeeAsync(regulator, cancellationToken);
 
-            if (request.NumberOfSubsidiaries <= 20)
+            var subsidiariesFeeBreakdown = new SubsidiariesFeeBreakdown
             {
-                return CalculateFeeForUpTo20Subsidiaries(baseFee, request.NumberOfSubsidiaries);
-            }
+                CountOfOMPSubsidiaries = request.NoOfSubsidiariesOnlineMarketplace,
+                UnitOMPFees = unitOMPFees,
+                TotalSubsidiariesOMPFees = request.NoOfSubsidiariesOnlineMarketplace * unitOMPFees,
+                FeeBreakdowns = new List<FeeBreakdown>()
+            };
 
-            var upTo100Fee = await _feesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(regulator, cancellationToken);
+            var firstBandCount = Math.Min(request.NumberOfSubsidiaries, 20);
+            var secondBandCount = request.NumberOfSubsidiaries > 100 ? 80 : Math.Max(0, request.NumberOfSubsidiaries - 20);
+            var thirdBandCount = request.NumberOfSubsidiaries > 100 ? Math.Max(0, request.NumberOfSubsidiaries - 100) : 0;
 
-            if (request.NumberOfSubsidiaries <= 100)
-            {
-                return CalculateFeeForUpTo100Subsidiaries(baseFee, upTo100Fee, request.NumberOfSubsidiaries);
-            }
+            var firstBandFee = await _feesRepository.GetFirst20SubsidiariesFeeAsync(regulator, cancellationToken);
+            AddFeeBreakdown(subsidiariesFeeBreakdown.FeeBreakdowns, 1, firstBandCount, firstBandFee);
 
-            var moreThan100Fee = await _feesRepository.GetAdditionalMoreThan100SubsidiariesFeeAsync(regulator, cancellationToken);
+            var secondBandFee = await _feesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(regulator, cancellationToken);
+            AddFeeBreakdown(subsidiariesFeeBreakdown.FeeBreakdowns, 2, secondBandCount, secondBandFee);
 
-            return CalculateFeeForMoreThan100Subsidiaries(baseFee, upTo100Fee, moreThan100Fee, request.NumberOfSubsidiaries);
+            var thirdBandFee = await _feesRepository.GetAdditionalMoreThan100SubsidiariesFeeAsync(regulator, cancellationToken);
+            AddFeeBreakdown(subsidiariesFeeBreakdown.FeeBreakdowns, 3, thirdBandCount, thirdBandFee);
+
+            return subsidiariesFeeBreakdown;
         }
 
         private static void ValidateRequest(ProducerRegistrationFeesRequestDto request)
@@ -51,21 +54,17 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
                 throw new ArgumentException(ProducerFeesCalculationExceptions.InvalidSubsidiariesNumber);
             }
         }
-
-        private static decimal CalculateFeeForUpTo20Subsidiaries(decimal baseFee, int numberOfSubsidiaries)
+        private static void AddFeeBreakdown(ICollection<FeeBreakdown> feeBreakdowns, int bandNumber, int unitCount, decimal unitPrice)
         {
-            return baseFee * numberOfSubsidiaries;
+            feeBreakdowns.Add(new FeeBreakdown
+            {
+                BandNumber = bandNumber,
+                UnitCount = unitCount,
+                UnitPrice = unitPrice,
+                TotalPrice = unitCount * unitPrice
+            });
         }
 
-        private static decimal CalculateFeeForUpTo100Subsidiaries(decimal baseFee, decimal upTo100Fee, int numberOfSubsidiaries)
-        {
-            return baseFee * 20 + upTo100Fee * (numberOfSubsidiaries - 20);
-        }
-
-        private static decimal CalculateFeeForMoreThan100Subsidiaries(decimal baseFee, decimal upTo100Fee, decimal moreThan100Fee, int numberOfSubsidiaries)
-        {
-            return baseFee * 20 + upTo100Fee * 80 + moreThan100Fee * (numberOfSubsidiaries - 100);
-        }
     }
 
 }

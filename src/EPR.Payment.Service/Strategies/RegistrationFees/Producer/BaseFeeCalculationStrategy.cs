@@ -6,7 +6,7 @@ using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 
 namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
 {
-    public class BaseFeeCalculationStrategy : IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>
+    public class BaseFeeCalculationStrategy : IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>
     {
         private readonly IProducerFeesRepository _feesRepository;
 

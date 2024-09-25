@@ -51,7 +51,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             using (new AssertionScope())
             {
                 strategy.Should().NotBeNull();
-                strategy.Should().BeAssignableTo<IComplianceSchemeBaseFeeCalculationStrategy>();
+                strategy.Should().BeAssignableTo<IComplianceSchemeBaseFeeCalculationStrategy<RegulatorType, decimal>>();
             }
         }
 

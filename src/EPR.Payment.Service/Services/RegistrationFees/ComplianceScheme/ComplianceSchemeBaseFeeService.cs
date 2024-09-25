@@ -7,10 +7,10 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
 {
     public class ComplianceSchemeBaseFeeService : IComplianceSchemeBaseFeeService
     {
-        private readonly IComplianceSchemeBaseFeeCalculationStrategy _baseFeeCalculationStrategy;
+        private readonly IComplianceSchemeBaseFeeCalculationStrategy<RegulatorType, decimal> _baseFeeCalculationStrategy;
 
         public ComplianceSchemeBaseFeeService(
-            IComplianceSchemeBaseFeeCalculationStrategy baseFeeCalculationStrategy)
+            IComplianceSchemeBaseFeeCalculationStrategy<RegulatorType, decimal> baseFeeCalculationStrategy)
         {
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
         }
