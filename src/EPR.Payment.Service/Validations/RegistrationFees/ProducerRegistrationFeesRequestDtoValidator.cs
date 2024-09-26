@@ -26,7 +26,7 @@ namespace EPR.Payment.Service.Validations.RegistrationFees
                 .Must(RegulatorValidationHelper.IsValidRegulator).WithMessage(ValidationMessages.RegulatorInvalid);
 
             RuleFor(x => x.NoOfSubsidiariesOnlineMarketplace)
-                .GreaterThanOrEqualTo(0).WithMessage(ValidationMessages.NumberOfSubsidiariesRange);
+                .GreaterThanOrEqualTo(0).WithMessage(ValidationMessages.NoOfSubsidiariesOnlineMarketplaceRange);
 
             RuleFor(x => x.ApplicationReferenceNumber)
                 .NotEmpty().WithMessage(ValidationMessages.ApplicationReferenceNumberRequired);

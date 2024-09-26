@@ -289,7 +289,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.NoOfSubsidiariesOnlineMarketplace)
-                  .WithErrorMessage(ValidationMessages.NumberOfSubsidiariesRange);
+                  .WithErrorMessage(ValidationMessages.NoOfSubsidiariesOnlineMarketplaceRange);
         }
     }
 }
