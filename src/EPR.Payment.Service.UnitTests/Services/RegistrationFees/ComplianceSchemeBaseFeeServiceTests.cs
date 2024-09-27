@@ -62,7 +62,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 .ReturnsAsync(1380400m); // £13,804 in pence
 
             // Act
-            var result = await _baseFeeService.GetComplianceSchemeBaseFeeAsync(regulator, CancellationToken.None);
+            var result = await _baseFeeService!.GetComplianceSchemeBaseFeeAsync(regulator, CancellationToken.None);
 
             // Assert
             result.Should().Be(1380400m); // £13,804 in pence
@@ -77,26 +77,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 .ThrowsAsync(new KeyNotFoundException("Regulator not found"));
 
             // Act
-            Func<Task> act = async () => await _baseFeeService.GetComplianceSchemeBaseFeeAsync(regulator, CancellationToken.None);
+            Func<Task> act = async () => await _baseFeeService!.GetComplianceSchemeBaseFeeAsync(regulator, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
                 .WithMessage(ComplianceSchemeFeeCalculationExceptions.BaseFeeCalculationInvalidOperation);
-        }
-
-        [TestMethod, AutoMoqData]
-        public async Task GetComplianceSchemeBaseFeeAsync_WhenNoExceptionOccurs_ReturnsExpectedFee(
-            [Frozen] RegulatorType regulator)
-        {
-            // Arrange
-            _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(1380400m); // £13,804 in pence
-
-            // Act
-            var result = await _baseFeeService.GetComplianceSchemeBaseFeeAsync(regulator, CancellationToken.None);
-
-            // Assert
-            result.Should().Be(1380400m); // £13,804 in pence
         }
     }
 }
