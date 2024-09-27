@@ -1,7 +1,7 @@
 ﻿namespace EPR.Payment.Service.Strategies.Interfaces.RegistrationFees
 {
-    public interface IFeeCalculationStrategy<TRequestDto>
+    public interface IFeeCalculationStrategy<TRequestDto, TResponse>
     {
-        Task<decimal> CalculateFeeAsync(TRequestDto request, CancellationToken cancellationToken);
+        Task<TResponse> CalculateFeeAsync(TRequestDto request, CancellationToken cancellationToken);
     }
 }

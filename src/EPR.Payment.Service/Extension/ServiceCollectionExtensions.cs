@@ -6,6 +6,7 @@ using EPR.Payment.Service.Common.Data.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
+using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
@@ -16,8 +17,6 @@ using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceSchem
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
-using EPR.Payment.Service.Utilities.RegistrationFees.Interfaces;
-using EPR.Payment.Service.Utilities.RegistrationFees.Producer;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 
@@ -31,16 +30,13 @@ namespace EPR.Payment.Service.Extension
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // Register the specific implementations of IFeeCalculationStrategy for Producer
-            services.AddScoped<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>, BaseFeeCalculationStrategy>();
-            services.AddScoped<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>, SubsidiariesFeeCalculationStrategy>();
-            services.AddScoped<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto>, OnlineMarketCalculationStrategy>();
-            services.AddScoped<IResubmissionAmountStrategy, DefaultResubmissionAmountStrategy>();
+            services.AddScoped<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, BaseFeeCalculationStrategy>();
+            services.AddScoped<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>, SubsidiariesFeeCalculationStrategy >();
+            services.AddScoped<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, OnlineMarketCalculationStrategy>();
+            services.AddScoped<IResubmissionAmountStrategy<RegulatorDto, decimal>, DefaultResubmissionAmountStrategy>();
 
             // Register the specific implementations of IFeeCalculationStrategy for Compliance Scheme
-            services.AddScoped<IComplianceSchemeBaseFeeCalculationStrategy, ComplianceSchemeBaseFeeCalculationStrategy>();
-
-            // Register the fee breakdown generators
-            services.AddScoped<IFeeBreakdownGenerator<ProducerRegistrationFeesRequestDto, RegistrationFeesResponseDto>, FeeBreakdownGenerator>();
+            services.AddScoped<IComplianceSchemeBaseFeeCalculationStrategy<RegulatorType, decimal>, ComplianceSchemeBaseFeeCalculationStrategy>();
 
             // Register repositories
             services.AddScoped<IProducerFeesRepository, ProducerFeesRepository>();

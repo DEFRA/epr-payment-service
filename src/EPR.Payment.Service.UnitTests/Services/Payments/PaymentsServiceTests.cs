@@ -51,7 +51,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public async Task InsertPaymentStatusAsync_ValidInput_ShouldReturnGuid([Frozen] Guid expectedResult)
         {
             // Arrange
-            var request = _fixture!.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, new Guid()).With(x => x.OrganisationId, new Guid()).Create();
+            var request = _fixture!.Build<PaymentStatusInsertRequestDto>().With(d => d.UserId, Guid.NewGuid()).With(x => x.OrganisationId, Guid.NewGuid()).Create();
 
             _paymentStatusInsertRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
 
@@ -89,7 +89,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public async Task UpdatePaymentStatusAsync_ValidInput_NotThrowException([Frozen] Guid id)
         {
             // Arrange
-            var request = _fixture!.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, new Guid()).With(x => x.UpdatedByOrganisationId, new Guid()).Create();
+            var request = _fixture!.Build<PaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, Guid.NewGuid()).With(x => x.UpdatedByOrganisationId, Guid.NewGuid()).Create();
 
             var entity = new Common.Data.DataModels.Payment();
             _paymentsRepositoryMock.Setup(r => r.GetPaymentByExternalPaymentIdAsync(id, _cancellationToken)).ReturnsAsync(entity);

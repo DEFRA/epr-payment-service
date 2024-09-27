@@ -6,7 +6,7 @@ using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 
 namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
 {
-    public class OnlineMarketCalculationStrategy : IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto>
+    public class OnlineMarketCalculationStrategy : IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>
     {
         private readonly IProducerFeesRepository _feesRepository;
 
@@ -18,7 +18,7 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
         public async Task<decimal> CalculateFeeAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
         {
             // If Online Market is false, return zero
-            if (!request.IsOnlineMarketplace)
+            if (!request.IsProducerOnlineMarketplace)
                 return 0m;
 
             // Ensure Regulator is not null or empty

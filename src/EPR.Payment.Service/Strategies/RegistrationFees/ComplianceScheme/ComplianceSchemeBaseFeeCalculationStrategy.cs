@@ -1,11 +1,12 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme;
 
 namespace EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme
 {
-    public class ComplianceSchemeBaseFeeCalculationStrategy : IComplianceSchemeBaseFeeCalculationStrategy
+    public class ComplianceSchemeBaseFeeCalculationStrategy : IComplianceSchemeBaseFeeCalculationStrategy<RegulatorType, decimal>
     {
         private readonly IComplianceSchemeFeesRepository _feesRepository;
 

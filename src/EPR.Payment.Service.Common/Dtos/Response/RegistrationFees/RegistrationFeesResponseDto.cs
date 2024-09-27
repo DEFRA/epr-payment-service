@@ -2,16 +2,28 @@
 {
     public class RegistrationFeesResponseDto
     {
-        public decimal BaseFee { get; set; } = 0; // Default to 0 if not applicable
-        public decimal OnlineMarket { get; set; } = 0; // Default to 0 if not applicable
+        public decimal ProducerRegistrationFee { get; set; } = 0; // Default to 0 if not applicable
+        public decimal ProducerOnlineMarketPlaceFee { get; set; } = 0; // Default to 0 if not applicable
         public decimal SubsidiariesFee { get; set; } = 0; // Default to 0 if not applicable
         public decimal TotalFee { get; set; } // Total fee will be computed
+        public decimal PreviousPayment { get; set; } 
+        public decimal OutstandingPayment { get; set; } 
+        public required SubsidiariesFeeBreakdown SubsidiariesFeeBreakdown { get; set; }
+    }
+
+    public class SubsidiariesFeeBreakdown
+    {
+        public decimal TotalSubsidiariesOMPFees { get; set; }
+        public int CountOfOMPSubsidiaries { get; set; }
+        public decimal UnitOMPFees { get; set; }
         public List<FeeBreakdown> FeeBreakdowns { get; set; } = new();
     }
 
     public class FeeBreakdown
     {
-        public required string Description { get; set; } = string.Empty; // Description of the fee component
-        public decimal Amount { get; set; } // Fee amount, should be valid and non-negative
+        public int BandNumber { get; set; }
+        public int UnitCount { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

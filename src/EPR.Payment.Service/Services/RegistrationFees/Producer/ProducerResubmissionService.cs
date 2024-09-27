@@ -2,16 +2,15 @@
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
 
 namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 {
     public class ProducerResubmissionService : IProducerResubmissionService
     {
-        private readonly IResubmissionAmountStrategy _resubmissionAmountStrategy;
+        private readonly IResubmissionAmountStrategy<RegulatorDto, decimal> _resubmissionAmountStrategy;
         private readonly IValidator<RegulatorDto> _producerResubmissionRequestValidator;
 
-        public ProducerResubmissionService(IResubmissionAmountStrategy resubmissionAmountStrategy, IValidator<RegulatorDto> producerResubmissionRequestValidator)
+        public ProducerResubmissionService(IResubmissionAmountStrategy<RegulatorDto, decimal> resubmissionAmountStrategy, IValidator<RegulatorDto> producerResubmissionRequestValidator)
         {
             _resubmissionAmountStrategy = resubmissionAmountStrategy ?? throw new ArgumentNullException(nameof(resubmissionAmountStrategy));
             _producerResubmissionRequestValidator = producerResubmissionRequestValidator ?? throw new ArgumentNullException(nameof(producerResubmissionRequestValidator));

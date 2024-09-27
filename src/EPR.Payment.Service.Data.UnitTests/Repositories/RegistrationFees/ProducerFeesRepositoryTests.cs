@@ -102,7 +102,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
         {
             // Arrange
             var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
-            var oldFee = feesMock?.Object?.First(f => f.SubGroup.Type == "Large" && f.Amount == 262000m);
+            var oldFee = await feesMock.Object.FirstAsync(f => f.SubGroup.Type == "Large" && f.Amount == 262000m);
             var newFee = new Common.Data.DataModels.Lookups.RegistrationFees
             {
                 Group = oldFee!.Group,
@@ -113,7 +113,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
                 EffectiveTo = DateTime.UtcNow.AddDays(5)
             };
 
-            var updatedFees = feesMock?.Object?.ToList();
+            var updatedFees = await feesMock.Object.ToListAsync();
             updatedFees?.Add(newFee);
 
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees?.AsQueryable());
@@ -357,7 +357,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
         {
             // Arrange
             var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
-            var oldFee = feesMock.Object.First(f => f.SubGroup.Type == SubsidiariesConstants.UpTo20 && f.Amount == 55800m);
+            var oldFee = await feesMock.Object.FirstAsync(f => f.SubGroup.Type == SubsidiariesConstants.UpTo20 && f.Amount == 55800m);
             var newFee = new Common.Data.DataModels.Lookups.RegistrationFees
             {
                 Group = oldFee.Group,
@@ -368,7 +368,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
                 EffectiveTo = DateTime.UtcNow.AddDays(5) // Still within the valid period
             };
 
-            var updatedFees = feesMock.Object.ToList();
+            var updatedFees = await feesMock.Object.ToListAsync();
             updatedFees.Add(newFee);
 
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees.AsQueryable());
@@ -476,7 +476,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
         {
             // Arrange
             var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
-            var oldFee = feesMock.Object.First(f => f.SubGroup.Type == SubsidiariesConstants.MoreThan20 && f.Amount == 14000m);
+            var oldFee = await feesMock.Object.FirstAsync(f => f.SubGroup.Type == SubsidiariesConstants.MoreThan20 && f.Amount == 14000m);
             var newFee = new Common.Data.DataModels.Lookups.RegistrationFees
             {
                 Group = oldFee.Group,
@@ -487,7 +487,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
                 EffectiveTo = DateTime.UtcNow.AddDays(5) // Still within the valid period
             };
 
-            var updatedFees = feesMock.Object.ToList();
+            var updatedFees = await feesMock.Object.ToListAsync();
             updatedFees.Add(newFee);
 
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees.AsQueryable());
@@ -525,7 +525,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
         {
             // Arrange
             var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
-            var oldFee = feesMock.Object.First(f => f.SubGroup.Type == SubsidiariesConstants.MoreThan100 && f.Amount == 1m);
+            var oldFee = await feesMock.Object.FirstAsync(f => f.SubGroup.Type == SubsidiariesConstants.MoreThan100 && f.Amount == 1m);
             var newFee = new Common.Data.DataModels.Lookups.RegistrationFees
             {
                 Group = oldFee.Group,
@@ -536,7 +536,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
                 EffectiveTo = DateTime.UtcNow.AddDays(5) // Still within the valid period
             };
 
-            var updatedFees = feesMock.Object.ToList();
+            var updatedFees = await feesMock.Object.ToListAsync();
             updatedFees.Add(newFee);
 
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees.AsQueryable());

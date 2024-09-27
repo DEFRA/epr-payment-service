@@ -8,6 +8,10 @@
 
         public required string Regulator { get; set; } // "GB-ENG", "GB-SCT", etc.
 
-        public bool IsOnlineMarketplace { get; set; } // True or False
+        public int NoOfSubsidiariesOnlineMarketplace { get; set; } // Any integer >= 0
+
+        public bool IsProducerOnlineMarketplace { get; set; } // True or False
+
+        public required string ApplicationReferenceNumber { get; set; }
     }
 }
