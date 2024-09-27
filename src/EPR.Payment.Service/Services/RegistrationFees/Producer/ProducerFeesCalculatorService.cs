@@ -28,25 +28,28 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 
         public async Task<RegistrationFeesResponseDto> CalculateFeesAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
         {
-            var response = new RegistrationFeesResponseDto();
             ValidateRequest(request);
 
             try
             {
-                response.ProducerRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
-                response.ProducerOnlineMarketPlaceFee = await _onlineMarketCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
-                response.SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
+                var response = new RegistrationFeesResponseDto
+                {
+                    ProducerRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
+                    ProducerOnlineMarketPlaceFee = await _onlineMarketCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
+                    SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken)
+                };
+
                 response.SubsidiariesFee = response.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + response.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
                 response.TotalFee = response.ProducerRegistrationFee + response.ProducerOnlineMarketPlaceFee + response.SubsidiariesFee;
                 response.PreviousPayment = 0;
                 response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
+
+                return response;
             }
             catch (ArgumentException ex)
             {
                 throw new InvalidOperationException(ProducerFeesCalculationExceptions.FeeCalculationError, ex);
             }
-
-            return response;
         }
 
         private void ValidateRequest(ProducerRegistrationFeesRequestDto request)

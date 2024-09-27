@@ -54,7 +54,7 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
                 throw new ArgumentException(ProducerFeesCalculationExceptions.InvalidSubsidiariesNumber);
             }
         }
-        private static void AddFeeBreakdown(ICollection<FeeBreakdown> feeBreakdowns, int bandNumber, int unitCount, decimal unitPrice)
+        private static void AddFeeBreakdown(List<FeeBreakdown> feeBreakdowns, int bandNumber, int unitCount, decimal unitPrice)
         {
             feeBreakdowns.Add(new FeeBreakdown
             {
