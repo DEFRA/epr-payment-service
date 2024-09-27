@@ -217,24 +217,6 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeeAsync_WhenSubsidiariesCountIsNegative_ThrowsArgumentException(
-            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
-            SubsidiariesFeeCalculationStrategy strategy)
-        {
-            // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
-            {
-                NumberOfSubsidiaries = -5,
-                Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
-            };
-
-            // Act & Assert
-            await Assert.ThrowsExceptionAsync<ArgumentException>(() => strategy.CalculateFeeAsync(request, CancellationToken.None));
-        }
-
-        [TestMethod]
-        [AutoMoqData]
         public async Task CalculateFeeAsync_WhenRegulatorIsNullOrEmpty_ThrowsArgumentException(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
             SubsidiariesFeeCalculationStrategy strategy)

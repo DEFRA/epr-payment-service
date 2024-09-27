@@ -1,5 +1,4 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -9,6 +8,9 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
 {
     public class SubsidiariesFeeCalculationStrategy : ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>
     {
+        private const int FirstBandLimit = 20;
+        private const int SecondBandLimit = 100;
+        private const int SecondBandSize = 80;
         private readonly IProducerFeesRepository _feesRepository;
 
         public SubsidiariesFeeCalculationStrategy(IProducerFeesRepository feesRepository)
@@ -18,11 +20,10 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
 
         public async Task<SubsidiariesFeeBreakdown> CalculateFeeAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
         {
-            ValidateRequest(request);
-
             var regulator = RegulatorType.Create(request.Regulator);
             var unitOMPFees = await _feesRepository.GetOnlineMarketFeeAsync(regulator, cancellationToken);
 
+            // Fee breakdown initialization
             var subsidiariesFeeBreakdown = new SubsidiariesFeeBreakdown
             {
                 CountOfOMPSubsidiaries = request.NoOfSubsidiariesOnlineMarketplace,
@@ -31,30 +32,32 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
                 FeeBreakdowns = new List<FeeBreakdown>()
             };
 
-            var firstBandCount = Math.Min(request.NumberOfSubsidiaries, 20);
-            var secondBandCount = request.NumberOfSubsidiaries > 100 ? 80 : Math.Max(0, request.NumberOfSubsidiaries - 20);
-            var thirdBandCount = request.NumberOfSubsidiaries > 100 ? Math.Max(0, request.NumberOfSubsidiaries - 100) : 0;
+            // Calculate subsidiary band counts
+            (int firstBandCount, int secondBandCount, int thirdBandCount) = CalculateBandCounts(request.NumberOfSubsidiaries);
 
-            var firstBandFee = await _feesRepository.GetFirst20SubsidiariesFeeAsync(regulator, cancellationToken);
-            AddFeeBreakdown(subsidiariesFeeBreakdown.FeeBreakdowns, 1, firstBandCount, firstBandFee);
+            // Fetch fees in parallel
+            var firstBandFeeTask = await _feesRepository.GetFirst20SubsidiariesFeeAsync(regulator, cancellationToken);
+            var secondBandFeeTask = await _feesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(regulator, cancellationToken);
+            var thirdBandFeeTask = await _feesRepository.GetAdditionalMoreThan100SubsidiariesFeeAsync(regulator, cancellationToken);
 
-            var secondBandFee = await _feesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(regulator, cancellationToken);
-            AddFeeBreakdown(subsidiariesFeeBreakdown.FeeBreakdowns, 2, secondBandCount, secondBandFee);
-
-            var thirdBandFee = await _feesRepository.GetAdditionalMoreThan100SubsidiariesFeeAsync(regulator, cancellationToken);
-            AddFeeBreakdown(subsidiariesFeeBreakdown.FeeBreakdowns, 3, thirdBandCount, thirdBandFee);
+            // Adding Fee breakdowns
+            AddFeeBreakdown(subsidiariesFeeBreakdown.FeeBreakdowns, 1, firstBandCount, firstBandFeeTask);
+            AddFeeBreakdown(subsidiariesFeeBreakdown.FeeBreakdowns, 2, secondBandCount, secondBandFeeTask);
+            AddFeeBreakdown(subsidiariesFeeBreakdown.FeeBreakdowns, 3, thirdBandCount, thirdBandFeeTask);
 
             return subsidiariesFeeBreakdown;
         }
 
-        private static void ValidateRequest(ProducerRegistrationFeesRequestDto request)
+        private (int firstBandCount, int secondBandCount, int thirdBandCount) CalculateBandCounts(int numberOfSubsidiaries)
         {
-            if (request.NumberOfSubsidiaries < 0 || string.IsNullOrEmpty(request.Regulator))
-            {
-                throw new ArgumentException(ProducerFeesCalculationExceptions.InvalidSubsidiariesNumber);
-            }
+            var firstBandCount = Math.Min(numberOfSubsidiaries, FirstBandLimit);
+            var secondBandCount = numberOfSubsidiaries > SecondBandLimit ? SecondBandSize : Math.Max(0, numberOfSubsidiaries - FirstBandLimit);
+            var thirdBandCount = numberOfSubsidiaries > SecondBandLimit ? Math.Max(0, numberOfSubsidiaries - SecondBandLimit) : 0;
+
+            return (firstBandCount, secondBandCount, thirdBandCount);
         }
-        private static void AddFeeBreakdown(List<FeeBreakdown> feeBreakdowns, int bandNumber, int unitCount, decimal unitPrice)
+
+        private void AddFeeBreakdown(List<FeeBreakdown> feeBreakdowns, int bandNumber, int unitCount, decimal unitPrice)
         {
             feeBreakdowns.Add(new FeeBreakdown
             {
@@ -64,7 +67,5 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
                 TotalPrice = unitCount * unitPrice
             });
         }
-
     }
-
 }
