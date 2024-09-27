@@ -48,7 +48,7 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             return subsidiariesFeeBreakdown;
         }
 
-        private (int firstBandCount, int secondBandCount, int thirdBandCount) CalculateBandCounts(int numberOfSubsidiaries)
+        private static (int firstBandCount, int secondBandCount, int thirdBandCount) CalculateBandCounts(int numberOfSubsidiaries)
         {
             var firstBandCount = Math.Min(numberOfSubsidiaries, FirstBandLimit);
             var secondBandCount = numberOfSubsidiaries > SecondBandLimit ? SecondBandSize : Math.Max(0, numberOfSubsidiaries - FirstBandLimit);
@@ -57,7 +57,7 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             return (firstBandCount, secondBandCount, thirdBandCount);
         }
 
-        private void AddFeeBreakdown(List<FeeBreakdown> feeBreakdowns, int bandNumber, int unitCount, decimal unitPrice)
+        private static void AddFeeBreakdown(List<FeeBreakdown> feeBreakdowns, int bandNumber, int unitCount, decimal unitPrice)
         {
             feeBreakdowns.Add(new FeeBreakdown
             {
