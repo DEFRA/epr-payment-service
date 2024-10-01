@@ -51,7 +51,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             using (new AssertionScope())
             {
                 strategy.Should().NotBeNull();
-                strategy.Should().BeAssignableTo<IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>>();
+                strategy.Should().BeAssignableTo<IFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             }
         }
 
@@ -63,8 +63,9 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
-                IsOnlineMarketplace = true,
-                Regulator = "GB-ENG"
+                IsProducerOnlineMarketplace = true,
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "A123"
             };
 
             var regulator = RegulatorType.Create("GB-ENG");
@@ -87,8 +88,9 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
-                IsOnlineMarketplace = false,
-                Regulator = "GB-ENG"
+                IsProducerOnlineMarketplace = false,
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act
@@ -105,8 +107,9 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
-                IsOnlineMarketplace = true,
-                Regulator = null! // Regulator is null
+                IsProducerOnlineMarketplace = true,
+                Regulator = null!, // Regulator is null
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act & Assert
@@ -120,8 +123,9 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
-                IsOnlineMarketplace = true,
-                Regulator = string.Empty // Regulator is empty
+                IsProducerOnlineMarketplace = true,
+                Regulator = string.Empty, // Regulator is empty
+                ApplicationReferenceNumber = "A123"
             };
 
             // Act & Assert

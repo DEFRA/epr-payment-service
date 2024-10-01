@@ -20,9 +20,16 @@ namespace EPR.Payment.Service.Validations.RegistrationFees
             .GreaterThan(0)
                 .When(x => string.IsNullOrEmpty(x.ProducerType))
                 .WithMessage(ValidationMessages.NumberOfSubsidiariesRequiredWhenProducerTypeEmpty);
+
             RuleFor(x => x.Regulator)
                 .NotEmpty().WithMessage(ValidationMessages.RegulatorRequired)
                 .Must(RegulatorValidationHelper.IsValidRegulator).WithMessage(ValidationMessages.RegulatorInvalid);
+
+            RuleFor(x => x.NoOfSubsidiariesOnlineMarketplace)
+                .GreaterThanOrEqualTo(0).WithMessage(ValidationMessages.NoOfSubsidiariesOnlineMarketplaceRange);
+
+            RuleFor(x => x.ApplicationReferenceNumber)
+                .NotEmpty().WithMessage(ValidationMessages.ApplicationReferenceNumberRequired);
         }
     }
 }

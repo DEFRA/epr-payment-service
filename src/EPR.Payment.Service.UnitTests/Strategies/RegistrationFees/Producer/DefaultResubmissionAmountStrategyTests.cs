@@ -52,7 +52,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             using (new AssertionScope())
             {
                 strategy.Should().NotBeNull();
-                strategy.Should().BeAssignableTo<IResubmissionAmountStrategy>();
+                strategy.Should().BeAssignableTo<IResubmissionAmountStrategy<RegulatorDto, decimal>>();
             }
         }
 

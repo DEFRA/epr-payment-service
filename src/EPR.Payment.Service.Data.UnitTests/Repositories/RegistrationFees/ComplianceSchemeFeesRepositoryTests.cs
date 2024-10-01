@@ -85,7 +85,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
         {
             // Arrange
             var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
-            var oldFee = feesMock.Object.First(f => f.SubGroup.Type == ComplianceSchemeConstants.Registration && f.Amount == 1380400m);
+            var oldFee = await feesMock.Object.FirstAsync(f => f.SubGroup.Type == ComplianceSchemeConstants.Registration && f.Amount == 1380400m);
             var newFee = new Common.Data.DataModels.Lookups.RegistrationFees
             {
                 Group = oldFee.Group,
@@ -96,7 +96,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
                 EffectiveTo = DateTime.UtcNow.AddDays(5)
             };
 
-            var updatedFees = feesMock.Object.ToList();
+            var updatedFees = await feesMock.Object.ToListAsync();
             updatedFees.Add(newFee);
 
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees.AsQueryable());
