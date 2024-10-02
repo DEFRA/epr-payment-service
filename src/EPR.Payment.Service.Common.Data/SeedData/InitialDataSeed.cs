@@ -37,7 +37,8 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                new SubGroup { Id = 4, Type = "Online", Description = "Online Market" },
                new SubGroup { Id = 5, Type = "UpTo20", Description = "Up to 20" },
                new SubGroup { Id = 6, Type = "MoreThan20", Description = "More than 20" },
-               new SubGroup { Id = 7, Type = "ReSubmitting", Description = "Re-submitting a report" }
+               new SubGroup { Id = 7, Type = "ReSubmitting", Description = "Re-submitting a report" },
+               new SubGroup { Id = 8, Type = "ProducerLateRegistrationFee", Description = "Producer Late Registration Fee" }
                );
 
             modelBuilder.Entity<Regulator>().HasData(
@@ -95,8 +96,11 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                 new RegistrationFees { Id = 45, GroupId = 5, SubGroupId = 7, RegulatorId = 1, Amount = 71400, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
                 new RegistrationFees { Id = 46, GroupId = 5, SubGroupId = 7, RegulatorId = 2, Amount = 71400, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
                 new RegistrationFees { Id = 47, GroupId = 5, SubGroupId = 7, RegulatorId = 3, Amount = 71400, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
-                new RegistrationFees { Id = 48, GroupId = 5, SubGroupId = 7, RegulatorId = 4, Amount = 71400, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
-
+                new RegistrationFees { Id = 48, GroupId = 5, SubGroupId = 7, RegulatorId = 4, Amount = 71400, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new RegistrationFees { Id = 49, GroupId = 1, SubGroupId = 8, RegulatorId = 1, Amount = 33200, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new RegistrationFees { Id = 50, GroupId = 1, SubGroupId = 8, RegulatorId = 2, Amount = 33200, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new RegistrationFees { Id = 51, GroupId = 1, SubGroupId = 8, RegulatorId = 3, Amount = 33200, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
+                new RegistrationFees { Id = 52, GroupId = 1, SubGroupId = 8, RegulatorId = 4, Amount = 33200, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
                 );
         }
 
