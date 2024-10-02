@@ -793,8 +793,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         new
                         {
                             Id = 8,
-                            Description = "Producer Late Registration Fee",
-                            Type = "ProducerLateRegistrationFee"
+                            Description = "Late Fee",
+                            Type = "LateFee"
                         });
                 });
 

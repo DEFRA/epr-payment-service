@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241002102239_ProducerLateRegistration")]
-    partial class ProducerLateRegistration
+    [Migration("20241002152703_LateFee")]
+    partial class LateFee
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -796,8 +796,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         new
                         {
                             Id = 8,
-                            Description = "Producer Late Registration Fee",
-                            Type = "ProducerLateRegistrationFee"
+                            Description = "Late Fee",
+                            Type = "LateFee"
                         });
                 });
 

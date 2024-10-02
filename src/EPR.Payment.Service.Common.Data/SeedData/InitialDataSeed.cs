@@ -38,7 +38,7 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                new SubGroup { Id = 5, Type = "UpTo20", Description = "Up to 20" },
                new SubGroup { Id = 6, Type = "MoreThan20", Description = "More than 20" },
                new SubGroup { Id = 7, Type = "ReSubmitting", Description = "Re-submitting a report" },
-               new SubGroup { Id = 8, Type = "ProducerLateRegistrationFee", Description = "Producer Late Registration Fee" }
+               new SubGroup { Id = 8, Type = "LateFee", Description = "Late Fee" }
                );
 
             modelBuilder.Entity<Regulator>().HasData(
