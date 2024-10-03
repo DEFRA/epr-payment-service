@@ -78,6 +78,8 @@ namespace EPR.Payment.Service.UnitTests.Middleware
         {
             [FeatureEnabled("MethodFeature")]
             public void MethodWithFeatureEnabledAttribute() { }
+
+
         }
     }
 }
