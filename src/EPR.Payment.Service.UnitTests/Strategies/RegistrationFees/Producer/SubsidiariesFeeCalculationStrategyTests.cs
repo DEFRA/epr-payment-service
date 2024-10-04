@@ -57,6 +57,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 NumberOfSubsidiaries = 50,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
@@ -90,6 +91,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 NumberOfSubsidiaries = 50,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
@@ -127,6 +129,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 NumberOfSubsidiaries = 101,
                 Regulator = "GB-ENG",
                 NoOfSubsidiariesOnlineMarketplace = 0,
@@ -163,6 +166,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 NumberOfSubsidiaries = 101,
                 Regulator = "GB-ENG",
                 NoOfSubsidiariesOnlineMarketplace = 2,
@@ -203,6 +207,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 NumberOfSubsidiaries = 0,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123"
@@ -224,6 +229,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
                 Regulator = null!,
                 ApplicationReferenceNumber = "A123"
@@ -242,6 +248,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123"
@@ -271,6 +278,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
                 Regulator = "GB-ENG",
                 NoOfSubsidiariesOnlineMarketplace = 2,
