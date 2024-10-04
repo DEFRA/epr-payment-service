@@ -13,17 +13,20 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
         private readonly ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown> _subsidiariesFeeCalculationStrategy;
         private readonly IValidator<ProducerRegistrationFeesRequestDto> _validator;
         private readonly IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _onlineMarketCalculationStrategy;
+        private readonly ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _lateFeeCalculationStrategy;
 
         public ProducerFeesCalculatorService(
             IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> baseFeeCalculationStrategy,
             ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown> subsidiariesFeeCalculationStrategy,
             IValidator<ProducerRegistrationFeesRequestDto> validator,
-            IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> onlineMarketCalculationStrategy)
+            IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> onlineMarketCalculationStrategy,
+            ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> lateFeeCalculationStrategy)
         {
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _onlineMarketCalculationStrategy = onlineMarketCalculationStrategy ?? throw new ArgumentNullException(nameof(onlineMarketCalculationStrategy));
+            _lateFeeCalculationStrategy = lateFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(lateFeeCalculationStrategy));
         }
 
         public async Task<RegistrationFeesResponseDto> CalculateFeesAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
@@ -36,11 +39,12 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
                 {
                     ProducerRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
                     ProducerOnlineMarketPlaceFee = await _onlineMarketCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
+                    ProducerLateRegistrationFee = await _lateFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
                     SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken)
                 };
 
                 response.SubsidiariesFee = response.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + response.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
-                response.TotalFee = response.ProducerRegistrationFee + response.ProducerOnlineMarketPlaceFee + response.SubsidiariesFee;
+                response.TotalFee = response.ProducerRegistrationFee + response.ProducerOnlineMarketPlaceFee + response.SubsidiariesFee + response.ProducerLateRegistrationFee ;
                 response.PreviousPayment = 0;// TODO: This will not be 0 but calculated once the database schema is changes are ready
                 response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
 

@@ -12,6 +12,8 @@
 
         public bool IsProducerOnlineMarketplace { get; set; } // True or False
 
+        public bool IsLateFeeApplicable { get; set; } // True or False
+
         public required string ApplicationReferenceNumber { get; set; }
     }
 }
