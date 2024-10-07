@@ -122,7 +122,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>? lateFeeCalculationStrategy = null;
 
             // Act
-            Action act = () => new ProducerFeesCalculatorService(
+            Func<ProducerFeesCalculatorService> servie = () => new ProducerFeesCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
@@ -130,7 +130,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 lateFeeCalculationStrategy!);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'lateFeeCalculationStrategy')");
+            servie.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'lateFeeCalculationStrategy')");
         }
 
         [TestMethod]
