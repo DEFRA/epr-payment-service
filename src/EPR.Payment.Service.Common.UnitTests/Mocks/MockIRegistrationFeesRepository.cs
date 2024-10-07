@@ -129,8 +129,8 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
             new Common.Data.DataModels.Lookups.RegistrationFees
             {
                 Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
-                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type=SubGroupTypeConstants.LateFee, Description = "Late Fee" },
-                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.LateFee, Description = "Late Fee" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
                 Amount = 33200m, // £332 represented in pence (33200 pence)
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days

@@ -44,7 +44,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
                 };
 
                 response.SubsidiariesFee = response.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + response.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
-                response.TotalFee = response.ProducerRegistrationFee + response.ProducerOnlineMarketPlaceFee + response.SubsidiariesFee + response.ProducerLateRegistrationFee ;
+                response.TotalFee = response.ProducerRegistrationFee + response.ProducerOnlineMarketPlaceFee + response.SubsidiariesFee + response.ProducerLateRegistrationFee;
                 response.PreviousPayment = 0;// TODO: This will not be 0 but calculated once the database schema is changes are ready
                 response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
 

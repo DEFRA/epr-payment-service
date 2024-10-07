@@ -116,6 +116,24 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         }
 
         [TestMethod]
+        public void Constructor_WhenLateFeeCalculationStrategyIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>? lateFeeCalculationStrategy = null;
+
+            // Act
+            Action act = () => new ProducerFeesCalculatorService(
+                _baseFeeCalculationStrategyMock.Object,
+                _subsidiariesFeeCalculationStrategyMock.Object,
+                _validatorMock.Object,
+                _onlineMarketCalculationStrategyMock.Object!,
+                lateFeeCalculationStrategy!);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'lateFeeCalculationStrategyMock')");
+        }
+
+        [TestMethod]
         public void Constructor_WhenAllDependenciesAreNotNull_ShouldInitializeProducerFeesCalculatorService()
         {
             // Act
@@ -144,7 +162,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 NumberOfSubsidiaries = 50,
                 Regulator = "GB-ENG",
                 NoOfSubsidiariesOnlineMarketplace = 5,
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -186,7 +205,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 NumberOfSubsidiaries = 50,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                IsProducerOnlineMarketplace = true
+                IsProducerOnlineMarketplace = true,
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -225,7 +245,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -264,7 +285,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 NumberOfSubsidiaries = 10,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                IsProducerOnlineMarketplace = true
+                IsProducerOnlineMarketplace = true,
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -303,7 +325,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 ProducerType = "",// ProducerType is empty to indicate no base fee
                 NumberOfSubsidiaries = 50,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -343,7 +366,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 NumberOfSubsidiaries = 50,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                IsProducerOnlineMarketplace = true
+                IsProducerOnlineMarketplace = true,
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -382,7 +406,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 ProducerType = "Small",
                 NumberOfSubsidiaries = 25,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -422,7 +447,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 NumberOfSubsidiaries = 25,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                IsProducerOnlineMarketplace = true
+                IsProducerOnlineMarketplace = true,
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -461,7 +487,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 ProducerType = "Small",
                 NumberOfSubsidiaries = 20,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                IsLateFeeApplicable = false
             };
 
             request.ProducerType = "Small";
@@ -505,7 +532,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 NumberOfSubsidiaries = 20,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                IsProducerOnlineMarketplace = true
+                IsProducerOnlineMarketplace = true,
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -544,7 +572,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 0,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -585,7 +614,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 NumberOfSubsidiaries = 0,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                IsProducerOnlineMarketplace = true
+                IsProducerOnlineMarketplace = true,
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -671,7 +701,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                IsLateFeeApplicable = false
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
