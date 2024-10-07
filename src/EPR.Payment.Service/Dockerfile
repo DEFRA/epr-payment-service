@@ -23,9 +23,9 @@ COPY ["EPR.Payment.Service.Common/EPR.Payment.Service.Common.csproj", "EPR.Payme
 COPY ["EPR.Payment.Service.Common.Data/EPR.Payment.Service.Common.Data.csproj", "EPR.Payment.Service.Common.Data/"]
 RUN dotnet restore "EPR.Payment.Service/EPR.Payment.Service.csproj"
 
-COPY --chown=dotnet:dotnet EPR.Payment.Service/. ./EPR.Payment.Service/.
-COPY --chown=dotnet:dotnet EPR.Payment.Service.Common/. ./EPR.Payment.Service.Common/.
-COPY --chown=dotnet:dotnet EPR.Payment.Service.Common.Data/. ./EPR.Payment.Service.Common.Data/.
+COPY EPR.Payment.Service/. ./EPR.Payment.Service/.
+COPY EPR.Payment.Service.Common/. ./EPR.Payment.Service.Common/.
+COPY EPR.Payment.Service.Common.Data/. ./EPR.Payment.Service.Common.Data/.
 
 WORKDIR "/src/EPR.Payment.Service"
 RUN dotnet build "EPR.Payment.Service.csproj" -c Release /p:AzureBuild=true -o /app/build
