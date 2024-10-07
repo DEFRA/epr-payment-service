@@ -2,9 +2,9 @@
 {
     public static class ValidationMessages
     {
-        public const string ProducerTypeInvalid = "ProducerType must be one of the following: ";
+        public const string ProducerTypeInvalid = "Producer Type must be one of the following: ";
         public const string NumberOfSubsidiariesRange = "Number of subsidiaries must be greater than or equal to 0";
-        public const string NumberOfSubsidiariesRequiredWhenProducerTypeEmpty = "Number of subsidiaries must be greater than 0 when ProducerType is empty.";
+        public const string NumberOfOMPSubsidiariesLessThanOrEqualToNumberOfSubsidiaries = "Number of online marketplace subsidiaries must be less than or equal to number of subsidiaries";
         public const string RegulatorRequired = "Regulator is required.";
         public const string RegulatorInvalid = "Invalid Regulator.";
         public const string ApplicationReferenceNumberRequired = "Application Reference Number is required.";

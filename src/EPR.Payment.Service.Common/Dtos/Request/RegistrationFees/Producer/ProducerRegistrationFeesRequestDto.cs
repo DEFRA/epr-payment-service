@@ -2,7 +2,7 @@
 {
     public class ProducerRegistrationFeesRequestDto
     {
-        public string ProducerType { get; set; } = string.Empty; // "large" or "small", case insensitive, empty indicates no base fee
+        public required string ProducerType { get; set; } // "large" or "small", case insensitive, cannot be an empty string
 
         public int NumberOfSubsidiaries { get; set; } // Any integer >= 0
 
