@@ -17,7 +17,7 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
 
         public async Task<decimal> CalculateFeeAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
         {
-            // If Online Market is false, return zero
+            // If Late fee is false, return zero
             if (!request.IsLateFeeApplicable)
                 return 0m;
 

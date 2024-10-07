@@ -871,7 +871,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             var futureFee = new Common.Data.DataModels.Lookups.RegistrationFees
             {
                 Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
-                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.OnlineMarket, Description = "Online Market" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.LateFee, Description = "Late Fee" },
                 Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG" },
                 Amount = 257900m,
                 EffectiveFrom = DateTime.UtcNow.AddDays(1),
@@ -898,7 +898,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             var expiredFee = new Common.Data.DataModels.Lookups.RegistrationFees
             {
                 Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
-                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.OnlineMarket, Description = "Online Market" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.LateFee, Description = "Late Fee" },
                 Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG" },
                 Amount = 257900m,
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10),
