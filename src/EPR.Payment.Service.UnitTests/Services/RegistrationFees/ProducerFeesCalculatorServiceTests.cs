@@ -130,7 +130,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
                 lateFeeCalculationStrategy!);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'lateFeeCalculationStrategyMock')");
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'lateFeeCalculationStrategy')");
         }
 
         [TestMethod]
