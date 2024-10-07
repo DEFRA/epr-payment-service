@@ -31,7 +31,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             IProducerFeesRepository? nullRepository = null;
 
             // Act
-            Action act = () => new LateFeeCalculationStrategy(nullRepository!);
+            Func<LateFeeCalculationStrategy> act = () => new LateFeeCalculationStrategy(nullRepository!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
