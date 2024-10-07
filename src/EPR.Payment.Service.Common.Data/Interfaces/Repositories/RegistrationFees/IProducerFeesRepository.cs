@@ -2,17 +2,9 @@
 
 namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees
 {
-    public interface IProducerFeesRepository
+    public interface IProducerFeesRepository : IFeeRepository
     {
         Task<decimal> GetBaseFeeAsync(string producer, RegulatorType regulator, CancellationToken cancellationToken);
-
-        Task<decimal> GetFirstBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
-
-        Task<decimal> GetSecondBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
-
-        Task<decimal> GetThirdBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
-
-        Task<decimal> GetOnlineMarketFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
 
         Task<decimal> GetResubmissionAsync(RegulatorType regulator, CancellationToken cancellationToken);
     }

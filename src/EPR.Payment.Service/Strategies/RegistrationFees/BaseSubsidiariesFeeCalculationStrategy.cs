@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
 
@@ -6,15 +7,37 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees
 {
     public abstract class BaseSubsidiariesFeeCalculationStrategy<TRequestDto> : IBaseSubsidiariesFeeCalculationStrategy<TRequestDto, SubsidiariesFeeBreakdown>
     {
+        private readonly IFeeRepository _feesRepository;
+
+        protected BaseSubsidiariesFeeCalculationStrategy(IFeeRepository feesRepository)
+        {
+            _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
+        }
+
         private const int FirstBandLimit = 20;
         private const int SecondBandLimit = 100;
         private const int SecondBandSize = 80;
 
 
-        protected abstract Task<decimal> GetFirstBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
-        protected abstract Task<decimal> GetSecondBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
-        protected abstract Task<decimal> GetThirdBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
-        protected abstract Task<decimal> GetOnlineMarketFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
+        protected virtual Task<decimal> GetFirstBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        {
+            return _feesRepository.GetFirstBandFeeAsync(regulator, cancellationToken);
+        }
+
+        protected virtual Task<decimal> GetSecondBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        {
+            return _feesRepository.GetSecondBandFeeAsync(regulator, cancellationToken);
+        }
+
+        protected virtual Task<decimal> GetThirdBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        {
+            return _feesRepository.GetThirdBandFeeAsync(regulator, cancellationToken);
+        }
+
+        protected virtual Task<decimal> GetOnlineMarketFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        {
+            return _feesRepository.GetOnlineMarketFeeAsync(regulator, cancellationToken);
+        }
 
         protected abstract int GetNoOfSubsidiaries(TRequestDto request);
         protected abstract int GetNoOfOMPSubsidiaries(TRequestDto request);
