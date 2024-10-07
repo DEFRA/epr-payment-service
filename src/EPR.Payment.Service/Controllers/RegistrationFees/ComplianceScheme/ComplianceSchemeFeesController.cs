@@ -39,7 +39,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme
         [ProducesResponseType(typeof(ComplianceSchemeFeesResponseDto), 200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [FeatureGate("EnableComplianceSchemeMembersFees")]
+        [FeatureGate("EnableComplianceSchemeFees")]
         public async Task<ActionResult<ComplianceSchemeFeesResponseDto>> CalculateFeesAsync([FromBody] ComplianceSchemeFeesRequestDto complianceSchemeFeesRequestDto, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(complianceSchemeFeesRequestDto);
