@@ -3,9 +3,9 @@ using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
-using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
-using EPR.Payment.Service.Controllers;
+using EPR.Payment.Service.Controllers.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Controllers
+namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
 {
     [TestClass]
     public class ProducerFeesControllerTests

@@ -1,14 +1,14 @@
 ﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 
-namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
+namespace EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme
 {
-    public class SubsidiariesFeeCalculationStrategy : BaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>
+    public class CSSubsidiariesFeeCalculationStrategy : BaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto>
     {
-        private readonly IProducerFeesRepository _feesRepository;
+        private readonly IComplianceSchemeFeesRepository _feesRepository;
 
-        public SubsidiariesFeeCalculationStrategy(IProducerFeesRepository feesRepository)
+        public CSSubsidiariesFeeCalculationStrategy(IComplianceSchemeFeesRepository feesRepository)
         {
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
@@ -32,19 +32,19 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             return await _feesRepository.GetOnlineMarketFeeAsync(regulator, cancellationToken);
         }
 
-        protected override int GetNoOfOMPSubsidiaries(ProducerRegistrationFeesRequestDto request)
+        protected override int GetNoOfOMPSubsidiaries(ComplianceSchemeMemberWithRegulatorDto request)
         {
             return request.NoOfSubsidiariesOnlineMarketplace;
         }
 
-        protected override int GetNoOfSubsidiaries(ProducerRegistrationFeesRequestDto request)
+        protected override int GetNoOfSubsidiaries(ComplianceSchemeMemberWithRegulatorDto request)
         {
             return request.NumberOfSubsidiaries;
         }
 
-        protected override RegulatorType GetRegulator(ProducerRegistrationFeesRequestDto request)
+        protected override RegulatorType GetRegulator(ComplianceSchemeMemberWithRegulatorDto request)
         {
-            return RegulatorType.Create(request.Regulator);
+            return request.Regulator;
         }
     }
 }

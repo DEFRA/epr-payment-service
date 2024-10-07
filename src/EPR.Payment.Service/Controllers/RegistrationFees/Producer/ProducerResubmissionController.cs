@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace EPR.Payment.Service.Controllers.RegistrationFees
+namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
 {
     [ApiVersion(1)]
     [ApiController]

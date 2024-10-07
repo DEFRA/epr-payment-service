@@ -4,8 +4,10 @@ using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Data.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
@@ -13,8 +15,10 @@ using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.Payments;
 using EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.RegistrationFees;
 using EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
 using Microsoft.EntityFrameworkCore;
@@ -31,12 +35,15 @@ namespace EPR.Payment.Service.Extension
 
             // Register the specific implementations of IFeeCalculationStrategy for Producer
             services.AddScoped<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, BaseFeeCalculationStrategy>();
-            services.AddScoped<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>, SubsidiariesFeeCalculationStrategy >();
+            services.AddScoped<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>, SubsidiariesFeeCalculationStrategy >();
             services.AddScoped<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, OnlineMarketCalculationStrategy>();
             services.AddScoped<IResubmissionAmountStrategy<RegulatorDto, decimal>, DefaultResubmissionAmountStrategy>();
 
             // Register the specific implementations of IFeeCalculationStrategy for Compliance Scheme
-            services.AddScoped<IComplianceSchemeBaseFeeCalculationStrategy<RegulatorType, decimal>, ComplianceSchemeBaseFeeCalculationStrategy>();
+            services.AddScoped<ICSBaseFeeCalculationStrategy<RegulatorType, decimal>, CSBaseFeeCalculationStrategy>();
+            services.AddScoped<ICSMemberCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSMemberCalculationStrategy>();
+            services.AddScoped<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSOnlineMarketCalculationStrategy>();
+            services.AddScoped<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>, CSSubsidiariesFeeCalculationStrategy>();
 
             // Register repositories
             services.AddScoped<IProducerFeesRepository, ProducerFeesRepository>();
@@ -45,7 +52,7 @@ namespace EPR.Payment.Service.Extension
 
             // Register the main services
             services.AddScoped<IProducerFeesCalculatorService, ProducerFeesCalculatorService>();
-            services.AddScoped<IComplianceSchemeBaseFeeService, ComplianceSchemeBaseFeeService>();
+            services.AddScoped<IComplianceSchemeCalculatorService, ComplianceSchemeCalculatorService>();
             services.AddScoped<IProducerResubmissionService, ProducerResubmissionService>();
             services.AddScoped<IPaymentsService, PaymentsService>();
 

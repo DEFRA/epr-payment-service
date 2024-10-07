@@ -9,5 +9,6 @@
 
         //Compliance Scheme
         public const string ComplianceScheme = "ComplianceScheme";
+        public const string ComplianceSchemeSubsidiaries = "ComplianceSchemeSubsidiaries";
     }
 }

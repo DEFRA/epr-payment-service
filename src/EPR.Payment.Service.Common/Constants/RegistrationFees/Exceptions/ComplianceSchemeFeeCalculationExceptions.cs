@@ -2,12 +2,11 @@
 {
     public static class ComplianceSchemeFeeCalculationExceptions
     {
-        public const string RegulatorMissing = "The regulator identifier is missing.";
-        public const string BaseFeeCalculationError = "An error occurred while calculating the compliance scheme base fee.";
-        public const string ProducerAndSubsidiaryFeeCalculationError = "An error occurred while calculating the compliance scheme producer and subsidiary fees.";
-        public const string RetrievalError = "An error occurred while retrieving the compliance scheme base fee.";
-        public const string InvalidComplianceSchemeOrRegulatorError = "Base fee for compliance scheme with regulator '{0}' not found.";
-        public const string InvalidRegulatorError = "Base fee for compliance scheme with regulator '{0}' not found.";
-        public const string BaseFeeCalculationInvalidOperation = "Error calculating compliance scheme base fee.";
+        public const string InvalidComplianceSchemeOrRegulatorError = "Registration fee for compliance scheme with regulator '{0}' not found.";
+        public const string InvalidRegulatorError = "Fee for compliance scheme with regulator '{0}' not found.";
+        public const string CalculationError = "An error occurred while calculating the compliance scheme fees.";
+        public const string InvalidOnlineMarketPlaceError = "Compliance scheme Online Marketplace Fee record not found for regulator";
+        public const string InvalidSubsidiariesFeeOrRegulatorError = "Subsidiaries fee for '{0}' and regulator '{1}' not found.";
+        public const string InvalidMemberTypeOrRegulatorError = "Fee for Member type '{0}' and regulator '{1}' not found.";
     }
 }
