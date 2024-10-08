@@ -1,15 +1,14 @@
 ﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
-using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme;
 
 namespace EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme
 {
-    public class CSOnlineMarketCalculationStrategy : ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>
+    public class CSOMPFeeCalculationStrategy : ICSOMPFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>
     {
         private readonly IComplianceSchemeFeesRepository _feesRepository;
 
-        public CSOnlineMarketCalculationStrategy(IComplianceSchemeFeesRepository feesRepository)
+        public CSOMPFeeCalculationStrategy(IComplianceSchemeFeesRepository feesRepository)
         {
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }

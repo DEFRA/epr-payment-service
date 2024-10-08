@@ -162,36 +162,14 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             }
         }
 
-        [TestMethod]
-        [AutoMoqData]
-        public async Task CalculateFeesAsync_WhenCalculationThrowsException_ReturnsInternalServerError(
-            [Frozen] ProducerRegistrationFeesRequestDto request)
-        {
-            // Arrange
-            var innerExceptionMessage = "Inner exception message";
-            var ex = new Exception("Outer exception", new Exception(innerExceptionMessage));
-            _producerFeesCalculatorServiceMock.Setup(i => i.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                               .ThrowsAsync(ex);
-
-            // Act
-            var result = await _controller.CalculateFeesAsync(request, CancellationToken.None);
-
-            // Assert
-            using (new AssertionScope())
-            {
-                result.Should().NotBeNull();
-                result.Result.Should().BeOfType<ObjectResult>().Which.Value.Should().Be($"{ProducerFeesCalculationExceptions.FeeCalculationError}: {innerExceptionMessage}");
-            }
-        }
-
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_WhenCalculationThrowsExceptionnWithoutInnerException_ShouldReturnInternalServerError(
+        public async Task CalculateFeesAsync_WhenCalculationThrowsException_ShouldReturnInternalServerError(
               [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
-            var exceptionMessage = "Outer exception";
+            var exceptionMessage = "exception";
             _producerFeesCalculatorServiceMock.Setup(i => i.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                                .ThrowsAsync(new Exception(exceptionMessage));
 

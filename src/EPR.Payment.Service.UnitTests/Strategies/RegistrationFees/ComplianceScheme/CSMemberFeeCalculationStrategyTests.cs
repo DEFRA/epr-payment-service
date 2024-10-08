@@ -14,7 +14,7 @@ using Moq;
 namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceScheme
 {
     [TestClass]
-    public class CSMemberCalculationStrategyTests
+    public class CSMemberFeeCalculationStrategyTests
     {
         private IFixture _fixture = null!;
 
@@ -31,7 +31,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             IComplianceSchemeFeesRepository? nullRepository = null;
 
             // Act
-            Action act = () => new CSMemberCalculationStrategy(nullRepository!);
+            Action act = () => new CSMemberFeeCalculationStrategy(nullRepository!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -45,20 +45,20 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             var feesRepositoryMock = _fixture.Create<Mock<IComplianceSchemeFeesRepository>>();
 
             // Act
-            var strategy = new CSMemberCalculationStrategy(feesRepositoryMock.Object);
+            var strategy = new CSMemberFeeCalculationStrategy(feesRepositoryMock.Object);
 
             // Assert
             using (new AssertionScope())
             {
                 strategy.Should().NotBeNull();
-                strategy.Should().BeAssignableTo<ICSMemberCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
+                strategy.Should().BeAssignableTo<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             }
         }
 
         [TestMethod, AutoMoqData]
         public async Task CalculateFeeAsync_WhenValidRequest_ReturnsMemberFee(
             [Frozen] Mock<IComplianceSchemeFeesRepository> feesRepositoryMock,
-            CSMemberCalculationStrategy strategy)
+            CSMemberFeeCalculationStrategy strategy)
         {
             // Arrange
             var request = new ComplianceSchemeMemberWithRegulatorDto { MemberType = "Large", Regulator = RegulatorType.GBEng };

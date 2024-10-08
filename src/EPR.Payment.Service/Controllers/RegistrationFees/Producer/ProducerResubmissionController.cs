@@ -56,7 +56,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{ProducerResubmissionExceptions.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ProducerResubmissionExceptions.Status500InternalServerError}: {ex.Message}");
             }
         }
     }

@@ -74,7 +74,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{ComplianceSchemeFeeCalculationExceptions.CalculationError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ComplianceSchemeFeeCalculationExceptions.CalculationError}: {ex.Message}");
             }
         }
     }

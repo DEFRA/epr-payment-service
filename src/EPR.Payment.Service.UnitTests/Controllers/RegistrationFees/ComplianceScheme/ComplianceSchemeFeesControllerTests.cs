@@ -176,34 +176,13 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             }
         }
 
-        [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenCalculationThrowsException_ReturnsInternalServerError(
-            [Frozen] ComplianceSchemeFeesRequestDto request)
-        {
-            // Arrange
-            var innerExceptionMessage = "Inner exception message";
-            var ex = new Exception("Outer exception", new Exception(innerExceptionMessage));
-            _complianceSchemeCalculatorServiceMock.Setup(i => i.CalculateFeesAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                               .ThrowsAsync(ex);
-
-            // Act
-            var result = await _controller.CalculateFeesAsync(request, CancellationToken.None);
-
-            // Assert
-            using (new AssertionScope())
-            {
-                result.Should().NotBeNull();
-                result.Result.Should().BeOfType<ObjectResult>().Which.Value.Should().Be($"{ComplianceSchemeFeeCalculationExceptions.CalculationError}: {innerExceptionMessage}");
-            }
-        }
-
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenCalculationThrowsExceptionnWithoutInnerException_ShouldReturnInternalServerError(
+        public async Task CalculateFeesAsync_WhenCalculationThrowsException_ShouldReturnInternalServerError(
               [Frozen] ComplianceSchemeFeesRequestDto request)
         {
             // Arrange
-            var exceptionMessage = "Outer exception";
+            var exceptionMessage = "exception";
             _complianceSchemeCalculatorServiceMock.Setup(i => i.CalculateFeesAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
                                .ThrowsAsync(new Exception(exceptionMessage));
 
