@@ -30,7 +30,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             return fee;
         }
 
-        protected void ValidateFee(decimal fee, string errorMessage)
+        protected static void ValidateFee(decimal fee, string errorMessage)
         {
             if (fee == 0)
             {
