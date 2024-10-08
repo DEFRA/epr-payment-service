@@ -110,7 +110,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                ComplianceSchemeMember = new List<ComplianceSchemeMemberDto>
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
                 {
@@ -176,7 +176,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                ComplianceSchemeMember = new List<ComplianceSchemeMemberDto>
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
                 {
@@ -242,7 +242,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                ComplianceSchemeMember = new List<ComplianceSchemeMemberDto>
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
                     {
@@ -342,7 +342,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                ComplianceSchemeMember = new List<ComplianceSchemeMemberDto>
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
                     {

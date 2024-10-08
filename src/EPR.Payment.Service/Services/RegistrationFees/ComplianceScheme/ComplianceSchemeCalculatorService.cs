@@ -40,7 +40,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                     ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>()
                 };
 
-                foreach (var item in request.ComplianceSchemeMember)
+                foreach (var item in request.ComplianceSchemeMembers)
                 {
                     var complianceSchemeMemberWithRegulatorDto = new ComplianceSchemeMemberWithRegulatorDto
                     {

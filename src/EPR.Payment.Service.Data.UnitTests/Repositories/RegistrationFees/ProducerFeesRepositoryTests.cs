@@ -1,4 +1,5 @@
 ﻿using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
@@ -224,7 +225,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Producer Online Market Fee record not found for regulator: GB-ENG");
+                .WithMessage(string.Format(ProducerFeesRepositoryConstants.InvalidOnlineMarketRegulatorError, "GB-ENG"));
         }
 
         [TestMethod]
@@ -250,7 +251,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Producer Online Market Fee record not found for regulator: GB-ENG");
+                .WithMessage(string.Format(ProducerFeesRepositoryConstants.InvalidOnlineMarketRegulatorError, "GB-ENG"));
         }
 
         [TestMethod]
@@ -278,7 +279,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Producer Online Market Fee record not found for regulator: GB-ENG");
+                .WithMessage(string.Format(ProducerFeesRepositoryConstants.InvalidOnlineMarketRegulatorError, "GB-ENG"));
         }
 
         [TestMethod]

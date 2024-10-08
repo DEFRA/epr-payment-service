@@ -15,7 +15,7 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
             RuleFor(x => x.ApplicationReferenceNumber)
                     .NotEmpty().WithMessage(ValidationMessages.ApplicationReferenceNumberRequired);
 
-            RuleForEach(x => x.ComplianceSchemeMember)
+            RuleForEach(x => x.ComplianceSchemeMembers)
             .SetValidator(new ComplianceSchemeMemberDtoValidator())
             .WithMessage(ValidationMessages.InvalidComplianceSchemeMember);
         }

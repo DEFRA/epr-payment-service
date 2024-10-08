@@ -435,7 +435,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage($"{ComplianceSchemeFeeCalculationExceptions.InvalidOnlineMarketPlaceError}: GB-ENG");
+                .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidOnlineMarketPlaceError, "GB-ENG"));
         }
 
         [TestMethod, AutoMoqData]
@@ -460,7 +460,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage($"{ComplianceSchemeFeeCalculationExceptions.InvalidOnlineMarketPlaceError}: GB-ENG");
+                .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidOnlineMarketPlaceError, "GB-ENG"));
         }
 
         [TestMethod, AutoMoqData]
@@ -487,7 +487,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage($"{ComplianceSchemeFeeCalculationExceptions.InvalidOnlineMarketPlaceError}: GB-ENG");
+                .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidOnlineMarketPlaceError, "GB-ENG"));
         }
 
         [TestMethod, AutoMoqData]

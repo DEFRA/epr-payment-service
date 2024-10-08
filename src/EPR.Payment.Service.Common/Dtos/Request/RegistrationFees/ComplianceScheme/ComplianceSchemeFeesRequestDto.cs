@@ -4,7 +4,7 @@
     {
         public required string Regulator { get; set; } // "GB-ENG", "GB-SCT", etc.
         public required string ApplicationReferenceNumber { get; set; }
-        public List<ComplianceSchemeMemberDto> ComplianceSchemeMember { get; set; } = new();
+        public List<ComplianceSchemeMemberDto> ComplianceSchemeMembers { get; set; } = new();
     }
 
     public class ComplianceSchemeMemberDto

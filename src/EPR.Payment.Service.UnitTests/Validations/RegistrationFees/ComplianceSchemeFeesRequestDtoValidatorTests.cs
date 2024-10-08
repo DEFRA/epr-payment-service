@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             {
                 Regulator = "",
                 ApplicationReferenceNumber = "Ref123",
-                ComplianceSchemeMember = new List<ComplianceSchemeMemberDto>()
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
             };
 
             // Act
@@ -44,7 +44,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             {
                 Regulator = "ValidRegulator",
                 ApplicationReferenceNumber = "",
-                ComplianceSchemeMember = new List<ComplianceSchemeMemberDto>()
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
             };
 
             // Act
@@ -63,7 +63,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             {
                 Regulator = "ValidRegulator",
                 ApplicationReferenceNumber = "Ref123",
-                ComplianceSchemeMember = new List<ComplianceSchemeMemberDto>
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto { MemberId = 1, MemberType = "Large", NumberOfSubsidiaries = 2, NoOfSubsidiariesOnlineMarketplace = 1 },
                     new ComplianceSchemeMemberDto { MemberId = 0, MemberType = "Small", NumberOfSubsidiaries = -1, NoOfSubsidiariesOnlineMarketplace = 1 }
@@ -74,11 +74,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             var result = _validator.TestValidate(dto);
 
             // Assert
-
-            result.Errors.Should().ContainSingle(e => e.PropertyName == "ComplianceSchemeMember[1].MemberId" && 
+            result.Errors.Should().ContainSingle(e => e.PropertyName == "ComplianceSchemeMembers[1].MemberId" && 
                                    e.ErrorMessage == ValidationMessages.InvalidMemberId);
 
-            result.Errors.Should().ContainSingle(e => e.PropertyName == "ComplianceSchemeMember[1].NumberOfSubsidiaries" && 
+            result.Errors.Should().ContainSingle(e => e.PropertyName == "ComplianceSchemeMembers[1].NumberOfSubsidiaries" && 
                                    e.ErrorMessage == ValidationMessages.NumberOfSubsidiariesRange);
         }
     }
