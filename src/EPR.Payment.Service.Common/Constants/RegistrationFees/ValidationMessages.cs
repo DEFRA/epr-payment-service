@@ -9,5 +9,9 @@
         public const string RegulatorInvalid = "Invalid Regulator.";
         public const string ApplicationReferenceNumberRequired = "Application Reference Number is required.";
         public const string NoOfSubsidiariesOnlineMarketplaceRange = "Number of Subsidiaries with Online Marketplace must be greater than or equal to 0";
+        public const string InvalidComplianceSchemeMember = "Invalid ComplianceSchemeMember entry.";
+        public const string InvalidMemberId = "MemberId must be greater than 0.";
+        public const string MemberTypeRequired = "MemberType is required.";
+        public const string InvalidMemberType = "MemberType must be either 'Large' or 'Small'.";
     }
 }

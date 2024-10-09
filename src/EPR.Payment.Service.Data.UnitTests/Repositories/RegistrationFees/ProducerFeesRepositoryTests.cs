@@ -1,4 +1,5 @@
 ﻿using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
@@ -224,7 +225,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Producer Online Market Fee record not found for regulator: GB-ENG");
+                .WithMessage(string.Format(ProducerFeesRepositoryConstants.InvalidOnlineMarketRegulatorError, "GB-ENG"));
         }
 
         [TestMethod]
@@ -250,7 +251,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Producer Online Market Fee record not found for regulator: GB-ENG");
+                .WithMessage(string.Format(ProducerFeesRepositoryConstants.InvalidOnlineMarketRegulatorError, "GB-ENG"));
         }
 
         [TestMethod]
@@ -278,12 +279,12 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Producer Online Market Fee record not found for regulator: GB-ENG");
+                .WithMessage(string.Format(ProducerFeesRepositoryConstants.InvalidOnlineMarketRegulatorError, "GB-ENG"));
         }
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetFirst20SubsidiariesFeeAsync_ValidInput_ShouldReturnFeePerSubsidiary(
+        public async Task GetFirstBandFeeAsync_ValidInput_ShouldReturnFeePerSubsidiary(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -291,7 +292,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
 
             // Act
-            var result = await _producerFeesRepository.GetFirst20SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(55800m); // £558 represented in pence per subsidiary (55800 pence)
@@ -299,7 +300,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetFirst20SubsidiariesFeeAsync_FutureEffectiveDate_ShouldThrowKeyNotFoundException(
+        public async Task GetFirstBandFeeAsync_FutureEffectiveDate_ShouldThrowKeyNotFoundException(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -316,7 +317,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { futureFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _producerFeesRepository.GetFirst20SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _producerFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -325,7 +326,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetFirst20SubsidiariesFeeAsync_ExpiredEffectiveDate_ShouldThrowKeyNotFoundException(
+        public async Task GetFirstBandFeeAsync_ExpiredEffectiveDate_ShouldThrowKeyNotFoundException(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -342,7 +343,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { expiredFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _producerFeesRepository.GetFirst20SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _producerFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -351,7 +352,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetFirst20SubsidiariesFeeAsync_OverlappingEffectiveDates_ShouldReturnCorrectFee(
+        public async Task GetFirstBandFeeAsync_OverlappingEffectiveDates_ShouldReturnCorrectFee(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -374,7 +375,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees.AsQueryable());
 
             // Act
-            var result = await _producerFeesRepository.GetFirst20SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(60000m); // The most recent valid fee should be returned
@@ -382,7 +383,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetAdditionalUpTo100SubsidiariesFeeAsync_ValidInput_ShouldReturnFeePerSubsidiary(
+        public async Task GetSecondBandFeeAsync_ValidInput_ShouldReturnFeePerSubsidiary(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -391,7 +392,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
 
             // Act
-            var result = await _producerFeesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(14000m); // £140 represented in pence (14000 pence)
@@ -399,7 +400,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetAdditionalUpTo100SubsidiariesFeeAsync_NoValidRecord_ShouldThrowKeyNotFoundException(
+        public async Task GetSecondBandFeeAsync_NoValidRecord_ShouldThrowKeyNotFoundException(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -407,7 +408,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
 
             // Act
-            Func<Task> act = async () => await _producerFeesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _producerFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -416,7 +417,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetAdditionalUpTo100SubsidiariesFeeAsync_FutureEffectiveDate_ShouldThrowKeyNotFoundException(
+        public async Task GetSecondBandFeeAsync_FutureEffectiveDate_ShouldThrowKeyNotFoundException(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -433,7 +434,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { futureFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _producerFeesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _producerFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -442,7 +443,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetAdditionalUpTo100SubsidiariesFeeAsync_ExpiredEffectiveDate_ShouldThrowKeyNotFoundException(
+        public async Task GetSecondBandFeeAsync_ExpiredEffectiveDate_ShouldThrowKeyNotFoundException(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -460,7 +461,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { expiredFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _producerFeesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _producerFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -470,7 +471,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetAdditionalUpTo100SubsidiariesFeeAsync_OverlappingEffectiveDates_ShouldReturnCorrectFee(
+        public async Task GetSecondBandFeeAsync_OverlappingEffectiveDates_ShouldReturnCorrectFee(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -493,7 +494,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees.AsQueryable());
 
             // Act
-            var result = await _producerFeesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(16000m); // The most recent valid fee should be returned
@@ -501,7 +502,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetAdditionalMoreThan100SubsidiariesFeeAsync_ValidInput_ShouldReturnFeePerSubsidiary(
+        public async Task GetThirdBandFeeAsync_ValidInput_ShouldReturnFeePerSubsidiary(
            [Frozen] Mock<IAppDbContext> _dataContextMock,
            [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -510,7 +511,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
 
             // Act
-            var result = await _producerFeesRepository.GetAdditionalMoreThan100SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetThirdBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(1m); 
@@ -519,7 +520,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetAdditionalMoreThan100SubsidiariesFeeAsync_OverlappingEffectiveDates_ShouldReturnCorrectFee(
+        public async Task GetThirdBandFeeAsync_OverlappingEffectiveDates_ShouldReturnCorrectFee(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -542,7 +543,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees.AsQueryable());
 
             // Act
-            var result = await _producerFeesRepository.GetAdditionalMoreThan100SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetThirdBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(1m); // The most recent valid fee should be returned
@@ -631,7 +632,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetFirst20SubsidiariesFeeAsync_OnEffectiveFromDate_ShouldReturnFee(
+        public async Task GetFirstBandFeeAsync_OnEffectiveFromDate_ShouldReturnFee(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -650,7 +651,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _producerFeesRepository.GetFirst20SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(55000m); // Fee should be returned since today matches EffectiveFrom
@@ -658,7 +659,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetFirst20SubsidiariesFeeAsync_OnEffectiveToDate_ShouldReturnFee(
+        public async Task GetFirstBandFeeAsync_OnEffectiveToDate_ShouldReturnFee(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -677,7 +678,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _producerFeesRepository.GetFirst20SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(56000m); // Fee should be returned since today matches EffectiveTo
@@ -685,7 +686,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetFirst20SubsidiariesFeeAsync_FeeActiveForEntireDay_ShouldReturnFee(
+        public async Task GetFirstBandFeeAsync_FeeActiveForEntireDay_ShouldReturnFee(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -704,7 +705,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _producerFeesRepository.GetFirst20SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(57000m); // Fee should be active for the entire day
@@ -712,7 +713,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetAdditionalUpTo100SubsidiariesFeeAsync_OnEffectiveFromDate_ShouldReturnFee(
+        public async Task GetSecondBandFeeAsync_OnEffectiveFromDate_ShouldReturnFee(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -731,7 +732,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _producerFeesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(15000m); // Fee should be returned since today matches EffectiveFrom
@@ -739,7 +740,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetAdditionalUpTo100SubsidiariesFeeAsync_OnEffectiveToDate_ShouldReturnFee(
+        public async Task GetSecondBandFeeAsync_OnEffectiveToDate_ShouldReturnFee(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -758,7 +759,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _producerFeesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(16000m); // Fee should be returned since today matches EffectiveTo
@@ -766,7 +767,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetAdditionalUpTo100SubsidiariesFeeAsync_FeeActiveForEntireDay_ShouldReturnFee(
+        public async Task GetSecondBandFeeAsync_FeeActiveForEntireDay_ShouldReturnFee(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
@@ -785,7 +786,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _producerFeesRepository.GetAdditionalUpTo100SubsidiariesFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _producerFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
 
             // Assert
             result.Should().Be(17000m); // Fee should be active for the entire day
