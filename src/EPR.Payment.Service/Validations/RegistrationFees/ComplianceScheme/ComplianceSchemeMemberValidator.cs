@@ -8,6 +8,8 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
     {
         public ComplianceSchemeMemberDtoValidator()
         {
+            var validMemberTypes = new List<string> { "LARGE", "SMALL" };
+
             RuleFor(x => x.MemberId)
                 .GreaterThan(0)
                 .WithMessage(ValidationMessages.InvalidMemberId);
@@ -15,8 +17,8 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
             RuleFor(x => x.MemberType)
                 .NotEmpty()
                 .WithMessage(ValidationMessages.MemberTypeRequired)
-                .Must(type => type == "Large" || type == "Small")
-                .WithMessage(ValidationMessages.InvalidMemberType);
+                .Must(pt => validMemberTypes.Contains(pt.ToUpper()))
+                .WithMessage(ValidationMessages.InvalidMemberType + string.Join(", ", validMemberTypes));
 
             RuleFor(x => x.NumberOfSubsidiaries)
                 .GreaterThanOrEqualTo(0)

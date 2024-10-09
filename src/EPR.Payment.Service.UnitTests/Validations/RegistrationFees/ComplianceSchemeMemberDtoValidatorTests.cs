@@ -73,7 +73,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.MemberType)
-                  .WithErrorMessage(ValidationMessages.InvalidMemberType);
+                  .WithErrorMessage(ValidationMessages.InvalidMemberType + "LARGE, SMALL");
         }
 
         [TestMethod]

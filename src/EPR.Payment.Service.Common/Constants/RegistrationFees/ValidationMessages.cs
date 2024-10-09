@@ -12,6 +12,6 @@
         public const string InvalidComplianceSchemeMember = "Invalid ComplianceSchemeMember entry.";
         public const string InvalidMemberId = "MemberId must be greater than 0.";
         public const string MemberTypeRequired = "MemberType is required.";
-        public const string InvalidMemberType = "MemberType must be either 'Large' or 'Small'.";
+        public const string InvalidMemberType = "Member Type must be one of the following: ";
     }
 }
