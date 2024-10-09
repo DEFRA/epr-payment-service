@@ -17,7 +17,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
     public class ComplianceSchemeCalculatorServiceTests
     {
         private Mock<ICSBaseFeeCalculationStrategy<RegulatorType, decimal>> _baseFeeCalculationStrategyMock = null!;
-        private Mock<ICSOMPFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeOnlineMarketStrategyMock = null!;
+        private Mock<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeOnlineMarketStrategyMock = null!;
         private Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeMemberStrategyMock = null!;
         private Mock<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>> _subsidiariesFeeCalculationStrategyMock = null!;
         private ComplianceSchemeCalculatorService _service = null!;
@@ -26,7 +26,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public void TestInitialize()
         {
             _baseFeeCalculationStrategyMock = new Mock<ICSBaseFeeCalculationStrategy<RegulatorType, decimal>>();
-            _complianceSchemeOnlineMarketStrategyMock = new Mock<ICSOMPFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
+            _complianceSchemeOnlineMarketStrategyMock = new Mock<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _complianceSchemeMemberStrategyMock = new Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>>();
             _service = new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
@@ -50,7 +50,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public void Constructor_WhenComplianceSchemeOnlineMarketStrategyIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
-            ICSOMPFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>? complianceSchemeOnlineMarketStrategy = null;
+            ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>? complianceSchemeOnlineMarketStrategy = null;
 
             // Act
             Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, complianceSchemeOnlineMarketStrategy!, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);

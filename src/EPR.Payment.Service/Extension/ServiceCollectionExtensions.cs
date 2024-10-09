@@ -42,7 +42,7 @@ namespace EPR.Payment.Service.Extension
             // Register the specific implementations of IFeeCalculationStrategy for Compliance Scheme
             services.AddScoped<ICSBaseFeeCalculationStrategy<RegulatorType, decimal>, CSBaseFeeCalculationStrategy>();
             services.AddScoped<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSMemberFeeCalculationStrategy>();
-            services.AddScoped<ICSOMPFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSOMPFeeCalculationStrategy>();
+            services.AddScoped<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSOnlineMarketCalculationStrategy>();
             services.AddScoped<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>, CSSubsidiariesFeeCalculationStrategy>();
 
             // Register repositories

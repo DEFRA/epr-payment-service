@@ -14,7 +14,7 @@ using Moq;
 namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceScheme
 {
     [TestClass]
-    public class CSOMPFeeCalculationStrategyTests
+    public class CSOnlineMarketCalculationStrategyTests
     {
         private IFixture _fixture = null!;
 
@@ -31,7 +31,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             IComplianceSchemeFeesRepository? nullRepository = null;
 
             // Act
-            Action act = () => new CSOMPFeeCalculationStrategy(nullRepository!);
+            Action act = () => new CSOnlineMarketCalculationStrategy(nullRepository!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -45,7 +45,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             var feesRepositoryMock = _fixture.Create<Mock<IComplianceSchemeFeesRepository>>();
 
             // Act
-            var strategy = new CSOMPFeeCalculationStrategy(feesRepositoryMock.Object);
+            var strategy = new CSOnlineMarketCalculationStrategy(feesRepositoryMock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -58,7 +58,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
         [TestMethod, AutoMoqData]
         public async Task CalculateFeeAsync_WhenOnlineMarketplaceIsTrueMarketWithValidRegulator_ReturnsOnlineMarketFee(
             [Frozen] Mock<IComplianceSchemeFeesRepository> feesRepositoryMock,
-            CSOMPFeeCalculationStrategy strategy)
+            CSOnlineMarketCalculationStrategy strategy)
         {
             // Arrange
             var request = new ComplianceSchemeMemberWithRegulatorDto
@@ -80,7 +80,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
 
         [TestMethod, AutoMoqData]
         public async Task CalculateFeeAsync_WhenOnlineMarketplaceIsFalse_ReturnsZeroFee(
-            CSOMPFeeCalculationStrategy strategy)
+            CSOnlineMarketCalculationStrategy strategy)
         {
             // Arrange
             var request = new ComplianceSchemeMemberWithRegulatorDto

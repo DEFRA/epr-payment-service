@@ -4,11 +4,11 @@ using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceSchem
 
 namespace EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme
 {
-    public class CSOMPFeeCalculationStrategy : ICSOMPFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>
+    public class CSOnlineMarketCalculationStrategy : ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>
     {
         private readonly IComplianceSchemeFeesRepository _feesRepository;
 
-        public CSOMPFeeCalculationStrategy(IComplianceSchemeFeesRepository feesRepository)
+        public CSOnlineMarketCalculationStrategy(IComplianceSchemeFeesRepository feesRepository)
         {
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
