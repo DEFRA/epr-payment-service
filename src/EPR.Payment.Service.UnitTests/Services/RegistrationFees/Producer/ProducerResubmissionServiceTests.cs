@@ -10,7 +10,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
+namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
 {
     [TestClass]
     public class ProducerResubmissionServiceTests

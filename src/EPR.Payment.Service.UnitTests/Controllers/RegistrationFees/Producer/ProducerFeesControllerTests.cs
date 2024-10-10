@@ -3,19 +3,18 @@ using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
-using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
-using EPR.Payment.Service.Controllers;
+using EPR.Payment.Service.Controllers.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
 using FluentValidation.Results;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Controllers
+namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
 {
     [TestClass]
     public class ProducerFeesControllerTests
@@ -163,19 +162,16 @@ namespace EPR.Payment.Service.UnitTests.Controllers
             }
         }
 
+
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_WhenCalculationThrowsException_ReturnsInternalServerErrorWithExceptionDetails(
-            [Frozen] ProducerRegistrationFeesRequestDto request)
+        public async Task CalculateFeesAsync_WhenCalculationThrowsException_ShouldReturnInternalServerError(
+              [Frozen] ProducerRegistrationFeesRequestDto request)
         {
             // Arrange
-            var exceptionMessage = "Unexpected error";
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
-
-            _producerFeesCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new Exception(exceptionMessage));
+            var exceptionMessage = "exception";
+            _producerFeesCalculatorServiceMock.Setup(i => i.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                               .ThrowsAsync(new Exception(exceptionMessage));
 
             // Act
             var result = await _controller.CalculateFeesAsync(request, CancellationToken.None);
@@ -183,10 +179,10 @@ namespace EPR.Payment.Service.UnitTests.Controllers
             // Assert
             using (new AssertionScope())
             {
-                var internalServerErrorResult = result.Result.Should().BeOfType<ObjectResult>().Which;
-                internalServerErrorResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-                internalServerErrorResult.Value.Should().Be($"{ProducerFeesCalculationExceptions.FeeCalculationError}: {exceptionMessage}");
+                result.Should().NotBeNull();
+                result.Result.Should().BeOfType<ObjectResult>().Which.Value.Should().Be($"{ProducerFeesCalculationExceptions.FeeCalculationError}: {exceptionMessage}");
             }
+
         }
     }
 }

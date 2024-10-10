@@ -1,5 +1,5 @@
 ﻿using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
-using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
 
 namespace EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer
 {

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace EPR.Payment.Service.Controllers.RegistrationFees
+namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
 {
     [ApiVersion(1)]
     [ApiController]
@@ -56,7 +56,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{ProducerResubmissionExceptions.Status500InternalServerError}: {(ex.InnerException != null ? ex.InnerException.Message : ex.Message)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ProducerResubmissionExceptions.Status500InternalServerError}: {ex.Message}");
             }
         }
     }
