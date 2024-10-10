@@ -63,6 +63,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 IsLateFeeApplicable = true,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123"
@@ -88,6 +89,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 IsLateFeeApplicable = false,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123"
@@ -107,6 +109,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 IsLateFeeApplicable = true,
                 Regulator = null!, // Regulator is null
                 ApplicationReferenceNumber = "A123"
@@ -123,6 +126,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
+                ProducerType = "Large",
                 IsLateFeeApplicable = true,
                 Regulator = string.Empty, // Regulator is empty
                 ApplicationReferenceNumber = "A123"
