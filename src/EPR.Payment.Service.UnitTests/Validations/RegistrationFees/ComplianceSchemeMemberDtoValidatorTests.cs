@@ -95,5 +95,25 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             result.ShouldHaveValidationErrorFor(x => x.NumberOfSubsidiaries)
                   .WithErrorMessage(ValidationMessages.NumberOfSubsidiariesRange);
         }
+
+        [TestMethod]
+        public void Validate_NumberOfOMPSubsidiaries_ShouldBeLessThanOrEqualToNumberOfSubsidiaries()
+        {
+            // Arrange
+            var dto = new ComplianceSchemeMemberDto
+            {
+                MemberId = 1,
+                MemberType = "Large",
+                NumberOfSubsidiaries = 10,
+                NoOfSubsidiariesOnlineMarketplace = 11
+            };
+
+            // Act
+            var result = _validator.TestValidate(dto);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.NoOfSubsidiariesOnlineMarketplace)
+                  .WithErrorMessage(ValidationMessages.NumberOfOMPSubsidiariesLessThanOrEqualToNumberOfSubsidiaries);
+        }
     }
 }

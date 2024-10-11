@@ -37,6 +37,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, BaseFeeCalculationStrategy>();
             services.AddScoped<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>, SubsidiariesFeeCalculationStrategy >();
             services.AddScoped<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, OnlineMarketCalculationStrategy>();
+            services.AddScoped<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, LateFeeCalculationStrategy>();
             services.AddScoped<IResubmissionAmountStrategy<RegulatorDto, decimal>, DefaultResubmissionAmountStrategy>();
 
             // Register the specific implementations of IFeeCalculationStrategy for Compliance Scheme

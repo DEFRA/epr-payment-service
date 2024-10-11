@@ -2166,3 +2166,77 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241002152703_LateFee'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[SubGroup] SET [Description] = ''Late Fee'', [Type] = ''LateFee''
+    WHERE [Id] = 8;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241002152703_LateFee'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241002152703_LateFee', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241011074943_LateFeeData'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
+        SET IDENTITY_INSERT [Lookup].[SubGroup] ON;
+    EXEC(N'INSERT INTO [Lookup].[SubGroup] ([Id], [Description], [Type])
+    VALUES (8, ''Late Fee'', ''LateFee'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
+        SET IDENTITY_INSERT [Lookup].[SubGroup] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241011074943_LateFeeData'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
+        SET IDENTITY_INSERT [Lookup].[RegistrationFees] ON;
+    EXEC(N'INSERT INTO [Lookup].[RegistrationFees] ([Id], [Amount], [EffectiveFrom], [EffectiveTo], [GroupId], [RegulatorId], [SubGroupId])
+    VALUES (49, 33200.0, ''2024-01-01T00:00:00.0000000Z'', ''2025-12-31T23:59:59.0000000Z'', 1, 1, 8),
+    (50, 33200.0, ''2024-01-01T00:00:00.0000000Z'', ''2025-12-31T23:59:59.0000000Z'', 1, 2, 8),
+    (51, 33200.0, ''2024-01-01T00:00:00.0000000Z'', ''2025-12-31T23:59:59.0000000Z'', 1, 3, 8),
+    (52, 33200.0, ''2024-01-01T00:00:00.0000000Z'', ''2025-12-31T23:59:59.0000000Z'', 1, 4, 8)');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
+        SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241011074943_LateFeeData'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241011074943_LateFeeData', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+

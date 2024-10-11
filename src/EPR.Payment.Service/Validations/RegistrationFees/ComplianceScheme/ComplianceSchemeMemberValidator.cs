@@ -25,6 +25,9 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
                 .WithMessage(ValidationMessages.NumberOfSubsidiariesRange);
 
             RuleFor(x => x.NoOfSubsidiariesOnlineMarketplace)
+                .LessThanOrEqualTo(x => x.NumberOfSubsidiaries).WithMessage(ValidationMessages.NumberOfOMPSubsidiariesLessThanOrEqualToNumberOfSubsidiaries);
+
+            RuleFor(x => x.NoOfSubsidiariesOnlineMarketplace)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage(ValidationMessages.NoOfSubsidiariesOnlineMarketplaceRange);
         }

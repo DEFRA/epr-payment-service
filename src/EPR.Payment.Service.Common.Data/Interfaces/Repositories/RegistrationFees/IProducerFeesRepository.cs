@@ -6,6 +6,8 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFe
     {
         Task<decimal> GetBaseFeeAsync(string producer, RegulatorType regulator, CancellationToken cancellationToken);
 
+        Task<decimal> GetLateFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
+
         Task<decimal> GetResubmissionAsync(RegulatorType regulator, CancellationToken cancellationToken);
     }
 }
