@@ -114,7 +114,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 new ComplianceSchemeMemberDto
                 {
-                    MemberId = 12345,
+                    MemberId = "12345",
                     MemberType = "Small",
                     IsOnlineMarketplace = false,
                     NumberOfSubsidiaries = 5,
@@ -180,7 +180,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 new ComplianceSchemeMemberDto
                 {
-                    MemberId = 12345,
+                    MemberId = "12345",
                     MemberType = "Large",
                     IsOnlineMarketplace = true,
                     NumberOfSubsidiaries = 105,
@@ -246,7 +246,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 {
                     new ComplianceSchemeMemberDto
                     {
-                        MemberId = 12345,
+                        MemberId = "12345",
                         MemberType = "Small",
                         IsOnlineMarketplace = false,
                         NumberOfSubsidiaries = 5,
@@ -254,7 +254,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     },
                     new ComplianceSchemeMemberDto
                     {
-                        MemberId = 67890,
+                        MemberId = "67890",
                         MemberType = "Large",
                         IsOnlineMarketplace = true,
                         NumberOfSubsidiaries = 105,
@@ -313,7 +313,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
 
                 // member 1
                 var member1 = result.ComplianceSchemeMembersWithFees.First();
-                member1.MemberId.Should().Be(12345);
+                member1.MemberId.Should().Be("12345");
                 member1.MemberRegistrationFee.Should().Be(63100M);
                 member1.MemberOnlineMarketPlaceFee.Should().Be(0);
                 member1.SubsidiariesFee.Should().Be(279000M);
@@ -321,7 +321,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
 
                 // member 2
                 var member2 = result.ComplianceSchemeMembersWithFees.Last();
-                member2.MemberId.Should().Be(67890);
+                member2.MemberId.Should().Be("67890");
                 member2.MemberRegistrationFee.Should().Be(165800M);
                 member2.MemberOnlineMarketPlaceFee.Should().Be(257900M);
                 member2.SubsidiariesFee.Should().Be(2236000M);
@@ -346,7 +346,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 {
                     new ComplianceSchemeMemberDto
                     {
-                        MemberId = 12345,
+                        MemberId = "12345",
                         MemberType = "Small",
                         IsOnlineMarketplace = false,
                         NumberOfSubsidiaries = 5,
@@ -354,7 +354,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     },
                     new ComplianceSchemeMemberDto
                     {
-                        MemberId = 67890,
+                        MemberId = "67890",
                         MemberType = "Large",
                         IsOnlineMarketplace = true,
                         NumberOfSubsidiaries = 105,
@@ -413,7 +413,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
 
                 // member 1
                 var member1 = result.ComplianceSchemeMembersWithFees.First();
-                member1.MemberId.Should().Be(12345);
+                member1.MemberId.Should().Be("12345");
                 member1.MemberRegistrationFee.Should().Be(63100);
                 member1.MemberOnlineMarketPlaceFee.Should().Be(0);
                 member1.SubsidiariesFee.Should().Be(279000);
@@ -421,7 +421,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
 
                 // member 2
                 var member2 = result.ComplianceSchemeMembersWithFees.Last();
-                member2.MemberId.Should().Be(67890);
+                member2.MemberId.Should().Be("67890");
                 member2.MemberRegistrationFee.Should().Be(165800);
                 member2.MemberOnlineMarketPlaceFee.Should().Be(257900);
                 member2.SubsidiariesFee.Should().Be(4815000);

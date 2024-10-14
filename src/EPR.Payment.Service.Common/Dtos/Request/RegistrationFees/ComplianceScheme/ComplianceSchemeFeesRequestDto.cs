@@ -9,7 +9,7 @@
 
     public class ComplianceSchemeMemberDto
     {
-        public int MemberId { get; set; }
+        public required string MemberId { get; set; }
         public required string MemberType { get; set; } //"Large" or "Small"
         public bool IsOnlineMarketplace { get; set; }
         public int NumberOfSubsidiaries { get; set; }
