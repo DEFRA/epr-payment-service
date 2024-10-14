@@ -113,6 +113,26 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             return fee;
         }
 
+        public async Task<decimal> GetLateFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        {
+            var currentDate = DateTime.UtcNow.Date; // Only the date part, time is set to 00:00:00
+
+            var fee = await _dataContext.RegistrationFees
+                .Where(r => r.Group.Type.ToLower() == GroupTypeConstants.ProducerType.ToLower() &&
+                            r.SubGroup.Type.ToLower() == SubGroupTypeConstants.LateFee.ToLower() &&
+                            r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
+                            r.EffectiveFrom.Date <= currentDate &&
+                            r.EffectiveTo.Date >= currentDate)
+                .OrderByDescending(r => r.EffectiveFrom) // Ensure the most recent EffectiveFrom is selected
+                .Select(r => r.Amount)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (fee == 0)
+                throw new KeyNotFoundException($"{ProducerFeesRepositoryConstants.InvalidLateFeeError}: {regulator}");
+
+            return fee;
+        }
+
         public async Task<decimal> GetResubmissionAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
             var currentDate = DateTime.UtcNow.Date; // Only the date part, time is set to 00:00:00
