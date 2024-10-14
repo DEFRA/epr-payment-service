@@ -11,7 +11,7 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
             var validMemberTypes = new List<string> { "LARGE", "SMALL" };
 
             RuleFor(x => x.MemberId)
-                .GreaterThan(0)
+                .NotEmpty()
                 .WithMessage(ValidationMessages.InvalidMemberId);
 
             RuleFor(x => x.MemberType)

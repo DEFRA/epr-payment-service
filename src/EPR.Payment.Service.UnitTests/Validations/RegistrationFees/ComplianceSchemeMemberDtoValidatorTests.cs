@@ -17,12 +17,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         }
 
         [TestMethod]
-        public void Validator_Should_Fail_When_MemberId_Is_Zero()
+        public void Validator_Should_Fail_When_MemberId_Is_Empty()
         {
             // Arrange
             var dto = new ComplianceSchemeMemberDto
             {
-                MemberId = 0,
+                MemberId = string.Empty,
                 MemberType = "Large",
                 NumberOfSubsidiaries = 1,
                 NoOfSubsidiariesOnlineMarketplace = 0
@@ -42,7 +42,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             // Arrange
             var dto = new ComplianceSchemeMemberDto
             {
-                MemberId = 1,
+                MemberId = "123",
                 MemberType = "",
                 NumberOfSubsidiaries = 1,
                 NoOfSubsidiariesOnlineMarketplace = 0
@@ -62,7 +62,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             // Arrange
             var dto = new ComplianceSchemeMemberDto
             {
-                MemberId = 1,
+                MemberId = "123",
                 MemberType = "InvalidType",
                 NumberOfSubsidiaries = 1,
                 NoOfSubsidiariesOnlineMarketplace = 0
@@ -82,7 +82,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             // Arrange
             var dto = new ComplianceSchemeMemberDto
             {
-                MemberId = 1,
+                MemberId = "123",
                 MemberType = "Large",
                 NumberOfSubsidiaries = -1,
                 NoOfSubsidiariesOnlineMarketplace = 0
@@ -102,7 +102,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             // Arrange
             var dto = new ComplianceSchemeMemberDto
             {
-                MemberId = 1,
+                MemberId = "123",
                 MemberType = "Large",
                 NumberOfSubsidiaries = 10,
                 NoOfSubsidiariesOnlineMarketplace = 11

@@ -65,8 +65,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ApplicationReferenceNumber = "Ref123",
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
-                    new ComplianceSchemeMemberDto { MemberId = 1, MemberType = "Large", NumberOfSubsidiaries = 2, NoOfSubsidiariesOnlineMarketplace = 1 },
-                    new ComplianceSchemeMemberDto { MemberId = 0, MemberType = "Small", NumberOfSubsidiaries = -1, NoOfSubsidiariesOnlineMarketplace = 1 }
+                    new ComplianceSchemeMemberDto { MemberId = "123", MemberType = "Large", NumberOfSubsidiaries = 2, NoOfSubsidiariesOnlineMarketplace = 1 },
+                    new ComplianceSchemeMemberDto { MemberId = "", MemberType = "Small", NumberOfSubsidiaries = -1, NoOfSubsidiariesOnlineMarketplace = 1 }
                 }
             };
 
