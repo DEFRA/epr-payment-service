@@ -66,7 +66,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto { MemberId = "123", MemberType = "Large", NumberOfSubsidiaries = 2, NoOfSubsidiariesOnlineMarketplace = 1 },
-                    new ComplianceSchemeMemberDto { MemberId = "", MemberType = "Small", NumberOfSubsidiaries = -1, NoOfSubsidiariesOnlineMarketplace = 1 }
+                    new ComplianceSchemeMemberDto { MemberId = string.Empty, MemberType = "Small", NumberOfSubsidiaries = -1, NoOfSubsidiariesOnlineMarketplace = 1 }
                 }
             };
 
