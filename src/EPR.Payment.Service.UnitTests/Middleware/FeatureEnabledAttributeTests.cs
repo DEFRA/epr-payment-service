@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.UnitTests.Middleware
 {
+    //Test class
     [TestClass]
     public class FeatureEnabledAttributeTests
     {
