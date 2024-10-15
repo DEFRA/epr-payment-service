@@ -1,26 +1,27 @@
 ﻿using AutoFixture.MSTest;
-using Azure;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.RegistrationFees;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
 using FluentValidation.Results;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
+namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
 {
     [TestClass]
     public class ProducerFeesCalculatorServiceTests
     {
         private Mock<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>> _baseFeeCalculationStrategyMock = null!;
         private Mock<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>> _onlineMarketCalculationStrategyMock = null!;
+        private Mock<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>> _subsidiariesFeeCalculationStrategyMock = null!;
         private Mock<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>> _lateFeeCalculationStrategyMock = null!;
-        private Mock<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>> _subsidiariesFeeCalculationStrategyMock = null!;
         private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
         private ProducerFeesCalculatorService? _calculatorService = null;
 
@@ -30,7 +31,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
             _baseFeeCalculationStrategyMock = new Mock<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             _onlineMarketCalculationStrategyMock = new Mock<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             _lateFeeCalculationStrategyMock = new Mock<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
-            _subsidiariesFeeCalculationStrategyMock = new Mock<ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>>();
+            _subsidiariesFeeCalculationStrategyMock = new Mock<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>>();
             _validatorMock = new Mock<IValidator<ProducerRegistrationFeesRequestDto>>();
 
             _calculatorService = new ProducerFeesCalculatorService(
@@ -64,7 +65,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
         public void Constructor_WhenSubsidiariesFeeCalculationStrategyIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
-            ISubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>? subsidiariesFeeCalculationStrategy = null;
+            BaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>? subsidiariesFeeCalculationStrategy = null;
 
             // Act
             Action act = () => new ProducerFeesCalculatorService(
