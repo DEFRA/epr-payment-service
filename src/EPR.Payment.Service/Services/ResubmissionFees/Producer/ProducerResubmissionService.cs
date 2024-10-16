@@ -1,9 +1,9 @@
 ﻿using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.ResubmissionFees.Producer;
 using FluentValidation;
 
-namespace EPR.Payment.Service.Services.RegistrationFees.Producer
+namespace EPR.Payment.Service.Services.ResubmissionFees.Producer
 {
     public class ProducerResubmissionService : IProducerResubmissionService
     {

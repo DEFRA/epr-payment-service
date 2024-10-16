@@ -1,9 +1,9 @@
 ﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
-using EPR.Payment.Service.Services.RegistrationFees.Producer;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.Producer;
+using EPR.Payment.Service.Services.ResubmissionFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.ResubmissionFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
