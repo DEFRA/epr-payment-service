@@ -77,7 +77,7 @@ namespace EPR.Payment.Service.UnitTests.Middleware
         private class ClassWithFeatureEnabledAttribute
         {
             [FeatureEnabled("MethodFeature")]
-            public void MethodWithFeatureEnabledAttribute() { }
+            public static void MethodWithFeatureEnabledAttribute() { }
         }
     }
 }
