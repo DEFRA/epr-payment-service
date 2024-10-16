@@ -1,13 +1,13 @@
 ﻿using Asp.Versioning;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.Producer;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
+namespace EPR.Payment.Service.Controllers.ResubmissionFees.Producer
 {
     [ApiVersion(1)]
     [ApiController]
