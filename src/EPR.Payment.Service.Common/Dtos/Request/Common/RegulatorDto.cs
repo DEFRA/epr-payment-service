@@ -1,4 +1,4 @@
-﻿namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer
+﻿namespace EPR.Payment.Service.Common.Dtos.Request.Common
 {
     public class RegulatorDto
     {

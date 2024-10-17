@@ -1,8 +1,8 @@
-﻿using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
-using EPR.Payment.Service.Validations.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Dtos.Request.Common;
+using EPR.Payment.Service.Validations.Common;
 using FluentValidation.TestHelper;
 
-namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
+namespace EPR.Payment.Service.UnitTests.Validations.Common
 {
 
     [TestClass]
