@@ -1,4 +1,4 @@
-﻿using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+﻿using EPR.Payment.Service.Common.Dtos.Request.Common;
 
 namespace EPR.Payment.Service.Services.Interfaces.ResubmissionFees.Producer
 {
