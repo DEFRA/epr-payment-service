@@ -2,7 +2,7 @@
 using EPR.Payment.Service.Validations.Common;
 using FluentValidation.TestHelper;
 
-namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
+namespace EPR.Payment.Service.UnitTests.Validations.Common
 {
 
     [TestClass]

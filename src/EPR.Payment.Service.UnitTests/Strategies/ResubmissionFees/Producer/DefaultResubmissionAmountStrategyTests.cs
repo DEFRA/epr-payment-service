@@ -12,7 +12,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
+namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.Producer
 {
     [TestClass]
     public class DefaultResubmissionAmountStrategyTests

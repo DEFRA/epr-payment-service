@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
+namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.Producer
 {
     [TestClass]
     public class ProducerResubmissionControllerTests
