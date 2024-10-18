@@ -197,13 +197,13 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
             },
-            // Online Market Compliance Scheme
+            // Late Fee Compliance Scheme
             new Common.Data.DataModels.Lookups.RegistrationFees
             {
                 Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ComplianceScheme, Description = "Compliance Scheme" },
-                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type=SubGroupTypeConstants.OnlineMarket, Description = "Online Market" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type=SubGroupTypeConstants.LateFee, Description = "Late Fee" },
                 Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
-                Amount = 257900m, // £2,579 represented in pence (257900 pence)
+                Amount = 33200m, // £332 represented in pence (33200 pence)
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
             },
