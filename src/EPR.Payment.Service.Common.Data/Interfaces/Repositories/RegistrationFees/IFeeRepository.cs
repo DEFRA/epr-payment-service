@@ -14,6 +14,9 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFe
         Task<decimal> GetSecondBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
 
         Task<decimal> GetThirdBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
+
         Task<decimal> GetOnlineMarketFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
+
+        Task<decimal> GetLateFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
     }
 }
