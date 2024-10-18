@@ -1,5 +1,5 @@
 ﻿using AutoFixture.MSTest;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.Dtos.Request.Common;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.Producer;
 using EPR.Payment.Service.Services.ResubmissionFees.Producer;
@@ -10,7 +10,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
+namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
 {
     [TestClass]
     public class ProducerResubmissionServiceTests

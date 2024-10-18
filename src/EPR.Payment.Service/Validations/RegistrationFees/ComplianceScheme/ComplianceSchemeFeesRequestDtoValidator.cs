@@ -1,5 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Validations.Common;
 using FluentValidation;
 
 namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
