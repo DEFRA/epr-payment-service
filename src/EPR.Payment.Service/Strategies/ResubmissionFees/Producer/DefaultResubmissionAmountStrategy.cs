@@ -1,6 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.Dtos.Request.Common;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.ResubmissionFees.Producer;
 
