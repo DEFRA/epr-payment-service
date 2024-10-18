@@ -58,7 +58,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
                 Regulator = RegulatorType.GBEng,
                 NoOfSubsidiariesOnlineMarketplace = 0,
                 MemberType = "Large",
-                SubmissionDate = DateTime.UtcNow.Date
+                SubmissionDate = DateTime.Now
             };
 
             feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(request.Regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
@@ -89,7 +89,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
                 Regulator = RegulatorType.GBEng,
                 NoOfSubsidiariesOnlineMarketplace = 2,
                 MemberType = "Large",
-                SubmissionDate = DateTime.UtcNow.Date
+                SubmissionDate = DateTime.Now
             };
 
             feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(request.Regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
@@ -124,7 +124,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
                 Regulator = RegulatorType.GBEng,
                 NoOfSubsidiariesOnlineMarketplace = 0,
                 MemberType = "Large",
-                SubmissionDate = DateTime.UtcNow.Date
+                SubmissionDate = DateTime.Now
             };
 
             feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(request.Regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
@@ -158,7 +158,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
                 Regulator = RegulatorType.GBEng,
                 NoOfSubsidiariesOnlineMarketplace = 2,
                 MemberType = "Large",
-                SubmissionDate = DateTime.UtcNow.Date
+                SubmissionDate = DateTime.Now
             };
 
             feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(request.Regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
@@ -194,7 +194,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
                 NumberOfSubsidiaries = 0,
                 Regulator = RegulatorType.GBEng,
                 MemberType = "Large",
-                SubmissionDate = DateTime.UtcNow.Date
+                SubmissionDate = DateTime.Now
             };
 
             // Act
@@ -215,7 +215,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorType.GBEng,
                 MemberType = "Large",
-                SubmissionDate = DateTime.UtcNow.Date
+                SubmissionDate = DateTime.Now
             };
 
             feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(request.Regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
@@ -243,7 +243,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
                 Regulator = RegulatorType.GBEng,
                 NoOfSubsidiariesOnlineMarketplace = 2,
                 MemberType = "Large",
-                SubmissionDate = DateTime.UtcNow.Date
+                SubmissionDate = DateTime.Now
             };
 
             feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(request.Regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))

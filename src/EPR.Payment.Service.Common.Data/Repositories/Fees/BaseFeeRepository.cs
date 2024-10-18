@@ -14,7 +14,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
         }
         protected async Task<decimal> GetFeeAsync(string groupType, string subGroupType, RegulatorType regulator, DateTime? submissionDate, CancellationToken cancellationToken)
         {
-            var checkingDate = submissionDate.HasValue ? submissionDate.Value : DateTime.UtcNow.Date;
+            var checkingDate = submissionDate.HasValue ? submissionDate.Value : DateTime.Now;
 
             var fee = await _dataContext.RegistrationFees
                 .Where(r => r.Group.Type.ToLower() == groupType.ToLower() &&

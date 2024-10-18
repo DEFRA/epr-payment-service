@@ -110,7 +110,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.UtcNow.Date,
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
@@ -177,7 +177,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.UtcNow.Date,
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
@@ -244,7 +244,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.UtcNow.Date,
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
@@ -345,7 +345,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.UtcNow.Date,
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
@@ -446,7 +446,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow.Date
+                SubmissionDate = DateTime.Now
             };
 
             // Mock base fee calculation
@@ -476,7 +476,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "InvalidRegulator",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow.Date
+                SubmissionDate = DateTime.Now
             };
             var cancellationToken = CancellationToken.None;
 

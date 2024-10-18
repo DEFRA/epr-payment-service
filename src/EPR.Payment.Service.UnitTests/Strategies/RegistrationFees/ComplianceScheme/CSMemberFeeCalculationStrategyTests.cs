@@ -61,7 +61,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             CSMemberFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ComplianceSchemeMemberWithRegulatorDto { MemberType = "Large", Regulator = RegulatorType.GBEng, SubmissionDate = DateTime.UtcNow.Date };
+            var request = new ComplianceSchemeMemberWithRegulatorDto { MemberType = "Large", Regulator = RegulatorType.GBEng, SubmissionDate = DateTime.Now };
 
             feesRepositoryMock.Setup(repo => repo.GetMemberFeeAsync(request.MemberType, request.Regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(165800m); 
