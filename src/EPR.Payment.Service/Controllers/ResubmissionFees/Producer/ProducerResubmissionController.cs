@@ -1,7 +1,8 @@
 ﻿using Asp.Versioning;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.Dtos.Request.Common;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.Producer;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;

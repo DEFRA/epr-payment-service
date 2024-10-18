@@ -49,6 +49,8 @@
 	  <Folder Include="Services\ResubmissionFees\ComplianceScheme\" />
 	  <Folder Include="Strategies\Interfaces\ResubmissionFees\ComplianceScheme\" />
 	  <Folder Include="Strategies\ResubmissionFees\ComplianceScheme\" />
+	  <Folder Include="Validations\ResubmissionFees\ComplianceScheme\" />
+	  <Folder Include="Validations\ResubmissionFees\Producer\" />
 	</ItemGroup>
 
 </Project>

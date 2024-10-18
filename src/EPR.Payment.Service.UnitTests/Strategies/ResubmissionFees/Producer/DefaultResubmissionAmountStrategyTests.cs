@@ -3,7 +3,7 @@ using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.Dtos.Request.Common;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.ResubmissionFees.Producer;
@@ -12,7 +12,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
+namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.Producer
 {
     [TestClass]
     public class DefaultResubmissionAmountStrategyTests
