@@ -18,7 +18,7 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme
             if (!request.IsOnlineMarketplace)
                 return 0m;
 
-            return await _feesRepository.GetOnlineMarketFeeAsync(request.Regulator, cancellationToken);
+            return await _feesRepository.GetOnlineMarketFeeAsync(request.Regulator, request.SubmissionDate, cancellationToken);
         }
     }
 }

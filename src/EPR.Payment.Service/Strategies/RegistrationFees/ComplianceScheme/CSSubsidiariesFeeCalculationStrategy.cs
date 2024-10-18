@@ -25,5 +25,10 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme
         {
             return request.Regulator;
         }
+
+        protected override DateTime GetSubmissionDate(ComplianceSchemeMemberWithRegulatorDto request)
+        {
+            return request.SubmissionDate;
+        }
     }
 }

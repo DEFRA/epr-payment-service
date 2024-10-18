@@ -12,17 +12,16 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
         {
             _dataContext = dataContext;
         }
-
-        protected async Task<decimal> GetFeeAsync(string groupType, string subGroupType, RegulatorType regulator, CancellationToken cancellationToken)
+        protected async Task<decimal> GetFeeAsync(string groupType, string subGroupType, RegulatorType regulator, DateTime? submissionDate, CancellationToken cancellationToken)
         {
-            var currentDate = DateTime.UtcNow.Date;
+            var checkingDate = submissionDate.HasValue ? submissionDate.Value : DateTime.UtcNow.Date;
 
             var fee = await _dataContext.RegistrationFees
                 .Where(r => r.Group.Type.ToLower() == groupType.ToLower() &&
                             r.SubGroup.Type.ToLower() == subGroupType.ToLower() &&
                             r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
-                            r.EffectiveFrom.Date <= currentDate &&
-                            r.EffectiveTo.Date >= currentDate)
+                            r.EffectiveFrom.Date <= checkingDate &&
+                            r.EffectiveTo.Date >= checkingDate)
                 .OrderByDescending(r => r.EffectiveFrom)
                 .Select(r => r.Amount)
                 .FirstOrDefaultAsync(cancellationToken);

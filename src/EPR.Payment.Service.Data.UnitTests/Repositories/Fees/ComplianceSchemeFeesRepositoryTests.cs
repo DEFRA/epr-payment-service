@@ -37,7 +37,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(1500000m); // £13,804 represented in pence (1380400 pence)
@@ -52,7 +52,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-INVALID"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-INVALID"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<ArgumentException>()
@@ -68,7 +68,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -99,7 +99,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(1500000m); // The most recent valid fee should be returned
@@ -114,7 +114,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("gb-eng"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("gb-eng"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(1500000m); // Assuming this is the expected fee in pence for 'gb-eng'.
@@ -138,7 +138,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { futureFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -163,7 +163,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { expiredFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -190,7 +190,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(1380400m); // Fee should be returned since today matches EffectiveFrom
@@ -216,7 +216,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(1380400m); // Fee should be returned since today matches EffectiveTo
@@ -242,7 +242,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(1380400m); // Fee should be active for the entire day
@@ -258,7 +258,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(165800m); // £1,658 represented in pence (165800 pence)
@@ -273,7 +273,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetMemberFeeAsync("InvalidType", RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetMemberFeeAsync("InvalidType", RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -289,7 +289,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetMemberFeeAsync("Small", RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetMemberFeeAsync("Small", RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(63100m); // £631 represented in pence (63100 pence)
@@ -304,7 +304,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -335,7 +335,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees?.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(300000m); // The most recent valid fee should be returned
@@ -350,7 +350,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetMemberFeeAsync("LARGE", RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetMemberFeeAsync("LARGE", RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(165800m); // £1,658 represented in pence (165800 pence)
@@ -374,7 +374,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { futureFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -399,7 +399,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { expiredFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -416,7 +416,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(257900m); // £2,579 represented in pence (257900 pence)
@@ -431,7 +431,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -456,7 +456,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { futureFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -483,7 +483,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { expiredFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -499,7 +499,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(55800m); // £558 represented in pence per subsidiary (55800 pence)
@@ -523,7 +523,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { futureFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -548,7 +548,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { expiredFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -579,7 +579,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(60000m); // The most recent valid fee should be returned
@@ -605,7 +605,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(55000m); // Fee should be returned since today matches EffectiveFrom
@@ -631,7 +631,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(56000m); // Fee should be returned since today matches EffectiveTo
@@ -657,7 +657,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(57000m); // Fee should be active for the entire day
@@ -673,7 +673,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(14000m); // £140 represented in pence (14000 pence)
@@ -688,7 +688,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -713,7 +713,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { futureFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -739,7 +739,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { expiredFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -771,7 +771,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(16000m); // The most recent valid fee should be returned
@@ -797,7 +797,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(15000m); // Fee should be returned since today matches EffectiveFrom
@@ -823,7 +823,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(16000m); // Fee should be returned since today matches EffectiveTo
@@ -849,7 +849,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { fee }.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(17000m); // Fee should be active for the entire day
@@ -865,7 +865,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetThirdBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetThirdBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(1m);
@@ -896,7 +896,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(updatedFees.AsQueryable());
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetThirdBandFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetThirdBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow.Date, _cancellationToken);
 
             // Assert
             result.Should().Be(1m); // The most recent valid fee should be returned

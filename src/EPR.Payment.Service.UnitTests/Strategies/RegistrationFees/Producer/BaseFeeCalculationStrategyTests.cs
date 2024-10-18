@@ -66,12 +66,13 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             {
                 ProducerType = "Large",
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.UtcNow.Date
             };
 
             var regulator = RegulatorType.Create("GB-ENG");
 
-            feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync("Large", regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync("Large", regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(262000m); // £2,620 in pence
 
             // Act
@@ -92,7 +93,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             {
                 ProducerType = "Large",
                 Regulator = null!, // Regulator is null
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.UtcNow.Date
             };
 
             // Act & Assert
@@ -110,7 +112,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             {
                 ProducerType = string.Empty, // ProducerType is empty
                 Regulator = "GB-ENG", // Valid Regulator
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.UtcNow.Date
             };
 
             // Act
@@ -131,7 +134,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             {
                 ProducerType = "Large",
                 Regulator = string.Empty, // Regulator is empty
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.UtcNow.Date
             };
 
             // Act & Assert

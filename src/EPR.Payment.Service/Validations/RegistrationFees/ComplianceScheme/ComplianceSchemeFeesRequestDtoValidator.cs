@@ -16,6 +16,10 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
             RuleFor(x => x.ApplicationReferenceNumber)
                     .NotEmpty().WithMessage(ValidationMessages.ApplicationReferenceNumberRequired);
 
+            RuleFor(x => x.SubmissionDate)
+                .Must(date => date != default(DateTime))
+                .WithMessage(ValidationMessages.InvalidSubmissionDate);
+
             RuleForEach(x => x.ComplianceSchemeMembers)
             .SetValidator(new ComplianceSchemeMemberDtoValidator())
             .WithMessage(ValidationMessages.InvalidComplianceSchemeMember);

@@ -29,6 +29,10 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.Producer
 
             RuleFor(x => x.ApplicationReferenceNumber)
                 .NotEmpty().WithMessage(ValidationMessages.ApplicationReferenceNumberRequired);
+
+            RuleFor(x => x.SubmissionDate)
+                .Must(date => date != default(DateTime))
+                .WithMessage(ValidationMessages.InvalidSubmissionDate);
         }
     }
 }

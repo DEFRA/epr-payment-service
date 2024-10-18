@@ -65,10 +65,11 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             {
                 IsOnlineMarketplace = true,
                 Regulator = RegulatorType.GBEng,
-                MemberType = "Small"
+                MemberType = "Small",
+                SubmissionDate = DateTime.UtcNow.Date
             };
 
-            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(request.Regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(request.Regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(257900m);
 
             // Act
@@ -87,7 +88,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             {
                 IsOnlineMarketplace = false,
                 Regulator = RegulatorType.GBEng,
-                MemberType = "Small"
+                MemberType = "Small",
+                SubmissionDate = DateTime.UtcNow.Date
             };
 
             // Act

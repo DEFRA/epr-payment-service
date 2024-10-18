@@ -66,12 +66,13 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ProducerType = "Large",
                 IsLateFeeApplicable = true,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.UtcNow.Date
             };
 
             var regulator = RegulatorType.Create("GB-ENG");
 
-            feesRepositoryMock.Setup(repo => repo.GetLateFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetLateFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(33200m);
 
             // Act
@@ -92,7 +93,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ProducerType = "Large",
                 IsLateFeeApplicable = false,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.UtcNow.Date
             };
 
             // Act
@@ -112,7 +114,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ProducerType = "Large",
                 IsLateFeeApplicable = true,
                 Regulator = null!, // Regulator is null
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.UtcNow.Date
             };
 
             // Act & Assert
@@ -129,7 +132,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ProducerType = "Large",
                 IsLateFeeApplicable = true,
                 Regulator = string.Empty, // Regulator is empty
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.UtcNow.Date
             };
 
             // Act & Assert
