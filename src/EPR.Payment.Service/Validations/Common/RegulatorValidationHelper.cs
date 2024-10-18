@@ -1,6 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
 
-namespace EPR.Payment.Service.Validations.RegistrationFees
+namespace EPR.Payment.Service.Validations.Common
 {
     public static class RegulatorValidationHelper
     {
