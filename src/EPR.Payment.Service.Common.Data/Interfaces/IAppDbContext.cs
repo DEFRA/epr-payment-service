@@ -7,6 +7,7 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
     {
         DbSet<PaymentStatus> PaymentStatus { get; } 
         DbSet<DataModels.Payment> Payment { get; }
+        DbSet<DataModels.OnlinePayment> OnlinePayment { get; }
         DbSet<Group> Group { get; }
         DbSet<SubGroup> SubGroup { get; }
         DbSet<Regulator> Regulator { get; }

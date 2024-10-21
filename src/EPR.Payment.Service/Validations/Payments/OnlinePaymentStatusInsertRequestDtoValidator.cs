@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace EPR.Payment.Service.Validations.Payments
 {
-    public class PaymentStatusInsertRequestDtoValidator : AbstractValidator<PaymentStatusInsertRequestDto>
+    public class OnlinePaymentStatusInsertRequestDtoValidator : AbstractValidator<OnlinePaymentStatusInsertRequestDto>
     {
         private const string InvalidUserIdErrorMessage = "User ID cannot be null or empty.";
         private const string InvalidOrganisationIdErrorMessage = "Organisation ID cannot be null or empty.";
@@ -11,7 +11,7 @@ namespace EPR.Payment.Service.Validations.Payments
         private const string InvalidReasonForPaymentErrorMessage = "Reason For Payment cannot be null or empty.";
         private const string InvalidAmountErrorMessage = "Amount For Payment cannot be null or empty.";
         private const string InvalidStatusErrorMessage = "Status For Payment must be a valid status type.";
-        public PaymentStatusInsertRequestDtoValidator()
+        public OnlinePaymentStatusInsertRequestDtoValidator()
         {
             RuleFor(x => x.UserId)
                 .NotNull()

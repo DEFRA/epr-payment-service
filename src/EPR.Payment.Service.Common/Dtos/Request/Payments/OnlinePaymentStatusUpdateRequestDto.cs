@@ -1,6 +1,6 @@
 ﻿namespace EPR.Payment.Service.Common.Dtos.Request.Payments
 {
-    public class PaymentStatusUpdateRequestDto
+    public class OnlinePaymentStatusUpdateRequestDto
     {
         public string? GovPayPaymentId { get; set; }
 

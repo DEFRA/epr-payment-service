@@ -18,6 +18,7 @@ namespace EPR.Payment.Service.Common.Data
         }
         public DbSet<PaymentStatus> PaymentStatus => Set<PaymentStatus>();
         public DbSet<DataModels.Payment> Payment => Set<DataModels.Payment>();
+        public DbSet<DataModels.OnlinePayment> OnlinePayment => Set<DataModels.OnlinePayment>();
         public DbSet<Group> Group => Set<Group>();
         public DbSet<SubGroup> SubGroup => Set<SubGroup>();
         public DbSet<Regulator> Regulator => Set<Regulator>();
@@ -33,6 +34,12 @@ namespace EPR.Payment.Service.Common.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<DataModels.Payment>()
+               .ToTable("Payment");
+
+            modelBuilder.Entity<DataModels.OnlinePayment>()
+                .ToTable("OnlinePayment");
+
+            modelBuilder.Entity<DataModels.OnlinePayment>()
             .HasIndex(a => a.GovpayPaymentId)
             .IsUnique();
 

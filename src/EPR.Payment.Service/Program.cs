@@ -27,7 +27,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddFluentValidation(fv =>
 {
-    fv.RegisterValidatorsFromAssemblyContaining<PaymentStatusInsertRequestDtoValidator>();
+    fv.RegisterValidatorsFromAssemblyContaining<OnlinePaymentStatusInsertRequestDtoValidator>();
     fv.RegisterValidatorsFromAssemblyContaining<ProducerRegistrationFeesRequestDtoValidator>();
     fv.AutomaticValidationEnabled = false;
 });

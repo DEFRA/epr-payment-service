@@ -1,6 +1,6 @@
 ﻿namespace EPR.Payment.Service.Common.Dtos.Request.Payments
 {
-    public class PaymentStatusInsertRequestDto
+    public class OnlinePaymentStatusInsertRequestDto
     {
         public Guid? UserId { get; set; }
 

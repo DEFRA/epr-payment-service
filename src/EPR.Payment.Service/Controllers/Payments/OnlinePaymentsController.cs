@@ -11,15 +11,15 @@ namespace EPR.Payment.Service.Controllers
 {
     [ApiVersion(1)]
     [ApiController]
-    [Route("api/v{version:apiVersion}/payments")]
+    [Route("api/v{version:apiVersion}/onlinepayments")]
     [FeatureGate("EnablePaymentsFeature")]
-    public class PaymentsController : ControllerBase
+    public class OnlinePaymentsController : ControllerBase
     {
-        private readonly IPaymentsService _paymentsService;
+        private readonly IOnlinePaymentsService _onlinePaymentsService;
 
-        public PaymentsController(IPaymentsService paymentsService)
+        public OnlinePaymentsController(IOnlinePaymentsService paymentsService)
         {
-            _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
+            _onlinePaymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
         }
 
         [MapToApiVersion(1)]
@@ -28,7 +28,7 @@ namespace EPR.Payment.Service.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnablePaymentStatusInsert")]
-        public async Task<ActionResult<Guid>> InsertPaymentStatus([FromBody] PaymentStatusInsertRequestDto paymentStatusInsertRequest, CancellationToken cancellationToken)
+        public async Task<ActionResult<Guid>> InsertOnlinePaymentStatus([FromBody] OnlinePaymentStatusInsertRequestDto onlinePaymentStatusInsertRequest, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -36,7 +36,7 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                var externalPaymentId = await _paymentsService.InsertPaymentStatusAsync(paymentStatusInsertRequest, cancellationToken);
+                var externalPaymentId = await _onlinePaymentsService.InsertOnlinePaymentStatusAsync(onlinePaymentStatusInsertRequest, cancellationToken);
                 return Ok(externalPaymentId);
             }
             catch (ValidationException ex)
@@ -64,7 +64,7 @@ namespace EPR.Payment.Service.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnablePaymentStatusUpdate")]
-        public async Task<IActionResult> UpdatePaymentStatus(Guid externalPaymentId, [FromBody] PaymentStatusUpdateRequestDto paymentStatusUpdateRequest, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateOnlinePaymentStatus(Guid externalPaymentId, [FromBody] OnlinePaymentStatusUpdateRequestDto onlinePaymentStatusUpdateRequest, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                await _paymentsService.UpdatePaymentStatusAsync(externalPaymentId, paymentStatusUpdateRequest, cancellationToken);
+                await _onlinePaymentsService.UpdateOnlinePaymentStatusAsync(externalPaymentId, onlinePaymentStatusUpdateRequest, cancellationToken);
                 return NoContent();
             }
             catch (ValidationException ex)
@@ -96,11 +96,11 @@ namespace EPR.Payment.Service.Controllers
 
         [MapToApiVersion(1)]
         [HttpGet("{externalPaymentId}")]
-        [ProducesResponseType(typeof(PaymentResponseDto), 200)]
+        [ProducesResponseType(typeof(OnlinePaymentResponseDto), 200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableGetPaymentByExternalPaymentId")]
-        public async Task<IActionResult> GetPaymentByExternalPaymentId(Guid externalPaymentId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetOnlinePaymentByExternalPaymentId(Guid externalPaymentId, CancellationToken cancellationToken)
         {
             if (externalPaymentId == Guid.Empty)
             {
@@ -113,8 +113,8 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                var paymentResponse = await _paymentsService.GetPaymentByExternalPaymentIdAsync(externalPaymentId, cancellationToken);
-                return Ok(paymentResponse);
+                var onlinePaymentResponse = await _onlinePaymentsService.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, cancellationToken);
+                return Ok(onlinePaymentResponse);
             }
             catch (Exception ex)
             {
