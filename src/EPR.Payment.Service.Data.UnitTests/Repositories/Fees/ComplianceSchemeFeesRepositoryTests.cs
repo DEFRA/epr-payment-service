@@ -901,5 +901,53 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             // Assert
             result.Should().Be(1m); // The most recent valid fee should be returned
         }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionFeeAsync_ValidInput_ShouldReturnResubmissionFee(
+        [Frozen] Mock<IAppDbContext> _dataContextMock,
+        [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
+        {
+            // Arrange
+            var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
+
+            // Act
+            var result = await _complianceSchemeFeesRepository.GetResubmissionFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            result.Should().Be(43000m);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionFeeAsync_InvalidRegulator_ShouldThrowArgumentException(
+                [Frozen] Mock<IAppDbContext> _dataContextMock,
+                [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
+        {
+            // Arrange
+            var invalidRegulator = "GB-INVALID";
+
+            // Act
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetResubmissionFeeAsync(RegulatorType.Create(invalidRegulator), _cancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage($"Invalid regulator type: {invalidRegulator}. (Parameter 'regulator')");
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionFeeAsync_EmptyDatabase_ShouldThrowKeyNotFoundException(
+        [Frozen] Mock<IAppDbContext> _dataContextMock,
+        [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
+        {
+            // Arrange
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
+
+            // Act
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetResubmissionFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<KeyNotFoundException>()
+                .WithMessage("Registration fee for compliance scheme with regulator 'GB-ENG' not found.");
+        }
     }
 }

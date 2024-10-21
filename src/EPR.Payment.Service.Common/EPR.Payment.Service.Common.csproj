@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Request\ResubmissionFees\ComplianceScheme\" />
     <Folder Include="Dtos\Request\ResubmissionFees\Producer\" />
   </ItemGroup>
 
