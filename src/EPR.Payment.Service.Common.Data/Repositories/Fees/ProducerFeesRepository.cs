@@ -52,7 +52,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 
         public async Task<decimal> GetResubmissionAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
-            var fee = await GetFeeAsync(GroupTypeConstants.ProducerResubmission, SubGroupTypeConstants.ReSubmitting, regulator, null, cancellationToken);
+            var fee = await GetFeeAsync(GroupTypeConstants.ProducerResubmission, SubGroupTypeConstants.ReSubmitting, regulator, DateTime.Now, cancellationToken);
             ValidateFee(fee, string.Format(ProducerResubmissionExceptions.RecordNotFoundProducerResubmissionFeeError, regulator.Value));
             return fee;
         }
