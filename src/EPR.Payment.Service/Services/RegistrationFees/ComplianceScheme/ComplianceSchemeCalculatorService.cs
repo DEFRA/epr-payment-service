@@ -13,17 +13,20 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
     {
         private readonly ICSBaseFeeCalculationStrategy<RegulatorType, decimal> _baseFeeCalculationStrategy;
         private readonly ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeOnlineMarketStrategy;
+        private readonly ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeLateFeeStrategy;
         private readonly ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeMemberStrategy;
         private readonly IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown> _subsidiariesFeeCalculationStrategy;
 
         public ComplianceSchemeCalculatorService(
             ICSBaseFeeCalculationStrategy<RegulatorType, decimal> baseFeeCalculationStrategy,
             ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeOnlineMarketStrategy,
+            ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeLateFeeStrategy,
             ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeMemberStrategy,
             IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown> subsidiariesFeeCalculationStrategy)
         {
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
             _complianceSchemeOnlineMarketStrategy = complianceSchemeOnlineMarketStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeOnlineMarketStrategy));
+            _complianceSchemeLateFeeStrategy = complianceSchemeLateFeeStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeLateFeeStrategy));
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
             _complianceSchemeMemberStrategy = complianceSchemeMemberStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeMemberStrategy));
         }
@@ -47,6 +50,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                         Regulator = regulatorType,
                         MemberType = item.MemberType,
                         IsOnlineMarketplace = item.IsOnlineMarketplace,
+                        IsLateFeeApplicable = item.IsLateFeeApplicable,
                         NumberOfSubsidiaries = item.NumberOfSubsidiaries,
                         NoOfSubsidiariesOnlineMarketplace = item.NoOfSubsidiariesOnlineMarketplace
                     };
@@ -56,11 +60,12 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                         MemberId = item.MemberId,
                         MemberRegistrationFee = await _complianceSchemeMemberStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
                         MemberOnlineMarketPlaceFee = await _complianceSchemeOnlineMarketStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
+                        MemberLateRegistrationFee = await _complianceSchemeLateFeeStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
                         SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken)
                     };
 
                     member.SubsidiariesFee = member.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + member.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
-                    member.TotalMemberFee = member.MemberRegistrationFee + member.MemberOnlineMarketPlaceFee + member.SubsidiariesFee;
+                    member.TotalMemberFee = member.MemberRegistrationFee + member.MemberOnlineMarketPlaceFee + member.SubsidiariesFee + member.MemberLateRegistrationFee;
 
                     response.ComplianceSchemeMembersWithFees.Add(member);
                 }

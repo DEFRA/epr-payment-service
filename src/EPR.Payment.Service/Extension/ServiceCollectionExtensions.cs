@@ -47,6 +47,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<ICSBaseFeeCalculationStrategy<RegulatorType, decimal>, CSBaseFeeCalculationStrategy>();
             services.AddScoped<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSMemberFeeCalculationStrategy>();
             services.AddScoped<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSOnlineMarketCalculationStrategy>();
+            services.AddScoped<ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSLateFeeCalculationStrategy>();
             services.AddScoped<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>, CSSubsidiariesFeeCalculationStrategy>();
 
             // Register repositories
