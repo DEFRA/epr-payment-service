@@ -47,7 +47,6 @@
   <ItemGroup>
     <Folder Include="Controllers\ResubmissionFees\ComplianceScheme\" />
     <Folder Include="Services\ResubmissionFees\ComplianceScheme\" />
-    <Folder Include="Strategies\ResubmissionFees\ComplianceScheme\" />
     <Folder Include="Validations\ResubmissionFees\" />
   </ItemGroup>
 
