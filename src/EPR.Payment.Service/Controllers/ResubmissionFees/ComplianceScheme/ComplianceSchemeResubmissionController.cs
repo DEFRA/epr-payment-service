@@ -12,7 +12,7 @@ namespace EPR.Payment.Service.Controllers.ResubmissionFees.ComplianceScheme
 {
     [ApiVersion(1)]
     [ApiController]
-    [Route("api/v{version:apiVersion}/compliance-scheme/resubmission-fees")]
+    [Route("api/v{version:apiVersion}/compliance-scheme/resubmission-fee")]
     [FeatureGate("EnableResubmissionComplianceSchemeFeature")]
     public class ComplianceSchemeResubmissionController : ControllerBase
     {
