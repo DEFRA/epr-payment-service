@@ -21,7 +21,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
                 throw new ArgumentException(PaymentConstants.InvalidInputToInsertPaymentError);
             }
 
-            entity.CreatedDate = DateTime.Now;
+            entity.CreatedDate = DateTime.UtcNow;
             entity.UpdatedDate = entity.CreatedDate;
             entity.UpdatedByUserId = entity.UserId;
             entity.UpdatedByOrganisationId = entity.OrganisationId;
