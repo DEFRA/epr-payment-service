@@ -4,9 +4,9 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFe
 {
     public interface IProducerFeesRepository : IFeeRepository
     {
-        Task<decimal> GetBaseFeeAsync(string producer, RegulatorType regulator, CancellationToken cancellationToken);
+        Task<decimal> GetBaseFeeAsync(string producer, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken);
 
-        Task<decimal> GetLateFeeAsync(RegulatorType regulator, CancellationToken cancellationToken);
+        Task<decimal> GetLateFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken);
 
         Task<decimal> GetResubmissionAsync(RegulatorType regulator, CancellationToken cancellationToken);
     }
