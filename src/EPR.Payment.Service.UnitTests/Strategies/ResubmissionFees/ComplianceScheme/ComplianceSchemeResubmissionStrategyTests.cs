@@ -14,7 +14,7 @@ using Moq;
 namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.ComplianceScheme
 {
     [TestClass]
-    public class ComplianceSchemeResubmissionFeeCalculationStrategyTests
+    public class ComplianceSchemeResubmissionStrategyTests
     {
         private IFixture _fixture = null!;
 
@@ -31,7 +31,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.ComplianceSc
             IComplianceSchemeFeesRepository? nullRepository = null;
 
             // Act
-            Action act = () => new ComplianceSchemeResubmissionFeeCalculationStrategy(nullRepository!);
+            Action act = () => new ComplianceSchemeResubmissionStrategy(nullRepository!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -45,21 +45,21 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.ComplianceSc
             var feesRepositoryMock = _fixture.Create<Mock<IComplianceSchemeFeesRepository>>();
 
             // Act
-            var strategy = new ComplianceSchemeResubmissionFeeCalculationStrategy(feesRepositoryMock.Object);
+            var strategy = new ComplianceSchemeResubmissionStrategy(feesRepositoryMock.Object);
 
             // Assert
             using (new AssertionScope())
             {
                 strategy.Should().NotBeNull();
-                strategy.Should().BeAssignableTo<IComplianceSchemeResubmissionFeeCalculationStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>>();
+                strategy.Should().BeAssignableTo<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>>();
             }
         }
 
         [TestMethod, AutoMoqData]
         public async Task CalculateFeeAsync_RepositoryReturnsAResult_ShouldReturnAmount(
-            [Frozen] Mock<IComplianceSchemeFeesRepository> feesRepositoryMock,
-            ComplianceSchemeResubmissionFeeCalculationStrategy strategy,
-            [Frozen] decimal expectedAmount)
+                    [Frozen] Mock<IComplianceSchemeFeesRepository> feesRepositoryMock,
+                    ComplianceSchemeResubmissionStrategy strategy,
+                    [Frozen] decimal expectedAmount)
         {
             // Arrange
             var request = new ComplianceSchemeResubmissionFeeRequestDto
@@ -71,7 +71,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.ComplianceSc
             };
             var regulatorType = RegulatorType.Create(request.Regulator);
 
-            feesRepositoryMock.Setup(i => i.GetResubmissionFeeAsync(regulatorType, CancellationToken.None)).ReturnsAsync(expectedAmount);
+            feesRepositoryMock.Setup(i => i.GetResubmissionFeeAsync(regulatorType, request.ResubmissionDate, CancellationToken.None))
+                              .ReturnsAsync(expectedAmount);
 
             // Act
             var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
@@ -82,7 +83,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.ComplianceSc
 
         [TestMethod, AutoMoqData]
         public async Task CalculateFeeAsync_EmptyRegulator_ThrowsArgumentException(
-            ComplianceSchemeResubmissionFeeCalculationStrategy strategy)
+            ComplianceSchemeResubmissionStrategy strategy)
         {
             // Act & Assert
             var request = new ComplianceSchemeResubmissionFeeRequestDto
@@ -99,7 +100,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.ComplianceSc
 
         [TestMethod, AutoMoqData]
         public async Task CalculateFeeAsync_NullRegulator_ThrowsArgumentException(
-            ComplianceSchemeResubmissionFeeCalculationStrategy strategy)
+            ComplianceSchemeResubmissionStrategy strategy)
         {
             // Act & Assert
             var request = new ComplianceSchemeResubmissionFeeRequestDto
@@ -116,8 +117,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.ComplianceSc
 
         [TestMethod, AutoMoqData]
         public async Task CalculateFeeAsync_ZeroFee_ThrowsKeyNotFoundException(
-            [Frozen] Mock<IComplianceSchemeFeesRepository> feesRepositoryMock,
-            ComplianceSchemeResubmissionFeeCalculationStrategy strategy)
+                    [Frozen] Mock<IComplianceSchemeFeesRepository> feesRepositoryMock,
+                    ComplianceSchemeResubmissionStrategy strategy)
         {
             // Arrange
             var request = new ComplianceSchemeResubmissionFeeRequestDto
@@ -130,7 +131,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.ComplianceSc
             var regulatorType = RegulatorType.Create(request.Regulator);
 
             // Set up the repository mock to return 0 fee
-            feesRepositoryMock.Setup(i => i.GetResubmissionFeeAsync(regulatorType, CancellationToken.None)).ReturnsAsync(0m);
+            feesRepositoryMock.Setup(i => i.GetResubmissionFeeAsync(regulatorType, request.ResubmissionDate, CancellationToken.None)).ReturnsAsync(0m);
 
             // Act & Assert
             await strategy.Invoking(async s => await s.CalculateFeeAsync(request, new CancellationToken()))

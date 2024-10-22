@@ -12,47 +12,47 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 
         public async Task<decimal> GetBaseFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
-            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceScheme, ComplianceSchemeConstants.Registration, regulator, cancellationToken);
+            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceScheme, ComplianceSchemeConstants.Registration, regulator, DateTime.UtcNow.Date, cancellationToken);
             ValidateFee(fee, string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidComplianceSchemeOrRegulatorError, regulator.Value));
             return fee;
         }
 
         public async Task<decimal> GetMemberFeeAsync(string memberType, RegulatorType regulator, CancellationToken cancellationToken)
         {
-            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceScheme, memberType, regulator, cancellationToken);
+            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceScheme, memberType, regulator, DateTime.UtcNow.Date, cancellationToken);
             ValidateFee(fee, string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidMemberTypeOrRegulatorError, memberType, regulator.Value));
             return fee;
         }
 
         public async Task<decimal> GetFirstBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
-            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceSchemeSubsidiaries, SubsidiariesConstants.UpTo20, regulator, cancellationToken);
+            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceSchemeSubsidiaries, SubsidiariesConstants.UpTo20, regulator, DateTime.UtcNow.Date, cancellationToken);
             ValidateFee(fee, string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidSubsidiariesFeeOrRegulatorError, SubsidiariesConstants.UpTo20, regulator.Value));
             return fee;
         }
 
         public async Task<decimal> GetSecondBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
-            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceSchemeSubsidiaries, SubsidiariesConstants.MoreThan20, regulator, cancellationToken);
+            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceSchemeSubsidiaries, SubsidiariesConstants.MoreThan20, regulator, DateTime.UtcNow.Date, cancellationToken);
             ValidateFee(fee, string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidSubsidiariesFeeOrRegulatorError, SubsidiariesConstants.MoreThan20, regulator.Value));
             return fee;
         }
 
         public async Task<decimal> GetThirdBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
-            return await GetFeeAsync(GroupTypeConstants.ComplianceSchemeSubsidiaries, SubsidiariesConstants.MoreThan100, regulator, cancellationToken);
+            return await GetFeeAsync(GroupTypeConstants.ComplianceSchemeSubsidiaries, SubsidiariesConstants.MoreThan100, regulator, DateTime.UtcNow.Date, cancellationToken);
         }
 
         public async Task<decimal> GetOnlineMarketFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
         {
-            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceScheme, SubGroupTypeConstants.OnlineMarket, regulator, cancellationToken);
+            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceScheme, SubGroupTypeConstants.OnlineMarket, regulator, DateTime.UtcNow.Date, cancellationToken);
             ValidateFee(fee, string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidOnlineMarketPlaceError, regulator.Value));
             return fee;
         }
 
-        public async Task<decimal> GetResubmissionFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        public async Task<decimal> GetResubmissionFeeAsync(RegulatorType regulator, DateTime resubmissionDate, CancellationToken cancellationToken)
         {
-            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceSchemeResubmission, SubGroupTypeConstants.ReSubmitting, regulator, cancellationToken);
+            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceSchemeResubmission, SubGroupTypeConstants.ReSubmitting, regulator, resubmissionDate, cancellationToken);
             ValidateFee(fee, string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidComplianceSchemeOrRegulatorError, regulator.Value));
             return fee;
         }
