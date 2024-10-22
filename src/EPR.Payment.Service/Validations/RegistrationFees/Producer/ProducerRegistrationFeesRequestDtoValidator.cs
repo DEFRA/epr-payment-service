@@ -32,7 +32,9 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.Producer
 
             RuleFor(x => x.SubmissionDate)
                 .Must(date => date != default(DateTime))
-                .WithMessage(ValidationMessages.InvalidSubmissionDate);
+                .WithMessage(ValidationMessages.InvalidSubmissionDate)
+                .Must(date => date <= DateTime.Now)
+                .WithMessage(ValidationMessages.FutureSubmissionDate);
         }
     }
 }

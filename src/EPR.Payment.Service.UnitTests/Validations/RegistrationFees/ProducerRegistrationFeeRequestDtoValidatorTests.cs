@@ -330,16 +330,16 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         }
 
         [TestMethod]
-        public void Validate_SubmissionDateIsNotValid_ShouldHaveError()
+        public void Validate_InvalidSubmissionDate_ShouldHaveError()
         {
             // Arrange
             var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "LARGE",
-                NumberOfSubsidiaries = 0,
+                NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
-                NoOfSubsidiariesOnlineMarketplace = 10,
+                IsLateFeeApplicable = false,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = default
             };
@@ -350,6 +350,29 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
                   .WithErrorMessage(ValidationMessages.InvalidSubmissionDate);
+        }
+
+        [TestMethod]
+        public void Validate_FutureSubmissionDate_ShouldHaveError()
+        {
+            // Arrange
+            var request = new ProducerRegistrationFeesRequestDto
+            {
+                ProducerType = "LARGE",
+                NumberOfSubsidiaries = 10,
+                Regulator = RegulatorConstants.GBENG,
+                IsProducerOnlineMarketplace = false,
+                IsLateFeeApplicable = false,
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now.AddDays(10)
+            };
+
+            // Act
+            var result = _validator.TestValidate(request);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
+                  .WithErrorMessage(ValidationMessages.FutureSubmissionDate);
         }
     }
 }
