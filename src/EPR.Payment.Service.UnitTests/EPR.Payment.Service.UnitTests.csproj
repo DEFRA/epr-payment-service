@@ -44,10 +44,4 @@
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\ResubmissionFees\ComplianceScheme\" />
-    <Folder Include="Services\ResubmissionFees\ComplianceScheme\" />
-    <Folder Include="Validations\ResubmissionFees\" />
-  </ItemGroup>
-
 </Project>

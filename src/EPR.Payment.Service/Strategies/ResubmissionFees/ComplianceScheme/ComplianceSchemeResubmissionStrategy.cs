@@ -5,11 +5,11 @@ using EPR.Payment.Service.Strategies.Interfaces.ResubmissionFees.ComplianceSchem
 
 namespace EPR.Payment.Service.Strategies.ResubmissionFees.ComplianceScheme
 {
-    public class ComplianceSchemeResubmissionFeeCalculationStrategy : IComplianceSchemeResubmissionFeeCalculationStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>
+    public class ComplianceSchemeResubmissionStrategy : IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>
     {
         private readonly IComplianceSchemeFeesRepository _feesRepository;
 
-        public ComplianceSchemeResubmissionFeeCalculationStrategy(IComplianceSchemeFeesRepository feesRepository)
+        public ComplianceSchemeResubmissionStrategy(IComplianceSchemeFeesRepository feesRepository)
         {
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
@@ -23,7 +23,7 @@ namespace EPR.Payment.Service.Strategies.ResubmissionFees.ComplianceScheme
 
             var regulatorType = RegulatorType.Create(request.Regulator);
 
-            var fee = await _feesRepository.GetResubmissionFeeAsync(regulatorType, cancellationToken);
+            var fee = await _feesRepository.GetResubmissionFeeAsync(regulatorType, request.ResubmissionDate, cancellationToken);
 
             if (fee == 0)
             {

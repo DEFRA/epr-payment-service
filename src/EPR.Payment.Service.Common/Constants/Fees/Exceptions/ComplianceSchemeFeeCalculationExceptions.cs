@@ -8,5 +8,6 @@
         public const string InvalidOnlineMarketPlaceError = "Compliance scheme Online Marketplace Fee record not found for regulator: '{0}'";
         public const string InvalidSubsidiariesFeeOrRegulatorError = "Subsidiaries fee for '{0}' and regulator '{1}' not found.";
         public const string InvalidMemberTypeOrRegulatorError = "Fee for Member type '{0}' and regulator '{1}' not found.";
+        public const string InvalidMemberCountError = "Member count must be greater than or equal to 1. Provided: {0}.";
     }
 }

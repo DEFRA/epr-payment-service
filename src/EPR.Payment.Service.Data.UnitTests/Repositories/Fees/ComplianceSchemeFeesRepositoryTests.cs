@@ -904,15 +904,17 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod, AutoMoqData]
         public async Task GetResubmissionFeeAsync_ValidInput_ShouldReturnResubmissionFee(
-        [Frozen] Mock<IAppDbContext> _dataContextMock,
-        [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
         {
             // Arrange
             var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
 
+            var resubmissionDate = DateTime.UtcNow;
+
             // Act
-            var result = await _complianceSchemeFeesRepository.GetResubmissionFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetResubmissionFeeAsync(RegulatorType.Create("GB-ENG"), resubmissionDate, _cancellationToken);
 
             // Assert
             result.Should().Be(43000m);
@@ -920,14 +922,15 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod, AutoMoqData]
         public async Task GetResubmissionFeeAsync_InvalidRegulator_ShouldThrowArgumentException(
-                [Frozen] Mock<IAppDbContext> _dataContextMock,
-                [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
         {
             // Arrange
             var invalidRegulator = "GB-INVALID";
+            var resubmissionDate = DateTime.UtcNow;
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetResubmissionFeeAsync(RegulatorType.Create(invalidRegulator), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetResubmissionFeeAsync(RegulatorType.Create(invalidRegulator), resubmissionDate, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<ArgumentException>()
@@ -936,14 +939,15 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod, AutoMoqData]
         public async Task GetResubmissionFeeAsync_EmptyDatabase_ShouldThrowKeyNotFoundException(
-        [Frozen] Mock<IAppDbContext> _dataContextMock,
-        [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
         {
             // Arrange
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
+            var resubmissionDate = DateTime.UtcNow;
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetResubmissionFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetResubmissionFeeAsync(RegulatorType.Create("GB-ENG"), resubmissionDate, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
