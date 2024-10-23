@@ -48,7 +48,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
             };
 
             //Act
-            Guid result = await _mockOnlinePaymentsRepository.InsertPaymentStatusAsync(request, _cancellationToken);
+            Guid result = await _mockOnlinePaymentsRepository.InsertOnlinePaymentAsync(request, _cancellationToken);
 
 
             //Assert
@@ -89,8 +89,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
             };
 
             //Act
-            await _mockOnlinePaymentsRepository.InsertPaymentStatusAsync(firstRequest, _cancellationToken);
-            await _mockOnlinePaymentsRepository.InsertPaymentStatusAsync(secondRequest, _cancellationToken);
+            await _mockOnlinePaymentsRepository.InsertOnlinePaymentAsync(firstRequest, _cancellationToken);
+            await _mockOnlinePaymentsRepository.InsertOnlinePaymentAsync(secondRequest, _cancellationToken);
 
 
             //Assert
@@ -115,7 +115,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
 
 
             //Act & Assert
-            await _mockOnlinePaymentsRepository.Invoking(async x => await x.InsertPaymentStatusAsync(request, _cancellationToken))
+            await _mockOnlinePaymentsRepository.Invoking(async x => await x.InsertOnlinePaymentAsync(request, _cancellationToken))
                 .Should().ThrowAsync<ArgumentException>();
         }
 
@@ -140,7 +140,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
             };
 
             //Act
-            await _mockOnlinePaymentsRepository.UpdatePaymentStatusAsync(request, _cancellationToken);
+            await _mockOnlinePaymentsRepository.UpdateOnlinePaymentAsync(request, _cancellationToken);
 
 
             //Assert
@@ -166,7 +166,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
 
 
             //Act & Assert
-            await _mockOnlinePaymentsRepository.Invoking(async x => await x.UpdatePaymentStatusAsync(request, _cancellationToken))
+            await _mockOnlinePaymentsRepository.Invoking(async x => await x.UpdateOnlinePaymentAsync(request, _cancellationToken))
                 .Should().ThrowAsync<ArgumentException>();
         }
 

@@ -56,7 +56,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             _onlinePaymentStatusInsertRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
 
             _onlinePaymentsRepositoryMock.Setup(r =>
-               r.InsertPaymentStatusAsync(It.IsAny<Common.Data.DataModels.OnlinePayment>(), _cancellationToken)).ReturnsAsync(expectedResult);
+               r.InsertOnlinePaymentAsync(It.IsAny<Common.Data.DataModels.OnlinePayment>(), _cancellationToken)).ReturnsAsync(expectedResult);
 
             // Act
             var result = await _service!.InsertOnlinePaymentStatusAsync(request, _cancellationToken);
@@ -98,7 +98,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
 
             // Act
             _onlinePaymentsRepositoryMock.Setup(r =>
-               r.UpdatePaymentStatusAsync(entity, _cancellationToken));
+               r.UpdateOnlinePaymentAsync(entity, _cancellationToken));
 
             _onlinePaymentStatusUpdateRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
 

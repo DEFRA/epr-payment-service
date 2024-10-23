@@ -33,7 +33,7 @@ namespace EPR.Payment.Service.Services.Payments
             }
 
             var entity = _mapper.Map<Common.Data.DataModels.OnlinePayment>(onlinePaymentStatusInsertRequest);
-            return await _OnlinePaymentRepository.InsertPaymentStatusAsync(entity, cancellationToken);
+            return await _OnlinePaymentRepository.InsertOnlinePaymentAsync(entity, cancellationToken);
         }
 
         public async Task UpdateOnlinePaymentStatusAsync(Guid externalPaymentId, OnlinePaymentStatusUpdateRequestDto onlinePaymentStatusUpdateRequest, CancellationToken cancellationToken)
@@ -47,7 +47,7 @@ namespace EPR.Payment.Service.Services.Payments
 
             var entity = await _OnlinePaymentRepository.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, cancellationToken);
             entity = _mapper.Map(onlinePaymentStatusUpdateRequest, entity);
-            await _OnlinePaymentRepository.UpdatePaymentStatusAsync(entity, cancellationToken);
+            await _OnlinePaymentRepository.UpdateOnlinePaymentAsync(entity, cancellationToken);
         }
         public async Task<int> GetOnlinePaymentStatusCountAsync(CancellationToken cancellationToken)
         {

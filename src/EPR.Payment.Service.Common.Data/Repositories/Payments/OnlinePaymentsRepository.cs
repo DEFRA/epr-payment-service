@@ -13,7 +13,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
             _dataContext = dataContext;
         }
 
-        public async Task<Guid> InsertPaymentStatusAsync(DataModels.OnlinePayment? entity, CancellationToken cancellationToken)
+        public async Task<Guid> InsertOnlinePaymentAsync(DataModels.OnlinePayment? entity, CancellationToken cancellationToken)
         {
 
             if (entity == null)
@@ -35,7 +35,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
             return entity.ExternalPaymentId;
         }
 
-        public async Task UpdatePaymentStatusAsync(DataModels.OnlinePayment? entity, CancellationToken cancellationToken)
+        public async Task UpdateOnlinePaymentAsync(DataModels.OnlinePayment? entity, CancellationToken cancellationToken)
         {
             if (entity == null)
             {
