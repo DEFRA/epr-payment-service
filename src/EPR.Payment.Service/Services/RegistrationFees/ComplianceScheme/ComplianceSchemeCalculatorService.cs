@@ -11,14 +11,14 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
 {
     public class ComplianceSchemeCalculatorService : IComplianceSchemeCalculatorService
     {
-        private readonly ICSBaseFeeCalculationStrategy<RegulatorType, decimal> _baseFeeCalculationStrategy;
+        private readonly ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal> _baseFeeCalculationStrategy;
         private readonly ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeOnlineMarketStrategy;
         private readonly ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeLateFeeStrategy;
         private readonly ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeMemberStrategy;
         private readonly IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown> _subsidiariesFeeCalculationStrategy;
 
         public ComplianceSchemeCalculatorService(
-            ICSBaseFeeCalculationStrategy<RegulatorType, decimal> baseFeeCalculationStrategy,
+            ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal> baseFeeCalculationStrategy,
             ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeOnlineMarketStrategy,
             ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeLateFeeStrategy,
             ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeMemberStrategy,
@@ -39,7 +39,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
 
                 var response = new ComplianceSchemeFeesResponseDto
                 {
-                    ComplianceSchemeRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(regulatorType, cancellationToken),
+                    ComplianceSchemeRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
                     ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>()
                 };
 
@@ -52,7 +52,8 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                         IsOnlineMarketplace = item.IsOnlineMarketplace,
                         IsLateFeeApplicable = item.IsLateFeeApplicable,
                         NumberOfSubsidiaries = item.NumberOfSubsidiaries,
-                        NoOfSubsidiariesOnlineMarketplace = item.NoOfSubsidiariesOnlineMarketplace
+                        NoOfSubsidiariesOnlineMarketplace = item.NoOfSubsidiariesOnlineMarketplace,
+                        SubmissionDate = request.SubmissionDate
                     };
 
                     var member = new ComplianceSchemeMembersWithFeesDto

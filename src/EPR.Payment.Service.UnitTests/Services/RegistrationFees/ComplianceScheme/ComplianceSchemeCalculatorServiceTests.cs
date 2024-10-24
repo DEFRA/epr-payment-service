@@ -19,7 +19,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
     [TestClass]
     public class ComplianceSchemeCalculatorServiceTests
     {
-        private Mock<ICSBaseFeeCalculationStrategy<RegulatorType, decimal>> _baseFeeCalculationStrategyMock = null!;
+        private Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>> _baseFeeCalculationStrategyMock = null!;
         private Mock<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeOnlineMarketStrategyMock = null!;
         private Mock<ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeLateFeeStrategyMock = null!;
         private Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeMemberStrategyMock = null!;
@@ -29,7 +29,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         [TestInitialize]
         public void TestInitialize()
         {
-            _baseFeeCalculationStrategyMock = new Mock<ICSBaseFeeCalculationStrategy<RegulatorType, decimal>>();
+            _baseFeeCalculationStrategyMock = new Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>>();
             _complianceSchemeOnlineMarketStrategyMock = new Mock<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _complianceSchemeLateFeeStrategyMock = new Mock<ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _complianceSchemeMemberStrategyMock = new Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
@@ -41,7 +41,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public void Constructor_WhenBaseFeeCalculationStrategyIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
-            ICSBaseFeeCalculationStrategy<RegulatorType, decimal>? baseFeeCalculationStrategy = null;
+            ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>? baseFeeCalculationStrategy = null;
 
             // Act
             Action act = () => new ComplianceSchemeCalculatorService(baseFeeCalculationStrategy!, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeLateFeeStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
@@ -129,6 +129,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
@@ -144,7 +145,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             };
 
             _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -197,6 +198,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
@@ -212,7 +214,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             };
 
             _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -265,6 +267,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
@@ -290,7 +293,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             var cancellationToken = CancellationToken.None;
 
             _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<RegulatorType>(), cancellationToken))
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), cancellationToken))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -369,6 +372,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
@@ -394,7 +398,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             var cancellationToken = CancellationToken.None;
 
             _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<RegulatorType>(), cancellationToken))
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), cancellationToken))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -472,12 +476,13 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             var request = new ComplianceSchemeFeesRequestDto
             {
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
 
             // Mock base fee calculation
             _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(100);
 
             // Act
@@ -501,7 +506,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             var request = new ComplianceSchemeFeesRequestDto
             {
                 Regulator = "InvalidRegulator",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
             var cancellationToken = CancellationToken.None;
 

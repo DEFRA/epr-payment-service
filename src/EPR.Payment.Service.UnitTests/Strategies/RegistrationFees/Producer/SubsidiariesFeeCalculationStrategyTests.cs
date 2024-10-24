@@ -4,7 +4,7 @@ using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Strategies.Interfaces.Common;
 using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -61,18 +61,19 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 NumberOfSubsidiaries = 50,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                NoOfSubsidiariesOnlineMarketplace = 0
+                NoOfSubsidiariesOnlineMarketplace = 0,
+                SubmissionDate = DateTime.Now
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
 
-            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(257900m); // £2579 in pence per Online Market Subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetSecondBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetSecondBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(14000m); // £140 in pence per additional subsidiary
 
             // Act
@@ -95,18 +96,19 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 NumberOfSubsidiaries = 50,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                NoOfSubsidiariesOnlineMarketplace = 2
+                NoOfSubsidiariesOnlineMarketplace = 2,
+                SubmissionDate = DateTime.Now
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
 
-            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(257900m); // £2579 in pence per Online Market Subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetSecondBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetSecondBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(14000m); // £140 in pence per additional subsidiary
 
             // Act
@@ -133,21 +135,22 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 NumberOfSubsidiaries = 101,
                 Regulator = "GB-ENG",
                 NoOfSubsidiariesOnlineMarketplace = 0,
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
 
-            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(257900m); // £2579 in pound per Online Market Subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetSecondBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetSecondBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(14000m); // £140 in pence per additional subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetThirdBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetThirdBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(0m); // £0 in pence per additional subsidiary
 
             // Act
@@ -170,21 +173,22 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 NumberOfSubsidiaries = 101,
                 Regulator = "GB-ENG",
                 NoOfSubsidiariesOnlineMarketplace = 2,
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
 
-            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(257900m); // £2579 in pound per Online Market Subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetSecondBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetSecondBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(14000m); // £140 in pence per additional subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetThirdBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetThirdBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(0m); // £0 in pence per additional subsidiary
 
             // Act
@@ -210,7 +214,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 0,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
 
             // Act
@@ -232,7 +237,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
                 Regulator = null!,
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
 
             // Act & Assert
@@ -251,15 +257,16 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
 
-            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(257900m); // £2579 in pence per Online Market Subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
             // Act
@@ -282,15 +289,16 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 NumberOfSubsidiaries = 10,
                 Regulator = "GB-ENG",
                 NoOfSubsidiariesOnlineMarketplace = 2,
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
 
-            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetOnlineMarketFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(257900m); // £2579 in pence per Online Market Subsidiary
 
-            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetFirstBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(55800m); // £558 in pence per subsidiary
 
             // Act

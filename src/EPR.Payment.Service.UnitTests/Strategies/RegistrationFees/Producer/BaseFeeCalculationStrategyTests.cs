@@ -5,7 +5,7 @@ using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Strategies.Interfaces.Common;
 using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -66,12 +66,13 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             {
                 ProducerType = "Large",
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
 
             var regulator = RegulatorType.Create("GB-ENG");
 
-            feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync("Large", regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync("Large", regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(262000m); // £2,620 in pence
 
             // Act
@@ -92,7 +93,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             {
                 ProducerType = "Large",
                 Regulator = null!, // Regulator is null
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
 
             // Act & Assert
@@ -110,7 +112,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             {
                 ProducerType = string.Empty, // ProducerType is empty
                 Regulator = "GB-ENG", // Valid Regulator
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
 
             // Act
@@ -131,7 +134,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             {
                 ProducerType = "Large",
                 Regulator = string.Empty, // Regulator is empty
-                ApplicationReferenceNumber = "A123"
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
             };
 
             // Act & Assert

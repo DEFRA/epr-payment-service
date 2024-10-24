@@ -2,6 +2,7 @@
 using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme;
@@ -50,7 +51,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             using (new AssertionScope())
             {
                 strategy.Should().NotBeNull();
-                strategy.Should().BeAssignableTo<ICSBaseFeeCalculationStrategy<RegulatorType, decimal>>();
+                strategy.Should().BeAssignableTo<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>>();
             }
         }
 
@@ -61,13 +62,30 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             CSBaseFeeCalculationStrategy strategy)
         {
             // Arrange
-            var regulator = RegulatorType.Create("GB-ENG");
+            var request = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.Now,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
+                {
+                    new ComplianceSchemeMemberDto
+                    {
+                        MemberId = "12345",
+                        MemberType = "Small",
+                        IsOnlineMarketplace = false,
+                        NumberOfSubsidiaries = 5,
+                        NoOfSubsidiariesOnlineMarketplace = 0
+                    }
+                }
+            };
+            var regulator = RegulatorType.Create(request.Regulator);
 
-            feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetBaseFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1380400m); // £13,804 in pence
 
             // Act
-            var result = await strategy.CalculateFeeAsync(regulator, CancellationToken.None);
+            var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
 
             // Assert
             result.Should().Be(1380400m); // £13,804 in pence
