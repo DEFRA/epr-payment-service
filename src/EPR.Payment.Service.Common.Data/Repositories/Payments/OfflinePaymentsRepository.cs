@@ -18,7 +18,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
             {
                 throw new ArgumentException(PaymentConstants.InvalidInputToInsertPaymentError);
             }
-
+            throw new NotImplementedException();
             //TODO: Should Regulator come from the user somehow???
             entity.Regulator = "GB-ENG";
             entity.CreatedDate = DateTime.UtcNow;
