@@ -236,6 +236,16 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 Amount = 14000m, // £140 represented in pence per additional subsidiary (14000 pence)
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
+            },
+            // Compliance Scheme Resubmission Fee (Currently Active)
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ComplianceSchemeResubmission, Description = "Compliance Scheme Re-submission" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.ReSubmitting, Description = "Re-submitting a report" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 43000m, // The fee for resubmission, represented in pence
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
+                EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
             }
 
         }.AsQueryable();

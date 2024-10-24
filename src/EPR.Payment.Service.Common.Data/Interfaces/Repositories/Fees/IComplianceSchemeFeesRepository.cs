@@ -5,6 +5,7 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFe
     public interface IComplianceSchemeFeesRepository : IFeeRepository
     {
         Task<decimal> GetBaseFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken);
-        Task<decimal> GetMemberFeeAsync(string memberType, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken);
+        Task<decimal> GetMemberFeeAsync(string memberType, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken);                
+        Task<decimal> GetResubmissionFeeAsync(RegulatorType regulator, DateTime resubmissionDate, CancellationToken cancellationToken);
     }
 }
