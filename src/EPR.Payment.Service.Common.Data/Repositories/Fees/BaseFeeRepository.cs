@@ -17,27 +17,29 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
         {
             var registrationFees = await _dataContext.RegistrationFees
                 .Where(r => r.Group.Type.ToLower() == groupType.ToLower() &&
-                            r.SubGroup.Type.ToLower() == subGroupType.ToLower() &&
-                            r.Regulator.Type.ToLower() == regulator.Value.ToLower())
-                .ToListAsync(cancellationToken);
+                r.SubGroup.Type.ToLower() == subGroupType.ToLower() &&
+                r.Regulator.Type.ToLower() == regulator.Value.ToLower())
+               .ToListAsync(cancellationToken);
 
-            if (registrationFees?.Count > 0)
+            // Return 0 if no matching records based on groupType, subGroupType, and regulator
+            if (registrationFees == null || registrationFees.Count == 0)
             {
-                var fee = registrationFees
-                    .Where(r => submissionDate >= r.EffectiveFrom && submissionDate <= r.EffectiveTo)
-                    .OrderByDescending(r => r.EffectiveFrom)
-                    .Select(r => r.Amount)
-                    .FirstOrDefault();
-
-                if (fee == 0)
-                {
-                    throw new ArgumentException(ValidationMessages.SubmissionDateIsNotInRange);
-                }
-
-                return fee;
+                return 0;
             }
 
-            return 0;
+            // Now apply date filtering in memory
+            var fee = registrationFees
+                .Where(r => submissionDate >= r.EffectiveFrom && submissionDate <= r.EffectiveTo)
+                .OrderByDescending(r => r.EffectiveFrom)
+                .Select(r => r.Amount)
+                .FirstOrDefault();
+
+            if (fee == 0)
+            {
+                throw new ArgumentException(ValidationMessages.SubmissionDateIsNotInRange);
+            }
+
+            return fee;
         }
 
         protected static void ValidateFee(decimal fee, string errorMessage)
