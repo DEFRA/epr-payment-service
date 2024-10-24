@@ -1,4 +1,4 @@
-﻿using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
+﻿using EPR.Payment.Service.Strategies.Interfaces.Common;
 
 namespace EPR.Payment.Service.Strategies.Interfaces.ResubmissionFees.ComplianceScheme
 {

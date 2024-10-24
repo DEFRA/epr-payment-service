@@ -33,7 +33,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 
         public async Task<decimal> GetThirdBandFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
-            return await GetFeeAsync(GroupTypeConstants.ProducerSubsidiaries, SubsidiariesConstants.MoreThan100, regulator, cancellationToken);
+            return await GetFeeAsync(GroupTypeConstants.ProducerSubsidiaries, SubsidiariesConstants.MoreThan100, regulator, submissionDate, cancellationToken);
         }
 
         public async Task<decimal> GetOnlineMarketFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
