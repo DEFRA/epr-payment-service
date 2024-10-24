@@ -1,6 +1,6 @@
 ﻿namespace EPR.Payment.Service.Common.Dtos.Response.Payments
 {
-    public class PaymentResponseDto
+    public class OnlinePaymentResponseDto
     {
         public Guid ExternalPaymentId { get; set; }
 

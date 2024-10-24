@@ -9,7 +9,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels
     [Table("Payment")]
     [ExcludeFromCodeCoverage]
     [Index(nameof(ExternalPaymentId), IsUnique = true)]
-    public class Payment
+    public abstract class Payment
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,15 +19,9 @@ namespace EPR.Payment.Service.Common.Data.DataModels
         [Column(Order = 2)]
         public Guid UserId { get; set; }
 
-        [Column(Order = 3)]
-        public Guid OrganisationId { get; set; }
-
         [Column(Order = 4)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ExternalPaymentId { get; set; }
-
-        [Column(TypeName = "varchar(50)", Order = 5)]
-        public string? GovpayPaymentId { get; set; }
 
         [ForeignKey("PaymentStatus")]
         [Column(Order = 6)]
@@ -35,15 +29,6 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         [Column(TypeName = "varchar(20)", Order = 7)]
         public string Regulator { get; set; } = null!;
-
-        [Column(TypeName = "varchar(20)", Order = 8)]
-        public string? GovPayStatus { get; set; }
-
-        [Column(TypeName = "varchar(255)", Order = 9)]
-        public string? ErrorCode { get; set; }
-
-        [Column(TypeName = "varchar(255)", Order = 10)]
-        public string? ErrorMessage { get; set; }
 
         [MaxLength(255)]
         [Column(Order = 11)]

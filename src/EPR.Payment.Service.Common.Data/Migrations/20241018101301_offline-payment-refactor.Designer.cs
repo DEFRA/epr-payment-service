@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241018101301_offline-payment-refactor")]
+    partial class offlinepaymentrefactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -870,23 +873,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OfflinePayment", b =>
-                {
-                    b.HasBaseType("EPR.Payment.Service.Common.Data.DataModels.Payment");
-
-                    b.Property<string>("Comments")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnOrder(2);
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnOrder(1);
-
-                    b.ToTable("OfflinePayment", (string)null);
-                });
-
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OnlinePayment", b =>
                 {
                     b.HasBaseType("EPR.Payment.Service.Common.Data.DataModels.Payment");
@@ -954,15 +940,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PaymentStatus");
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OfflinePayment", b =>
-                {
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Payment", null)
-                        .WithOne()
-                        .HasForeignKey("EPR.Payment.Service.Common.Data.DataModels.OfflinePayment", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OnlinePayment", b =>

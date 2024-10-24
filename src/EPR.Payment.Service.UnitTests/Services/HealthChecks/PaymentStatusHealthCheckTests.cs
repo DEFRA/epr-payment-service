@@ -9,13 +9,13 @@ namespace EPR.Payment.Service.UnitTests.Services.HealthChecks
     [TestClass]
     public class PaymentStatusHealthCheckTests
     {
-        private Mock<IPaymentsService> _paymentsServiceMock = null!;
+        private Mock<IOnlinePaymentsService> _paymentsServiceMock = null!;
         private PaymentStatusHealthCheck _paymentStatusHealthCheck = null!;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _paymentsServiceMock = new Mock<IPaymentsService>();
+            _paymentsServiceMock = new Mock<IOnlinePaymentsService>();
             _paymentStatusHealthCheck = new PaymentStatusHealthCheck(_paymentsServiceMock.Object);
         }
 
@@ -24,7 +24,7 @@ namespace EPR.Payment.Service.UnitTests.Services.HealthChecks
         {
             //Arrange
             var cancellationToken = new CancellationToken();
-            _paymentsServiceMock.Setup(x => x.GetPaymentStatusCountAsync(cancellationToken)).ReturnsAsync(6);
+            _paymentsServiceMock.Setup(x => x.GetOnlinePaymentStatusCountAsync(cancellationToken)).ReturnsAsync(6);
 
             //Act
             var result = await _paymentStatusHealthCheck.CheckHealthAsync(new HealthCheckContext(), new CancellationToken());
@@ -38,7 +38,7 @@ namespace EPR.Payment.Service.UnitTests.Services.HealthChecks
         {
             //Arrange
             var cancellationToken = new CancellationToken();
-            _paymentsServiceMock.Setup(x => x.GetPaymentStatusCountAsync(cancellationToken)).ReturnsAsync(0);
+            _paymentsServiceMock.Setup(x => x.GetOnlinePaymentStatusCountAsync(cancellationToken)).ReturnsAsync(0);
 
             //Act
             var result = await _paymentStatusHealthCheck.CheckHealthAsync(new HealthCheckContext(), new CancellationToken());

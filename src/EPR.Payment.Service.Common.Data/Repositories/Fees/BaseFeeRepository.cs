@@ -22,7 +22,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
                             r.EffectiveTo.Date >= submissionDate)
                 .OrderByDescending(r => r.EffectiveFrom)
                 .Select(r => r.Amount)
-                .FirstOrDefaultAsync(cancellationToken);
+                .FirstOrDefaultAsync(cancellationToken); 
 
             return fee;
         }
