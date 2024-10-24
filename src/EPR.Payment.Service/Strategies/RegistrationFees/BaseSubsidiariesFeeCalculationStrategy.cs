@@ -19,34 +19,36 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees
         private const int SecondBandSize = 80;
 
 
-        protected virtual Task<decimal> GetFirstBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        protected virtual Task<decimal> GetFirstBandFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
-            return _feesRepository.GetFirstBandFeeAsync(regulator, cancellationToken);
+            return _feesRepository.GetFirstBandFeeAsync(regulator, submissionDate, cancellationToken);
         }
 
-        protected virtual Task<decimal> GetSecondBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        protected virtual Task<decimal> GetSecondBandFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
-            return _feesRepository.GetSecondBandFeeAsync(regulator, cancellationToken);
+            return _feesRepository.GetSecondBandFeeAsync(regulator, submissionDate, cancellationToken);
         }
 
-        protected virtual Task<decimal> GetThirdBandFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        protected virtual Task<decimal> GetThirdBandFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
-            return _feesRepository.GetThirdBandFeeAsync(regulator, cancellationToken);
+            return _feesRepository.GetThirdBandFeeAsync(regulator, submissionDate, cancellationToken);
         }
 
-        protected virtual Task<decimal> GetOnlineMarketFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        protected virtual Task<decimal> GetOnlineMarketFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
-            return _feesRepository.GetOnlineMarketFeeAsync(regulator, cancellationToken);
+            return _feesRepository.GetOnlineMarketFeeAsync(regulator, submissionDate, cancellationToken);
         }
 
         protected abstract int GetNoOfSubsidiaries(TRequestDto request);
         protected abstract int GetNoOfOMPSubsidiaries(TRequestDto request);
         protected abstract RegulatorType GetRegulator(TRequestDto request);
+        protected abstract DateTime GetSubmissionDate(TRequestDto request);
 
         public async Task<SubsidiariesFeeBreakdown> CalculateFeeAsync(TRequestDto request, CancellationToken cancellationToken)
         {
             var regulator = GetRegulator(request);
-            var unitOMPFees = await GetOnlineMarketFeeAsync(regulator, cancellationToken);
+            var submissionDate = GetSubmissionDate(request);
+            var unitOMPFees = await GetOnlineMarketFeeAsync(regulator, submissionDate, cancellationToken);
 
             // Fee breakdown initialization
             var subsidiariesFeeBreakdown = new SubsidiariesFeeBreakdown
@@ -61,9 +63,9 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees
             (int firstBandCount, int secondBandCount, int thirdBandCount) = CalculateBandCounts(GetNoOfSubsidiaries(request));
 
             // Fetch fees in parallel
-            var firstBandFee = await GetFirstBandFeeAsync(regulator, cancellationToken);
-            var secondBandFee = await GetSecondBandFeeAsync(regulator, cancellationToken);
-            var thirdBandFee = await GetThirdBandFeeAsync(regulator, cancellationToken);
+            var firstBandFee = await GetFirstBandFeeAsync(regulator, submissionDate, cancellationToken);
+            var secondBandFee = await GetSecondBandFeeAsync(regulator, submissionDate, cancellationToken);
+            var thirdBandFee = await GetThirdBandFeeAsync(regulator, submissionDate, cancellationToken);
 
             // Adding Fee breakdowns
             AddFeeBreakdown(subsidiariesFeeBreakdown.FeeBreakdowns, 1, firstBandCount, firstBandFee);

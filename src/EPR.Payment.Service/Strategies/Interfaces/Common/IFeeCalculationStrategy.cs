@@ -1,4 +1,4 @@
-﻿namespace EPR.Payment.Service.Strategies.Interfaces.RegistrationFees
+﻿namespace EPR.Payment.Service.Strategies.Interfaces.Common
 {
     public interface IFeeCalculationStrategy<TRequestDto, TResponse>
     {
