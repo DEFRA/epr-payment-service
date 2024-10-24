@@ -63,7 +63,5 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
             var result = _validator.TestValidate(offlinePaymentStatusInsertRequestDto);
             result.ShouldNotHaveValidationErrorFor(x => x.Amount);
         }
-
-        //TODO: check all OfflinePaymentStatusInsertRequestDto properties are covered
     }
 }

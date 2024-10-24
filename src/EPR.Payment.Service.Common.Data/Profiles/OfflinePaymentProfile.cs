@@ -8,7 +8,7 @@ namespace EPR.Payment.Service.Common.Data.Profiles
     {
         public OfflinePaymentProfile()
         {
-            CreateMap<OfflinePaymentStatusInsertRequestDto, DataModels.OfflinePayment>();
+            CreateMap<OfflinePaymentStatusInsertRequestDto, DataModels.OfflinePayment>().ForMember(dest => dest.ReasonForPayment, opt => opt.MapFrom(src => src.Description));
         }
     }
 }

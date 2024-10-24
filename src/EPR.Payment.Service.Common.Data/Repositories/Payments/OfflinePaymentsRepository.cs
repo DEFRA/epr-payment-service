@@ -21,8 +21,6 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
 
             //TODO: Should Regulator come from the user somehow???
             entity.Regulator = "GB-ENG";
-            //TODO: is this correct???
-            entity.ReasonForPayment = "registration fee";
             entity.CreatedDate = DateTime.UtcNow;
             entity.UpdatedDate = entity.CreatedDate;
             entity.UpdatedByUserId = entity.UserId;
