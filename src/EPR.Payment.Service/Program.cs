@@ -28,6 +28,7 @@ builder.Services.AddControllers();
 builder.Services.AddFluentValidation(fv =>
 {
     fv.RegisterValidatorsFromAssemblyContaining<OnlinePaymentStatusInsertRequestDtoValidator>();
+    fv.RegisterValidatorsFromAssemblyContaining<OfflinePaymentStatusInsertRequestDtoValidator>();
     fv.RegisterValidatorsFromAssemblyContaining<ProducerRegistrationFeesRequestDtoValidator>();
     fv.AutomaticValidationEnabled = false;
 });
@@ -106,6 +107,9 @@ bool enablePaymentStatusInsert = await featureManager.IsEnabledAsync("EnablePaym
 bool enablePaymentStatusUpdate = await featureManager.IsEnabledAsync("EnablePaymentStatusUpdate");
 bool enableGetPaymentByExternalPaymentId = await featureManager.IsEnabledAsync("EnableGetPaymentByExternalPaymentId");
 
+bool enableOfflinePaymentsFeature = await featureManager.IsEnabledAsync("EnableOfflinePaymentsFeature");
+bool enableOfflinePaymentStatusInsert = await featureManager.IsEnabledAsync("EnableOfflinePaymentStatusInsert");
+
 bool enableRegistrationFeesFeature = await featureManager.IsEnabledAsync("EnableRegistrationFeesFeature");
 bool enableProducerResubmissionAmount = await featureManager.IsEnabledAsync("EnableProducerResubmissionAmount");
 bool enableRegistrationFeesCalculation = await featureManager.IsEnabledAsync("EnableRegistrationFeesCalculation");
@@ -114,6 +118,9 @@ logger.LogInformation($"EnablePaymentsFeature: {enablePaymentsFeature}");
 logger.LogInformation($"EnablePaymentStatusInsert: {enablePaymentStatusInsert}");
 logger.LogInformation($"EnablePaymentStatusUpdate: {enablePaymentStatusUpdate}");
 logger.LogInformation($"EnableGetPaymentByExternalPaymentId: {enableGetPaymentByExternalPaymentId}");
+
+logger.LogInformation($"EnableOfflinePaymentsFeature: {enableOfflinePaymentsFeature}");
+logger.LogInformation($"EnableOfflinePaymentStatusInsert: {enableOfflinePaymentStatusInsert}");
 
 
 logger.LogInformation($"EnableRegistrationFeesFeature: {enableRegistrationFeesFeature}");
