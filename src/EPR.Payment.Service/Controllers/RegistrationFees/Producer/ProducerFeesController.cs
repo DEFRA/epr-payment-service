@@ -41,11 +41,11 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableRegistrationFeesCalculation")]
         public async Task<ActionResult<RegistrationFeesResponseDto>> CalculateFeesAsync(
-            [FromBody] ProducerRegistrationFeesRequestDto request,
+            [FromBody] ProducerRegistrationFeesRequestDto producerRegistrationFeesRequestDto,
             CancellationToken cancellationToken)
         {
             // Manually validate the request
-            var validationResult = _validator.Validate(request);
+            var validationResult = _validator.Validate(producerRegistrationFeesRequestDto);
 
             if (!validationResult.IsValid)
             {
@@ -59,7 +59,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
 
             try
             {
-                var result = await _producerFeesCalculatorService.CalculateFeesAsync(request, cancellationToken);
+                var result = await _producerFeesCalculatorService.CalculateFeesAsync(producerRegistrationFeesRequestDto, cancellationToken);
                 return Ok(result); // Return the calculated fees as a resource
             }
             catch (ValidationException ex)

@@ -1,4 +1,5 @@
 ﻿using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
 using EPR.Payment.Service.Common.Data.Interfaces;
@@ -141,8 +142,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Registration fee for compliance scheme with regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod, AutoMoqData]
@@ -166,8 +167,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _complianceSchemeFeesRepository.GetBaseFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Registration fee for compliance scheme with regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod, AutoMoqData]
@@ -377,8 +378,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidMemberTypeOrRegulatorError, "Large", "GB-ENG"));
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod, AutoMoqData]
@@ -402,8 +403,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _complianceSchemeFeesRepository.GetMemberFeeAsync("Large", RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-            .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidMemberTypeOrRegulatorError, "Large", "GB-ENG"));
+            await act.Should().ThrowAsync<ArgumentException>()
+            .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod, AutoMoqData]
@@ -459,8 +460,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _complianceSchemeFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidOnlineMarketPlaceError, "GB-ENG"));
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod, AutoMoqData]
@@ -486,8 +487,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _complianceSchemeFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidOnlineMarketPlaceError, "GB-ENG"));
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod, AutoMoqData]
@@ -526,8 +527,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Subsidiaries fee for 'UpTo20' and regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod, AutoMoqData]
@@ -551,8 +552,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _complianceSchemeFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Subsidiaries fee for 'UpTo20' and regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod, AutoMoqData]
@@ -716,8 +717,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Subsidiaries fee for 'MoreThan20' and regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod, AutoMoqData]
@@ -742,8 +743,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _complianceSchemeFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Subsidiaries fee for 'MoreThan20' and regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
 

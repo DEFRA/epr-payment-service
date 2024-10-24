@@ -31,8 +31,8 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.Producer
                 .NotEmpty().WithMessage(ValidationMessages.ApplicationReferenceNumberRequired);
 
             RuleFor(x => x.SubmissionDate)
-                .Must(date => date != default(DateTime))
-                .WithMessage(ValidationMessages.InvalidSubmissionDate)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty().WithMessage(ValidationMessages.InvalidSubmissionDate)
                 .Must(date => date <= DateTime.Now)
                 .WithMessage(ValidationMessages.FutureSubmissionDate);
         }

@@ -1,4 +1,5 @@
 ﻿using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
 using EPR.Payment.Service.Common.Data.Interfaces;
@@ -164,8 +165,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _producerFeesRepository.GetBaseFeeAsync("Large", RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Base fee for producer type 'Large' and regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod]
@@ -190,8 +191,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _producerFeesRepository.GetBaseFeeAsync("Large", RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Base fee for producer type 'Large' and regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod]
@@ -250,8 +251,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _producerFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage(string.Format(ProducerFeesRepositoryConstants.InvalidOnlineMarketRegulatorError, "GB-ENG"));
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod]
@@ -278,8 +279,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _producerFeesRepository.GetOnlineMarketFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage(string.Format(ProducerFeesRepositoryConstants.InvalidOnlineMarketRegulatorError, "GB-ENG"));
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod]
@@ -320,8 +321,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _producerFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Subsidiaries fee for 'UpTo20' and regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod]
@@ -346,8 +347,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _producerFeesRepository.GetFirstBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Subsidiaries fee for 'UpTo20' and regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod]
@@ -437,8 +438,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _producerFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Subsidiaries fee for 'MoreThan20' and regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod]
@@ -464,8 +465,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _producerFeesRepository.GetSecondBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Subsidiaries fee for 'MoreThan20' and regulator 'GB-ENG' not found.");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
 
@@ -884,8 +885,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _producerFeesRepository.GetLateFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Producer Late Fee record not found for regulator: 'GB-ENG'");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
         [TestMethod]
@@ -912,8 +913,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             Func<Task> act = async () => await _producerFeesRepository.GetLateFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<KeyNotFoundException>()
-                .WithMessage("Producer Late Fee record not found for regulator: 'GB-ENG'");
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.SubmissionDateIsNotInRange);
         }
 
     }

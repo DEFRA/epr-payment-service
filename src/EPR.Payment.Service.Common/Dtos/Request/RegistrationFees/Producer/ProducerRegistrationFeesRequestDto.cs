@@ -16,6 +16,6 @@
 
         public required string ApplicationReferenceNumber { get; set; }
 
-        public required DateTime SubmissionDate { get; set; }
+        public DateTime SubmissionDate { get; set; }
     }
 }

@@ -30,51 +30,44 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
 
         public async Task<ComplianceSchemeFeesResponseDto> CalculateFeesAsync(ComplianceSchemeFeesRequestDto request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var regulatorType = RegulatorType.Create(request.Regulator);
+            var regulatorType = RegulatorType.Create(request.Regulator);
 
-                var response = new ComplianceSchemeFeesResponseDto
+            var response = new ComplianceSchemeFeesResponseDto
+            {
+                ComplianceSchemeRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
+                ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>()
+            };
+
+            foreach (var item in request.ComplianceSchemeMembers)
+            {
+                var complianceSchemeMemberWithRegulatorDto = new ComplianceSchemeMemberWithRegulatorDto
                 {
-                    ComplianceSchemeRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
-                    ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>()
+                    Regulator = regulatorType,
+                    MemberType = item.MemberType,
+                    IsOnlineMarketplace = item.IsOnlineMarketplace,
+                    NumberOfSubsidiaries = item.NumberOfSubsidiaries,
+                    NoOfSubsidiariesOnlineMarketplace = item.NoOfSubsidiariesOnlineMarketplace,
+                    SubmissionDate = request.SubmissionDate
                 };
 
-                foreach (var item in request.ComplianceSchemeMembers)
+                var member = new ComplianceSchemeMembersWithFeesDto
                 {
-                    var complianceSchemeMemberWithRegulatorDto = new ComplianceSchemeMemberWithRegulatorDto
-                    {
-                        Regulator = regulatorType,
-                        MemberType = item.MemberType,
-                        IsOnlineMarketplace = item.IsOnlineMarketplace,
-                        NumberOfSubsidiaries = item.NumberOfSubsidiaries,
-                        NoOfSubsidiariesOnlineMarketplace = item.NoOfSubsidiariesOnlineMarketplace,
-                        SubmissionDate = request.SubmissionDate
-                    };
+                    MemberId = item.MemberId,
+                    MemberRegistrationFee = await _complianceSchemeMemberStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
+                    MemberOnlineMarketPlaceFee = await _complianceSchemeOnlineMarketStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
+                    SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken)
+                };
 
-                    var member = new ComplianceSchemeMembersWithFeesDto
-                    {
-                        MemberId = item.MemberId,
-                        MemberRegistrationFee = await _complianceSchemeMemberStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
-                        MemberOnlineMarketPlaceFee = await _complianceSchemeOnlineMarketStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
-                        SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken)
-                    };
+                member.SubsidiariesFee = member.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + member.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
+                member.TotalMemberFee = member.MemberRegistrationFee + member.MemberOnlineMarketPlaceFee + member.SubsidiariesFee;
 
-                    member.SubsidiariesFee = member.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + member.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
-                    member.TotalMemberFee = member.MemberRegistrationFee + member.MemberOnlineMarketPlaceFee + member.SubsidiariesFee;
-
-                    response.ComplianceSchemeMembersWithFees.Add(member);
-                }
-                response.TotalFee = response.ComplianceSchemeRegistrationFee + response.ComplianceSchemeMembersWithFees.Select(i => i.TotalMemberFee).Sum();
-                response.PreviousPayment = 0;// TODO: This will not be 0 but calculated once the database schema is changes are ready
-                response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
-
-                return response;
+                response.ComplianceSchemeMembersWithFees.Add(member);
             }
-            catch (ArgumentException ex)
-            {
-                throw new InvalidOperationException(ComplianceSchemeFeeCalculationExceptions.CalculationError, ex);
-            }
+            response.TotalFee = response.ComplianceSchemeRegistrationFee + response.ComplianceSchemeMembersWithFees.Select(i => i.TotalMemberFee).Sum();
+            response.PreviousPayment = 0;// TODO: This will not be 0 but calculated once the database schema is changes are ready
+            response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
+
+            return response;
         }
     }
 }

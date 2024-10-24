@@ -484,8 +484,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             Func<Task> act = async () => await _service.CalculateFeesAsync(request, cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<InvalidOperationException>()
-                .WithMessage(ComplianceSchemeFeeCalculationExceptions.CalculationError);
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage("Invalid regulator type: InvalidRegulator. (Parameter 'regulator')");
         }
     }
 }

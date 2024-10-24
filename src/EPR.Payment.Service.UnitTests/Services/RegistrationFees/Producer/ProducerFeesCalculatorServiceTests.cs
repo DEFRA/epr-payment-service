@@ -9,8 +9,6 @@ using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Strategies.RegistrationFees;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using FluentValidation;
-using FluentValidation.Results;
 using Moq;
 
 namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
@@ -22,7 +20,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
         private Mock<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>> _onlineMarketCalculationStrategyMock = null!;
         private Mock<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>> _subsidiariesFeeCalculationStrategyMock = null!;
         private Mock<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>> _lateFeeCalculationStrategyMock = null!;
-        private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
         private ProducerFeesCalculatorService? _calculatorService = null;
 
         [TestInitialize]
@@ -32,12 +29,10 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _onlineMarketCalculationStrategyMock = new Mock<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             _lateFeeCalculationStrategyMock = new Mock<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>>();
-            _validatorMock = new Mock<IValidator<ProducerRegistrationFeesRequestDto>>();
 
             _calculatorService = new ProducerFeesCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
-                _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object
             );
@@ -53,7 +48,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             Action act = () => new ProducerFeesCalculatorService(
                 baseFeeCalculationStrategy!,
                 _subsidiariesFeeCalculationStrategyMock.Object,
-                _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object);
 
@@ -71,30 +65,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             Action act = () => new ProducerFeesCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
                 subsidiariesFeeCalculationStrategy!,
-                _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'subsidiariesFeeCalculationStrategy')");
-        }
-
-        [TestMethod]
-        public void Constructor_WhenValidatorIsNull_ShouldThrowArgumentNullException()
-        {
-            // Arrange
-            IValidator<ProducerRegistrationFeesRequestDto>? validator = null;
-
-            // Act
-            Action act = () => new ProducerFeesCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _subsidiariesFeeCalculationStrategyMock.Object,
-                validator!,
-                _onlineMarketCalculationStrategyMock.Object,
-                _lateFeeCalculationStrategyMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");
         }
 
 
@@ -108,7 +83,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             Action act = () => new ProducerFeesCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
-                _validatorMock.Object,
                 onlineMarketCalculationStrategy!,
                 _lateFeeCalculationStrategyMock.Object);
 
@@ -126,7 +100,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             Func<ProducerFeesCalculatorService> servie = () => new ProducerFeesCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
-                _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object!,
                 lateFeeCalculationStrategy!);
 
@@ -141,7 +114,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             var service = new ProducerFeesCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
-                _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object);
 
@@ -176,9 +148,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
 
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
@@ -221,9 +190,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
-
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -261,9 +227,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Subsidiaries Fee Breakdown
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
 
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
@@ -303,9 +266,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
-
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -343,9 +303,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
 
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
@@ -386,9 +343,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
-
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -426,9 +380,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
 
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
@@ -468,9 +419,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
 
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
@@ -514,9 +462,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence for 20 subsidiaries
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
-
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -556,9 +501,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence for 20 subsidiaries
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
-
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -596,9 +538,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
 
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
@@ -640,9 +579,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
-
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -655,53 +591,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.ProducerOnlineMarketPlaceFee + result.SubsidiariesFee); // Total fee in pence
             }
-        }
-
-        [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenInvalidRequest_ThrowsValidationException(
-            [Frozen] ProducerRegistrationFeesRequestDto request)
-        {
-            // Arrange
-            request.ProducerType = null!;
-            request.NumberOfSubsidiaries = -1;
-            request.Regulator = null!;
-
-            var validationFailures = new[]
-            {
-                new ValidationFailure("ProducerType", "ProducerType is required"),
-                new ValidationFailure("NumberOfSubsidiaries", "Number of Subsidiaries must be greater than or equal to 0"),
-                new ValidationFailure("Regulator", "Regulator is required")
-            };
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult(validationFailures));
-
-            // Act & Assert
-            await Assert.ThrowsExceptionAsync<ValidationException>(async () =>
-            {
-                await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
-            });
-        }
-
-        [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenArgumentExceptionOccurs_ThrowsInvalidOperationException(
-            [Frozen] ProducerRegistrationFeesRequestDto request)
-        {
-            // Arrange
-            _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new ArgumentException("Invalid argument"));
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
-
-            // Act & Assert
-            var exception = await Assert.ThrowsExceptionAsync<InvalidOperationException>(async () =>
-            {
-                await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
-            });
-
-            exception.Message.Should().Be("An error occurred while calculating fees.");
-            exception.InnerException.Should().BeOfType<ArgumentException>();
         }
 
         [TestMethod, AutoMoqData]
@@ -724,9 +613,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
 
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
@@ -766,9 +652,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
-
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -806,9 +689,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
 
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
