@@ -15,7 +15,7 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme
 
         public async Task<decimal> CalculateFeeAsync(ComplianceSchemeMemberWithRegulatorDto request, CancellationToken cancellationToken)
         {
-            return await _feesRepository.GetMemberFeeAsync(request.MemberType, request.Regulator, cancellationToken);
+            return await _feesRepository.GetMemberFeeAsync(request.MemberType, request.Regulator, request.SubmissionDate, cancellationToken);
         }
     }
 }
