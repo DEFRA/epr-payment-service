@@ -24,5 +24,9 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
         {
             return RegulatorType.Create(request.Regulator);
         }
+        protected override DateTime GetSubmissionDate(ProducerRegistrationFeesRequestDto request)
+        {
+            return request.SubmissionDate;
+        }
     }
 }
