@@ -25,6 +25,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             {
                 Regulator = "",
                 ApplicationReferenceNumber = "Ref123",
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
             };
 
@@ -42,8 +43,9 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             // Arrange
             var dto = new ComplianceSchemeFeesRequestDto
             {
-                Regulator = "ValidRegulator",
+                Regulator = RegulatorConstants.GBENG,
                 ApplicationReferenceNumber = "",
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
             };
 
@@ -61,8 +63,9 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             // Arrange
             var dto = new ComplianceSchemeFeesRequestDto
             {
-                Regulator = "ValidRegulator",
+                Regulator = RegulatorConstants.GBENG,
                 ApplicationReferenceNumber = "Ref123",
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto { MemberId = "123", MemberType = "Large", NumberOfSubsidiaries = 2, NoOfSubsidiariesOnlineMarketplace = 1 },
@@ -79,6 +82,46 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
 
             result.Errors.Should().ContainSingle(e => e.PropertyName == "ComplianceSchemeMembers[1].NumberOfSubsidiaries" && 
                                    e.ErrorMessage == ValidationMessages.NumberOfSubsidiariesRange);
+        }
+
+        [TestMethod]
+        public void Validator_Should_Fail_When_SubmissionDate_Is_Not_Valid()
+        {
+            // Arrange
+            var dto = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = RegulatorConstants.GBENG,
+                ApplicationReferenceNumber = "Ref123",
+                SubmissionDate = default(DateTime),
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
+            };
+
+            // Act
+            var result = _validator.TestValidate(dto);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
+                  .WithErrorMessage(ValidationMessages.InvalidSubmissionDate);
+        }
+
+        [TestMethod]
+        public void Validator_Should_Fail_When_SubmissionDate_Is_Future_Date()
+        {
+            // Arrange
+            var dto = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = RegulatorConstants.GBENG,
+                ApplicationReferenceNumber = "Ref123",
+                SubmissionDate = DateTime.Now.AddDays(10),
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
+            };
+
+            // Act
+            var result = _validator.TestValidate(dto);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
+                  .WithErrorMessage(ValidationMessages.FutureSubmissionDate);
         }
     }
 }

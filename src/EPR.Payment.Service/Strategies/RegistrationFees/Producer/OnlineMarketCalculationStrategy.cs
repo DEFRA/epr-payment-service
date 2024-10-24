@@ -26,7 +26,7 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
                 throw new ArgumentException(ProducerFeesCalculationExceptions.RegulatorMissing);
 
             var regulator = RegulatorType.Create(request.Regulator);
-            return await _feesRepository.GetOnlineMarketFeeAsync(regulator, cancellationToken);
+            return await _feesRepository.GetOnlineMarketFeeAsync(regulator, request.SubmissionDate, cancellationToken);
         }
     }
 }
