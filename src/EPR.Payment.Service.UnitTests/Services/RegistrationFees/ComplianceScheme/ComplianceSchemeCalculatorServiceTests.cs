@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+﻿using AutoMapper.Execution;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -10,6 +11,8 @@ using EPR.Payment.Service.Strategies.RegistrationFees;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Moq;
+using System.Reflection;
+using System.Threading;
 
 namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceScheme
 {
@@ -18,6 +21,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
     {
         private Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>> _baseFeeCalculationStrategyMock = null!;
         private Mock<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeOnlineMarketStrategyMock = null!;
+        private Mock<ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeLateFeeStrategyMock = null!;
         private Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeMemberStrategyMock = null!;
         private Mock<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>> _subsidiariesFeeCalculationStrategyMock = null!;
         private ComplianceSchemeCalculatorService _service = null!;
@@ -27,9 +31,10 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         {
             _baseFeeCalculationStrategyMock = new Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>>();
             _complianceSchemeOnlineMarketStrategyMock = new Mock<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
+            _complianceSchemeLateFeeStrategyMock = new Mock<ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _complianceSchemeMemberStrategyMock = new Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>>();
-            _service = new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
+            _service = new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeLateFeeStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
         }
 
         [TestMethod]
@@ -39,7 +44,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>? baseFeeCalculationStrategy = null;
 
             // Act
-            Action act = () => new ComplianceSchemeCalculatorService(baseFeeCalculationStrategy!, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
+            Action act = () => new ComplianceSchemeCalculatorService(baseFeeCalculationStrategy!, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeLateFeeStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -53,11 +58,25 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>? complianceSchemeOnlineMarketStrategy = null;
 
             // Act
-            Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, complianceSchemeOnlineMarketStrategy!, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
+            Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, complianceSchemeOnlineMarketStrategy!, _complianceSchemeLateFeeStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
                 .WithMessage("Value cannot be null. (Parameter 'complianceSchemeOnlineMarketStrategy')");
+        }
+
+        [TestMethod]
+        public void Constructor_WhenComplianceSchemeLateFeeStrategyIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>? complianceSchemeLateFeeStrategy = null;
+
+            // Act
+            Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, complianceSchemeLateFeeStrategy!, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'complianceSchemeLateFeeStrategy')");
         }
 
         [TestMethod]
@@ -67,7 +86,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>? complianceSchemeMemberStrategy = null;
 
             // Act
-            Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, complianceSchemeMemberStrategy!, _subsidiariesFeeCalculationStrategyMock.Object);
+            Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeLateFeeStrategyMock.Object, complianceSchemeMemberStrategy!, _subsidiariesFeeCalculationStrategyMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -81,7 +100,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             BaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto>? subsidiariesFeeCalculationStrategy = null;
 
             // Act
-            Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, subsidiariesFeeCalculationStrategy!);
+            Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeLateFeeStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, subsidiariesFeeCalculationStrategy!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -92,7 +111,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public void Constructor_WhenAllDependenciesAreNotNull_ShouldInitializeComplianceSchemeBaseFeeService()
         {
             // Act
-            var service = new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
+            var service = new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeLateFeeStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -118,6 +137,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     MemberId = "12345",
                     MemberType = "Small",
                     IsOnlineMarketplace = false,
+                    IsLateFeeApplicable = false,
                     NumberOfSubsidiaries = 5,
                     NoOfSubsidiariesOnlineMarketplace = 0
                 }
@@ -160,6 +180,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 var member = result.ComplianceSchemeMembersWithFees.First();
                 member.MemberRegistrationFee.Should().Be(63100M);
                 member.MemberOnlineMarketPlaceFee.Should().Be(0);
+                member.MemberLateRegistrationFee.Should().Be(0);
                 member.SubsidiariesFee.Should().Be(279000M);
                 member.TotalMemberFee.Should().Be(342100M);
 
@@ -185,6 +206,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     MemberId = "12345",
                     MemberType = "Large",
                     IsOnlineMarketplace = true,
+                    IsLateFeeApplicable = false,
                     NumberOfSubsidiaries = 105,
                     NoOfSubsidiariesOnlineMarketplace = 0
                 }
@@ -227,6 +249,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 var member = result.ComplianceSchemeMembersWithFees.First();
                 member.MemberRegistrationFee.Should().Be(165800M);
                 member.MemberOnlineMarketPlaceFee.Should().Be(257900);
+                member.MemberLateRegistrationFee.Should().Be(0);
                 member.SubsidiariesFee.Should().Be(2236000M);
                 member.TotalMemberFee.Should().Be(2659700M);
 
@@ -252,6 +275,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                         MemberId = "12345",
                         MemberType = "Small",
                         IsOnlineMarketplace = false,
+                        IsLateFeeApplicable = false,
                         NumberOfSubsidiaries = 5,
                         NoOfSubsidiariesOnlineMarketplace = 0
                     },
@@ -260,6 +284,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                         MemberId = "67890",
                         MemberType = "Large",
                         IsOnlineMarketplace = true,
+                        IsLateFeeApplicable = false,
                         NumberOfSubsidiaries = 105,
                         NoOfSubsidiariesOnlineMarketplace = 0
                     }
@@ -319,6 +344,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 member1.MemberId.Should().Be("12345");
                 member1.MemberRegistrationFee.Should().Be(63100M);
                 member1.MemberOnlineMarketPlaceFee.Should().Be(0);
+                member1.MemberLateRegistrationFee.Should().Be(0);
                 member1.SubsidiariesFee.Should().Be(279000M);
                 member1.TotalMemberFee.Should().Be(342100M);
 
@@ -327,6 +353,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 member2.MemberId.Should().Be("67890");
                 member2.MemberRegistrationFee.Should().Be(165800M);
                 member2.MemberOnlineMarketPlaceFee.Should().Be(257900M);
+                member2.MemberLateRegistrationFee.Should().Be(0);
                 member2.SubsidiariesFee.Should().Be(2236000M);
                 member2.TotalMemberFee.Should().Be(2659700M);
 
@@ -353,6 +380,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                         MemberId = "12345",
                         MemberType = "Small",
                         IsOnlineMarketplace = false,
+                        IsLateFeeApplicable = false,
                         NumberOfSubsidiaries = 5,
                         NoOfSubsidiariesOnlineMarketplace = 0
                     },
@@ -361,6 +389,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                         MemberId = "67890",
                         MemberType = "Large",
                         IsOnlineMarketplace = true,
+                        IsLateFeeApplicable = false,
                         NumberOfSubsidiaries = 105,
                         NoOfSubsidiariesOnlineMarketplace = 10
                     }
@@ -420,6 +449,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 member1.MemberId.Should().Be("12345");
                 member1.MemberRegistrationFee.Should().Be(63100);
                 member1.MemberOnlineMarketPlaceFee.Should().Be(0);
+                member1.MemberLateRegistrationFee.Should().Be(0);
                 member1.SubsidiariesFee.Should().Be(279000);
                 member1.TotalMemberFee.Should().Be(342100);
 
@@ -428,6 +458,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 member2.MemberId.Should().Be("67890");
                 member2.MemberRegistrationFee.Should().Be(165800);
                 member2.MemberOnlineMarketPlaceFee.Should().Be(257900);
+                member2.MemberLateRegistrationFee.Should().Be(0);
                 member2.SubsidiariesFee.Should().Be(4815000);
                 member2.TotalMemberFee.Should().Be(5238700);
 
@@ -486,6 +517,299 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
                 .WithMessage(ComplianceSchemeFeeCalculationExceptions.CalculationError);
+        }
+
+        [TestMethod]
+        public async Task CalculateFeesAsync_CSWith1MemberWithLateFee_ReturnsCorrectFees()
+        {
+            // Arrange
+            var request = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.Now,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
+            {
+                new ComplianceSchemeMemberDto
+                {
+                    MemberId = "12345",
+                    MemberType = "Small",
+                    IsOnlineMarketplace = false,
+                    IsLateFeeApplicable = true,
+                    NumberOfSubsidiaries = 5,
+                    NoOfSubsidiariesOnlineMarketplace = 0
+                }
+            }
+            };
+
+            _baseFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1380400);
+
+            _complianceSchemeMemberStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(63100);
+
+            _complianceSchemeOnlineMarketStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(0);
+
+            _complianceSchemeLateFeeStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(33200);
+
+            _subsidiariesFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new SubsidiariesFeeBreakdown
+                {
+                    TotalSubsidiariesOMPFees = 0,
+                    FeeBreakdowns = new List<FeeBreakdown>
+                    {
+                        new FeeBreakdown { TotalPrice = 279000 },
+                        new FeeBreakdown { TotalPrice = 0 },
+                        new FeeBreakdown { TotalPrice = 0 }
+                    }
+                });
+
+            // Act
+            var result = await _service.CalculateFeesAsync(request, It.IsAny<CancellationToken>());
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.ComplianceSchemeRegistrationFee.Should().Be(1380400M);
+                result.ComplianceSchemeMembersWithFees.Should().HaveCount(1);
+                var member = result.ComplianceSchemeMembersWithFees.First();
+                member.MemberRegistrationFee.Should().Be(63100M);
+                member.MemberOnlineMarketPlaceFee.Should().Be(0);
+                member.MemberLateRegistrationFee.Should().Be(33200);
+                member.SubsidiariesFee.Should().Be(279000M);
+                member.TotalMemberFee.Should().Be(375300M);
+
+                result.TotalFee.Should().Be(1755700M);
+                result.PreviousPayment.Should().Be(0);
+                result.OutstandingPayment.Should().Be(1755700M);
+            }
+        }
+
+        [TestMethod]
+        public async Task CalculateFeesAsync_CSWith2MembersWithLateFee_ReturnsCorrectAggregatedFees()
+        {
+            // Arrange
+            var request = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.Now,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
+                {
+                    new ComplianceSchemeMemberDto
+                    {
+                        MemberId = "12345",
+                        MemberType = "Small",
+                        IsOnlineMarketplace = false,
+                        IsLateFeeApplicable = true,
+                        NumberOfSubsidiaries = 5,
+                        NoOfSubsidiariesOnlineMarketplace = 0
+                    },
+                    new ComplianceSchemeMemberDto
+                    {
+                        MemberId = "67890",
+                        MemberType = "Large",
+                        IsOnlineMarketplace = true,
+                        IsLateFeeApplicable = true,
+                        NumberOfSubsidiaries = 105,
+                        NoOfSubsidiariesOnlineMarketplace = 0
+                    }
+                }
+            };
+            var cancellationToken = CancellationToken.None;
+
+            _baseFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), cancellationToken))
+                .ReturnsAsync(1380400);
+
+            _complianceSchemeMemberStrategyMock
+                .SetupSequence(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), cancellationToken))
+                .ReturnsAsync(63100)
+                .ReturnsAsync(165800);
+
+            _complianceSchemeOnlineMarketStrategyMock
+                .SetupSequence(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), cancellationToken))
+                .ReturnsAsync(0)
+                .ReturnsAsync(257900);
+
+            _complianceSchemeLateFeeStrategyMock
+                .SetupSequence(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), cancellationToken))
+                .ReturnsAsync(33200)
+                .ReturnsAsync(33200);
+
+            _subsidiariesFeeCalculationStrategyMock
+                .SetupSequence(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), cancellationToken))
+                .ReturnsAsync(new SubsidiariesFeeBreakdown
+                {
+                    TotalSubsidiariesOMPFees = 0,
+                    FeeBreakdowns = new List<FeeBreakdown>
+                    {
+                        new FeeBreakdown { TotalPrice = 279000 },
+                        new FeeBreakdown { TotalPrice = 0 },
+                        new FeeBreakdown { TotalPrice = 0 }
+                    }
+                })
+                .ReturnsAsync(new SubsidiariesFeeBreakdown
+                {
+                    TotalSubsidiariesOMPFees = 0,
+                    FeeBreakdowns = new List<FeeBreakdown>
+                    {
+                         new FeeBreakdown { TotalPrice = 1116000 },
+                         new FeeBreakdown { TotalPrice = 1120000 },
+                         new FeeBreakdown { TotalPrice = 0 }
+                    }
+                });
+
+            // Act
+            var result = await _service.CalculateFeesAsync(request, cancellationToken);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.ComplianceSchemeRegistrationFee.Should().Be(1380400M);
+
+                result.ComplianceSchemeMembersWithFees.Should().HaveCount(2);
+
+                // member 1
+                var member1 = result.ComplianceSchemeMembersWithFees.First();
+                member1.MemberId.Should().Be("12345");
+                member1.MemberRegistrationFee.Should().Be(63100M);
+                member1.MemberOnlineMarketPlaceFee.Should().Be(0);
+                member1.MemberLateRegistrationFee.Should().Be(33200);
+                member1.SubsidiariesFee.Should().Be(279000M);
+                member1.TotalMemberFee.Should().Be(375300M);
+
+                // member 2
+                var member2 = result.ComplianceSchemeMembersWithFees.Last();
+                member2.MemberId.Should().Be("67890");
+                member2.MemberRegistrationFee.Should().Be(165800M);
+                member2.MemberOnlineMarketPlaceFee.Should().Be(257900M);
+                member1.MemberLateRegistrationFee.Should().Be(33200);
+                member2.SubsidiariesFee.Should().Be(2236000M);
+                member2.TotalMemberFee.Should().Be(2692900M);
+
+                // Total fee calculation
+                result.TotalFee.Should().Be(4448600M);
+                result.PreviousPayment.Should().Be(0);
+                result.OutstandingPayment.Should().Be(4448600M);
+            }
+        }
+
+        [TestMethod]
+        public async Task CalculateFeesAsync_CSWith2MembersWith1LateMemberRegstrationFee_ReturnsCorrectAggregatedFees()
+        {
+            // Arrange
+            var request = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.Now,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
+                {
+                    new ComplianceSchemeMemberDto
+                    {
+                        MemberId = "12345",
+                        MemberType = "Small",
+                        IsOnlineMarketplace = false,
+                        IsLateFeeApplicable = false,
+                        NumberOfSubsidiaries = 5,
+                        NoOfSubsidiariesOnlineMarketplace = 0
+                    },
+                    new ComplianceSchemeMemberDto
+                    {
+                        MemberId = "67890",
+                        MemberType = "Large",
+                        IsOnlineMarketplace = true,
+                        IsLateFeeApplicable = true,
+                        NumberOfSubsidiaries = 105,
+                        NoOfSubsidiariesOnlineMarketplace = 0
+                    }
+                }
+            };
+            var cancellationToken = CancellationToken.None;
+
+            _baseFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), cancellationToken))
+                .ReturnsAsync(1380400);
+
+            _complianceSchemeMemberStrategyMock
+                .SetupSequence(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), cancellationToken))
+                .ReturnsAsync(63100)
+                .ReturnsAsync(165800);
+
+            _complianceSchemeOnlineMarketStrategyMock
+                .SetupSequence(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), cancellationToken))
+                .ReturnsAsync(0)
+                .ReturnsAsync(257900);
+
+            _complianceSchemeLateFeeStrategyMock
+                .SetupSequence(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), cancellationToken))
+                .ReturnsAsync(0)
+                .ReturnsAsync(33200);
+
+            _subsidiariesFeeCalculationStrategyMock
+                .SetupSequence(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), cancellationToken))
+                .ReturnsAsync(new SubsidiariesFeeBreakdown
+                {
+                    TotalSubsidiariesOMPFees = 0,
+                    FeeBreakdowns = new List<FeeBreakdown>
+                    {
+                        new FeeBreakdown { TotalPrice = 279000 },
+                        new FeeBreakdown { TotalPrice = 0 },
+                        new FeeBreakdown { TotalPrice = 0 }
+                    }
+                })
+                .ReturnsAsync(new SubsidiariesFeeBreakdown
+                {
+                    TotalSubsidiariesOMPFees = 0,
+                    FeeBreakdowns = new List<FeeBreakdown>
+                    {
+                         new FeeBreakdown { TotalPrice = 1116000 },
+                         new FeeBreakdown { TotalPrice = 1120000 },
+                         new FeeBreakdown { TotalPrice = 0 }
+                    }
+                });
+
+            // Act
+            var result = await _service.CalculateFeesAsync(request, cancellationToken);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.ComplianceSchemeRegistrationFee.Should().Be(1380400M);
+
+                result.ComplianceSchemeMembersWithFees.Should().HaveCount(2);
+
+                // member 1
+                var member1 = result.ComplianceSchemeMembersWithFees.First();
+                member1.MemberId.Should().Be("12345");
+                member1.MemberRegistrationFee.Should().Be(63100M);
+                member1.MemberOnlineMarketPlaceFee.Should().Be(0);
+                member1.MemberLateRegistrationFee.Should().Be(0);
+                member1.SubsidiariesFee.Should().Be(279000M);
+                member1.TotalMemberFee.Should().Be(342100M);
+
+                // member 2
+                var member2 = result.ComplianceSchemeMembersWithFees.Last();
+                member2.MemberId.Should().Be("67890");
+                member2.MemberRegistrationFee.Should().Be(165800M);
+                member2.MemberOnlineMarketPlaceFee.Should().Be(257900M);
+                member2.MemberLateRegistrationFee.Should().Be(33200);
+                member2.SubsidiariesFee.Should().Be(2236000M);
+                member2.TotalMemberFee.Should().Be(2692900M);
+
+                // Total fee calculation
+                result.TotalFee.Should().Be(4415400M);
+                result.PreviousPayment.Should().Be(0);
+                result.OutstandingPayment.Should().Be(4415400M);
+            }
         }
     }
 }
