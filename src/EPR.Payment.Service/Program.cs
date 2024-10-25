@@ -108,7 +108,7 @@ bool enablePaymentStatusUpdate = await featureManager.IsEnabledAsync("EnablePaym
 bool enableGetPaymentByExternalPaymentId = await featureManager.IsEnabledAsync("EnableGetPaymentByExternalPaymentId");
 
 bool enableOfflinePaymentsFeature = await featureManager.IsEnabledAsync("EnableOfflinePaymentsFeature");
-bool enableOfflinePaymentStatusInsert = await featureManager.IsEnabledAsync("EnableOfflinePaymentStatusInsert");
+bool EnableOfflinePayment = await featureManager.IsEnabledAsync("EnableOfflinePayment");
 
 bool enableRegistrationFeesFeature = await featureManager.IsEnabledAsync("EnableRegistrationFeesFeature");
 bool enableProducerResubmissionAmount = await featureManager.IsEnabledAsync("EnableProducerResubmissionAmount");
@@ -120,7 +120,7 @@ logger.LogInformation($"EnablePaymentStatusUpdate: {enablePaymentStatusUpdate}")
 logger.LogInformation($"EnableGetPaymentByExternalPaymentId: {enableGetPaymentByExternalPaymentId}");
 
 logger.LogInformation($"EnableOfflinePaymentsFeature: {enableOfflinePaymentsFeature}");
-logger.LogInformation($"EnableOfflinePaymentStatusInsert: {enableOfflinePaymentStatusInsert}");
+logger.LogInformation($"EnableOfflinePayment: {EnableOfflinePayment}");
 
 
 logger.LogInformation($"EnableRegistrationFeesFeature: {enableRegistrationFeesFeature}");

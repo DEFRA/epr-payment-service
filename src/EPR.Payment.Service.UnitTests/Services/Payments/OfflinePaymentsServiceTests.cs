@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.MSTest;
 using AutoMapper;
+using EPR.Payment.Service.Common.Data.DataModels;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Profiles;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
@@ -46,7 +47,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
 
         [TestMethod]
         [AutoMoqData]
-        public async Task InsertOfflinePaymentStatusAsync_ValidInput_ShouldReturnGuid([Frozen] Guid expectedResult)
+        public async Task InsertOfflinePaymentStatusAsync_ValidInput_ShouldCallRespository()
         {
             // Arrange
             var request = _fixture!.Build<OfflinePaymentStatusInsertRequestDto>().With(d => d.UserId, Guid.NewGuid()).Create();
@@ -54,13 +55,14 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             _offlinePaymentStatusInsertRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
 
             _offlinePaymentsRepositoryMock.Setup(r =>
-               r.InsertOfflinePaymentAsync(It.IsAny<Common.Data.DataModels.OfflinePayment>(), _cancellationToken)).ReturnsAsync(expectedResult);
+               r.InsertOfflinePaymentAsync(It.IsAny<Common.Data.DataModels.OfflinePayment>(), _cancellationToken));
 
             // Act
-            var result = await _service!.InsertOfflinePaymentAsync(request, _cancellationToken);
+            await _service!.InsertOfflinePaymentAsync(request, _cancellationToken);
 
             // Assert
-            result.Should().Be(expectedResult);
+            _offlinePaymentsRepositoryMock.Verify(s => s.InsertOfflinePaymentAsync(It.IsAny<OfflinePayment>(), It.IsAny<CancellationToken>()), Times.Once);
+
         }
 
         [TestMethod]

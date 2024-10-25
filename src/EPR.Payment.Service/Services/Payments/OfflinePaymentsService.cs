@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
-using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using FluentValidation;
 
@@ -20,7 +19,7 @@ namespace EPR.Payment.Service.Services.Payments
             _OfflinePaymentRepository = offlinePaymentRepository ?? throw new ArgumentNullException(nameof(offlinePaymentRepository));
             _offlinePaymentStatusInsertRequestValidator = offlinePaymentStatusInsertRequestValidator ?? throw new ArgumentNullException(nameof(offlinePaymentStatusInsertRequestValidator));
         }
-        public async Task<Guid> InsertOfflinePaymentAsync(OfflinePaymentStatusInsertRequestDto offlinePaymentInsertRequest, CancellationToken cancellationToken)
+        public async Task InsertOfflinePaymentAsync(OfflinePaymentStatusInsertRequestDto offlinePaymentInsertRequest, CancellationToken cancellationToken)
         {
             var validatorResult = await _offlinePaymentStatusInsertRequestValidator.ValidateAsync(offlinePaymentInsertRequest, cancellationToken);
 
@@ -30,7 +29,8 @@ namespace EPR.Payment.Service.Services.Payments
             }
 
             var entity = _mapper.Map<Common.Data.DataModels.OfflinePayment>(offlinePaymentInsertRequest);
-            return await _OfflinePaymentRepository.InsertOfflinePaymentAsync(entity, cancellationToken);
+            
+            await _OfflinePaymentRepository.InsertOfflinePaymentAsync(entity, cancellationToken);
         }
     }
 }

@@ -23,11 +23,11 @@ namespace EPR.Payment.Service.Controllers
 
         [MapToApiVersion(1)]
         [HttpPost]
-        [ProducesResponseType(typeof(Guid), 200)]
+        [ProducesResponseType(typeof(NoContentResult), 200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [FeatureGate("EnableOfflinePaymentStatusInsert")]
-        public async Task<ActionResult<Guid>> InsertOfflinePaymentStatus([FromBody] OfflinePaymentStatusInsertRequestDto offlinePaymentStatusInsertRequest, CancellationToken cancellationToken)
+        [FeatureGate("EnableOfflinePayment")]
+        public async Task<ActionResult> InsertOfflinePaymentStatus([FromBody] OfflinePaymentStatusInsertRequestDto offlinePaymentStatusInsertRequest, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {

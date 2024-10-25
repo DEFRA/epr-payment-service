@@ -31,19 +31,16 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         }
 
         [TestMethod, AutoMoqData]
-        public async Task InsertOfflinePaymentStatus_ValidInput_ShouldReturnOk([Frozen] Guid expectedResult)
+        public async Task InsertOfflinePaymentStatus_ValidInput_ShouldReturnOk()
         {
             // Arrange
             var request = _fixture.Build<OfflinePaymentStatusInsertRequestDto>().Create();
-
-            _offlinePaymentsServiceMock.Setup(service => service.InsertOfflinePaymentAsync(request, _cancellationToken))
-                .ReturnsAsync(expectedResult);
 
             //Act
             var result = await _controller.InsertOfflinePaymentStatus(request, _cancellationToken);
 
             //Assert
-            result.Result.Should().BeOfType<NoContentResult>();
+            result.Should().BeOfType<NoContentResult>();
         }
 
         [TestMethod]
@@ -57,7 +54,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             var result = await _controller.InsertOfflinePaymentStatus(request, _cancellationToken);
 
             // Assert
-            result.Result.Should().BeOfType<BadRequestObjectResult>();
+            result.Should().BeOfType<BadRequestObjectResult>();
         }
 
         [TestMethod]
@@ -73,7 +70,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             var result = await _controller.InsertOfflinePaymentStatus(request, _cancellationToken);
 
             // Assert
-            result.Result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
         [TestMethod]
@@ -89,7 +86,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             var result = await _controller.InsertOfflinePaymentStatus(request, _cancellationToken);
 
             // Assert
-            result.Result.Should().BeOfType<BadRequestObjectResult>();
+            result.Should().BeOfType<BadRequestObjectResult>();
         }
 
         [TestMethod]
@@ -108,9 +105,9 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             // Assert
             using (new AssertionScope())
             {
-                result.Result.Should().BeOfType<BadRequestObjectResult>();
+                result.Should().BeOfType<BadRequestObjectResult>();
 
-                var badRequestResult = result.Result as BadRequestObjectResult;
+                var badRequestResult = result as BadRequestObjectResult;
                 badRequestResult.Should().NotBeNull();
             }
         }
