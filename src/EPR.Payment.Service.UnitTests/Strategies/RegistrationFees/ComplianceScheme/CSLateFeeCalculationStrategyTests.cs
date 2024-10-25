@@ -5,6 +5,7 @@ using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
+using EPR.Payment.Service.Strategies.Interfaces.Common;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
 using EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme;
 using FluentAssertions;
@@ -65,10 +66,11 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             {
                 IsLateFeeApplicable = true,
                 Regulator = RegulatorType.GBEng,
-                MemberType = "Small"
+                MemberType = "Small",
+                SubmissionDate = DateTime.Now
             };
 
-            feesRepositoryMock.Setup(repo => repo.GetLateFeeAsync(request.Regulator, It.IsAny<CancellationToken>()))
+            feesRepositoryMock.Setup(repo => repo.GetLateFeeAsync(request.Regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(33200m);
 
             // Act
@@ -87,7 +89,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             {
                 IsLateFeeApplicable = false,
                 Regulator = RegulatorType.GBEng,
-                MemberType = "Small"
+                MemberType = "Small",
+                SubmissionDate = DateTime.Now
             };
 
             // Act

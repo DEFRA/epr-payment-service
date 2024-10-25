@@ -912,7 +912,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
 
             // Act
-            var result = await _complianceSchemeFeesRepository.GetLateFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            var result = await _complianceSchemeFeesRepository.GetLateFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
             result.Should().Be(33200m); // £332 represented in pence (33200 pence)
@@ -927,7 +927,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetLateFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetLateFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -952,7 +952,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { futureFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetLateFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetLateFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()
@@ -979,7 +979,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { expiredFee }.AsQueryable());
 
             // Act
-            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetLateFeeAsync(RegulatorType.Create("GB-ENG"), _cancellationToken);
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetLateFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<KeyNotFoundException>()

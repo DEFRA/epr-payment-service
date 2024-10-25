@@ -50,9 +50,9 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             return fee;
         }
 
-        public async Task<decimal> GetLateFeeAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        public async Task<decimal> GetLateFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
-            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceScheme, SubGroupTypeConstants.LateFee, regulator, cancellationToken);
+            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceScheme, SubGroupTypeConstants.LateFee, regulator, submissionDate, cancellationToken);
             ValidateFee(fee, string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidLateFeeError, regulator.Value));
             return fee;
         }

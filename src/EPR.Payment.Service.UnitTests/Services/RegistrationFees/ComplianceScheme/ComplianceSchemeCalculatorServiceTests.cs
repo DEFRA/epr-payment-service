@@ -527,6 +527,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
@@ -542,7 +543,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             };
 
             _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<CancellationToken>()))
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -599,6 +600,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
@@ -624,7 +626,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             var cancellationToken = CancellationToken.None;
 
             _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<RegulatorType>(), cancellationToken))
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), cancellationToken))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -708,6 +710,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.Now,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
@@ -733,7 +736,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             var cancellationToken = CancellationToken.None;
 
             _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<RegulatorType>(), cancellationToken))
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), cancellationToken))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
