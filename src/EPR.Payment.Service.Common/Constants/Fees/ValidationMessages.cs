@@ -15,5 +15,10 @@
         public const string InvalidMemberType = "Member Type must be one of the following: ";
         public const string InvalidSubmissionDate = "Submission Date is required. It must be a valid UTC date.";
         public const string FutureSubmissionDate = "Submission Date can not be future dated.";
+        public const string ResubmissionDateRequired = "Resubmission Date is required.";
+        public const string ResubmissionDateInvalid = "Resubmission Date cannot be in the future.";
+        public const string ReferenceNumberRequired = "Reference Number is required.";
+        public const string MemberCountGreaterThanZero = "Member Count must be greater than zero.";
+        public const string ResubmissionDateMustBeUtc = "Resubmission date must be in UTC.";
     }
 }
