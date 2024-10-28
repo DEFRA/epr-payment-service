@@ -49,5 +49,12 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             ValidateFee(fee, string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidOnlineMarketPlaceError, regulator.Value));
             return fee;
         }
+
+        public async Task<decimal> GetLateFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
+        {
+            var fee = await GetFeeAsync(GroupTypeConstants.ComplianceScheme, SubGroupTypeConstants.LateFee, regulator, submissionDate, cancellationToken);
+            ValidateFee(fee, string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidLateFeeError, regulator.Value));
+            return fee;
+        }
     }
 }
