@@ -13,9 +13,8 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
             _dataContext = dataContext;
         }
 
-        public async Task<Guid> InsertOnlinePaymentAsync(DataModels.OnlinePayment? entity, CancellationToken cancellationToken)
+        public async Task<Guid> InsertOnlinePaymentAsync(DataModels.Payment? entity, CancellationToken cancellationToken)
         {
-
             if (entity == null)
             {
                 throw new ArgumentException(PaymentConstants.InvalidInputToInsertPaymentError);
@@ -24,35 +23,32 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
             entity.CreatedDate = DateTime.UtcNow;
             entity.UpdatedDate = entity.CreatedDate;
             entity.UpdatedByUserId = entity.UserId;
-            entity.UpdatedByOrganisationId = entity.OrganisationId;
-            entity.GovPayStatus = Enum.GetName(typeof(Enums.Status), entity.InternalStatusId);
+            entity.OnlinePayment.UpdatedByOrgId = entity.OnlinePayment.OrganisationId;
 
-
-            _dataContext.OnlinePayment.Add(entity);
-
+            _dataContext.Payment.Add(entity); 
             await _dataContext.SaveChangesAsync(cancellationToken);
 
             return entity.ExternalPaymentId;
         }
 
-        public async Task UpdateOnlinePaymentAsync(DataModels.OnlinePayment? entity, CancellationToken cancellationToken)
+        public async Task UpdateOnlinePayment(DataModels.Payment? entity, CancellationToken cancellationToken)
         {
             if (entity == null)
             {
                 throw new ArgumentException(PaymentConstants.InvalidInputToUpdatePaymentError);
             }
 
-            entity.UpdatedDate = DateTime.Now;
-            entity.GovPayStatus = Enum.GetName(typeof(Enums.Status), entity.InternalStatusId);
-            _dataContext.OnlinePayment.Update(entity);
+            entity.UpdatedDate = DateTime.UtcNow;
+            _dataContext.Payment.Update(entity);
             await _dataContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<DataModels.OnlinePayment?> GetOnlinePaymentByExternalPaymentIdAsync(Guid externalPaymentId, CancellationToken cancellationToken)
+        public async Task<DataModels.Payment> GetOnlinePaymentByExternalPaymentIdAsync(Guid externalPaymentId, CancellationToken cancellationToken)
         {
-            var entity = await _dataContext.OnlinePayment
+            var entity = await _dataContext.Payment
+                .Include(p => p.OnlinePayment)
                 .Where(a => a.ExternalPaymentId == externalPaymentId)
-                .SingleOrDefaultAsync(cancellationToken); // Pass the cancellationToken here
+                .SingleOrDefaultAsync(cancellationToken);
 
             if (entity == null)
             {
@@ -61,7 +57,6 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
 
             return entity;
         }
-
         public async Task<int> GetPaymentStatusCount(CancellationToken cancellationToken)
         {
             return await _dataContext.PaymentStatus.CountAsync(cancellationToken);

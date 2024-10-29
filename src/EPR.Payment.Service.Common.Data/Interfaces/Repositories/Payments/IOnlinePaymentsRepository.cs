@@ -2,9 +2,9 @@
 {
     public interface IOnlinePaymentsRepository
     {
-        Task<Guid> InsertOnlinePaymentAsync(DataModels.OnlinePayment? entity, CancellationToken cancellationToken);
-        Task UpdateOnlinePaymentAsync(DataModels.OnlinePayment? entity, CancellationToken cancellationToken);
-        Task<DataModels.OnlinePayment?> GetOnlinePaymentByExternalPaymentIdAsync(Guid externalPaymentId, CancellationToken cancellationToken);
+        Task<Guid> InsertOnlinePaymentAsync(DataModels.Payment? entity, CancellationToken cancellationToken);
+        Task UpdateOnlinePayment(DataModels.Payment? entity, CancellationToken cancellationToken);
+        Task<DataModels.Payment> GetOnlinePaymentByExternalPaymentIdAsync(Guid externalPaymentId, CancellationToken cancellationToken);
         Task<int> GetPaymentStatusCount(CancellationToken cancellationToken);
     }
 }

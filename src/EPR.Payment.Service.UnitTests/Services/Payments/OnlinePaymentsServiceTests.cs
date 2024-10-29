@@ -4,9 +4,14 @@ using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Profiles;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
+using EPR.Payment.Service.Services.Interfaces.Payments;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Payments;
+using EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -20,9 +25,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
     {
         private Fixture? _fixture = null!;
         private Mock<IOnlinePaymentsRepository> _onlinePaymentsRepositoryMock = null!;
-        private Mapper? _mapper = null!;
-        private Mock<IValidator<OnlinePaymentStatusInsertRequestDto>> _onlinePaymentStatusInsertRequestDtoMock = null!;
-        private Mock<IValidator<OnlinePaymentStatusUpdateRequestDto>> _onlinePaymentStatusUpdateRequestDtoMock = null!;
+        private IMapper _mapper = null!;
         private OnlinePaymentsService? _service = null!;
 
         private CancellationToken _cancellationToken;
@@ -35,9 +38,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             var configuration = SetupAutomapper();
             _mapper = new Mapper(configuration);
             _cancellationToken = new CancellationToken();
-            _onlinePaymentStatusInsertRequestDtoMock = new Mock<IValidator<OnlinePaymentStatusInsertRequestDto>>();
-            _onlinePaymentStatusUpdateRequestDtoMock = new Mock<IValidator<OnlinePaymentStatusUpdateRequestDto>>();
-            _service = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object, _onlinePaymentStatusInsertRequestDtoMock.Object, _onlinePaymentStatusUpdateRequestDtoMock.Object);
+            _service = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object);
         }
 
         private static MapperConfiguration SetupAutomapper()
@@ -47,41 +48,59 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         }
 
         [TestMethod]
+        public void Constructor_WhenAllDependenciesAreNotNull_ShouldInitializeComplianceSchemeBaseFeeService()
+        {
+            // Act
+            var service = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                service.Should().NotBeNull();
+                service.Should().BeAssignableTo<IOnlinePaymentsService>();
+            }
+        }
+
+        [TestMethod]
+        public void Constructor_WhenMapperIsNull_ShouldThrowArgumentNullException()
+        {
+            // Act
+            Action act = () => new OnlinePaymentsService(null!, _onlinePaymentsRepositoryMock.Object);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'mapper')");
+        }
+
+        [TestMethod]
+        public void Constructor_WhenonlinePaymentsRepositoryIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            IOnlinePaymentsRepository? onlinePaymentsRepository = null;
+
+            // Act
+            Action act = () => new OnlinePaymentsService(_mapper, onlinePaymentsRepository!);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'onlinePaymentRepository')");
+        }
+
+        [TestMethod]
         [AutoMoqData]
         public async Task InsertOnlinePaymentStatusAsync_ValidInput_ShouldReturnGuid([Frozen] Guid expectedResult)
         {
             // Arrange
-            var request = _fixture!.Build<OnlinePaymentStatusInsertRequestDto>().With(d => d.UserId, Guid.NewGuid()).With(x => x.OrganisationId, Guid.NewGuid()).Create();
-
-            _onlinePaymentStatusInsertRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
+            var request = _fixture!.Build<OnlinePaymentInsertRequestDto>().With(d => d.UserId, Guid.NewGuid()).With(x => x.OrganisationId, Guid.NewGuid()).Create();
 
             _onlinePaymentsRepositoryMock.Setup(r =>
-               r.InsertOnlinePaymentAsync(It.IsAny<Common.Data.DataModels.OnlinePayment>(), _cancellationToken)).ReturnsAsync(expectedResult);
+               r.InsertOnlinePaymentAsync(It.IsAny<Common.Data.DataModels.Payment>(), _cancellationToken)).ReturnsAsync(expectedResult);
 
             // Act
-            var result = await _service!.InsertOnlinePaymentStatusAsync(request, _cancellationToken);
+            var result = await _service!.InsertOnlinePaymentAsync(request, _cancellationToken);
 
             // Assert
             result.Should().Be(expectedResult);
-        }
-
-        [TestMethod]
-        public async Task InsertOnlinePaymentStatusAsync_ValiditonFails_ShouldThrowValidationException()
-        {
-            // Arrange
-            var request = _fixture!.Build<OnlinePaymentStatusInsertRequestDto>().With(d => d.UserId, (Guid?)null).With(d => d.OrganisationId, (Guid?)null).Create();
-
-            var validationFailures = new List<ValidationFailure>
-            {
-                new ValidationFailure(nameof(request.UserId), "User ID cannot be null or empty."),
-                new ValidationFailure(nameof(request.OrganisationId), "Organisation ID cannot be null or empty.")
-            };
-
-            _onlinePaymentStatusInsertRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult(validationFailures));
-
-            // Act & Assert
-            await _service.Invoking(async x => await x!.InsertOnlinePaymentStatusAsync(request, _cancellationToken))
-                .Should().ThrowAsync<ValidationException>();
         }
 
         [TestMethod]
@@ -89,43 +108,22 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public async Task UpdateOnlinePaymentStatusAsync_ValidInput_NotThrowException([Frozen] Guid id)
         {
             // Arrange
-            var request = _fixture!.Build<OnlinePaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, Guid.NewGuid()).With(x => x.UpdatedByOrganisationId, Guid.NewGuid()).Create();
+            var request = _fixture!.Build<OnlinePaymentUpdateRequestDto>().With(d => d.UpdatedByUserId, Guid.NewGuid()).With(x => x.UpdatedByOrganisationId, Guid.NewGuid()).Create();
 
-            var entity = new Common.Data.DataModels.OnlinePayment();
+            var entity = new Common.Data.DataModels.Payment();
             _onlinePaymentsRepositoryMock.Setup(r => r.GetOnlinePaymentByExternalPaymentIdAsync(id, _cancellationToken)).ReturnsAsync(entity);
 
             entity = _mapper!.Map(request, entity);
+            entity.OnlinePayment = _mapper!.Map(request, entity.OnlinePayment);
 
             // Act
             _onlinePaymentsRepositoryMock.Setup(r =>
-               r.UpdateOnlinePaymentAsync(entity, _cancellationToken));
+               r.UpdateOnlinePayment(entity, _cancellationToken));
 
-            _onlinePaymentStatusUpdateRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
-
-            Func<Task> action = async () => await _service!.UpdateOnlinePaymentStatusAsync(id, request, _cancellationToken);
+            Func<Task> action = async () => await _service!.UpdateOnlinePaymentAsync(id, request, _cancellationToken);
 
             // Assert
             await action.Should().NotThrowAsync();
-        }
-
-        [TestMethod]
-        [AutoMoqData]
-        public async Task UpdateOnlinePaymentStatusAsync_ValiditonFails_ShouldThrowValidationException([Frozen] Guid id)
-        {
-            // Arrange
-            var request = _fixture!.Build<OnlinePaymentStatusUpdateRequestDto>().With(d => d.UpdatedByUserId, (Guid?)null).With(d => d.UpdatedByOrganisationId, (Guid?)null).Create();
-
-            var validationFailures = new List<ValidationFailure>
-            {
-                new ValidationFailure(nameof(request.UpdatedByUserId), "Updated User ID cannot be null or empty."),
-                new ValidationFailure(nameof(request.UpdatedByOrganisationId), "Updated Organisation ID cannot be null or empty.")
-            };
-
-            _onlinePaymentStatusUpdateRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult(validationFailures));
-
-            // Act & Assert
-            await _service.Invoking(async x => await x!.UpdateOnlinePaymentStatusAsync(id, request, _cancellationToken))
-                .Should().ThrowAsync<ValidationException>();
         }
 
         [TestMethod]
@@ -158,7 +156,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         [TestMethod]
         [AutoMoqData]
         public async Task GetOnlinePaymentByExternalPaymentIdAsync_RepositoryReturnsAResult_ShouldReturnMappedObject(
-            [Frozen] Common.Data.DataModels.OnlinePayment onlinePaymentEntity,
+            [Frozen] Common.Data.DataModels.Payment onlinePaymentEntity,
             Guid externalPaymentId
             )
         {
@@ -177,24 +175,6 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
                 result.UpdatedByOrganisationId.Should().Be(expectedResult.UpdatedByOrganisationId);
                 result.UpdatedByUserId.Should().Be(expectedResult.UpdatedByUserId);
             }
-        }
-
-        [TestMethod]
-        [AutoMoqData]
-        public async Task GetOnlinePaymentByExternalPaymentIdAsync_RepositoryReturnsAResult_ShouldReturnNullMappedObject(
-            Guid externalPaymentId
-            )
-        {
-            //Arrange
-            _onlinePaymentsRepositoryMock.Setup(i => i.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken)).ReturnsAsync((Common.Data.DataModels.OnlinePayment?)null);
-
-            var expectedResult = _mapper!.Map<OnlinePaymentResponseDto>(null);
-
-            //Act
-            var result = await _service!.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken);
-
-            //Assert
-            result.Should().Be(expectedResult);
         }
     }
 }

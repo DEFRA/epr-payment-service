@@ -27,7 +27,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddFluentValidation(fv =>
 {
-    fv.RegisterValidatorsFromAssemblyContaining<OnlinePaymentStatusInsertRequestDtoValidator>();
+    fv.RegisterValidatorsFromAssemblyContaining<OnlinePaymentInsertRequestDtoValidator>();
     fv.RegisterValidatorsFromAssemblyContaining<ProducerRegistrationFeesRequestDtoValidator>();
     fv.AutomaticValidationEnabled = false;
 });
@@ -101,19 +101,19 @@ using (var scope = app.Services.CreateScope())
 var featureManager = app.Services.GetRequiredService<IFeatureManager>();
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
-bool enablePaymentsFeature = await featureManager.IsEnabledAsync("EnablePaymentsFeature");
-bool enablePaymentStatusInsert = await featureManager.IsEnabledAsync("EnablePaymentStatusInsert");
-bool enablePaymentStatusUpdate = await featureManager.IsEnabledAsync("EnablePaymentStatusUpdate");
-bool enableGetPaymentByExternalPaymentId = await featureManager.IsEnabledAsync("EnableGetPaymentByExternalPaymentId");
+bool enableOnlinePaymentsFeature = await featureManager.IsEnabledAsync("EnableOnlinePaymentsFeature");
+bool enableOnlinePaymentInsert = await featureManager.IsEnabledAsync("EnableOnlinePaymentInsert");
+bool enableOnlinePaymentUpdate = await featureManager.IsEnabledAsync("EnableOnlinePaymentUpdate");
+bool enableGetOnlinePaymentByExternalPaymentId = await featureManager.IsEnabledAsync("EnableGetOnlinePaymentByExternalPaymentId");
 
 bool enableRegistrationFeesFeature = await featureManager.IsEnabledAsync("EnableRegistrationFeesFeature");
 bool enableProducerResubmissionAmount = await featureManager.IsEnabledAsync("EnableProducerResubmissionAmount");
 bool enableRegistrationFeesCalculation = await featureManager.IsEnabledAsync("EnableRegistrationFeesCalculation");
 
-logger.LogInformation($"EnablePaymentsFeature: {enablePaymentsFeature}");
-logger.LogInformation($"EnablePaymentStatusInsert: {enablePaymentStatusInsert}");
-logger.LogInformation($"EnablePaymentStatusUpdate: {enablePaymentStatusUpdate}");
-logger.LogInformation($"EnableGetPaymentByExternalPaymentId: {enableGetPaymentByExternalPaymentId}");
+logger.LogInformation($"EnableOnlinePaymentsFeature: {enableOnlinePaymentsFeature}");
+logger.LogInformation($"EnableOnlinePaymentInsert: {enableOnlinePaymentInsert}");
+logger.LogInformation($"EnableOnlinePaymentUpdate: {enableOnlinePaymentUpdate}");
+logger.LogInformation($"EnableGetOnlinePaymentByExternalPaymentId: {enableGetOnlinePaymentByExternalPaymentId}");
 
 
 logger.LogInformation($"EnableRegistrationFeesFeature: {enableRegistrationFeesFeature}");

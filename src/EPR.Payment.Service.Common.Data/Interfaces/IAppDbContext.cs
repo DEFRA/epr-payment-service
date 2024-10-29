@@ -5,6 +5,7 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
 {
     public interface IAppDbContext
     {
+        DbSet<DataModels.Payment> Payment { get; }
         DbSet<PaymentStatus> PaymentStatus { get; } 
         DbSet<DataModels.OnlinePayment> OnlinePayment { get; }
         DbSet<DataModels.OfflinePayment> OfflinePayment { get; }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241018101301_offline-payment-refactor")]
-    partial class offlinepaymentrefactor
+    [Migration("20241028134619_RefactorPaymentTables")]
+    partial class RefactorPaymentTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -680,6 +680,46 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 1,
                             RegulatorId = 4,
                             SubGroupId = 8
+                        },
+                        new
+                        {
+                            Id = 53,
+                            Amount = 33200m,
+                            EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2025, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 2,
+                            RegulatorId = 1,
+                            SubGroupId = 8
+                        },
+                        new
+                        {
+                            Id = 54,
+                            Amount = 33200m,
+                            EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2025, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 2,
+                            RegulatorId = 2,
+                            SubGroupId = 8
+                        },
+                        new
+                        {
+                            Id = 55,
+                            Amount = 33200m,
+                            EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2025, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 2,
+                            RegulatorId = 3,
+                            SubGroupId = 8
+                        },
+                        new
+                        {
+                            Id = 56,
+                            Amount = 33200m,
+                            EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2025, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 2,
+                            RegulatorId = 4,
+                            SubGroupId = 8
                         });
                 });
 
@@ -801,6 +841,86 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OfflinePayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnOrder(4);
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnOrder(3);
+
+                    b.Property<int>("PaymentId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(2);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId")
+                        .IsUnique();
+
+                    b.ToTable("OfflinePayment", (string)null);
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OnlinePayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ErrorCode")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnOrder(6);
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnOrder(7);
+
+                    b.Property<string>("GovPayPaymentId")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnOrder(4);
+
+                    b.Property<string>("GovPayStatus")
+                        .HasColumnType("varchar(20)")
+                        .HasColumnOrder(5);
+
+                    b.Property<Guid>("OrganisationId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(3);
+
+                    b.Property<int>("PaymentId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("UpdatedByOrgId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(8);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GovPayPaymentId")
+                        .IsUnique()
+                        .HasFilter("[GovPayPaymentId] IS NOT NULL");
+
+                    b.HasIndex("PaymentId")
+                        .IsUnique();
+
+                    b.ToTable("OnlinePayment", (string)null);
+                });
+
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Payment", b =>
                 {
                     b.Property<int>("Id")
@@ -812,50 +932,46 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(19,4)")
-                        .HasColumnOrder(12);
+                        .HasColumnOrder(7);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2")
-                        .HasColumnOrder(14);
+                        .HasColumnOrder(9);
 
                     b.Property<Guid>("ExternalPaymentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(4)
+                        .HasColumnOrder(3)
                         .HasDefaultValueSql("NEWID()");
 
                     b.Property<int>("InternalStatusId")
                         .HasColumnType("int")
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(4);
 
                     b.Property<string>("ReasonForPayment")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasColumnOrder(13);
+                        .HasColumnOrder(8);
 
                     b.Property<string>("Reference")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasColumnOrder(11);
+                        .HasColumnOrder(6);
 
                     b.Property<string>("Regulator")
                         .IsRequired()
                         .HasColumnType("varchar(20)")
-                        .HasColumnOrder(7);
-
-                    b.Property<Guid>("UpdatedByOrganisationId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(16);
+                        .HasColumnOrder(5);
 
                     b.Property<Guid>("UpdatedByUserId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(15);
+                        .HasColumnOrder(10);
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2")
-                        .HasColumnOrder(17);
+                        .HasColumnOrder(11);
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier")
@@ -869,39 +985,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.HasIndex("InternalStatusId");
 
                     b.ToTable("Payment", (string)null);
-
-                    b.UseTptMappingStrategy();
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OnlinePayment", b =>
-                {
-                    b.HasBaseType("EPR.Payment.Service.Common.Data.DataModels.Payment");
-
-                    b.Property<string>("ErrorCode")
-                        .HasColumnType("varchar(255)")
-                        .HasColumnOrder(4);
-
-                    b.Property<string>("ErrorMessage")
-                        .HasColumnType("varchar(255)")
-                        .HasColumnOrder(5);
-
-                    b.Property<string>("GovPayStatus")
-                        .HasColumnType("varchar(20)")
-                        .HasColumnOrder(3);
-
-                    b.Property<string>("GovpayPaymentId")
-                        .HasColumnType("varchar(50)")
-                        .HasColumnOrder(2);
-
-                    b.Property<Guid>("OrganisationId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(1);
-
-                    b.HasIndex("GovpayPaymentId")
-                        .IsUnique()
-                        .HasFilter("[GovpayPaymentId] IS NOT NULL");
-
-                    b.ToTable("OnlinePayment", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.RegistrationFees", b =>
@@ -931,6 +1014,28 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Navigation("SubGroup");
                 });
 
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OfflinePayment", b =>
+                {
+                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Payment", "Payment")
+                        .WithOne("OfflinePayment")
+                        .HasForeignKey("EPR.Payment.Service.Common.Data.DataModels.OfflinePayment", "PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Payment");
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OnlinePayment", b =>
+                {
+                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Payment", "Payment")
+                        .WithOne("OnlinePayment")
+                        .HasForeignKey("EPR.Payment.Service.Common.Data.DataModels.OnlinePayment", "PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Payment");
+                });
+
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Payment", b =>
                 {
                     b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.PaymentStatus", "PaymentStatus")
@@ -940,15 +1045,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PaymentStatus");
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OnlinePayment", b =>
-                {
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Payment", null)
-                        .WithOne()
-                        .HasForeignKey("EPR.Payment.Service.Common.Data.DataModels.OnlinePayment", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.Group", b =>
@@ -969,6 +1065,15 @@ namespace EPR.Payment.Service.Common.Data.Migrations
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.SubGroup", b =>
                 {
                     b.Navigation("RegistrationFees");
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Payment", b =>
+                {
+                    b.Navigation("OfflinePayment")
+                        .IsRequired();
+
+                    b.Navigation("OnlinePayment")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

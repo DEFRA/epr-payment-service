@@ -8,11 +8,16 @@ namespace EPR.Payment.Service.Common.Data.Profiles
     {
         public PaymentProfile()
         {
-            CreateMap<OnlinePaymentStatusInsertRequestDto, DataModels.OnlinePayment>().ForMember(dest => dest.InternalStatusId, opt => opt.MapFrom(src => src.Status));
+            CreateMap<OnlinePaymentInsertRequestDto, DataModels.Payment>().ForMember(dest => dest.InternalStatusId, opt => opt.MapFrom(src => src.Status));
 
-            CreateMap<OnlinePaymentStatusUpdateRequestDto, DataModels.OnlinePayment>().ForMember(dest => dest.InternalStatusId, opt => opt.MapFrom(src => src.Status));
+            CreateMap<OnlinePaymentUpdateRequestDto, DataModels.Payment>().ForMember(dest => dest.InternalStatusId, opt => opt.MapFrom(src => src.Status));
 
-            CreateMap<OnlinePaymentResponseDto, DataModels.OnlinePayment>().ReverseMap();
+            CreateMap<OnlinePaymentInsertRequestDto, DataModels.OnlinePayment>().ReverseMap();
+
+            CreateMap<OnlinePaymentUpdateRequestDto, DataModels.OnlinePayment>().ReverseMap();
+
+            CreateMap<DataModels.Payment, OnlinePaymentResponseDto>().ForMember(dest => dest.GovPayPaymentId, opt => opt.MapFrom(src => src.OnlinePayment.GovPayPaymentId))
+                                                                     .ForMember(dest => dest.UpdatedByOrganisationId, opt => opt.MapFrom(src => src.OnlinePayment.UpdatedByOrgId));
         }
     }
 }
