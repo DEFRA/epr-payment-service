@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241028134619_RefactorPaymentTables")]
+    partial class RefactorPaymentTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,12 +75,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Id = 5,
                             Description = "Producer re-submitting a report",
                             Type = "ProducerResubmission"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "Compliance Scheme re-submitting a report",
-                            Type = "ComplianceSchemeResubmission"
                         });
                 });
 
@@ -723,46 +720,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 2,
                             RegulatorId = 4,
                             SubGroupId = 8
-                        },
-                        new
-                        {
-                            Id = 57,
-                            Amount = 43000m,
-                            EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2025, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 6,
-                            RegulatorId = 1,
-                            SubGroupId = 7
-                        },
-                        new
-                        {
-                            Id = 58,
-                            Amount = 43000m,
-                            EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2025, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 6,
-                            RegulatorId = 2,
-                            SubGroupId = 7
-                        },
-                        new
-                        {
-                            Id = 59,
-                            Amount = 43000m,
-                            EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2025, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 6,
-                            RegulatorId = 3,
-                            SubGroupId = 7
-                        },
-                        new
-                        {
-                            Id = 60,
-                            Amount = 43000m,
-                            EffectiveFrom = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2025, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 6,
-                            RegulatorId = 4,
-                            SubGroupId = 7
                         });
                 });
 

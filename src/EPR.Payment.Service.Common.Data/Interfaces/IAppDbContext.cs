@@ -5,8 +5,10 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
 {
     public interface IAppDbContext
     {
-        DbSet<PaymentStatus> PaymentStatus { get; } 
         DbSet<DataModels.Payment> Payment { get; }
+        DbSet<PaymentStatus> PaymentStatus { get; } 
+        DbSet<DataModels.OnlinePayment> OnlinePayment { get; }
+        DbSet<DataModels.OfflinePayment> OfflinePayment { get; }
         DbSet<Group> Group { get; }
         DbSet<SubGroup> SubGroup { get; }
         DbSet<Regulator> Regulator { get; }
