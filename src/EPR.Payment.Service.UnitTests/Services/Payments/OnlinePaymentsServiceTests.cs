@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
     {
         private Fixture? _fixture = null!;
         private Mock<IOnlinePaymentsRepository> _onlinePaymentsRepositoryMock = null!;
-        private IMapper _mapper = null!;
+        private Mapper _mapper = null!;
         private OnlinePaymentsService? _service = null!;
 
         private CancellationToken _cancellationToken;

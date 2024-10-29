@@ -110,15 +110,15 @@ bool enableRegistrationFeesFeature = await featureManager.IsEnabledAsync("Enable
 bool enableProducerResubmissionAmount = await featureManager.IsEnabledAsync("EnableProducerResubmissionAmount");
 bool enableRegistrationFeesCalculation = await featureManager.IsEnabledAsync("EnableRegistrationFeesCalculation");
 
-logger.LogInformation($"EnableOnlinePaymentsFeature: {enableOnlinePaymentsFeature}");
-logger.LogInformation($"EnableOnlinePaymentInsert: {enableOnlinePaymentInsert}");
-logger.LogInformation($"EnableOnlinePaymentUpdate: {enableOnlinePaymentUpdate}");
-logger.LogInformation($"EnableGetOnlinePaymentByExternalPaymentId: {enableGetOnlinePaymentByExternalPaymentId}");
+logger.LogInformation("EnableOnlinePaymentsFeature: {EnableOnlinePaymentsFeature}", enableOnlinePaymentsFeature);
+logger.LogInformation("EnableOnlinePaymentInsert: {EnableOnlinePaymentInsert}", enableOnlinePaymentInsert);
+logger.LogInformation("EnableOnlinePaymentUpdate: {EnableOnlinePaymentUpdate}", enableOnlinePaymentUpdate);
+logger.LogInformation("EnableGetOnlinePaymentByExternalPaymentId: {EnableGetOnlinePaymentByExternalPaymentId}", enableGetOnlinePaymentByExternalPaymentId);
 
 
-logger.LogInformation($"EnableRegistrationFeesFeature: {enableRegistrationFeesFeature}");
-logger.LogInformation($"EnableProducerResubmissionAmount: {enableProducerResubmissionAmount}");
-logger.LogInformation($"EnableRegistrationFeesCalculation: {enableRegistrationFeesCalculation}");
+logger.LogInformation("EnableRegistrationFeesFeature: {EnableRegistrationFeesFeature}", enableRegistrationFeesFeature);
+logger.LogInformation("EnableProducerResubmissionAmount: {EnableProducerResubmissionAmount}", enableProducerResubmissionAmount);
+logger.LogInformation("EnableRegistrationFeesCalculation: {EnableRegistrationFeesCalculation}", enableRegistrationFeesCalculation);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
