@@ -4,18 +4,12 @@ using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Profiles;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services.Interfaces.Payments;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Payments;
-using EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using FluentValidation;
-using FluentValidation.Results;
 using Moq;
 
 namespace EPR.Payment.Service.UnitTests.Services.Payments
