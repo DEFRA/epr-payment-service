@@ -24,6 +24,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
             entity.UpdatedDate = entity.CreatedDate;
             entity.UpdatedByUserId = entity.UserId;
             entity.OnlinePayment.UpdatedByOrgId = entity.OnlinePayment.OrganisationId;
+            entity.OnlinePayment.GovPayStatus = Enum.GetName(typeof(Enums.Status), entity.InternalStatusId);
 
             _dataContext.Payment.Add(entity); 
             await _dataContext.SaveChangesAsync(cancellationToken);
@@ -39,6 +40,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
             }
 
             entity.UpdatedDate = DateTime.UtcNow;
+            entity.OnlinePayment.GovPayStatus = Enum.GetName(typeof(Enums.Status), entity.InternalStatusId);
             _dataContext.Payment.Update(entity);
             await _dataContext.SaveChangesAsync(cancellationToken);
         }
