@@ -42,7 +42,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         }
 
         [TestMethod]
-        public void Constructor_WhenAllDependenciesAreNotNull_ShouldInitializeComplianceSchemeBaseFeeService()
+        public void Constructor_WhenAllDependenciesAreNotNull_ShouldInitialize()
         {
             // Act
             var service = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object);

@@ -73,7 +73,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         public void Constructor_WhenOnlinePaymentInsertRequestValidatorIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
-            IValidator<OnlinePaymentInsertRequestDto>? onlinePaymentInsertRequestValidator = null!;
+            IValidator<OnlinePaymentInsertRequestDto>? onlinePaymentInsertRequestValidator = null;
 
             // Act
             Action act = () => new OnlinePaymentsController(_onlinePaymentsServiceMock.Object,

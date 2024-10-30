@@ -15,6 +15,7 @@
         public const string InvalidOrganisationId = "Updated By Organisation ID cannot be null or empty.";
         public const string InvalidStatus = "Status cannot be null or empty.";
         public const string InvalidStatusType = "Status For Payment must be a valid status type.";
+        public const string DescriptionRequired = "Description is required.";
 
 
         public const string ProducerTypeInvalid = "Producer Type must be one of the following: ";
