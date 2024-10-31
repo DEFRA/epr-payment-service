@@ -38,11 +38,13 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 
             try
             {
+                var lateFee = await _lateFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
+                var subsidiariesLateFee = request.NumberOfSubsidiaries * lateFee;
                 var response = new RegistrationFeesResponseDto
                 {
                     ProducerRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
                     ProducerOnlineMarketPlaceFee = await _onlineMarketCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
-                    ProducerLateRegistrationFee = await _lateFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
+                    ProducerLateRegistrationFee = lateFee + subsidiariesLateFee,
                     SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken)
                 };
 
