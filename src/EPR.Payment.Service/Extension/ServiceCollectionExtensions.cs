@@ -9,7 +9,6 @@ using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
-using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
@@ -52,7 +51,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>, CSBaseFeeCalculationStrategy>();
             services.AddScoped<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSMemberFeeCalculationStrategy>();
             services.AddScoped<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSOnlineMarketCalculationStrategy>();
-            services.AddScoped<ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSLateFeeCalculationStrategy>();
+            services.AddScoped<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>, CSLateFeeCalculationStrategy>();
             services.AddScoped<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>, CSSubsidiariesFeeCalculationStrategy>();
             services.AddScoped<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>, ComplianceSchemeResubmissionStrategy>();
 
