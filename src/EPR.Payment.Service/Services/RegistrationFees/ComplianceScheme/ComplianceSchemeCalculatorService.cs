@@ -13,14 +13,14 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
     {
         private readonly ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal> _baseFeeCalculationStrategy;
         private readonly ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeOnlineMarketStrategy;
-        private readonly ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeLateFeeStrategy;
+        private readonly ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal> _complianceSchemeLateFeeStrategy;
         private readonly ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeMemberStrategy;
         private readonly IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown> _subsidiariesFeeCalculationStrategy;
 
         public ComplianceSchemeCalculatorService(
             ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal> baseFeeCalculationStrategy,
             ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeOnlineMarketStrategy,
-            ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeLateFeeStrategy,
+            ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal> complianceSchemeLateFeeStrategy,
             ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeMemberStrategy,
             IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown> subsidiariesFeeCalculationStrategy)
         {
@@ -43,6 +43,8 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                     ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>()
                 };
 
+                decimal memberLateFee = await GetMemberLateFee(request, regulatorType, cancellationToken);
+
                 foreach (var item in request.ComplianceSchemeMembers)
                 {
                     var complianceSchemeMemberWithRegulatorDto = new ComplianceSchemeMemberWithRegulatorDto
@@ -61,17 +63,30 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                         MemberId = item.MemberId,
                         MemberRegistrationFee = await _complianceSchemeMemberStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
                         MemberOnlineMarketPlaceFee = await _complianceSchemeOnlineMarketStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
-                        MemberLateRegistrationFee = await _complianceSchemeLateFeeStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
                         SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken)
                     };
 
-                    member.SubsidiariesFee = member.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + member.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
-                    member.TotalMemberFee = member.MemberRegistrationFee + member.MemberOnlineMarketPlaceFee + member.SubsidiariesFee + member.MemberLateRegistrationFee;
+                    member.SubsidiariesFee = member.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees
+                                             + member.SubsidiariesFeeBreakdown.FeeBreakdowns.Sum(i => i.TotalPrice);
 
+                    if (item.IsLateFeeApplicable)
+                    {
+                        var subsidiariesLateFee = item.NumberOfSubsidiaries * memberLateFee;
+                        member.MemberLateRegistrationFee = memberLateFee + subsidiariesLateFee;
+                    }
+
+                    member.TotalMemberFee = member.MemberRegistrationFee
+                                            + member.MemberOnlineMarketPlaceFee
+                                            + member.SubsidiariesFee
+                                            + member.MemberLateRegistrationFee;
+
+                    // Add to response collection
                     response.ComplianceSchemeMembersWithFees.Add(member);
                 }
-                response.TotalFee = response.ComplianceSchemeRegistrationFee + response.ComplianceSchemeMembersWithFees.Select(i => i.TotalMemberFee).Sum();
-                response.PreviousPayment = 0;// TODO: This will not be 0 but calculated once the database schema is changes are ready
+
+                response.TotalFee = response.ComplianceSchemeRegistrationFee
+                                    + response.ComplianceSchemeMembersWithFees.Sum(m => m.TotalMemberFee);
+                response.PreviousPayment = 0; // Placeholder until database is updated
                 response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
 
                 return response;
@@ -81,5 +96,22 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                 throw new InvalidOperationException(ComplianceSchemeFeeCalculationExceptions.CalculationError, ex);
             }
         }
+
+        private async Task<decimal> GetMemberLateFee(ComplianceSchemeFeesRequestDto request, RegulatorType regulatorType, CancellationToken cancellationToken)
+        {
+            if (request.ComplianceSchemeMembers.Any(m => m.IsLateFeeApplicable))
+            {
+                return await _complianceSchemeLateFeeStrategy.CalculateFeeAsync(
+                    new ComplianceSchemeLateFeeRequestDto
+                    {
+                        Regulator = regulatorType,
+                        SubmissionDate = request.SubmissionDate,
+                        IsLateFeeApplicable = true
+                    },
+                    cancellationToken);
+            }
+            return 0;
+        }
+
     }
 }
