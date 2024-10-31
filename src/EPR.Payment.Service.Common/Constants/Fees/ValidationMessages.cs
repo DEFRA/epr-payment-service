@@ -3,7 +3,7 @@
     public static class ValidationMessages
     {
         // PaymentRequestDto Validation Messages
-        public const string UserIdRequired = "User ID is required.";
+        public const string UserIdRequired = "User id is required.";
         public const string OrganisationIdRequired = "Organisation ID is required.";
         public const string ReferenceRequired = "Reference is required.";
         public const string AmountRequiredAndGreaterThanZero = "Amount is required and must be greater than zero.";
@@ -16,6 +16,8 @@
         public const string InvalidStatus = "Status cannot be null or empty.";
         public const string InvalidStatusType = "Status For Payment must be a valid status type.";
         public const string DescriptionRequired = "Description is required.";
+        public const string InvalidDescription = "Description is invalid; acceptable values are 'Registration fee' or 'Packaging data resubmission fee'";
+        public const string InvalidRegulatorOffline = "Regulator is invalid; acceptable values are 'GB-ENG', 'GB-SCT', 'GB-WLS' and 'GB-NIR'.";
 
 
         public const string ProducerTypeInvalid = "Producer Type must be one of the following: ";

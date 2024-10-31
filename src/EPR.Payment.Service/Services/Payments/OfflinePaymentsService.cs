@@ -2,7 +2,6 @@
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Services.Interfaces.Payments;
-using FluentValidation;
 
 namespace EPR.Payment.Service.Services.Payments
 {

@@ -4,15 +4,15 @@ namespace EPR.Payment.Service.Common.Dtos.Request.Payments
 {
     public class OfflinePaymentInsertRequestDto
     {
-        public Guid? UserId { get; set; }
+        public required Guid UserId { get; set; }
 
-        public string? Reference { get; set; }
+        public required string Reference { get; set; }
 
-        public string? Regulator { get; set; }
+        public required string Regulator { get; set; }
 
-        public int? Amount { get; set; }
+        public required int Amount { get; set; }
 
-        public string? Description { get; set; }
+        public required string Description { get; set; }
 
         public DateTime? PaymentDate { get; set; }
 

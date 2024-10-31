@@ -119,11 +119,10 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             }
         }
 
-        [TestMethod]
-        public async Task InsertOfflinePayment_ServiceThrowsException_ShouldReturnInternalServerError()
+        [TestMethod, AutoMoqData]
+        public async Task InsertOfflinePayment_ServiceThrowsException_ShouldReturnInternalServerError([Frozen] OfflinePaymentInsertRequestDto request)
         {
             // Arrange
-            var request = new OfflinePaymentInsertRequestDto();
 
             _offlinePaymentsServiceMock.Setup(service => service.InsertOfflinePaymentAsync(request, _cancellationToken))
                                .ThrowsAsync(new Exception("Test Exception"));
@@ -135,11 +134,10 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
-        [TestMethod]
-        public async Task InsertOfflinePayment_ArgumentExceptionThrow_ShouldReturnBadRequest()
+        [TestMethod, AutoMoqData]
+        public async Task InsertOfflinePayment_ArgumentExceptionThrow_ShouldReturnBadRequest([Frozen] OfflinePaymentInsertRequestDto request)
         {
             // Arrange
-            var request = new OfflinePaymentInsertRequestDto();
 
             _offlinePaymentsServiceMock.Setup(service => service.InsertOfflinePaymentAsync(request, _cancellationToken))
                                .ThrowsAsync(new ArgumentException("Test Exception"));
