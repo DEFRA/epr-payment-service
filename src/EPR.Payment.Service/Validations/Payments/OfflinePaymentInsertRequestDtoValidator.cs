@@ -15,7 +15,7 @@ namespace EPR.Payment.Service.Validations.Payments
 
             RuleFor(x => x.Reference)
                 .NotEmpty()
-                .WithMessage(ValidationMessages.ReferenceRequired);
+                .WithMessage(ValidationMessages.OfflineReferenceRequired);
 
             RuleFor(x => x.Amount)
                 .NotNull()
@@ -32,7 +32,7 @@ namespace EPR.Payment.Service.Validations.Payments
             RuleFor(x => x.Regulator)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                .WithMessage(ValidationMessages.RegulatorRequired)
+                .WithMessage(ValidationMessages.OfflineRegulatorRequired)
                 .Must(text => text == RegulatorConstants.GBENG || text == RegulatorConstants.GBSCT || text == RegulatorConstants.GBWLS || text == RegulatorConstants.GBNIR)
                 .WithMessage(ValidationMessages.InvalidRegulatorOffline);
 
