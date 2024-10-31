@@ -99,7 +99,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
 
         private async Task<decimal> GetMemberLateFee(ComplianceSchemeFeesRequestDto request, RegulatorType regulatorType, CancellationToken cancellationToken)
         {
-            if (request.ComplianceSchemeMembers.Any(m => m.IsLateFeeApplicable))
+            if (request.ComplianceSchemeMembers.Exists(m => m.IsLateFeeApplicable))
             {
                 return await _complianceSchemeLateFeeStrategy.CalculateFeeAsync(
                     new ComplianceSchemeLateFeeRequestDto
