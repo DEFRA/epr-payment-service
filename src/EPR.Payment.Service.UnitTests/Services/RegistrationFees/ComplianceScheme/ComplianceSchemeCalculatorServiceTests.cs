@@ -1,8 +1,6 @@
-﻿using AutoMapper.Execution;
-using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
-using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
@@ -11,8 +9,6 @@ using EPR.Payment.Service.Strategies.RegistrationFees;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Moq;
-using System.Reflection;
-using System.Threading;
 
 namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceScheme
 {
