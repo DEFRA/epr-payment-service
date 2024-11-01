@@ -1,19 +1,12 @@
-﻿using AutoFixture;
-using AutoMapper;
+﻿using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Constants.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
+using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Payments;
-using FluentAssertions.Execution;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture.MSTest;
-using EPR.Payment.Service.Common.Dtos.Response.Payments;
-using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 
 namespace EPR.Payment.Service.UnitTests.Services.Payments
 {
@@ -21,7 +14,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
     public class PaymentsServiceTests
     {
         private Mock<IPaymentsRepository> _paymentsRepositoryMock = null!;
-        private PaymentsService? _service = null!;
+        private PaymentsService _service = null!;
 
         private CancellationToken _cancellationToken;
 
@@ -74,6 +67,24 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
 
             //Assert
             result.Should().Be(expectedPreviousPayments);
+        }
+
+        [TestMethod]
+        public async Task GetPreviousPaymentsByReferenceAsync_EmptyReference_ShouldReturnArgumentException()
+        {
+            // Act & Assert
+            await _service.Invoking(async s => await s.GetPreviousPaymentsByReferenceAsync(string.Empty, _cancellationToken))
+                .Should().ThrowAsync<ArgumentException>()
+                .WithMessage(PaymentConstants.InvalidReference);
+        }
+
+        [TestMethod]
+        public async Task GetPreviousPaymentsByReferenceAsync_NullReference_ShouldReturnArgumentException()
+        {
+            // Act & Assert
+            await _service.Invoking(async s => await s.GetPreviousPaymentsByReferenceAsync(null!, _cancellationToken))
+                .Should().ThrowAsync<ArgumentException>()
+                .WithMessage(PaymentConstants.InvalidReference);
         }
     }
 }

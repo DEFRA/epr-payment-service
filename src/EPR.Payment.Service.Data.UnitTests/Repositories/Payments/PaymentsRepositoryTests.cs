@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetPreviousPaymentsByReferenceAsync_PaymentsExist_ShouldReturnPreviousAmounts(
+        public async Task GetPreviousPaymentByReferenceAsync_SinglePaymentExist_ShouldReturnPreviousAmounts(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] PaymentsRepository _mockPaymentsRepository)
         {
@@ -40,6 +40,42 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
 
             //Assert
             result.Should().Be(10.0m);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetPreviousPaymentsByReferenceAsync_MultiplePaymentsExist_ShouldReturnPreviousAmounts(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] PaymentsRepository _mockPaymentsRepository)
+        {
+            //Arrange
+            _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
+            _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object);
+
+            var reference = "Test Reference";
+
+            //Act
+            var result = await _mockPaymentsRepository.GetPreviousPaymentsByReferenceAsync(reference, _cancellationToken);
+
+            //Assert
+            result.Should().Be(50.0m);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetPreviousPaymentsByReferenceAsync_PaymentDoesNotExist_ShouldReturnZeroAmount(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] PaymentsRepository _mockPaymentsRepository)
+        {
+            //Arrange
+            _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
+            _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object);
+
+            var reference = "Reference";
+
+            //Act
+            var result = await _mockPaymentsRepository.GetPreviousPaymentsByReferenceAsync(reference, _cancellationToken);
+
+            //Assert
+            result.Should().Be(0.0m);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using EPR.Payment.Service.Common.Constants.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 
@@ -14,6 +14,11 @@ namespace EPR.Payment.Service.Services.Payments
 
         public async Task<decimal> GetPreviousPaymentsByReferenceAsync(string reference, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrEmpty(reference))
+            {
+                throw new ArgumentException(PaymentConstants.InvalidReference);
+            }
+
             return await _paymentsRepository.GetPreviousPaymentsByReferenceAsync(reference, cancellationToken);
         }
     }

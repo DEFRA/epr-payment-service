@@ -9,7 +9,6 @@ using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
-using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
@@ -61,6 +60,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IComplianceSchemeFeesRepository, ComplianceSchemeFeesRepository>();
             services.AddTransient<IOnlinePaymentsRepository, OnlinePaymentsRepository>();
             services.AddTransient<IOfflinePaymentsRepository, OfflinePaymentsRepository>();
+            services.AddTransient<IPaymentsRepository, PaymentsRepository>();
 
             // Register the main services
             services.AddScoped<IProducerFeesCalculatorService, ProducerFeesCalculatorService>();
@@ -69,6 +69,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IComplianceSchemeResubmissionService, ComplianceSchemeResubmissionService>();
             services.AddScoped<IOnlinePaymentsService, OnlinePaymentsService>();
             services.AddScoped<IOfflinePaymentsService, OfflinePaymentsService>();
+            services.AddScoped<IPaymentsService, PaymentsService>();
 
 
             return services;
