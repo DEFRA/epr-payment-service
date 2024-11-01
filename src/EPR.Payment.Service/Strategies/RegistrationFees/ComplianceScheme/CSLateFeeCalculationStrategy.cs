@@ -4,7 +4,7 @@ using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceSchem
 
 namespace EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme
 {
-    public class CSLateFeeCalculationStrategy : ICSLateFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>
+    public class CSLateFeeCalculationStrategy : ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>
     {
         private readonly IComplianceSchemeFeesRepository _feesRepository;
 
@@ -12,9 +12,10 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme
         {
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
-        public async Task<decimal> CalculateFeeAsync(ComplianceSchemeMemberWithRegulatorDto request, CancellationToken cancellationToken)
-        {            
-            // If Online Market is false, return zero
+
+        public async Task<decimal> CalculateFeeAsync(ComplianceSchemeLateFeeRequestDto request, CancellationToken cancellationToken)
+        {
+            // If Late Fee is false, return zero
             if (!request.IsLateFeeApplicable)
                 return 0m;
 

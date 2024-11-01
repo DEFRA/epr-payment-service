@@ -6,7 +6,6 @@ using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.Common;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
 using EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -52,7 +51,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             using (new AssertionScope())
             {
                 strategy.Should().NotBeNull();
-                strategy.Should().BeAssignableTo<IFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
+                strategy.Should().BeAssignableTo<IFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>>();
             }
         }
 
@@ -62,11 +61,10 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             CSLateFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ComplianceSchemeMemberWithRegulatorDto
+            var request = new ComplianceSchemeLateFeeRequestDto
             {
                 IsLateFeeApplicable = true,
                 Regulator = RegulatorType.GBEng,
-                MemberType = "Small",
                 SubmissionDate = DateTime.Now
             };
 
@@ -85,11 +83,10 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             CSLateFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ComplianceSchemeMemberWithRegulatorDto
+            var request = new ComplianceSchemeLateFeeRequestDto
             {
                 IsLateFeeApplicable = false,
                 Regulator = RegulatorType.GBEng,
-                MemberType = "Small",
                 SubmissionDate = DateTime.Now
             };
 
