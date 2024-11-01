@@ -59,6 +59,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IProducerFeesRepository, ProducerFeesRepository>();
             services.AddScoped<IComplianceSchemeFeesRepository, ComplianceSchemeFeesRepository>();
             services.AddTransient<IOnlinePaymentsRepository, OnlinePaymentsRepository>();
+            services.AddTransient<IOfflinePaymentsRepository, OfflinePaymentsRepository>();
 
             // Register the main services
             services.AddScoped<IProducerFeesCalculatorService, ProducerFeesCalculatorService>();
@@ -66,6 +67,8 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IProducerResubmissionService, ProducerResubmissionService>();
             services.AddScoped<IComplianceSchemeResubmissionService, ComplianceSchemeResubmissionService>();
             services.AddScoped<IOnlinePaymentsService, OnlinePaymentsService>();
+            services.AddScoped<IOfflinePaymentsService, OfflinePaymentsService>();
+
 
             return services;
         }
