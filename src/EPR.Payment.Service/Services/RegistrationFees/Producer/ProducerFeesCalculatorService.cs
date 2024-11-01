@@ -38,8 +38,8 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 
             try
             {
-                var lateFee = await _lateFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
-                var subsidiariesLateFee = request.NumberOfSubsidiaries * lateFee;
+                decimal lateFee = await _lateFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
+                decimal subsidiariesLateFee = request.NumberOfSubsidiaries * lateFee;
                 var response = new RegistrationFeesResponseDto
                 {
                     ProducerRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
