@@ -93,8 +93,11 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
             var result = await _repository.GetFeeAsyncPublic(groupType, subGroupType, regulator, submissionDate, CancellationToken.None);
 
             // Assert
-            result.Should().Be(expectedFee);
-            _keyValueStore.Data.Should().ContainKey(inMemoryKey!).And.Subject[inMemoryKey!].Should().Be(expectedFee);
+            using (new AssertionScope())
+            {
+                result.Should().Be(expectedFee);
+                _keyValueStore.Data.Should().ContainKey(inMemoryKey!).And.Subject[inMemoryKey!].Should().Be(expectedFee);
+            }
 
         }
     }
