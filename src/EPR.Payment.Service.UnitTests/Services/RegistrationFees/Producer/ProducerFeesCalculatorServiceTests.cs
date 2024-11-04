@@ -2,6 +2,7 @@
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.RegistrationFees.Producer;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
@@ -23,6 +24,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
         private Mock<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>> _subsidiariesFeeCalculationStrategyMock = null!;
         private Mock<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>> _lateFeeCalculationStrategyMock = null!;
         private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
+        private Mock<IPaymentsService> _paymentsService = null!;
         private ProducerFeesCalculatorService? _calculatorService = null;
 
         [TestInitialize]
@@ -33,13 +35,15 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _lateFeeCalculationStrategyMock = new Mock<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>>();
             _validatorMock = new Mock<IValidator<ProducerRegistrationFeesRequestDto>>();
+            _paymentsService = new Mock<IPaymentsService>();
 
             _calculatorService = new ProducerFeesCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
-                _lateFeeCalculationStrategyMock.Object
+                _lateFeeCalculationStrategyMock.Object,
+                _paymentsService.Object
             );
         }
 
@@ -55,7 +59,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
-                _lateFeeCalculationStrategyMock.Object);
+                _lateFeeCalculationStrategyMock.Object,
+                _paymentsService.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'baseFeeCalculationStrategy')");
@@ -73,7 +78,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 subsidiariesFeeCalculationStrategy!,
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
-                _lateFeeCalculationStrategyMock.Object);
+                _lateFeeCalculationStrategyMock.Object,
+                _paymentsService.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'subsidiariesFeeCalculationStrategy')");
@@ -91,7 +97,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 validator!,
                 _onlineMarketCalculationStrategyMock.Object,
-                _lateFeeCalculationStrategyMock.Object);
+                _lateFeeCalculationStrategyMock.Object,
+                _paymentsService.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");
@@ -110,7 +117,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
                 onlineMarketCalculationStrategy!,
-                _lateFeeCalculationStrategyMock.Object);
+                _lateFeeCalculationStrategyMock.Object,
+                _paymentsService.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'onlineMarketCalculationStrategy')");
@@ -128,10 +136,30 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object!,
-                lateFeeCalculationStrategy!);
+                lateFeeCalculationStrategy!,
+                _paymentsService.Object);
 
             // Assert
             servie.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'lateFeeCalculationStrategy')");
+        }
+
+        [TestMethod]
+        public void Constructor_WhenPaymentServiceIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            IPaymentsService? paymentsService = null;
+
+            // Act
+            Func<ProducerFeesCalculatorService> servie = () => new ProducerFeesCalculatorService(
+                _baseFeeCalculationStrategyMock.Object,
+                _subsidiariesFeeCalculationStrategyMock.Object,
+                _validatorMock.Object,
+                _onlineMarketCalculationStrategyMock.Object!,
+                _lateFeeCalculationStrategyMock.Object,
+                paymentsService!);
+
+            // Assert
+            servie.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'paymentsService')");
         }
 
         [TestMethod]
@@ -143,7 +171,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
-                _lateFeeCalculationStrategyMock.Object);
+                _lateFeeCalculationStrategyMock.Object,
+                _paymentsService.Object);
 
             // Assert
             using (new AssertionScope())
