@@ -1,4 +1,5 @@
 ﻿using EPR.Payment.Service.Common.Data;
+using EPR.Payment.Service.Common.Data.Helper;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
@@ -66,6 +67,8 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IProducerResubmissionService, ProducerResubmissionService>();
             services.AddScoped<IComplianceSchemeResubmissionService, ComplianceSchemeResubmissionService>();
             services.AddScoped<IOnlinePaymentsService, OnlinePaymentsService>();
+
+            services.AddScoped<FeesKeyValueStore>();
 
             return services;
         }

@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Data.Interfaces;
+﻿using EPR.Payment.Service.Common.Data.Helper;
+using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,22 +8,36 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
     public abstract class BaseFeeRepository
     {
         protected readonly IAppDbContext _dataContext;
+        private readonly FeesKeyValueStore _keyValueStore;
 
-        protected BaseFeeRepository(IAppDbContext dataContext)
+        protected BaseFeeRepository(IAppDbContext dataContext, FeesKeyValueStore keyValueStore)
         {
             _dataContext = dataContext;
+            _keyValueStore = keyValueStore;
         }
         protected async Task<decimal> GetFeeAsync(string groupType, string subGroupType, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
-            var fee = await _dataContext.RegistrationFees
-                .Where(r => r.Group.Type.ToLower() == groupType.ToLower() &&
-                            r.SubGroup.Type.ToLower() == subGroupType.ToLower() &&
-                            r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
-                            r.EffectiveFrom.Date <= submissionDate &&
-                            r.EffectiveTo.Date >= submissionDate)
-                .OrderByDescending(r => r.EffectiveFrom)
-                .Select(r => r.Amount)
-                .FirstOrDefaultAsync(cancellationToken); 
+            decimal fee = 0;
+            string inMemoryKey = GetInMemoryKey(groupType, subGroupType, regulator);
+            var feesFromMemory = _keyValueStore.Get(inMemoryKey);
+            if (feesFromMemory == null)
+            {
+                fee = await _dataContext.RegistrationFees
+                    .Where(r => r.Group.Type.ToLower() == groupType.ToLower() &&
+                                r.SubGroup.Type.ToLower() == subGroupType.ToLower() &&
+                                r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
+                                r.EffectiveFrom.Date <= submissionDate &&
+                                r.EffectiveTo.Date >= submissionDate)
+                    .OrderByDescending(r => r.EffectiveFrom)
+                    .Select(r => r.Amount)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                _keyValueStore.Add(inMemoryKey, fee);
+            }
+            else
+            {
+                fee = (decimal)feesFromMemory;
+            }
 
             return fee;
         }
@@ -33,6 +48,11 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             {
                 throw new KeyNotFoundException(errorMessage);
             }
+        }
+
+        private static string GetInMemoryKey(string groupType, string subGroupType, RegulatorType regulator)
+        {
+            return string.Concat(groupType, subGroupType, regulator);
         }
     }
 }
