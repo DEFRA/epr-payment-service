@@ -1,5 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
+using EPR.Payment.Service.Common.Data.Helper;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -8,7 +9,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 {
     public class ProducerFeesRepository : BaseFeeRepository, IProducerFeesRepository
     {
-        public ProducerFeesRepository(IAppDbContext dataContext) : base(dataContext) { }
+        public ProducerFeesRepository(IAppDbContext dataContext, FeesKeyValueStore keyValueStore) : base(dataContext, keyValueStore) { }
 
         public async Task<decimal> GetBaseFeeAsync(string producer, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
