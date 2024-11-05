@@ -29,6 +29,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     OnlinePayment = new Data.DataModels.OnlinePayment()
                     {
                         Id = 1,
+                        PaymentId = 1,
                         UpdatedByOrgId = Guid.NewGuid(),
                         OrganisationId = Guid.NewGuid()
                     }
@@ -56,7 +57,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                new Data.DataModels.Payment()
                 {
                     Id = 3,
-                    ExternalPaymentId = Guid.Parse("dab3d8e1-409b-4b40-a610-1b41843e4710"),
+                    ExternalPaymentId = Guid.Parse("5b44fe7c-f63d-40ae-a28a-97c4680e082c"),
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference",
@@ -76,7 +77,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                new Data.DataModels.Payment()
                 {
                     Id = 4,
-                    ExternalPaymentId = Guid.Parse("dab3d8e1-409b-4b40-a610-1b41843e4710"),
+                    ExternalPaymentId = Guid.Parse("5c81a6b3-3669-413a-a961-f072e18c6025"),
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference",
@@ -90,6 +91,68 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     {
                         Id = 3,
                         PaymentId = 4,
+                        PaymentDate = new DateTime()
+                    }
+                },
+               //Next three records are added for negative payments. A permitted scenario
+               new Data.DataModels.Payment()
+                {
+                    Id = 5,
+                    ExternalPaymentId = Guid.Parse("482963c7-57da-4758-b630-f25737c18793"),
+                    UserId = Guid.NewGuid(),
+                    Regulator = "Test Regulator For Negative",
+                    Reference = "Test Reference For Negative",
+                    InternalStatusId = Data.Enums.Status.Success,
+                    Amount = -10.0M,
+                    ReasonForPayment = "Test 1",
+                    CreatedDate = new DateTime(),
+                    UpdatedByUserId = Guid.NewGuid(),
+                    UpdatedDate = new DateTime(),
+                    OnlinePayment = new Data.DataModels.OnlinePayment()
+                    {
+                        Id = 2,
+                        PaymentId = 5,
+                        UpdatedByOrgId = Guid.NewGuid(),
+                        OrganisationId = Guid.NewGuid()
+                    }
+                },
+                new Data.DataModels.Payment()
+                {
+                    Id = 6,
+                    ExternalPaymentId = Guid.Parse("47bb50c4-c2cd-4791-95e8-f31159411eb4"),
+                    UserId = Guid.NewGuid(),
+                    Regulator = "Test Regulator For Negative",
+                    Reference = "Test Reference For Negative",
+                    InternalStatusId = Data.Enums.Status.Success,
+                    Amount = 50.0M,
+                    ReasonForPayment = "Test 2",
+                    CreatedDate = new DateTime(),
+                    UpdatedByUserId = Guid.NewGuid(),
+                    UpdatedDate = new DateTime(),
+                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    {
+                        Id = 4,
+                        PaymentId = 6,
+                        PaymentDate = new DateTime()
+                    }
+                },
+                new Data.DataModels.Payment()
+                {
+                    Id = 7,
+                    ExternalPaymentId = Guid.Parse("5a8fad6e-5570-48b3-83b9-174195b0f0b0"),
+                    UserId = Guid.NewGuid(),
+                    Regulator = "Test Regulator For Negative",
+                    Reference = "Test Reference For Negative",
+                    InternalStatusId = Data.Enums.Status.Success,
+                    Amount = 100.0M,
+                    ReasonForPayment = "Test 2",
+                    CreatedDate = new DateTime(),
+                    UpdatedByUserId = Guid.NewGuid(),
+                    UpdatedDate = new DateTime(),
+                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    {
+                        Id = 5,
+                        PaymentId = 7,
                         PaymentDate = new DateTime()
                     }
                 }
