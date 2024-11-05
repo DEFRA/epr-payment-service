@@ -1,4 +1,4 @@
-﻿namespace EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees
+﻿namespace EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme
 {
     public class ComplianceSchemeResubmissionFeeResult
     {

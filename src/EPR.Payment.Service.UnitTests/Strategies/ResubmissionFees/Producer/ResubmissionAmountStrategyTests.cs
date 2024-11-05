@@ -3,7 +3,7 @@ using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.Common;
+using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.ResubmissionFees.Producer;
@@ -15,7 +15,7 @@ using Moq;
 namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.Producer
 {
     [TestClass]
-    public class DefaultResubmissionAmountStrategyTests
+    public class ResubmissionAmountStrategyTests
     {
         private IFixture _fixture = null!;
 
@@ -32,7 +32,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.Producer
             IProducerFeesRepository? nullRepository = null;
 
             // Act
-            Action act = () => new DefaultResubmissionAmountStrategy(nullRepository!);
+            Action act = () => new ProducerResubmissionAmountStrategy(nullRepository!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -46,73 +46,71 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.Producer
             var feesRepositoryMock = _fixture.Create<Mock<IProducerFeesRepository>>();
 
             // Act
-            var strategy = new DefaultResubmissionAmountStrategy(feesRepositoryMock.Object);
+            var strategy = new ProducerResubmissionAmountStrategy(feesRepositoryMock.Object);
 
             // Assert
             using (new AssertionScope())
             {
                 strategy.Should().NotBeNull();
-                strategy.Should().BeAssignableTo<IResubmissionAmountStrategy<RegulatorDto, decimal>>();
+                strategy.Should().BeAssignableTo<IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal>>();
             }
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetResubmissionAsync_RepositoryReturnsAResult_ShouldReturnAmount(
+        public async Task CalculateFeeAsync_RepositoryReturnsAResult_ShouldReturnAmount(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
-            DefaultResubmissionAmountStrategy strategy,
-            [Frozen] decimal expectedAmount
-            )
+            ProducerResubmissionAmountStrategy strategy,
+            [Frozen] decimal expectedAmount)
         {
-            //Arrange
-            var producerResubmissionFeeRequestDto = new RegulatorDto { Regulator = "GB-ENG" };
+            // Arrange
+            var producerResubmissionFeeRequestDto = new ProducerResubmissionFeeRequestDto { Regulator = "GB-ENG" };
             var regulatorType = RegulatorType.Create(producerResubmissionFeeRequestDto.Regulator);
 
             feesRepositoryMock.Setup(i => i.GetResubmissionAsync(regulatorType, CancellationToken.None)).ReturnsAsync(expectedAmount);
 
-            //Act
+            // Act
             var result = await strategy.CalculateFeeAsync(producerResubmissionFeeRequestDto, CancellationToken.None);
 
-            //Assert
+            // Assert
             result.Should().Be(expectedAmount);
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetResubmissionAsync_EmptyRegulator_ThrowsArgumentException(DefaultResubmissionAmountStrategy strategy)
+        public async Task CalculateFeeAsync_EmptyRegulator_ThrowsArgumentException(ProducerResubmissionAmountStrategy strategy)
         {
             // Act & Assert
-            var producerResubmissionFeeRequestDto = new RegulatorDto { Regulator = string.Empty };
-            await strategy.Invoking(async s => await s!.CalculateFeeAsync(producerResubmissionFeeRequestDto, new CancellationToken()))
+            var producerResubmissionFeeRequestDto = new ProducerResubmissionFeeRequestDto { Regulator = string.Empty };
+            await strategy.Invoking(async s => await s.CalculateFeeAsync(producerResubmissionFeeRequestDto, new CancellationToken()))
                 .Should().ThrowAsync<ArgumentException>()
                 .WithMessage("Regulator cannot be null or empty");
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetResubmissionAsync_NullRegulator_ThrowsArgumentException(DefaultResubmissionAmountStrategy strategy)
+        public async Task CalculateFeeAsync_NullRegulator_ThrowsArgumentException(ProducerResubmissionAmountStrategy strategy)
         {
             // Act & Assert
-            var producerResubmissionFeeRequestDto = new RegulatorDto { Regulator = null! };
-            await strategy.Invoking(async s => await s!.CalculateFeeAsync(producerResubmissionFeeRequestDto, new CancellationToken()))
+            var producerResubmissionFeeRequestDto = new ProducerResubmissionFeeRequestDto { Regulator = null! };
+            await strategy.Invoking(async s => await s.CalculateFeeAsync(producerResubmissionFeeRequestDto, new CancellationToken()))
                 .Should().ThrowAsync<ArgumentException>()
                 .WithMessage("Regulator cannot be null or empty");
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetResubmissionAsync_ZeroFee_ThrowsKeyNotFoundException(
+        public async Task CalculateFeeAsync_ZeroFee_ThrowsKeyNotFoundException(
             [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
-            DefaultResubmissionAmountStrategy strategy)
+            ProducerResubmissionAmountStrategy strategy)
         {
             // Arrange
-            var producerResubmissionFeeRequestDto = new RegulatorDto { Regulator = "GB-ENG" };
+            var producerResubmissionFeeRequestDto = new ProducerResubmissionFeeRequestDto { Regulator = "GB-ENG" };
             var regulatorType = RegulatorType.Create(producerResubmissionFeeRequestDto.Regulator);
 
             // Set up the repository mock to return 0 fee
             feesRepositoryMock.Setup(i => i.GetResubmissionAsync(regulatorType, CancellationToken.None)).ReturnsAsync(0m);
 
             // Act & Assert
-            await strategy.Invoking(async s => await s!.CalculateFeeAsync(producerResubmissionFeeRequestDto, new CancellationToken()))
+            await strategy.Invoking(async s => await s.CalculateFeeAsync(producerResubmissionFeeRequestDto, new CancellationToken()))
                 .Should().ThrowAsync<KeyNotFoundException>()
                 .WithMessage(string.Format(ProducerFeesCalculationExceptions.InvalidRegulatorError, producerResubmissionFeeRequestDto.Regulator));
         }
-
     }
 }
