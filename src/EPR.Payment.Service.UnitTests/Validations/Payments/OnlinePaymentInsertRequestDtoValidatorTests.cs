@@ -6,7 +6,7 @@ using FluentValidation.TestHelper;
 namespace EPR.Payment.Service.UnitTests.Validations.Payments
 {
     [TestClass]
-    public class PaymentStatusInsertRequestDtoValidatorTests
+    public class OnlinePaymentInsertRequestDtoValidatorTests
     {
         private OnlinePaymentInsertRequestDtoValidator _validator = null!;
 
