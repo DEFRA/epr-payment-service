@@ -8,5 +8,6 @@
         public const string InvalidInputToInsertPaymentError = "The payment that is being tried to be recorded is invalid.";
         public const string InvalidInputToUpdatePaymentError = "The payment that is being tried to be updated is invalid.";
         public const string RecordNotFoundPaymentError = "Payment record not found for ID";
+        public const string InvalidReference = "Reference cannot be null or empty";
     }
 }
