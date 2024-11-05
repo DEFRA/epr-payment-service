@@ -26,7 +26,7 @@ namespace EPR.Payment.Service.Controllers.Payments
 
         [MapToApiVersion(1)]
         [HttpPost]
-        [ProducesResponseType(typeof(NoContentResult), 200)]
+        [ProducesResponseType(typeof(NoContentResult), 204)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableOfflinePayment")]

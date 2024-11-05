@@ -16,7 +16,7 @@
         public const string InvalidStatus = "Status cannot be null or empty.";
         public const string InvalidStatusType = "Status For Payment must be a valid status type.";
         public const string DescriptionRequired = "The Description field is required.";
-        public const string InvalidDescription = "Description is invalid; acceptable values are 'Registration fee' or 'Packaging data resubmission fee'";
+        public const string InvalidDescription = "Description is invalid; acceptable values are 'Registration fee' or 'Packaging data resubmission fee'.";
         public const string InvalidRegulatorOffline = "Regulator is invalid; acceptable values are 'GB-ENG', 'GB-SCT', 'GB-WLS' and 'GB-NIR'.";
         public const string OfflineReferenceRequired = "The Reference field is required.";
         public const string OfflineRegulatorRequired = "The Regulator field is required.";
