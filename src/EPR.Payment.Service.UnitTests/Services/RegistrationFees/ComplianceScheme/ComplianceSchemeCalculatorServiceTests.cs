@@ -1,6 +1,7 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
@@ -20,6 +21,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         private Mock<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>> _complianceSchemeLateFeeStrategyMock = null!;
         private Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeMemberStrategyMock = null!;
         private Mock<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>> _subsidiariesFeeCalculationStrategyMock = null!;
+        private Mock<IPaymentsService> _paymentsServiceMock = null!;
         private ComplianceSchemeCalculatorService _service = null!;
 
         [TestInitialize]
@@ -30,7 +32,14 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             _complianceSchemeLateFeeStrategyMock = new Mock<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>>();
             _complianceSchemeMemberStrategyMock = new Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>>();
-            _service = new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeLateFeeStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
+            _paymentsServiceMock = new Mock<IPaymentsService>();
+            _service = new ComplianceSchemeCalculatorService(
+                _baseFeeCalculationStrategyMock.Object, 
+                _complianceSchemeOnlineMarketStrategyMock.Object, 
+                _complianceSchemeLateFeeStrategyMock.Object, 
+                _complianceSchemeMemberStrategyMock.Object, 
+                _subsidiariesFeeCalculationStrategyMock.Object,
+                _paymentsServiceMock.Object);
         }
 
         [TestMethod]
@@ -40,7 +49,13 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>? baseFeeCalculationStrategy = null;
 
             // Act
-            Action act = () => new ComplianceSchemeCalculatorService(baseFeeCalculationStrategy!, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeLateFeeStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
+            Action act = () => new ComplianceSchemeCalculatorService(
+                baseFeeCalculationStrategy!, 
+                _complianceSchemeOnlineMarketStrategyMock.Object, 
+                _complianceSchemeLateFeeStrategyMock.Object, 
+                _complianceSchemeMemberStrategyMock.Object, 
+                _subsidiariesFeeCalculationStrategyMock.Object,
+                _paymentsServiceMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -54,7 +69,13 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>? complianceSchemeOnlineMarketStrategy = null;
 
             // Act
-            Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, complianceSchemeOnlineMarketStrategy!, _complianceSchemeLateFeeStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
+            Action act = () => new ComplianceSchemeCalculatorService(
+                _baseFeeCalculationStrategyMock.Object, 
+                complianceSchemeOnlineMarketStrategy!, 
+                _complianceSchemeLateFeeStrategyMock.Object, 
+                _complianceSchemeMemberStrategyMock.Object, 
+                _subsidiariesFeeCalculationStrategyMock.Object,
+                _paymentsServiceMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -68,7 +89,13 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>? complianceSchemeLateFeeStrategy = null;
 
             // Act
-            Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, complianceSchemeLateFeeStrategy!, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
+            Action act = () => new ComplianceSchemeCalculatorService(
+                _baseFeeCalculationStrategyMock.Object, 
+                _complianceSchemeOnlineMarketStrategyMock.Object, 
+                complianceSchemeLateFeeStrategy!, 
+                _complianceSchemeMemberStrategyMock.Object, 
+                _subsidiariesFeeCalculationStrategyMock.Object,
+                _paymentsServiceMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -82,7 +109,13 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>? complianceSchemeMemberStrategy = null;
 
             // Act
-            Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeLateFeeStrategyMock.Object, complianceSchemeMemberStrategy!, _subsidiariesFeeCalculationStrategyMock.Object);
+            Action act = () => new ComplianceSchemeCalculatorService(
+                _baseFeeCalculationStrategyMock.Object, 
+                _complianceSchemeOnlineMarketStrategyMock.Object, 
+                _complianceSchemeLateFeeStrategyMock.Object, 
+                complianceSchemeMemberStrategy!, 
+                _subsidiariesFeeCalculationStrategyMock.Object,
+                _paymentsServiceMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -96,18 +129,51 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             BaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto>? subsidiariesFeeCalculationStrategy = null;
 
             // Act
-            Action act = () => new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeLateFeeStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, subsidiariesFeeCalculationStrategy!);
+            Action act = () => new ComplianceSchemeCalculatorService(
+                _baseFeeCalculationStrategyMock.Object, 
+                _complianceSchemeOnlineMarketStrategyMock.Object, 
+                _complianceSchemeLateFeeStrategyMock.Object, 
+                _complianceSchemeMemberStrategyMock.Object, 
+                subsidiariesFeeCalculationStrategy!,
+                _paymentsServiceMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
                 .WithMessage("Value cannot be null. (Parameter 'subsidiariesFeeCalculationStrategy')");
         }
 
+
+        [TestMethod]
+        public void Constructor_WhenPaymentServiceIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            IPaymentsService? paymentsService = null;
+
+            // Act
+            Action act = () => new ComplianceSchemeCalculatorService(
+                _baseFeeCalculationStrategyMock.Object,
+                _complianceSchemeOnlineMarketStrategyMock.Object,
+                _complianceSchemeLateFeeStrategyMock.Object,
+                _complianceSchemeMemberStrategyMock.Object,
+                _subsidiariesFeeCalculationStrategyMock.Object,
+                paymentsService!);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'paymentsService')");
+        }
+
         [TestMethod]
         public void Constructor_WhenAllDependenciesAreNotNull_ShouldInitializeComplianceSchemeBaseFeeService()
         {
             // Act
-            var service = new ComplianceSchemeCalculatorService(_baseFeeCalculationStrategyMock.Object, _complianceSchemeOnlineMarketStrategyMock.Object, _complianceSchemeLateFeeStrategyMock.Object, _complianceSchemeMemberStrategyMock.Object, _subsidiariesFeeCalculationStrategyMock.Object);
+            var service = new ComplianceSchemeCalculatorService(
+                _baseFeeCalculationStrategyMock.Object, 
+                _complianceSchemeOnlineMarketStrategyMock.Object, 
+                _complianceSchemeLateFeeStrategyMock.Object, 
+                _complianceSchemeMemberStrategyMock.Object, 
+                _subsidiariesFeeCalculationStrategyMock.Object,
+                _paymentsServiceMock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -165,8 +231,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     }
                 });
 
-            // Act
-            var result = await _service.CalculateFeesAsync(request, It.IsAny<CancellationToken>());
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
+             // Act
+             var result = await _service.CalculateFeesAsync(request, It.IsAny<CancellationToken>());
 
             // Assert
             using (new AssertionScope())
@@ -181,8 +250,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 member.TotalMemberFee.Should().Be(342100M);
 
                 result.TotalFee.Should().Be(1722500M);
-                result.PreviousPayment.Should().Be(0);
-                result.OutstandingPayment.Should().Be(1722500M);
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(1722400M);
             }
         }
 
@@ -234,6 +303,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     }
                 });
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _service.CalculateFeesAsync(request, It.IsAny<CancellationToken>());
 
@@ -250,8 +322,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 member.TotalMemberFee.Should().Be(2659700M);
 
                 result.TotalFee.Should().Be(4040100M);
-                result.PreviousPayment.Should().Be(0);
-                result.OutstandingPayment.Should().Be(4040100M);
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(4040000M);
             }
         }
 
@@ -325,6 +397,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     }
                 });
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _service.CalculateFeesAsync(request, cancellationToken);
 
@@ -355,8 +430,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
 
                 // Total fee calculation
                 result.TotalFee.Should().Be(4382200M);
-                result.PreviousPayment.Should().Be(0);
-                result.OutstandingPayment.Should().Be(4382200M);
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(4382100M);
             }
         }
 
@@ -430,6 +505,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     }
                 });
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _service.CalculateFeesAsync(request, cancellationToken);
 
@@ -460,8 +538,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
 
                 // Total fee calculation
                 result.TotalFee.Should().Be(6961200);
-                result.PreviousPayment.Should().Be(0);
-                result.OutstandingPayment.Should().Be(6961200);
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(6961100);
             }
         }
 
@@ -567,6 +645,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     }
                 });
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _service.CalculateFeesAsync(request, It.IsAny<CancellationToken>());
 
@@ -590,8 +671,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
 
                 var expectedTotalFee = 1380400M + member.TotalMemberFee;
                 result.TotalFee.Should().Be(expectedTotalFee);
-                result.PreviousPayment.Should().Be(0);
-                result.OutstandingPayment.Should().Be(expectedTotalFee);
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(expectedTotalFee - 100M);
             }
         }
 
@@ -669,6 +750,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     }
                 });
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _service.CalculateFeesAsync(request, cancellationToken);
 
@@ -708,8 +792,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 // Total fee calculation including both members
                 var expectedTotalFee = 1380400M + member1.TotalMemberFee + member2.TotalMemberFee;
                 result.TotalFee.Should().Be(expectedTotalFee);
-                result.PreviousPayment.Should().Be(0);
-                result.OutstandingPayment.Should().Be(expectedTotalFee);
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(expectedTotalFee - 100M);
             }
         }
 
@@ -787,6 +871,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     }
                 });
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _service.CalculateFeesAsync(request, cancellationToken);
 
@@ -823,8 +910,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 // Total fee calculation including both members
                 var expectedTotalFee = 1380400M + member1.TotalMemberFee + member2.TotalMemberFee;
                 result.TotalFee.Should().Be(expectedTotalFee);
-                result.PreviousPayment.Should().Be(0);
-                result.OutstandingPayment.Should().Be(expectedTotalFee);
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(expectedTotalFee - 100M);
             }
         }
     }
