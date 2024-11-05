@@ -78,7 +78,8 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
             [Frozen] Mock<IPaymentsService> paymentsServiceMock,
             ComplianceSchemeResubmissionService service,
-            [Frozen] decimal baseFee, [Frozen] decimal previousPayments)
+            [Frozen] decimal baseFee, 
+            [Frozen] decimal previousPayments)
         {
             // Arrange
             var request = new ComplianceSchemeResubmissionFeeRequestDto
@@ -152,7 +153,8 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
             [Frozen] Mock<IPaymentsService> paymentsServiceMock,
             ComplianceSchemeResubmissionService service,
-            [Frozen] decimal baseFee, [Frozen] decimal previousPayments)
+            [Frozen] decimal baseFee, 
+            [Frozen] decimal previousPayments)
         {
             // Arrange
             var request = new ComplianceSchemeResubmissionFeeRequestDto
