@@ -22,6 +22,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
             entity.CreatedDate = DateTime.UtcNow;
             entity.UpdatedDate = entity.CreatedDate;
             entity.UpdatedByUserId = entity.UserId;
+            entity.InternalStatusId = Enums.Status.Success;
 
             _dataContext.Payment.Add(entity);
 
