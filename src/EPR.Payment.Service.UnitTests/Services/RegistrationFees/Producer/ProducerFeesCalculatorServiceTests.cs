@@ -24,7 +24,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
         private Mock<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>> _subsidiariesFeeCalculationStrategyMock = null!;
         private Mock<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>> _lateFeeCalculationStrategyMock = null!;
         private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
-        private Mock<IPaymentsService> _paymentsService = null!;
+        private Mock<IPaymentsService> _paymentsServiceMock = null!;
         private ProducerFeesCalculatorService? _calculatorService = null;
 
         [TestInitialize]
@@ -35,7 +35,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _lateFeeCalculationStrategyMock = new Mock<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>>();
             _validatorMock = new Mock<IValidator<ProducerRegistrationFeesRequestDto>>();
-            _paymentsService = new Mock<IPaymentsService>();
+            _paymentsServiceMock = new Mock<IPaymentsService>();
 
             _calculatorService = new ProducerFeesCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
@@ -43,7 +43,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object,
-                _paymentsService.Object
+                _paymentsServiceMock.Object
             );
         }
 
@@ -60,7 +60,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object,
-                _paymentsService.Object);
+                _paymentsServiceMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'baseFeeCalculationStrategy')");
@@ -79,7 +79,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object,
-                _paymentsService.Object);
+                _paymentsServiceMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'subsidiariesFeeCalculationStrategy')");
@@ -98,7 +98,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 validator!,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object,
-                _paymentsService.Object);
+                _paymentsServiceMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");
@@ -118,7 +118,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _validatorMock.Object,
                 onlineMarketCalculationStrategy!,
                 _lateFeeCalculationStrategyMock.Object,
-                _paymentsService.Object);
+                _paymentsServiceMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'onlineMarketCalculationStrategy')");
@@ -137,7 +137,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object!,
                 lateFeeCalculationStrategy!,
-                _paymentsService.Object);
+                _paymentsServiceMock.Object);
 
             // Assert
             servie.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'lateFeeCalculationStrategy')");
@@ -172,7 +172,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object,
-                _paymentsService.Object);
+                _paymentsServiceMock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -209,6 +209,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -222,6 +225,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.SubsidiariesFee.Should().Be(result.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + result.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum());
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M); 
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -253,6 +258,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -265,6 +273,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.ProducerOnlineMarketPlaceFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -294,6 +304,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -305,6 +318,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
         [TestMethod, AutoMoqData]
@@ -335,6 +350,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -346,6 +364,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.ProducerOnlineMarketPlaceFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -376,6 +396,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -387,6 +410,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -418,6 +443,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -429,6 +457,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.ProducerOnlineMarketPlaceFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -459,6 +489,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -470,6 +503,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -501,6 +536,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -512,6 +550,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.ProducerOnlineMarketPlaceFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -546,6 +586,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -557,6 +600,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -588,6 +633,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -599,6 +647,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.ProducerOnlineMarketPlaceFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -629,6 +679,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -640,6 +693,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -672,6 +727,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -683,6 +741,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.ProducerOnlineMarketPlaceFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -757,6 +817,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -768,6 +831,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -798,6 +863,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -809,6 +877,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(33200m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee + result.ProducerLateRegistrationFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -839,6 +909,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -850,6 +923,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(365200m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee + result.ProducerLateRegistrationFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
 
@@ -880,6 +955,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(100M);
+
             // Act
             var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
 
@@ -891,6 +969,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.ProducerLateRegistrationFee.Should().Be(0m); // Late fee in pence
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee + result.ProducerLateRegistrationFee); // Total fee in pence
+                result.PreviousPayment.Should().Be(100M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }
     }
