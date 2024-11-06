@@ -44,7 +44,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Services\RegistrationFees\" />
-	  <Folder Include="Validations\ResubmissionFees\Producer\" />
 	</ItemGroup>
 
 </Project>
