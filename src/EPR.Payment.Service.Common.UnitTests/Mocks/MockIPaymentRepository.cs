@@ -155,6 +155,46 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                         PaymentId = 7,
                         PaymentDate = new DateTime()
                     }
+                },
+               new Data.DataModels.Payment()
+                {
+                    Id = 3,
+                    ExternalPaymentId = Guid.Parse("dab3d8e1-409b-4b40-a610-1b41843e4710"),
+                    UserId = Guid.NewGuid(),
+                    Regulator = "Test Regulator",
+                    Reference = "Test Reference",
+                    InternalStatusId = Data.Enums.Status.Initiated,
+                    Amount = 30.0M,
+                    ReasonForPayment = "Test",
+                    CreatedDate = new DateTime(),
+                    UpdatedByUserId = Guid.NewGuid(),
+                    UpdatedDate = new DateTime(),
+                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    {
+                        Id = 2,
+                        PaymentId = 3,
+                        PaymentDate = new DateTime()
+                    }
+                },
+               new Data.DataModels.Payment()
+                {
+                    Id = 4,
+                    ExternalPaymentId = Guid.Parse("dab3d8e1-409b-4b40-a610-1b41843e4710"),
+                    UserId = Guid.NewGuid(),
+                    Regulator = "Test Regulator",
+                    Reference = "Test Reference",
+                    InternalStatusId = Data.Enums.Status.Initiated,
+                    Amount = 20.0M,
+                    ReasonForPayment = "Test",
+                    CreatedDate = new DateTime(),
+                    UpdatedByUserId = Guid.NewGuid(),
+                    UpdatedDate = new DateTime(),
+                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    {
+                        Id = 3,
+                        PaymentId = 4,
+                        PaymentDate = new DateTime()
+                    }
                 }
             }.AsQueryable();
 
