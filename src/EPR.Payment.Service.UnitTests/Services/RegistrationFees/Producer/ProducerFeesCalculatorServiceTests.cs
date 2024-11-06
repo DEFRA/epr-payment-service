@@ -225,7 +225,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.SubsidiariesFee.Should().Be(result.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + result.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum());
                 result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
                 result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee); // Total fee in pence
-                result.PreviousPayment.Should().Be(100M); 
+                result.PreviousPayment.Should().Be(100M);
                 result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }
         }

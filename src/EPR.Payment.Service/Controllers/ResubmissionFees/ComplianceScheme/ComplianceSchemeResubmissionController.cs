@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
-using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees;
+using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.ComplianceScheme;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
