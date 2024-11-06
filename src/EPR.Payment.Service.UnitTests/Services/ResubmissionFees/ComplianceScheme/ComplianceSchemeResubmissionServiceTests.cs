@@ -75,7 +75,7 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
         public async Task CalculateResubmissionFeeAsync_ValidRequest_ShouldReturnResubmissionFeeResult(
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
             [Frozen] Mock<IPaymentsService> paymentsServiceMock,
-            ComplianceSchemeResubmissionService service,
+            [Greedy] ComplianceSchemeResubmissionService service,
             [Frozen] decimal baseFee, 
             [Frozen] decimal previousPayments)
         {
@@ -109,7 +109,7 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
 
         [TestMethod, AutoMoqData]
         public async Task CalculateResubmissionFeeAsync_MemberCountLessThan1_ShouldThrowArgumentException(
-            ComplianceSchemeResubmissionService service)
+            [Greedy] ComplianceSchemeResubmissionService service)
         {
             // Arrange
             var request = new ComplianceSchemeResubmissionFeeRequestDto
@@ -130,7 +130,7 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
         [TestMethod, AutoMoqData]
         public async Task CalculateResubmissionFeeAsync_CalculationStrategyThrowsException_ShouldThrowException(
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
-            ComplianceSchemeResubmissionService service)
+            [Greedy] ComplianceSchemeResubmissionService service)
         {
             // Arrange
             var request = new ComplianceSchemeResubmissionFeeRequestDto
@@ -153,7 +153,7 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
         public async Task CalculateResubmissionFeeAsync_ValidRequest_ShouldCorrectlyCalculateFeeComponents(
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
             [Frozen] Mock<IPaymentsService> paymentsServiceMock,
-            ComplianceSchemeResubmissionService service,
+            [Greedy] ComplianceSchemeResubmissionService service,
             [Frozen] decimal baseFee, 
             [Frozen] decimal previousPayments)
         {
@@ -192,7 +192,7 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
         public async Task CalculateResubmissionFeeAsync_WithNoPreviousPayment_ShouldCorrectlyCalculateFeeComponents(
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
             [Frozen] Mock<IPaymentsService> paymentsServiceMock,
-            ComplianceSchemeResubmissionService service)
+            [Greedy] ComplianceSchemeResubmissionService service)
         {
             // Arrange
             var request = new ComplianceSchemeResubmissionFeeRequestDto
@@ -232,7 +232,7 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
         public async Task CalculateResubmissionFeeAsync_WithPartialPreviousPayment_ShouldCorrectlyCalculateFeeComponents(
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
             [Frozen] Mock<IPaymentsService> paymentsServiceMock,
-            ComplianceSchemeResubmissionService service)
+            [Greedy] ComplianceSchemeResubmissionService service)
         {
             // Arrange
             var request = new ComplianceSchemeResubmissionFeeRequestDto
@@ -272,7 +272,7 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
         public async Task CalculateResubmissionFeeAsync_WithFullPreviousPayment_ShouldCorrectlyCalculateFeeComponents(
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
             [Frozen] Mock<IPaymentsService> paymentsServiceMock,
-            ComplianceSchemeResubmissionService service)
+            [Greedy] ComplianceSchemeResubmissionService service)
         {
             // Arrange
             var request = new ComplianceSchemeResubmissionFeeRequestDto
@@ -312,7 +312,7 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
         public async Task CalculateResubmissionFeeAsync_WithOverPreviousPayment_ShouldCorrectlyCalculateFeeComponents(
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
             [Frozen] Mock<IPaymentsService> paymentsServiceMock,
-            ComplianceSchemeResubmissionService service)
+            [Greedy] ComplianceSchemeResubmissionService service)
         {
             // Arrange
             var request = new ComplianceSchemeResubmissionFeeRequestDto
