@@ -25,12 +25,11 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
         }
 
-        [TestMethod]
-        public void Constructor_WhenResubmissionFeeStrategyIsNull_ShouldThrowArgumentNullException()
+        [TestMethod, AutoMoqData]
+        public void Constructor_WhenResubmissionFeeStrategyIsNull_ShouldThrowArgumentNullException([Frozen] Mock<IPaymentsService> paymentsServiceMock)
         {
             // Arrange
             IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>? nullStrategy = null;
-            var paymentsServiceMock = _fixture.Create<Mock<IPaymentsService>>();
 
             // Act
             Action act = () => new ComplianceSchemeResubmissionService(nullStrategy!, paymentsServiceMock.Object);
@@ -55,12 +54,11 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
                 .WithMessage("Value cannot be null. (Parameter 'paymentsService')");
         }
 
-        [TestMethod]
-        public void Constructor_WhenResubmissionFeeStrategyIsNotNull_ShouldInitializeService()
+        [TestMethod, AutoMoqData]
+        public void Constructor_WhenResubmissionFeeStrategyIsNotNull_ShouldInitializeService([Frozen] Mock<IPaymentsService> paymentsServiceMock)
         {
             // Arrange
             var resubmissionFeeStrategyMock = _fixture.Create<Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>>>();
-            var paymentsServiceMock = _fixture.Create<Mock<IPaymentsService>>();
 
             // Act
             var service = new ComplianceSchemeResubmissionService(resubmissionFeeStrategyMock.Object, paymentsServiceMock.Object);
@@ -96,14 +94,17 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
             var result = await service.CalculateResubmissionFeeAsync(request, CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
-            var expectedTotalFee = baseFee * request.MemberCount;
-            result.TotalResubmissionFee.Should().Be(expectedTotalFee);
-            result.PreviousPayments.Should().Be(previousPayments);
-            // OutstandingPayment should be equal to totalFee - previousPayments
-            var outstandingPayment = expectedTotalFee - previousPayments;
-            result.OutstandingPayment.Should().Be(outstandingPayment);
-            result.MemberCount.Should().Be(request.MemberCount);
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+                var expectedTotalFee = baseFee * request.MemberCount;
+                result.TotalResubmissionFee.Should().Be(expectedTotalFee);
+                result.PreviousPayments.Should().Be(previousPayments);
+                // OutstandingPayment should be equal to totalFee - previousPayments
+                var outstandingPayment = expectedTotalFee - previousPayments;
+                result.OutstandingPayment.Should().Be(outstandingPayment);
+                result.MemberCount.Should().Be(request.MemberCount);
+            }            
         }
 
         [TestMethod, AutoMoqData]
@@ -171,19 +172,180 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
             var result = await service.CalculateResubmissionFeeAsync(request, CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
 
-            // Ensure that baseFee * MemberCount is correctly calculated as totalFee
-            var expectedTotalFee = baseFee * request.MemberCount;
-            result.TotalResubmissionFee.Should().Be(expectedTotalFee);
+                // Ensure that baseFee * MemberCount is correctly calculated as totalFee
+                var expectedTotalFee = baseFee * request.MemberCount;
+                result.TotalResubmissionFee.Should().Be(expectedTotalFee);
 
-            result.PreviousPayments.Should().Be(previousPayments);
+                result.PreviousPayments.Should().Be(previousPayments);
 
-            // OutstandingPayment should be equal to totalFee - previousPayments
-            var outstandingPayment = expectedTotalFee - previousPayments;
-            result.OutstandingPayment.Should().Be(outstandingPayment);
+                // OutstandingPayment should be equal to totalFee - previousPayments
+                var outstandingPayment = expectedTotalFee - previousPayments;
+                result.OutstandingPayment.Should().Be(outstandingPayment);
+            }
         }
 
+        [TestMethod, AutoMoqData]
+        public async Task CalculateResubmissionFeeAsync_WithNoPreviousPayment_ShouldCorrectlyCalculateFeeComponents(
+            [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
+            [Frozen] Mock<IPaymentsService> paymentsServiceMock,
+            ComplianceSchemeResubmissionService service)
+        {
+            // Arrange
+            var request = new ComplianceSchemeResubmissionFeeRequestDto
+            {
+                Regulator = "GB-ENG",
+                MemberCount = 1, // Set a valid MemberCount to test the calculations
+                ReferenceNumber = "REF12345" // Set the required ReferenceNumber
+            };
 
+            decimal baseFee = 10000m;
+            decimal previousPayments = 0m;
+
+            strategyMock.Setup(x => x.CalculateFeeAsync(request, It.IsAny<CancellationToken>())).ReturnsAsync(baseFee);
+            paymentsServiceMock.Setup(x => x.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, It.IsAny<CancellationToken>())).ReturnsAsync(previousPayments);
+
+            // Act
+            var result = await service.CalculateResubmissionFeeAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+
+                // Ensure that baseFee * MemberCount is correctly calculated as totalFee
+                var expectedTotalFee = baseFee * request.MemberCount;
+                result.TotalResubmissionFee.Should().Be(expectedTotalFee);
+
+                result.PreviousPayments.Should().Be(previousPayments);
+
+                // OutstandingPayment should be equal to totalFee - previousPayments
+                var outstandingPayment = expectedTotalFee - previousPayments;
+                result.OutstandingPayment.Should().Be(outstandingPayment);
+            }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task CalculateResubmissionFeeAsync_WithPartialPreviousPayment_ShouldCorrectlyCalculateFeeComponents(
+            [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
+            [Frozen] Mock<IPaymentsService> paymentsServiceMock,
+            ComplianceSchemeResubmissionService service)
+        {
+            // Arrange
+            var request = new ComplianceSchemeResubmissionFeeRequestDto
+            {
+                Regulator = "GB-ENG",
+                MemberCount = 1, // Set a valid MemberCount to test the calculations
+                ReferenceNumber = "REF12345" // Set the required ReferenceNumber
+            };
+
+            decimal baseFee = 10000m;
+            decimal previousPayments = 5000m;
+
+            strategyMock.Setup(x => x.CalculateFeeAsync(request, It.IsAny<CancellationToken>())).ReturnsAsync(baseFee);
+            paymentsServiceMock.Setup(x => x.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, It.IsAny<CancellationToken>())).ReturnsAsync(previousPayments);
+
+            // Act
+            var result = await service.CalculateResubmissionFeeAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+
+                // Ensure that baseFee * MemberCount is correctly calculated as totalFee
+                var expectedTotalFee = baseFee * request.MemberCount;
+                result.TotalResubmissionFee.Should().Be(expectedTotalFee);
+
+                result.PreviousPayments.Should().Be(previousPayments);
+
+                // OutstandingPayment should be equal to totalFee - previousPayments
+                var outstandingPayment = expectedTotalFee - previousPayments;
+                result.OutstandingPayment.Should().Be(outstandingPayment);
+            }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task CalculateResubmissionFeeAsync_WithFullPreviousPayment_ShouldCorrectlyCalculateFeeComponents(
+            [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
+            [Frozen] Mock<IPaymentsService> paymentsServiceMock,
+            ComplianceSchemeResubmissionService service)
+        {
+            // Arrange
+            var request = new ComplianceSchemeResubmissionFeeRequestDto
+            {
+                Regulator = "GB-ENG",
+                MemberCount = 1, // Set a valid MemberCount to test the calculations
+                ReferenceNumber = "REF12345" // Set the required ReferenceNumber
+            };
+
+            decimal baseFee = 10000m;
+            decimal previousPayments = 10000m;
+
+            strategyMock.Setup(x => x.CalculateFeeAsync(request, It.IsAny<CancellationToken>())).ReturnsAsync(baseFee);
+            paymentsServiceMock.Setup(x => x.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, It.IsAny<CancellationToken>())).ReturnsAsync(previousPayments);
+
+            // Act
+            var result = await service.CalculateResubmissionFeeAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+
+                // Ensure that baseFee * MemberCount is correctly calculated as totalFee
+                var expectedTotalFee = baseFee * request.MemberCount;
+                result.TotalResubmissionFee.Should().Be(expectedTotalFee);
+
+                result.PreviousPayments.Should().Be(previousPayments);
+
+                // OutstandingPayment should be equal to totalFee - previousPayments
+                var outstandingPayment = expectedTotalFee - previousPayments;
+                result.OutstandingPayment.Should().Be(outstandingPayment);
+            }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task CalculateResubmissionFeeAsync_WithOverPreviousPayment_ShouldCorrectlyCalculateFeeComponents(
+            [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
+            [Frozen] Mock<IPaymentsService> paymentsServiceMock,
+            ComplianceSchemeResubmissionService service)
+        {
+            // Arrange
+            var request = new ComplianceSchemeResubmissionFeeRequestDto
+            {
+                Regulator = "GB-ENG",
+                MemberCount = 1, // Set a valid MemberCount to test the calculations
+                ReferenceNumber = "REF12345" // Set the required ReferenceNumber
+            };
+
+            decimal baseFee = 10000m;
+            decimal previousPayments = 15000m;
+
+            strategyMock.Setup(x => x.CalculateFeeAsync(request, It.IsAny<CancellationToken>())).ReturnsAsync(baseFee);
+            paymentsServiceMock.Setup(x => x.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, It.IsAny<CancellationToken>())).ReturnsAsync(previousPayments);
+
+            // Act
+            var result = await service.CalculateResubmissionFeeAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+
+                // Ensure that baseFee * MemberCount is correctly calculated as totalFee
+                var expectedTotalFee = baseFee * request.MemberCount;
+                result.TotalResubmissionFee.Should().Be(expectedTotalFee);
+
+                result.PreviousPayments.Should().Be(previousPayments);
+
+                // OutstandingPayment should be equal to totalFee - previousPayments
+                var outstandingPayment = expectedTotalFee - previousPayments;
+                result.OutstandingPayment.Should().Be(0m);
+            }
+        }
     }
 }
