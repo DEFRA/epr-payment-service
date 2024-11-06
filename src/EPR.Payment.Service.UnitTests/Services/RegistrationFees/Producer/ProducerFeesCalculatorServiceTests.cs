@@ -883,47 +883,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenLateFeeIsApplicableWith0Subscribers_AddProducerRegistratonLateFee(
-            [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
-        {
-            // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
-            {
-                ProducerType = "Large",
-                NumberOfSubsidiaries = 0,
-                Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A123",
-                IsLateFeeApplicable = true,
-                SubmissionDate = DateTime.Now
-            };
-
-            _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(262000m); // £2,620 represented in pence
-
-            _lateFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(33200m); // £332 represented in pence
-
-            _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence
-
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
-                .Returns(new ValidationResult());
-
-            // Act
-            var result = await _calculatorService!.CalculateFeesAsync(request, CancellationToken.None);
-
-            // Assert
-            using (new AssertionScope())
-            {
-                result.ProducerRegistrationFee.Should().Be(262000m); // £2,620 represented in pence
-                result.ProducerOnlineMarketPlaceFee.Should().Be(0m); // Online Market fee in pence
-                result.ProducerLateRegistrationFee.Should().Be(33200m); // Late fee in pence
-                result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
-                result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee + result.ProducerLateRegistrationFee); // Total fee in pence
-            }
-        }
-
-        [TestMethod, AutoMoqData]
         public async Task CalculateFeesAsync_WhenLateFeeIsApplicable_AddProducerRegistratonLateFee(
             [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
