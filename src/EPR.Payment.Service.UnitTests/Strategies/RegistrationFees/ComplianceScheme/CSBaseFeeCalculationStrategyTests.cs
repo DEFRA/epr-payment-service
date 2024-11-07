@@ -66,7 +66,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.Now,
+                SubmissionDate = DateTime.UtcNow,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto

@@ -65,7 +65,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             {
                 IsLateFeeApplicable = true,
                 Regulator = RegulatorType.GBEng,
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             feesRepositoryMock.Setup(repo => repo.GetLateFeeAsync(request.Regulator, request.SubmissionDate, It.IsAny<CancellationToken>()))
@@ -87,7 +87,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             {
                 IsLateFeeApplicable = false,
                 Regulator = RegulatorType.GBEng,
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act

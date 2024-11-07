@@ -191,7 +191,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.Now,
+                SubmissionDate = DateTime.UtcNow,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
@@ -263,7 +263,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.Now,
+                SubmissionDate = DateTime.UtcNow,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
@@ -335,7 +335,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.Now,
+                SubmissionDate = DateTime.UtcNow,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
@@ -443,7 +443,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.Now,
+                SubmissionDate = DateTime.UtcNow,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
@@ -551,7 +551,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Mock base fee calculation
@@ -581,7 +581,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "InvalidRegulator",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
             var cancellationToken = CancellationToken.None;
 
@@ -589,8 +589,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             Func<Task> act = async () => await _service.CalculateFeesAsync(request, cancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<InvalidOperationException>()
-                .WithMessage(ComplianceSchemeFeeCalculationExceptions.CalculationError);
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage("Invalid regulator type: InvalidRegulator. (Parameter 'regulator')");
         }
 
         [TestMethod]
@@ -601,7 +601,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.Now,
+                SubmissionDate = DateTime.UtcNow,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
@@ -684,7 +684,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.Now,
+                SubmissionDate = DateTime.UtcNow,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
         {
             new ComplianceSchemeMemberDto
@@ -805,7 +805,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
-                SubmissionDate = DateTime.Now,
+                SubmissionDate = DateTime.UtcNow,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
