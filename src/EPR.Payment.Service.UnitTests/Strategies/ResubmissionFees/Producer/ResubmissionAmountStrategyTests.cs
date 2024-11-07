@@ -63,10 +63,15 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.Producer
             [Frozen] decimal expectedAmount)
         {
             // Arrange
-            var producerResubmissionFeeRequestDto = new ProducerResubmissionFeeRequestDto { Regulator = "GB-ENG" };
+            var resubmissionDate = DateTime.Today;
+            var producerResubmissionFeeRequestDto = new ProducerResubmissionFeeRequestDto
+            {
+                Regulator = "GB-ENG",
+                ResubmissionDate = resubmissionDate
+            };
             var regulatorType = RegulatorType.Create(producerResubmissionFeeRequestDto.Regulator);
 
-            feesRepositoryMock.Setup(i => i.GetResubmissionAsync(regulatorType, CancellationToken.None)).ReturnsAsync(expectedAmount);
+            feesRepositoryMock.Setup(i => i.GetResubmissionAsync(regulatorType, resubmissionDate, CancellationToken.None)).ReturnsAsync(expectedAmount);
 
             // Act
             var result = await strategy.CalculateFeeAsync(producerResubmissionFeeRequestDto, CancellationToken.None);
@@ -101,11 +106,16 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.Producer
             ProducerResubmissionAmountStrategy strategy)
         {
             // Arrange
-            var producerResubmissionFeeRequestDto = new ProducerResubmissionFeeRequestDto { Regulator = "GB-ENG" };
+            var resubmissionDate = DateTime.Today;
+            var producerResubmissionFeeRequestDto = new ProducerResubmissionFeeRequestDto
+            {
+                Regulator = "GB-ENG",
+                ResubmissionDate = resubmissionDate
+            };
             var regulatorType = RegulatorType.Create(producerResubmissionFeeRequestDto.Regulator);
 
             // Set up the repository mock to return 0 fee
-            feesRepositoryMock.Setup(i => i.GetResubmissionAsync(regulatorType, CancellationToken.None)).ReturnsAsync(0m);
+            feesRepositoryMock.Setup(i => i.GetResubmissionAsync(regulatorType, resubmissionDate, CancellationToken.None)).ReturnsAsync(0m);
 
             // Act & Assert
             await strategy.Invoking(async s => await s.CalculateFeeAsync(producerResubmissionFeeRequestDto, new CancellationToken()))
