@@ -24,7 +24,7 @@ namespace EPR.Payment.Service.Strategies.ResubmissionFees.Producer
 
             var regulatorType = RegulatorType.Create(request.Regulator);
 
-            var fee = await _feesRepository.GetResubmissionAsync(regulatorType, cancellationToken);
+            var fee = await _feesRepository.GetResubmissionAsync(regulatorType, request.ResubmissionDate, cancellationToken);
 
             if (fee == 0)
             {
