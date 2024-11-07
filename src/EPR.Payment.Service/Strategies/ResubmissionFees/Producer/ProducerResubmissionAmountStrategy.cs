@@ -1,21 +1,21 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.Common;
+using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.ResubmissionFees.Producer;
 
 namespace EPR.Payment.Service.Strategies.ResubmissionFees.Producer
 {
-    public class DefaultResubmissionAmountStrategy : IResubmissionAmountStrategy<RegulatorDto, decimal>
+    public class ProducerResubmissionAmountStrategy : IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal>
     {
         private readonly IProducerFeesRepository _feesRepository;
 
-        public DefaultResubmissionAmountStrategy(IProducerFeesRepository feesRepository)
+        public ProducerResubmissionAmountStrategy(IProducerFeesRepository feesRepository)
         {
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
 
-        public async Task<decimal> CalculateFeeAsync(RegulatorDto request, CancellationToken cancellationToken)
+        public async Task<decimal> CalculateFeeAsync(ProducerResubmissionFeeRequestDto request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.Regulator))
             {

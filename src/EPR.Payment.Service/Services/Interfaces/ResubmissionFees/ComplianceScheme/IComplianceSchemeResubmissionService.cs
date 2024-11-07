@@ -1,5 +1,5 @@
 ﻿using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
-using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees;
+using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme;
 
 namespace EPR.Payment.Service.Services.Interfaces.ResubmissionFees.ComplianceScheme
 {
