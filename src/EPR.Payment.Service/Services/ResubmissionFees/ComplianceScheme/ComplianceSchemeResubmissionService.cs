@@ -38,7 +38,7 @@ namespace EPR.Payment.Service.Services.ResubmissionFees.ComplianceScheme
             {
                 TotalResubmissionFee = totalFee,
                 PreviousPayments = previousPayments,
-                OutstandingPayment = outstandingPayment > 0 ? outstandingPayment : 0,
+                OutstandingPayment = outstandingPayment,
                 MemberCount = request.MemberCount
             };
         }
