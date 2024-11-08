@@ -2634,3 +2634,63 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241108152208_CSUpdateLargeFee'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 168500.0
+    WHERE [Id] = 13;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241108152208_CSUpdateLargeFee'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 168500.0
+    WHERE [Id] = 14;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241108152208_CSUpdateLargeFee'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 168500.0
+    WHERE [Id] = 15;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241108152208_CSUpdateLargeFee'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [Amount] = 168500.0
+    WHERE [Id] = 16;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20241108152208_CSUpdateLargeFee'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20241108152208_CSUpdateLargeFee', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
