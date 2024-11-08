@@ -40,7 +40,7 @@ variables:
   - name: sonarQubeProjectName
     value: epr-payment-service
   - name: runNugetTasks
-    value: false
+    value: true
   - name: dotnetVersion
     value: dotnetVersion8
 
