@@ -14,8 +14,8 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 
         protected BaseFeeRepository(IAppDbContext dataContext, FeesKeyValueStore keyValueStore)
         {
-            _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
-            _keyValueStore = keyValueStore ?? throw new ArgumentNullException(nameof(keyValueStore));
+            _dataContext = dataContext;
+            _keyValueStore = keyValueStore;
         }
 
         protected async Task<decimal> GetFeeAsync(
@@ -39,7 +39,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
                 r.Regulator.Type.ToLower() == regulator.Value.ToLower())
                .ToListAsync(cancellationToken);
 
-            if (registrationFees == null || !registrationFees.Any())
+            if (!registrationFees.Any())
             {
                 _keyValueStore.Add(inMemoryKey, fee); 
                 return fee;  

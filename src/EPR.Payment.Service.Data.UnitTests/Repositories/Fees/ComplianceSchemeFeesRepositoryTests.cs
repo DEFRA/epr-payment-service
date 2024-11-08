@@ -1038,5 +1038,32 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             await act.Should().ThrowAsync<KeyNotFoundException>()
                 .WithMessage("Registration fee for compliance scheme with regulator 'GB-ENG' not found.");
         }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionFeeAsync_DayAfterEffectiveToDate_ShouldThrowArgumentException(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
+        {
+            // Arrange
+
+            var expiredFee = new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ComplianceSchemeResubmission, Description = "Compliance Scheme Resubmission" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.ReSubmitting, Description = "ReSubmitting" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG" },
+                Amount = 43000m,
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10),
+                EffectiveTo = DateTime.UtcNow.AddDays(-1)
+            };
+
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { expiredFee }.AsQueryable());
+
+            // Act
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetResubmissionFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow, _cancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<ArgumentException>()
+                .WithMessage(ValidationMessages.ResubmissionDateIsNotInRange);
+        }
     }
 }
