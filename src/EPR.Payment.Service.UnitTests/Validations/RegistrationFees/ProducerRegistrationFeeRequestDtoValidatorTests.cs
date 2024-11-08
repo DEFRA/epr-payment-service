@@ -27,7 +27,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -49,7 +49,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -70,7 +70,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -91,7 +91,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -112,7 +112,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -133,7 +133,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -155,7 +155,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = string.Empty,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -178,7 +178,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -201,7 +201,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -223,7 +223,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -246,7 +246,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -272,7 +272,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                     Regulator = regulator,
                     IsProducerOnlineMarketplace = false,
                     ApplicationReferenceNumber = "A123",
-                    SubmissionDate = DateTime.Now
+                    SubmissionDate = DateTime.UtcNow
                 };
 
                 // Act
@@ -295,7 +295,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = string.Empty,
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -318,7 +318,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 IsProducerOnlineMarketplace = false,
                 NoOfSubsidiariesOnlineMarketplace = -5,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -364,7 +364,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 IsProducerOnlineMarketplace = false,
                 IsLateFeeApplicable = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now.AddDays(10)
+                SubmissionDate = DateTime.UtcNow.AddDays(10)
             };
 
             // Act
@@ -373,6 +373,29 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
                   .WithErrorMessage(ValidationMessages.FutureSubmissionDate);
+        }
+
+        [TestMethod]
+        public void Validate_SubmissionDateNotUtc_ShouldHaveError()
+        {
+            // Arrange
+            var request = new ProducerRegistrationFeesRequestDto
+            {
+                ProducerType = "LARGE",
+                NumberOfSubsidiaries = 10,
+                Regulator = RegulatorConstants.GBENG,
+                IsProducerOnlineMarketplace = false,
+                IsLateFeeApplicable = false,
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.Now
+            };
+
+            // Act
+            var result = _validator.TestValidate(request);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
+                .WithErrorMessage(ValidationMessages.SubmissionDateMustBeUtc);
         }
     }
 }

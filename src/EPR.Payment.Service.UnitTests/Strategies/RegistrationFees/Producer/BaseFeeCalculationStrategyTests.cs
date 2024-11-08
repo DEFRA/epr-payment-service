@@ -67,7 +67,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ProducerType = "Large",
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             var regulator = RegulatorType.Create("GB-ENG");
@@ -94,7 +94,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ProducerType = "Large",
                 Regulator = null!, // Regulator is null
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act & Assert
@@ -113,7 +113,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ProducerType = string.Empty, // ProducerType is empty
                 Regulator = "GB-ENG", // Valid Regulator
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -135,7 +135,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ProducerType = "Large",
                 Regulator = string.Empty, // Regulator is empty
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act & Assert

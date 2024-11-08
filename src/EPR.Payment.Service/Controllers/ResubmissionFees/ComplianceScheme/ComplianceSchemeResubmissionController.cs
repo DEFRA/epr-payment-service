@@ -65,12 +65,7 @@ namespace EPR.Payment.Service.Controllers.ResubmissionFees.ComplianceScheme
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "Argument Error",
-                    Detail = ex.Message,
-                    Status = StatusCodes.Status400BadRequest
-                });
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

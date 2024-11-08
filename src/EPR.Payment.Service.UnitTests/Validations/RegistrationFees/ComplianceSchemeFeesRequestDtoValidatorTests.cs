@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             {
                 Regulator = "",
                 ApplicationReferenceNumber = "Ref123",
-                SubmissionDate = DateTime.Now,
+                SubmissionDate = DateTime.UtcNow,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
             };
 
@@ -45,7 +45,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             {
                 Regulator = RegulatorConstants.GBENG,
                 ApplicationReferenceNumber = "",
-                SubmissionDate = DateTime.Now,
+                SubmissionDate = DateTime.UtcNow,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
             };
 
@@ -65,7 +65,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             {
                 Regulator = RegulatorConstants.GBENG,
                 ApplicationReferenceNumber = "Ref123",
-                SubmissionDate = DateTime.Now,
+                SubmissionDate = DateTime.UtcNow,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto { MemberId = "123", MemberType = "Large", NumberOfSubsidiaries = 2, NoOfSubsidiariesOnlineMarketplace = 1 },
@@ -112,7 +112,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             {
                 Regulator = RegulatorConstants.GBENG,
                 ApplicationReferenceNumber = "Ref123",
-                SubmissionDate = DateTime.Now.AddDays(10),
+                SubmissionDate = DateTime.UtcNow.AddDays(10),
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
             };
 
@@ -122,6 +122,26 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
                   .WithErrorMessage(ValidationMessages.FutureSubmissionDate);
+        }
+
+        [TestMethod]
+        public void Validate_SubmissionDateNotUtc_ShouldHaveError()
+        {
+            // Arrange
+            var dto = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = RegulatorConstants.GBENG,
+                ApplicationReferenceNumber = "Ref123",
+                SubmissionDate = DateTime.Now,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
+            };
+
+            // Act
+            var result = _validator.TestValidate(dto);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
+                .WithErrorMessage(ValidationMessages.SubmissionDateMustBeUtc);
         }
     }
 }

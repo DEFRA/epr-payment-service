@@ -1,4 +1,6 @@
-﻿using EPR.Payment.Service.Common.Data.Helper;
+﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
+using EPR.Payment.Service.Common.Data.Helper;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using Microsoft.EntityFrameworkCore;
@@ -15,29 +17,46 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             _dataContext = dataContext;
             _keyValueStore = keyValueStore;
         }
-        protected async Task<decimal> GetFeeAsync(string groupType, string subGroupType, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
+
+        protected async Task<decimal> GetFeeAsync(
+            string groupType,
+            string subGroupType,
+            RegulatorType regulator,
+            DateTime submissionDate,
+            CancellationToken cancellationToken)
         {
             decimal fee = 0;
             string inMemoryKey = GetInMemoryKey(groupType, subGroupType, regulator);
-            var feesFromMemory = _keyValueStore.Get(inMemoryKey);
-            if (feesFromMemory == null)
+            var cachedFee = _keyValueStore.Get(inMemoryKey);
+            if (cachedFee != null)
             {
-                fee = await _dataContext.RegistrationFees
-                    .Where(r => r.Group.Type.ToLower() == groupType.ToLower() &&
-                                r.SubGroup.Type.ToLower() == subGroupType.ToLower() &&
-                                r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
-                                r.EffectiveFrom.Date <= submissionDate &&
-                                r.EffectiveTo.Date >= submissionDate)
-                    .OrderByDescending(r => r.EffectiveFrom)
-                    .Select(r => r.Amount)
-                    .FirstOrDefaultAsync(cancellationToken);
+                return (decimal)cachedFee;
+            }
 
-                _keyValueStore.Add(inMemoryKey, fee);
-            }
-            else
+            var registrationFees = await _dataContext.RegistrationFees
+                .Where(r => r.Group.Type.ToLower() == groupType.ToLower() &&
+                r.SubGroup.Type.ToLower() == subGroupType.ToLower() &&
+                r.Regulator.Type.ToLower() == regulator.Value.ToLower())
+               .ToListAsync(cancellationToken);
+
+            if (!registrationFees.Any())
             {
-                fee = (decimal)feesFromMemory;
+                _keyValueStore.Add(inMemoryKey, fee); 
+                return fee;  
             }
+
+            fee = registrationFees
+                .Where(r => submissionDate >= r.EffectiveFrom && submissionDate <= r.EffectiveTo)
+                .OrderByDescending(r => r.EffectiveFrom)  
+                .Select(r => r.Amount)
+                .FirstOrDefault();
+
+            if (fee == 0)
+            {
+                throw new ArgumentException(subGroupType == SubGroupTypeConstants.ReSubmitting ? ValidationMessages.ResubmissionDateIsNotInRange : ValidationMessages.SubmissionDateIsNotInRange);
+            }
+
+            _keyValueStore.Add(inMemoryKey, fee);
 
             return fee;
         }
@@ -49,7 +68,6 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
                 throw new KeyNotFoundException(errorMessage);
             }
         }
-
         private static string GetInMemoryKey(string groupType, string subGroupType, RegulatorType regulator)
         {
             return string.Concat(groupType, subGroupType, regulator);

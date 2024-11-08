@@ -14,15 +14,20 @@ namespace EPR.Payment.Service.Validations.ResubmissionFees.ComplianceScheme
                 .Must(RegulatorValidationHelper.IsValidRegulator).WithMessage(ValidationMessages.RegulatorInvalid);
 
             RuleFor(x => x.ResubmissionDate)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage(ValidationMessages.ResubmissionDateRequired)
-                .Must(date => date.Kind == DateTimeKind.Utc).WithMessage(ValidationMessages.ResubmissionDateMustBeUtc)
-                .LessThanOrEqualTo(DateTime.UtcNow).WithMessage(ValidationMessages.ResubmissionDateInvalid);
+                .Must(BeInUtc).WithMessage(ValidationMessages.ResubmissionDateMustBeUtc)
+                .LessThanOrEqualTo(DateTime.UtcNow).WithMessage(ValidationMessages.FutureResubmissionDate);
 
             RuleFor(x => x.ReferenceNumber)
                 .NotEmpty().WithMessage(ValidationMessages.ReferenceNumberRequired);
 
             RuleFor(x => x.MemberCount)
                 .GreaterThan(0).WithMessage(ValidationMessages.MemberCountGreaterThanZero);
+        }
+        private static bool BeInUtc(DateTime dateTime)
+        {
+            return dateTime.Kind == DateTimeKind.Utc;
         }
     }
 }

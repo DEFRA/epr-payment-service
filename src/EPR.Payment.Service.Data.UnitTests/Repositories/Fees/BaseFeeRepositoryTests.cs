@@ -55,7 +55,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
             var groupType = GroupTypeConstants.ProducerType;
             var subGroupType = "Small";
             var regulator = RegulatorType.Create("GB-ENG");
-            var submissionDate = DateTime.Now;
+            var submissionDate = DateTime.UtcNow;
             var expectedFee = 100m;
 
             // Act
@@ -81,7 +81,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
             var groupType = GroupTypeConstants.ProducerType;
             var subGroupType = "Small";
             var regulator = RegulatorType.Create("GB-ENG");
-            var submissionDate = DateTime.Now;
+            var submissionDate = DateTime.UtcNow;
             var expectedFee = 121600M;
 
             _dbContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);

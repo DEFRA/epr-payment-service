@@ -17,14 +17,18 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
                     .NotEmpty().WithMessage(ValidationMessages.ApplicationReferenceNumberRequired);
 
             RuleFor(x => x.SubmissionDate)
-                .Must(date => date != default(DateTime))
-                .WithMessage(ValidationMessages.InvalidSubmissionDate)
-                .Must(date => date <= DateTime.Now)
-                .WithMessage(ValidationMessages.FutureSubmissionDate);
+                    .Cascade(CascadeMode.Stop)
+                    .NotEmpty().WithMessage(ValidationMessages.InvalidSubmissionDate)
+                    .Must(BeInUtc).WithMessage(ValidationMessages.SubmissionDateMustBeUtc)
+                    .LessThanOrEqualTo(DateTime.UtcNow).WithMessage(ValidationMessages.FutureSubmissionDate);
 
             RuleForEach(x => x.ComplianceSchemeMembers)
             .SetValidator(new ComplianceSchemeMemberDtoValidator())
             .WithMessage(ValidationMessages.InvalidComplianceSchemeMember);
+        }
+        private static bool BeInUtc(DateTime dateTime)
+        {
+            return dateTime.Kind == DateTimeKind.Utc;
         }
     }
 }

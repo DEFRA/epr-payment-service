@@ -1,12 +1,18 @@
-﻿using AutoFixture.MSTest;
+﻿using AutoFixture;
+using AutoFixture.AutoMoq;
+using AutoFixture.MSTest;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
+using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.ResubmissionFees.ComplianceScheme;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.ComplianceScheme;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -16,6 +22,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
     [TestClass]
     public class ComplianceSchemeResubmissionControllerTests
     {
+        private IFixture _fixture = null!;
         private ComplianceSchemeResubmissionController _controller = null!;
         private Mock<IComplianceSchemeResubmissionService> _resubmissionFeeServiceMock = null!;
         private Mock<IValidator<ComplianceSchemeResubmissionFeeRequestDto>> _validatorMock = null!;
@@ -24,8 +31,9 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
         [TestInitialize]
         public void TestInitialize()
         {
-            _resubmissionFeeServiceMock = new Mock<IComplianceSchemeResubmissionService>();
-            _validatorMock = new Mock<IValidator<ComplianceSchemeResubmissionFeeRequestDto>>();
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _resubmissionFeeServiceMock = _fixture.Freeze<Mock<IComplianceSchemeResubmissionService>>();
+            _validatorMock = _fixture.Freeze<Mock<IValidator<ComplianceSchemeResubmissionFeeRequestDto>>>();
             _controller = new ComplianceSchemeResubmissionController(_resubmissionFeeServiceMock.Object, _validatorMock.Object);
             _cancellationToken = new CancellationToken();
         }
@@ -129,33 +137,6 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateResubmissionFeeAsync_ServiceThrowsArgumentException_ShouldReturnBadRequest(
-            [Frozen] ComplianceSchemeResubmissionFeeRequestDto request)
-        {
-            // Arrange
-            request.ResubmissionDate = DateTime.UtcNow;
-            _resubmissionFeeServiceMock
-                .Setup(service => service.CalculateResubmissionFeeAsync(request, _cancellationToken))
-                .ThrowsAsync(new ArgumentException("Argument error"));
-
-            _validatorMock
-                .Setup(v => v.ValidateAsync(request, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new FluentValidation.Results.ValidationResult());
-
-            // Act
-            var result = await _controller.CalculateResubmissionFeeAsync(request, _cancellationToken);
-
-            // Assert
-            using (new AssertionScope())
-            {
-                result.Should().BeOfType<BadRequestObjectResult>();
-                var badRequestResult = result as BadRequestObjectResult;
-                badRequestResult.Should().NotBeNull();
-                badRequestResult!.Value.As<ProblemDetails>().Title.Should().Be("Argument Error");
-            }
-        }
-
-        [TestMethod, AutoMoqData]
         public async Task CalculateResubmissionFeeAsync_ServiceThrowsException_ShouldReturnInternalServerError(
             [Frozen] ComplianceSchemeResubmissionFeeRequestDto request)
         {
@@ -219,7 +200,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
             [Frozen] ComplianceSchemeResubmissionFeeRequestDto request)
         {
             // Arrange
-            request.ResubmissionDate = DateTime.Now; // Non-UTC date
+            request.ResubmissionDate = DateTime.UtcNow; // Non-UTC date
 
             _validatorMock
                 .Setup(v => v.ValidateAsync(request, It.IsAny<CancellationToken>()))
@@ -240,6 +221,26 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
                 badRequestResult!.Value.As<ProblemDetails>().Title.Should().Be("Validation Error");
                 badRequestResult!.Value.As<ProblemDetails>().Detail.Should().Contain("Resubmission date must be in UTC.");
             }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionAsync_ServiceThrowsArgumentException_ShouldReturnBadRequest(
+        [Frozen] ComplianceSchemeResubmissionFeeRequestDto request)
+        {
+
+            // Arrange
+            _validatorMock.Setup(v => v.Validate(request)).Returns(new ValidationResult());
+            _resubmissionFeeServiceMock
+                .Setup(s => s.CalculateResubmissionFeeAsync(request, _cancellationToken))
+                .ThrowsAsync(new ArgumentException("Invalid input parameter."));
+
+            // Act
+            var result = await _controller.CalculateResubmissionFeeAsync(request, _cancellationToken);
+
+            // Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+            var badRequestResult = result.As<BadRequestObjectResult>();
+            badRequestResult.Value.Should().Be("Invalid input parameter.");
         }
     }
 }
