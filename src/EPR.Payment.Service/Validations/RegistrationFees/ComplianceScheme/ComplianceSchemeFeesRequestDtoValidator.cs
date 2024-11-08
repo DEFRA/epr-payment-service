@@ -18,17 +18,11 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
 
             RuleFor(x => x.SubmissionDate)
                     .Cascade(CascadeMode.Stop)
-                    .NotEmpty().WithMessage(ValidationMessages.InvalidSubmissionDate)
-                    .Must(BeInUtc).WithMessage(ValidationMessages.SubmissionDateMustBeUtc)
-                    .LessThanOrEqualTo(DateTime.UtcNow).WithMessage(ValidationMessages.FutureSubmissionDate);
+                    .MustBeValidSubmissionDate();
 
             RuleForEach(x => x.ComplianceSchemeMembers)
             .SetValidator(new ComplianceSchemeMemberDtoValidator())
             .WithMessage(ValidationMessages.InvalidComplianceSchemeMember);
-        }
-        private static bool BeInUtc(DateTime dateTime)
-        {
-            return dateTime.Kind == DateTimeKind.Utc;
         }
     }
 }
