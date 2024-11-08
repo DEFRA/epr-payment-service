@@ -93,7 +93,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.ResubmissionFees
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.ResubmissionDate)
-                  .WithErrorMessage(ValidationMessages.ResubmissionDateInvalid);
+                  .WithErrorMessage(ValidationMessages.FutureResubmissionDate);
         }
 
         [TestMethod]
@@ -115,6 +115,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.ResubmissionFees
             result.ShouldHaveValidationErrorFor(x => x.ResubmissionDate)
                   .WithErrorMessage(ValidationMessages.ResubmissionDateMustBeUtc);
         }
+
 
         [TestMethod]
         public void Validate_ReferenceNumberIsEmpty_ShouldHaveValidationError()

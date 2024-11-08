@@ -89,7 +89,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.ResubmissionFees
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.ResubmissionDate)
-                  .WithErrorMessage(ValidationMessages.ResubmissionDateInvalid);
+                  .WithErrorMessage(ValidationMessages.FutureResubmissionDate);
         }
 
         [TestMethod]
