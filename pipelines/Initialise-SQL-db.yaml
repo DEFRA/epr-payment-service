@@ -74,6 +74,6 @@ jobs:
           azureContainerRegistryName: $(acr.azureContainerRegistryName)
           repositoryName: $(acr.repositoryName)
           ${{ if contains(parameters.branchName, 'RELEASE') }}:
-            branchName: $(DEVRWDWEBWAx407)
+            branchName: $(DEVRWDWEBWAx425)
           ${{ else }}:
             branchName: ${{ parameters.branchName }}
