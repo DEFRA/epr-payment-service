@@ -1,5 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
+using EPR.Payment.Service.Common.Data.Helper;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -8,7 +9,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 {
     public class ProducerFeesRepository : BaseFeeRepository, IProducerFeesRepository
     {
-        public ProducerFeesRepository(IAppDbContext dataContext) : base(dataContext) { }
+        public ProducerFeesRepository(IAppDbContext dataContext, FeesKeyValueStore keyValueStore) : base(dataContext, keyValueStore) { }
 
         public async Task<decimal> GetBaseFeeAsync(string producer, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
@@ -50,9 +51,9 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             return fee;
         }
 
-        public async Task<decimal> GetResubmissionAsync(RegulatorType regulator, CancellationToken cancellationToken)
+        public async Task<decimal> GetResubmissionAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
-            var fee = await GetFeeAsync(GroupTypeConstants.ProducerResubmission, SubGroupTypeConstants.ReSubmitting, regulator, DateTime.Now, cancellationToken);
+            var fee = await GetFeeAsync(GroupTypeConstants.ProducerResubmission, SubGroupTypeConstants.ReSubmitting, regulator, submissionDate, cancellationToken);
             ValidateFee(fee, string.Format(ProducerResubmissionExceptions.RecordNotFoundProducerResubmissionFeeError, regulator.Value));
             return fee;
         }

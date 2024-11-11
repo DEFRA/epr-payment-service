@@ -77,5 +77,23 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
             //Assert
             result.Should().Be(0.0m);
         }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetPreviousPaymentsByReferenceAsync_PaymentCanBeNegative_ShouldReturnAmount(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] PaymentsRepository _mockPaymentsRepository)
+        {
+            //Arrange
+            _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
+            _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object);
+
+            var reference = "Test Reference For Negative";
+
+            //Act
+            var result = await _mockPaymentsRepository.GetPreviousPaymentsByReferenceAsync(reference, _cancellationToken);
+
+            //Assert
+            result.Should().Be(140.0m);
+        }
     }
 }

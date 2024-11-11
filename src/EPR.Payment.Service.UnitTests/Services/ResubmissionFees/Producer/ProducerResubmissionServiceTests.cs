@@ -1,13 +1,12 @@
 ﻿using AutoFixture.MSTest;
-using EPR.Payment.Service.Common.Dtos.Request.Common;
+using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.Producer;
 using EPR.Payment.Service.Services.ResubmissionFees.Producer;
 using EPR.Payment.Service.Strategies.Interfaces.ResubmissionFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using FluentValidation;
-using FluentValidation.Results;
 using Moq;
 
 namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
@@ -15,20 +14,23 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
     [TestClass]
     public class ProducerResubmissionServiceTests
     {
-        private Mock<IResubmissionAmountStrategy<RegulatorDto, decimal>> _resubmissionAmountStrategyMock = null!;
-        private ProducerResubmissionService? _resubmissionService = null;
-        private Mock<IValidator<RegulatorDto>> _producerResubmissionFeeRequestDtoMock = null!;
+        private Mock<IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal>> _resubmissionAmountStrategyMock = null!;
+        private Mock<IPaymentsService> _paymentsServiceMock = null!;
+        private ProducerResubmissionService _resubmissionService = null!;
+        private CancellationToken _cancellationToken;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _resubmissionAmountStrategyMock = new Mock<IResubmissionAmountStrategy<RegulatorDto, decimal>>();
-            _producerResubmissionFeeRequestDtoMock = new Mock<IValidator<RegulatorDto>>();
+            _resubmissionAmountStrategyMock = new Mock<IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal>>();
+            _paymentsServiceMock = new Mock<IPaymentsService>();
 
             _resubmissionService = new ProducerResubmissionService(
                 _resubmissionAmountStrategyMock.Object,
-                _producerResubmissionFeeRequestDtoMock.Object
+                _paymentsServiceMock.Object
             );
+
+            _cancellationToken = new CancellationToken();
         }
 
         [TestMethod]
@@ -37,7 +39,8 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
             // Act
             var service = new ProducerResubmissionService(
                 _resubmissionAmountStrategyMock.Object,
-                _producerResubmissionFeeRequestDtoMock.Object);
+                _paymentsServiceMock.Object
+            );
 
             // Assert
             using (new AssertionScope())
@@ -51,62 +54,150 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
         public void Constructor_WhenResubmissionAmountStrategyIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
-            IResubmissionAmountStrategy<RegulatorDto, decimal>? resubmissionAmountStrategy = null;
+            IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal>? resubmissionAmountStrategy = null;
 
             // Act
             Action act = () => new ProducerResubmissionService(
                 resubmissionAmountStrategy!,
-                _producerResubmissionFeeRequestDtoMock.Object);
+                _paymentsServiceMock.Object
+            );
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'resubmissionAmountStrategy')");
         }
 
         [TestMethod]
-        public void Constructor_WhenProducerResubmissionFeeRequestDtoValidatorIsNull_ShouldThrowArgumentNullException()
+        public void Constructor_WhenPaymentsServiceIsNull_ShouldThrowArgumentNullException()
         {
             // Act
             Action act = () => new ProducerResubmissionService(
                 _resubmissionAmountStrategyMock.Object,
-                null!);
+                null!
+            );
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'producerResubmissionRequestValidator')");
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'paymentsService')");
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetResubmissionAsync_RepositoryReturnsAResult_ShouldReturnAmount(
-            [Frozen] RegulatorDto request,
-            [Frozen] decimal expectedAmount
-            )
-        {
-            //Arrange
-            _producerResubmissionFeeRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult());
-
-            _resubmissionAmountStrategyMock.Setup(i => i.CalculateFeeAsync(request, CancellationToken.None)).ReturnsAsync(expectedAmount);
-
-            //Act
-            var result = await _resubmissionService!.GetResubmissionAsync(request, CancellationToken.None);
-
-            //Assert
-            result.Should().Be(expectedAmount);
-        }
-
-        [TestMethod, AutoMoqData]
-        public async Task GetResubmissionAsync_ValiditonFails_ShouldThrowValidationException([Frozen] RegulatorDto request)
+        public async Task GetResubmissionFeeAsync_ShouldReturnCalculatedResponse(
+            [Frozen] ProducerResubmissionFeeRequestDto request,
+            [Frozen] decimal baseFee,
+            [Frozen] decimal previousPayments)
         {
             // Arrange
+            _resubmissionAmountStrategyMock
+                .Setup(strategy => strategy.CalculateFeeAsync(request, _cancellationToken))
+                .ReturnsAsync(baseFee);
 
-            var validationFailures = new List<ValidationFailure>
+            _paymentsServiceMock
+                .Setup(service => service.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, _cancellationToken))
+                .ReturnsAsync(previousPayments);
+
+            // Act
+            var result = await _resubmissionService.GetResubmissionFeeAsync(request, _cancellationToken);
+
+            // Assert
+            using (new AssertionScope())
             {
-                new ValidationFailure(nameof(request.Regulator), "Regulator is required.")
-            };
+                result.TotalResubmissionFee.Should().Be(baseFee);
+                result.PreviousPayments.Should().Be(previousPayments);
+                result.OutstandingPayment.Should().Be(baseFee - previousPayments);
+            }
+        }
 
-            _producerResubmissionFeeRequestDtoMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new ValidationResult(validationFailures));
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionFeeAsync_WithNoPreviousPayments_ShouldReturnTotalFeeAsOutstanding(
+            [Frozen] ProducerResubmissionFeeRequestDto request,
+            [Frozen] decimal baseFee)
+        {
+            // Arrange
+            _resubmissionAmountStrategyMock
+                .Setup(strategy => strategy.CalculateFeeAsync(request, _cancellationToken))
+                .ReturnsAsync(baseFee);
 
-            // Act & Assert
-            await _resubmissionService.Invoking(async x => await x!.GetResubmissionAsync(request, CancellationToken.None))
-                .Should().ThrowAsync<ValidationException>();
+            _paymentsServiceMock
+                .Setup(service => service.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, _cancellationToken))
+                .ReturnsAsync(0);
+
+            // Act
+            var result = await _resubmissionService.GetResubmissionFeeAsync(request, _cancellationToken);
+
+            // Assert
+            result.TotalResubmissionFee.Should().Be(baseFee);
+            result.PreviousPayments.Should().Be(0);
+            result.OutstandingPayment.Should().Be(baseFee);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionFeeAsync_WithFullPreviousPayment_ShouldReturnZeroOutstanding(
+            [Frozen] ProducerResubmissionFeeRequestDto request,
+            [Frozen] decimal baseFee)
+        {
+            // Arrange
+            _resubmissionAmountStrategyMock
+                .Setup(strategy => strategy.CalculateFeeAsync(request, _cancellationToken))
+                .ReturnsAsync(baseFee);
+
+            _paymentsServiceMock
+                .Setup(service => service.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, _cancellationToken))
+                .ReturnsAsync(baseFee);
+
+            // Act
+            var result = await _resubmissionService.GetResubmissionFeeAsync(request, _cancellationToken);
+
+            // Assert
+            result.TotalResubmissionFee.Should().Be(baseFee);
+            result.PreviousPayments.Should().Be(baseFee);
+            result.OutstandingPayment.Should().Be(0);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionFeeAsync_WithOverpayment_ShouldReturnZeroOutstandingPayment(
+            [Frozen] ProducerResubmissionFeeRequestDto request,
+            [Frozen] int baseFee)
+        {
+            // Arrange
+            int overpayment = baseFee + 500; // Overpayment of 500 pence
+            _resubmissionAmountStrategyMock
+                .Setup(strategy => strategy.CalculateFeeAsync(request, _cancellationToken))
+                .ReturnsAsync(baseFee);
+
+            _paymentsServiceMock
+                .Setup(service => service.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, _cancellationToken))
+                .ReturnsAsync(overpayment);
+
+            // Act
+            var result = await _resubmissionService.GetResubmissionFeeAsync(request, _cancellationToken);
+
+            // Assert
+            result.TotalResubmissionFee.Should().Be(baseFee);
+            result.PreviousPayments.Should().Be(overpayment);
+            result.OutstandingPayment.Should().Be(baseFee - overpayment); // Should be negative (-500)
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionFeeAsync_WithExcessOverpayment_ShouldReturnNegativeOutstandingPayment(
+            [Frozen] ProducerResubmissionFeeRequestDto request,
+            [Frozen] int baseFee)
+        {
+            // Arrange
+            int overpayment = baseFee + 5000; // Overpayment of 5000 pence
+            _resubmissionAmountStrategyMock
+                .Setup(strategy => strategy.CalculateFeeAsync(request, _cancellationToken))
+                .ReturnsAsync(baseFee);
+
+            _paymentsServiceMock
+                .Setup(service => service.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, _cancellationToken))
+                .ReturnsAsync(overpayment);
+
+            // Act
+            var result = await _resubmissionService.GetResubmissionFeeAsync(request, _cancellationToken);
+
+            // Assert
+            result.TotalResubmissionFee.Should().Be(baseFee);
+            result.PreviousPayments.Should().Be(overpayment);
+            result.OutstandingPayment.Should().Be(baseFee - overpayment); // Should be negative due to excess overpayment
         }
     }
 }
