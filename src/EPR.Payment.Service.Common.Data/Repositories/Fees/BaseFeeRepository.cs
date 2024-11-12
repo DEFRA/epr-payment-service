@@ -41,13 +41,13 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 
             if (!registrationFees.Any())
             {
-                _keyValueStore.Add(inMemoryKey, fee); 
-                return fee;  
+                _keyValueStore.Add(inMemoryKey, fee);
+                return fee;
             }
 
             fee = registrationFees
                 .Where(r => submissionDate >= r.EffectiveFrom && submissionDate <= r.EffectiveTo)
-                .OrderByDescending(r => r.EffectiveFrom)  
+                .OrderByDescending(r => r.EffectiveFrom)
                 .Select(r => r.Amount)
                 .FirstOrDefault();
 
