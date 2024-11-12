@@ -1,6 +1,6 @@
 ﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
-using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees;
+using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.ComplianceScheme;

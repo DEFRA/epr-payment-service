@@ -1,6 +1,7 @@
 ﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
+using EPR.Payment.Service.Common.Data.Helper;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.Mocks;
@@ -514,7 +515,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
             var result = await _producerFeesRepository.GetThirdBandFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.Now, _cancellationToken);
 
             // Assert
-            result.Should().Be(1m); 
+            result.Should().Be(1m);
         }
 
 
@@ -795,16 +796,18 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
         [TestMethod, AutoMoqData]
         public async Task GetResubmissionAsync_RegistrationFeesExist_ShouldReturnAmount(
            [Frozen] Mock<IAppDbContext> _dataContextMock,
+           [Frozen] Mock<FeesKeyValueStore> _keyValueStore,
            [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
             //Arrange
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
-            _producerFeesRepository = new ProducerFeesRepository(_dataContextMock.Object);
+            _producerFeesRepository = new ProducerFeesRepository(_dataContextMock.Object, _keyValueStore.Object);
 
             var regulator = RegulatorType.Create("GB-ENG");
+            var submissionDate = DateTime.Today;
 
             //Act
-            var result = await _producerFeesRepository.GetResubmissionAsync(regulator, _cancellationToken);
+            var result = await _producerFeesRepository.GetResubmissionAsync(regulator, submissionDate, _cancellationToken);
 
             //Assert
             using (new AssertionScope())
@@ -816,15 +819,17 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
         [TestMethod, AutoMoqData]
         public async Task GetResubmissionAsync_RegistrationFeesDoesNotExist_ShouldThrowKeyNotFoundException(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Frozen] Mock<FeesKeyValueStore> _keyValueStore,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
             //Arrange
             var regulator = RegulatorType.Create("GB-SCT");
+            var submissionDate = DateTime.Today;
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(_registrationFeesMock.Object);
-            _producerFeesRepository = new ProducerFeesRepository(_dataContextMock.Object);
+            _producerFeesRepository = new ProducerFeesRepository(_dataContextMock.Object, _keyValueStore.Object);
 
             //Act & Assert
-            await _producerFeesRepository.Invoking(async x => await x.GetResubmissionAsync(regulator, _cancellationToken))
+            await _producerFeesRepository.Invoking(async x => await x.GetResubmissionAsync(regulator, submissionDate, _cancellationToken))
                 .Should().ThrowAsync<KeyNotFoundException>();
         }
 

@@ -1,13 +1,14 @@
 ﻿using EPR.Payment.Service.Common.Data;
+using EPR.Payment.Service.Common.Data.Helper;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Data.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Request.Common;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
+using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
@@ -45,7 +46,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>, SubsidiariesFeeCalculationStrategy>();
             services.AddScoped<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, OnlineMarketCalculationStrategy>();
             services.AddScoped<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, LateFeeCalculationStrategy>();
-            services.AddScoped<IResubmissionAmountStrategy<RegulatorDto, decimal>, DefaultResubmissionAmountStrategy>();
+            services.AddScoped<IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal>, ProducerResubmissionAmountStrategy>();
 
             // Register the specific implementations of IFeeCalculationStrategy for Compliance Scheme
             services.AddScoped<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>, CSBaseFeeCalculationStrategy>();
@@ -71,6 +72,8 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IOfflinePaymentsService, OfflinePaymentsService>();
             services.AddScoped<IPaymentsService, PaymentsService>();
 
+
+            services.AddScoped<FeesKeyValueStore>();
 
             return services;
         }
