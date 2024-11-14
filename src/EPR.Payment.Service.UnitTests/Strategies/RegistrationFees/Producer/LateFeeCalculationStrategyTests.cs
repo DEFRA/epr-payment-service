@@ -67,7 +67,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 IsLateFeeApplicable = true,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             var regulator = RegulatorType.Create("GB-ENG");
@@ -94,7 +94,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 IsLateFeeApplicable = false,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act
@@ -115,7 +115,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 IsLateFeeApplicable = true,
                 Regulator = null!, // Regulator is null
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act & Assert
@@ -133,7 +133,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 IsLateFeeApplicable = true,
                 Regulator = string.Empty, // Regulator is empty
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.UtcNow
             };
 
             // Act & Assert

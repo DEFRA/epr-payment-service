@@ -344,7 +344,7 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
 
                 // OutstandingPayment should be equal to totalFee - previousPayments
                 var outstandingPayment = expectedTotalFee - previousPayments;
-                result.OutstandingPayment.Should().Be(-5000m);
+                result.OutstandingPayment.Should().Be(-5000M);
             }
         }
     }
