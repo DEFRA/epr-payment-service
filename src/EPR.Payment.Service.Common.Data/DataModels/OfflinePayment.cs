@@ -15,11 +15,11 @@ namespace EPR.Payment.Service.Common.Data.DataModels
         public int PaymentId { get; set; }
 
         [Column(Order = 3)]
-        public DateTime PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
 
         [MaxLength(255)]
         [Column(Order = 4)]
-        public string Comments { get; set; } = null!;
+        public string? Comments { get; set; }
 
         #region Navigation properties
 
