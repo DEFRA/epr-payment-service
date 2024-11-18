@@ -168,7 +168,8 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
                 result.GovPayPaymentId.Should().Be(expectedResult.GovPayPaymentId);
                 result.UpdatedByOrganisationId.Should().Be(expectedResult.UpdatedByOrganisationId);
                 result.UpdatedByUserId.Should().Be(expectedResult.UpdatedByUserId);
+                result.Description.Should().Be(expectedResult.Description);
             }
-        }
+        }        
     }
 }
