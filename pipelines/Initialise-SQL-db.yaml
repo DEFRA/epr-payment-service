@@ -8,10 +8,20 @@ parameters:
   default: 'DEV11'
   type: string
   values:
+    - DEV1
+    - DEV2
+    - DEV3
     - DEV4
     - DEV5
+    - DEV6
+    - DEV7
+    - DEV8
+    - DEV9
+    - DEV10
     - DEV11
+    - DEV12
     - DEV13
+    - DEV14
 - name: envToDeploy
   displayName: 'Target Environment to deploy:'
   default: development
