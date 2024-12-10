@@ -155,5 +155,5 @@ app.UseMiddleware<ConditionalEndpointMiddleware>();
 
 app.MapControllers();
 //app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-
+app.MapHealthChecks("/admin/health", HealthCheckOptionsBuilder.Build()).AllowAnonymous();
 app.Run();
