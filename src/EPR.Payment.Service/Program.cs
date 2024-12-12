@@ -67,7 +67,6 @@ builder.Services.AddApiVersioning(options =>
 });
 
 builder.Services.AddFeatureManagement();
-builder.Services.AddLogging();
 
 var app = builder.Build();
 
