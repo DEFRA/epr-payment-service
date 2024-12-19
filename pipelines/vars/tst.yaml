@@ -4,3 +4,7 @@ variables:
   acr.azureContainerRegistryName: 'tstrwdinfac1401'
   acr.repositoryName: 'eprpaymentbackendrepository'
   serviceName: 'tstrwdwebwa1425'
+  kvName: TSTRWDINFKV1401
+  sqlDBserver: 'tstrwddbssq1401.database.windows.net'
+  sqlDB: 'tst1_feespayment'
+  acr.Subscription: 'AZD-RWD-TST1'
