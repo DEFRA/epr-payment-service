@@ -80,7 +80,7 @@ extends:
   template: epr-funcs-deployment-pipeline.yaml@CommonTemplates
   parameters:
     ${{ if contains(parameters.imageTag, 'RELEASE') }}:
-      imageTag: $(DEVRWDWEBFAx425)
+      imageTag: $(DEVRWDWEBWAx425)
     ${{ else }}:
       imageTag: ${{ parameters.imageTag }}
     azureSubscription: $(azureSubscription)
