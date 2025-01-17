@@ -1,6 +1,6 @@
 trigger: none
 pr: none
-pool: DEFRA-COMMON-ubuntu2004-SSV3
+pool: DEFRA-COMMON-ubuntu2204-SSV3
 
 parameters:
 - name: teamName
