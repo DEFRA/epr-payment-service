@@ -2171,33 +2171,6 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20241002152703_LateFee'
-)
-BEGIN
-    EXEC(N'UPDATE [Lookup].[SubGroup] SET [Description] = ''Late Fee'', [Type] = ''LateFee''
-    WHERE [Id] = 8;
-    SELECT @@ROWCOUNT');
-END;
-GO
-
-IF NOT EXISTS (
-    SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20241002152703_LateFee'
-)
-BEGIN
-    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241002152703_LateFee', N'8.0.4');
-END;
-GO
-
-COMMIT;
-GO
-
-BEGIN TRANSACTION;
-GO
-
-IF NOT EXISTS (
-    SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241011074943_LateFeeData'
 )
 BEGIN
