@@ -2158,14 +2158,21 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
 )
 BEGIN
+    PRINT 'Inserting migration: 20240905115928_AddOnlineMarketToProducer';
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
     VALUES (N'20240905115928_AddOnlineMarketToProducer', N'8.0.4');
 END;
+ELSE
+BEGIN
+    PRINT 'Migration 20240905115928_AddOnlineMarketToProducer already exists, skipping insertion.';
+END;
 GO
 
+PRINT 'Committing transaction...';
 COMMIT;
 GO
 
+PRINT 'Starting new transaction...';
 BEGIN TRANSACTION;
 GO
 
@@ -2174,11 +2181,21 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20241002152703_LateFee'
 )
 BEGIN
+    PRINT 'Updating Lookup.SubGroup table with Late Fee details.';
     EXEC(N'UPDATE [Lookup].[SubGroup] SET [Description] = ''Late Fee'', [Type] = ''LateFee''
     WHERE [Id] = 8;
     SELECT @@ROWCOUNT');
 END;
+ELSE
+BEGIN
+    PRINT 'Migration 20241002152703_LateFee already exists, skipping update.';
+END;
 GO
+
+PRINT 'Committing final transaction...';
+COMMIT;
+GO
+
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
