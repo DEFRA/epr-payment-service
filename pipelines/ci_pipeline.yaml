@@ -49,7 +49,7 @@ resources:
     - repository: CommonTemplates
       name: RWD-CPR-EPR4P-ADO/epr-webapps-code-deploy-templates
       type: git
-      ref: main
+      ref: 478206-owasp-test
 
 extends:
   template: epr-build-pipeline.yaml@CommonTemplates
