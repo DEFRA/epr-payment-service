@@ -3,13 +3,10 @@ using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Extension;
 using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;
-using EPR.Payment.Service.ResponseWriter;
 using EPR.Payment.Service.Validations.Payments;
 using EPR.Payment.Service.Validations.RegistrationFees.Producer;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
 
@@ -44,13 +41,7 @@ builder.Services.AddSwaggerGen(setupAction =>
 builder.Services.AddDependencies();
 builder.Services.AddDataContext(builder.Configuration["ConnectionStrings:PaymentConnectionString"]!);
 builder.Services.AddApplicationInsightsTelemetry();
-builder.Services
-    .AddHealthChecks()
-    .AddDbContextCheck<AppDbContext>()
-    .AddCheck<PaymentStatusHealthCheck>(PaymentStatusHealthCheck.HealthCheckResultDescription,
-            failureStatus: HealthStatus.Unhealthy,
-            tags: new[] { "ready" });
-;
+builder.Services.AddHealthChecks();
 
 builder.Services.AddApiVersioning(options =>
 {
@@ -128,23 +119,6 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "PaymentServiceApi v1");
     c.RoutePrefix = "swagger";
 });
-app.UseHealthChecks("/health",
-    new HealthCheckOptions
-    {
-        ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
-    });
-
-if (!IsEnvironmentLocalOrDev)
-    app.UseHealthChecks("/ping",
-        new HealthCheckOptions
-        {
-            Predicate = _ => false,
-            ResponseWriter = (context, report) =>
-            {
-                context.Response.ContentType = "application/json";
-                return context.Response.WriteAsync("");
-            }
-        });
 
 app.UseHttpsRedirection();
 app.UseRouting();
