@@ -14,10 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 string _environmentName = builder.Configuration.GetValue<string>("EnvironmentName") ?? "LOCAL";
 
-bool IsEnvironmentLocalOrDev =
-    _environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
-    || _environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
-
 // Add services to the container.
 
 builder.Services.AddControllers();
