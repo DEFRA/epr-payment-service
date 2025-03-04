@@ -7,4 +7,4 @@ variables:
   kvName: TSTRWDINFKV1401
   sqlDBserver: 'tstrwddbssq1401.database.windows.net'
   sqlDB: 'tst1_feespayment'
-  acr.Subscription: 'AZR-RWD-tst1'
+  acr.Subscription: 'AZD-RWD-TST1'
