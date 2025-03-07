@@ -1,9 +1,9 @@
 variables:
   azureSubscription: 'AZR-RWD-PRE2'
-  docker.imageName: 'eprintegrationfunction'
+  docker.imageName: 'eprpaymentbackend'
   acr.azureContainerRegistryName: 'prerwdinfac2401'
-  acr.repositoryName: 'eprintegrationfunctionrepository'
-  serviceName: 'PRERWDWEBFA2412'
+  acr.repositoryName: 'eprpaymentbackendrepository'
+  serviceName: 'PRERWDWEBWA2425'
   kvName: PRERWDINFKV2401
   sqlDBserver: 'prerwddbssq2401.database.windows.net'
   sqlDB: 'pre2_feespayment'
