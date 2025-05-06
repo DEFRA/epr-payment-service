@@ -7,18 +7,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
 {
     [ExcludeFromCodeCoverage]
-    public class GroupConfiguration : IEntityTypeConfiguration<Group>
+    public class GroupConfiguration : CommonBaseEntityConfiguration<Group>
     {
         /// <inheritdoc />
-        public void Configure(EntityTypeBuilder<Group> builder)
+        public override void Configure(EntityTypeBuilder<Group> builder)
         {
             builder.ToTable(TableNameConstants.GroupTableName, SchemaNameConstants.LookupSchemaName);
 
-            builder.Property(p => p.Type)
-                   .HasColumnType("varchar(50)");
-
-            builder.Property(p => p.Description)
-                   .HasColumnType("varchar(255)");
+            base.Configure(builder);
         }
     }
 }

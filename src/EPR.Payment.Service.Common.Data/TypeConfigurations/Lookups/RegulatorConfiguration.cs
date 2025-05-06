@@ -7,18 +7,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
 {
     [ExcludeFromCodeCoverage]
-    public class RegulatorConfiguration : IEntityTypeConfiguration<Regulator>
+    public class RegulatorConfiguration : CommonBaseEntityConfiguration<Regulator>
     {
         /// <inheritdoc />
-        public void Configure(EntityTypeBuilder<Regulator> builder)
+        public override void Configure(EntityTypeBuilder<Regulator> builder)
         {
             builder.ToTable(TableNameConstants.RegulatorTableName, SchemaNameConstants.LookupSchemaName);
 
-            builder.Property(p => p.Type)
-                   .HasColumnType("varchar(50)");
-
-            builder.Property(p => p.Description)
-                   .HasColumnType("varchar(255)");
+            base.Configure(builder);
         }
     }
 }
