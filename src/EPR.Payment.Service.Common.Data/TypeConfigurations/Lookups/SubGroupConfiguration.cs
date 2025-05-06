@@ -15,10 +15,10 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
             builder.ToTable(TableNameConstants.SubGroupTableName, SchemaNameConstants.LookupSchemaName);
 
             builder.Property(p => p.Type)
-                   .HasMaxLength(50);
+                   .HasColumnType("varchar(50)");
 
             builder.Property(p => p.Description)
-                   .HasMaxLength(255);
+                   .HasColumnType("varchar(255)");
         }
     }
 }

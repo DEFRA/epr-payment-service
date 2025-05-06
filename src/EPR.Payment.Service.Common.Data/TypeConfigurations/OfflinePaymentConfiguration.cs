@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection.Emit;
 using EPR.Payment.Service.Common.Data.Constants;
 using EPR.Payment.Service.Common.Data.DataModels;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +12,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
         /// <inheritdoc />
         public void Configure(EntityTypeBuilder<OfflinePayment> builder)
         {
-            builder.ToTable(TableNameConstants.OfflinePaymentTableName, SchemaNameConstants.LookupSchemaName);
+            builder.ToTable(TableNameConstants.OfflinePaymentTableName);
 
             builder.Property(p => p.Id)
                    .HasColumnOrder(1);
@@ -26,7 +25,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
 
             builder.Property(p => p.Comments)
                    .HasColumnOrder(4)
-                   .HasMaxLength(255);
+                   .HasColumnType("nvarchar(255)");
 
             builder.HasOne(p => p.Payment)
                    .WithOne(op => op.OfflinePayment)

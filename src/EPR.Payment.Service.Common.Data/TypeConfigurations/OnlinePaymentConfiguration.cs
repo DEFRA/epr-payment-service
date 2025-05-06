@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection.Emit;
 using EPR.Payment.Service.Common.Data.Constants;
 using EPR.Payment.Service.Common.Data.DataModels;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +12,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
         /// <inheritdoc />
         public void Configure(EntityTypeBuilder<OnlinePayment> builder)
         {
-            builder.ToTable(TableNameConstants.OnlinePaymentTableName, SchemaNameConstants.LookupSchemaName);
+            builder.ToTable(TableNameConstants.OnlinePaymentTableName);
 
             builder.Property(p => p.Id)
                    .HasColumnOrder(1);
@@ -27,19 +26,19 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
 
             builder.Property(p => p.GovPayPaymentId)
                    .HasColumnOrder(4)
-                   .HasMaxLength(50);
+                   .HasColumnType("varchar(50)");
 
             builder.Property(p => p.GovPayStatus)
                    .HasColumnOrder(5)
-                   .HasMaxLength(20);
+                   .HasColumnType("varchar(20)");
 
             builder.Property(p => p.ErrorCode)
                    .HasColumnOrder(6)
-                   .HasMaxLength(255);
+                   .HasColumnType("varchar(255)");
 
             builder.Property(p => p.ErrorMessage)
                    .HasColumnOrder(7)
-                   .HasMaxLength(255);
+                   .HasColumnType("varchar(255)");
 
             builder.Property(p => p.UpdatedByOrgId)
                    .HasColumnOrder(8);

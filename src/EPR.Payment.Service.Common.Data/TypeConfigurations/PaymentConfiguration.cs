@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection.Emit;
-using System.Security.Principal;
 using EPR.Payment.Service.Common.Data.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,7 +11,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
         /// <inheritdoc />
         public void Configure(EntityTypeBuilder<DataModels.Payment> builder)
         {
-            builder.ToTable(TableNameConstants.PaymentTableName, SchemaNameConstants.LookupSchemaName);
+            builder.ToTable(TableNameConstants.PaymentTableName);
 
             builder.Property(p => p.Id)
                    .HasColumnOrder(1);
@@ -26,15 +24,15 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
                    .ValueGeneratedOnAdd();
            
             builder.Property(p => p.InternalStatusId)
-                   .HasColumnOrder(4);
+                    .HasColumnOrder(4);
 
             builder.Property(p => p.Regulator)
                    .HasColumnOrder(5)
-                   .HasMaxLength(20);
+                   .HasColumnType("varchar(20)");
 
             builder.Property(p => p.Reference)
                    .HasColumnOrder(6)
-                   .HasMaxLength(255);
+                   .HasColumnType("nvarchar(255)");
 
             builder.Property(p => p.Amount)
                    .HasColumnOrder(7)
@@ -42,7 +40,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
 
             builder.Property(p => p.ReasonForPayment)
                    .HasColumnOrder(8)
-                   .HasMaxLength(255);
+                   .HasColumnType("nvarchar(255)");
 
             builder.Property(p => p.CreatedDate)
                    .HasColumnOrder(9);
@@ -58,6 +56,10 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
 
             builder.Property(x => x.ExternalPaymentId)
                    .HasDefaultValueSql("NEWID()");
+
+            builder.HasOne(p => p.PaymentStatus)
+                   .WithMany(p=> p.Payments)
+                   .HasForeignKey(p => p.InternalStatusId);
         }
     }
 }

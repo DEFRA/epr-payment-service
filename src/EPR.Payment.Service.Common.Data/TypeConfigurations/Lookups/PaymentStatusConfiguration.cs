@@ -15,7 +15,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
             builder.ToTable(TableNameConstants.PaymentStatusTableName, SchemaNameConstants.LookupSchemaName);
 
             builder.Property(p => p.Status)
-                   .HasMaxLength(20)
+                   .HasColumnType("varchar(20)")
                    .IsRequired();
         }
     }
