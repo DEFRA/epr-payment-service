@@ -1,9 +1,11 @@
-﻿using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
+﻿using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EPR.Payment.Service.Common.Data.TypeConfigurations
 {
+    [ExcludeFromCodeCoverage]
     public class CommonBaseEntityConfiguration<T> : IEntityTypeConfiguration<T> where T : CommonBaseEntity
     {
         /// <inheritdoc />
