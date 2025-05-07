@@ -1,8 +1,6 @@
-﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
-using EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups;
+﻿using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 
 namespace EPR.Payment.Service.Common.Data.SeedData
 {
@@ -11,16 +9,7 @@ namespace EPR.Payment.Service.Common.Data.SeedData
     {
         public static void Seed(ModelBuilder modelBuilder)
         {
-            
-
-            modelBuilder.Entity<PaymentStatus>().HasData(
-                new PaymentStatus { Id = Enums.Status.Initiated, Status = "Initiated" },
-                new PaymentStatus { Id = Enums.Status.InProgress, Status = "InProgress" },
-                new PaymentStatus { Id = Enums.Status.Success, Status = "Success" },
-                new PaymentStatus { Id = Enums.Status.Failed, Status = "Failed" },
-                new PaymentStatus { Id = Enums.Status.Error, Status = "Error" },
-                new PaymentStatus { Id = Enums.Status.UserCancelled, Status = "UserCancelled" }
-                );
+            PaymentStatusDataSeed.SeedPaymentStatusData(modelBuilder.Entity<PaymentStatus>());
 
             modelBuilder.Entity<Group>().HasData(
                new Group { Id = 1, Type = "ProducerType", Description = "Producer Type" },
@@ -41,17 +30,10 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                new SubGroup { Id = 7, Type = "ReSubmitting", Description = "Re-submitting a report" },
                new SubGroup { Id = 8, Type = "LateFee", Description = "Late Fee" }
                );
-
-            modelBuilder.Entity<Regulator>().HasData(
-               new Regulator { Id = 1, Type = "GB-ENG", Description = "England" },
-               new Regulator { Id = 2, Type = "GB-SCT", Description = "Scotland" },
-               new Regulator { Id = 3, Type = "GB-WLS", Description = "Wales" },
-               new Regulator { Id = 4, Type = "GB-NIR", Description = "Northern Ireland" }
-               );
-
+            
+            RegulatorDataSeed.SeedRegulatorData(modelBuilder.Entity<Regulator>());
 
             RegistrationFeesDataSeed.SeedRegistrationFees(modelBuilder.Entity<RegistrationFees>());
         }
-
     }
 }

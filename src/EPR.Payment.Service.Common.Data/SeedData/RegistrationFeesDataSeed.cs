@@ -1,9 +1,11 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EPR.Payment.Service.Common.Data.SeedData
 {
+    [ExcludeFromCodeCoverage]
     public static class RegistrationFeesDataSeed
     {
         private static readonly DateTime effectiveFromDate = DateTime.ParseExact("01/01/2024 00:00:00", "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
@@ -12,8 +14,6 @@ namespace EPR.Payment.Service.Common.Data.SeedData
         public static void SeedRegistrationFees(EntityTypeBuilder<RegistrationFees> builder)
         {
             SeedSeedRegistrationFeesExistingData(builder);
-            SeedReprocessorRegistrationFeesData(builder);
-            SeedExporterRegistrationFeesData(builder);
         }
 
         private static void SeedSeedRegistrationFeesExistingData(EntityTypeBuilder<RegistrationFees> builder)
@@ -80,16 +80,6 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                             new RegistrationFees { Id = 59, GroupId = 6, SubGroupId = 7, RegulatorId = 3, Amount = 43000, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
                             new RegistrationFees { Id = 60, GroupId = 6, SubGroupId = 7, RegulatorId = 4, Amount = 43000, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
                             );
-        }
-
-        private static void SeedReprocessorRegistrationFeesData(EntityTypeBuilder<RegistrationFees> builder)
-        {
-
-        }
-
-        private static void SeedExporterRegistrationFeesData(EntityTypeBuilder<RegistrationFees> builder)
-        {
-          
         }
     }
 }
