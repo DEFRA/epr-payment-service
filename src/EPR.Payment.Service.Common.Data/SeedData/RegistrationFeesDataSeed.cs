@@ -11,9 +11,16 @@ namespace EPR.Payment.Service.Common.Data.SeedData
         private static readonly DateTime effectiveFromDate = DateTime.ParseExact("01/01/2024 00:00:00", "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
         private static readonly DateTime effectiveToDate = DateTime.ParseExact("31/12/2025 23:59:59", "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
 
+        private static readonly DateTime effectiveFromDateForYear2024_25 = DateTime.ParseExact("01/09/2024 00:00:00", "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+        private static readonly DateTime effectiveToDateForYear2024_25 = DateTime.ParseExact("31/08/2025 23:59:59", "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+
+        private static readonly DateTime effectiveFromDateForYear2025_26 = DateTime.ParseExact("01/09/2025 00:00:00", "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+        private static readonly DateTime effectiveToDateForYear2025_26 = DateTime.ParseExact("31/08/2026 23:59:59", "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+
         public static void SeedRegistrationFees(EntityTypeBuilder<RegistrationFees> builder)
         {
             SeedSeedRegistrationFeesExistingData(builder);
+            SeedReprocessorRegistrationFeesData(builder);
         }
 
         private static void SeedSeedRegistrationFeesExistingData(EntityTypeBuilder<RegistrationFees> builder)
@@ -79,6 +86,60 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                             new RegistrationFees { Id = 58, GroupId = 6, SubGroupId = 7, RegulatorId = 2, Amount = 43000, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
                             new RegistrationFees { Id = 59, GroupId = 6, SubGroupId = 7, RegulatorId = 3, Amount = 43000, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
                             new RegistrationFees { Id = 60, GroupId = 6, SubGroupId = 7, RegulatorId = 4, Amount = 43000, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate }
+                            );
+        }
+
+        private static void SeedReprocessorRegistrationFeesData(EntityTypeBuilder<RegistrationFees> builder)
+        {
+            builder.HasData(
+                            new RegistrationFees { Id = 109, GroupId = 8, SubGroupId = 9, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 110, GroupId = 8, SubGroupId = 10, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 111, GroupId = 8, SubGroupId = 11, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 112, GroupId = 8, SubGroupId = 12, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 113, GroupId = 8, SubGroupId = 13, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 114, GroupId = 8, SubGroupId = 14, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 115, GroupId = 8, SubGroupId = 9, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 116, GroupId = 8, SubGroupId = 10, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 117, GroupId = 8, SubGroupId = 11, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 118, GroupId = 8, SubGroupId = 12, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 119, GroupId = 8, SubGroupId = 13, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 120, GroupId = 8, SubGroupId = 14, RegulatorId = 1, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 121, GroupId = 8, SubGroupId = 9, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 122, GroupId = 8, SubGroupId = 10, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 123, GroupId = 8, SubGroupId = 11, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 124, GroupId = 8, SubGroupId = 12, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 125, GroupId = 8, SubGroupId = 13, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 126, GroupId = 8, SubGroupId = 14, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 127, GroupId = 8, SubGroupId = 9, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 128, GroupId = 8, SubGroupId = 10, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 129, GroupId = 8, SubGroupId = 11, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 130, GroupId = 8, SubGroupId = 12, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 131, GroupId = 8, SubGroupId = 13, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 132, GroupId = 8, SubGroupId = 14, RegulatorId = 2, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 133, GroupId = 8, SubGroupId = 9, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 134, GroupId = 8, SubGroupId = 10, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 135, GroupId = 8, SubGroupId = 11, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 136, GroupId = 8, SubGroupId = 12, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 137, GroupId = 8, SubGroupId = 13, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 138, GroupId = 8, SubGroupId = 14, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 139, GroupId = 8, SubGroupId = 9, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 140, GroupId = 8, SubGroupId = 10, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 141, GroupId = 8, SubGroupId = 11, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 142, GroupId = 8, SubGroupId = 12, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 143, GroupId = 8, SubGroupId = 13, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 144, GroupId = 8, SubGroupId = 14, RegulatorId = 3, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 145, GroupId = 8, SubGroupId = 9, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 146, GroupId = 8, SubGroupId = 10, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 147, GroupId = 8, SubGroupId = 11, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 148, GroupId = 8, SubGroupId = 12, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 149, GroupId = 8, SubGroupId = 13, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 150, GroupId = 8, SubGroupId = 14, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2024_25, EffectiveTo = effectiveToDateForYear2024_25 },
+                            new RegistrationFees { Id = 151, GroupId = 8, SubGroupId = 9, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 152, GroupId = 8, SubGroupId = 10, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 153, GroupId = 8, SubGroupId = 11, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 154, GroupId = 8, SubGroupId = 12, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 155, GroupId = 8, SubGroupId = 13, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 },
+                            new RegistrationFees { Id = 156, GroupId = 8, SubGroupId = 14, RegulatorId = 4, Amount = 2921, EffectiveFrom = effectiveFromDateForYear2025_26, EffectiveTo = effectiveToDateForYear2025_26 }
                             );
         }
     }
