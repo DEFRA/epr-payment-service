@@ -9,8 +9,6 @@ namespace EPR.Payment.Service.Common.Data.SeedData
     {
         public static void Seed(ModelBuilder modelBuilder)
         {
-            PaymentStatusDataSeed.SeedPaymentStatusData(modelBuilder.Entity<PaymentStatus>());
-
             modelBuilder.Entity<Group>().HasData(
                new Group { Id = 1, Type = "ProducerType", Description = "Producer Type" },
                new Group { Id = 2, Type = "ComplianceScheme", Description = "Compliance Scheme" },
@@ -30,9 +28,7 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                new SubGroup { Id = 7, Type = "ReSubmitting", Description = "Re-submitting a report" },
                new SubGroup { Id = 8, Type = "LateFee", Description = "Late Fee" }
                );
-            
-            RegulatorDataSeed.SeedRegulatorData(modelBuilder.Entity<Regulator>());
-
+           
             RegistrationFeesDataSeed.SeedRegistrationFees(modelBuilder.Entity<RegistrationFees>());
         }
     }
