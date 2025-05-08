@@ -1,0 +1,57 @@
+BEGIN TRANSACTION;
+GO
+
+DELETE FROM [Lookup].[Group]
+WHERE [Id] = 7;
+SELECT @@ROWCOUNT;
+
+GO
+
+DELETE FROM [Lookup].[Group]
+WHERE [Id] = 8;
+SELECT @@ROWCOUNT;
+
+GO
+
+DELETE FROM [Lookup].[SubGroup]
+WHERE [Id] = 9;
+SELECT @@ROWCOUNT;
+
+GO
+
+DELETE FROM [Lookup].[SubGroup]
+WHERE [Id] = 10;
+SELECT @@ROWCOUNT;
+
+GO
+
+DELETE FROM [Lookup].[SubGroup]
+WHERE [Id] = 11;
+SELECT @@ROWCOUNT;
+
+GO
+
+DELETE FROM [Lookup].[SubGroup]
+WHERE [Id] = 12;
+SELECT @@ROWCOUNT;
+
+GO
+
+DELETE FROM [Lookup].[SubGroup]
+WHERE [Id] = 13;
+SELECT @@ROWCOUNT;
+
+GO
+
+DELETE FROM [Lookup].[SubGroup]
+WHERE [Id] = 14;
+SELECT @@ROWCOUNT;
+
+GO
+
+DELETE FROM [__EFMigrationsHistory]
+WHERE [MigrationId] = N'20250508103111_SeedDataGroupandSubGroupTables';
+GO
+
+COMMIT;
+GO

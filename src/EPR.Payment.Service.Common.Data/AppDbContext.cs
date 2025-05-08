@@ -63,6 +63,8 @@ namespace EPR.Payment.Service.Common.Data
 
 
             // seed the lookup tables
+            SeedSubGroupData.SeedDataSubGroup(modelBuilder);
+            SeedGroupData.SeedDataGroup(modelBuilder);
             InitialDataSeed.Seed(modelBuilder);
         }
     }
