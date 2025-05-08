@@ -1,7 +1,9 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.SeedData
 {
+    [ExcludeFromCodeCoverage]
     public class SeedGroupData
     {
         public static List<Group> GetSeedData()
