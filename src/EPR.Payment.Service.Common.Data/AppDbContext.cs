@@ -1,4 +1,5 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+using EPR.Payment.Service.Common.Data.EntityTypeConfigurations;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.SeedData;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,7 @@ namespace EPR.Payment.Service.Common.Data
         public DbSet<SubGroup> SubGroup => Set<SubGroup>();
         public DbSet<Regulator> Regulator => Set<Regulator>();
         public DbSet<RegistrationFees> RegistrationFees => Set<RegistrationFees>();
+        public DbSet<AccreditationFee> AccreditationFees => Set<AccreditationFee>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -61,9 +63,10 @@ namespace EPR.Payment.Service.Common.Data
             .HasIndex(a => a.ExternalPaymentId)
             .IsUnique();
 
-
             // seed the lookup tables
             InitialDataSeed.Seed(modelBuilder);
+
+            new AccreditationFeeTypeConfiguration().Configure(modelBuilder.Entity<AccreditationFee>());
         }
     }
 }
