@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using EPR.Payment.Service.Common.Data.Constants;
 using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+using EPR.Payment.Service.Common.Data.SeedData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,6 +17,8 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
 
             builder.Property(p => p.Amount)
                    .HasPrecision(19, 4);
+
+            RegistrationFeesDataSeed.SeedRegistrationFees(builder);
         }
     }
 }

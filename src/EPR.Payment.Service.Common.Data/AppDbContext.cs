@@ -36,9 +36,6 @@ namespace EPR.Payment.Service.Common.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-            // seed the lookup tables
-            InitialDataSeed.Seed(modelBuilder);
         }
     }
 }
