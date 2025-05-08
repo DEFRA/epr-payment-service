@@ -2713,3 +2713,105 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250508103111_SeedDataGroupandSubGroupTables'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[Group]'))
+        SET IDENTITY_INSERT [Lookup].[Group] ON;
+    EXEC(N'INSERT INTO [Lookup].[Group] ([Id], [Description], [Type])
+    VALUES (7, ''Exporters'', ''Exporters''),
+    (8, ''Reprocessors'', ''Reprocessors'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[Group]'))
+        SET IDENTITY_INSERT [Lookup].[Group] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250508103111_SeedDataGroupandSubGroupTables'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
+        SET IDENTITY_INSERT [Lookup].[SubGroup] ON;
+    EXEC(N'INSERT INTO [Lookup].[SubGroup] ([Id], [Description], [Type])
+    VALUES (9, ''Aluminium'', ''Aluminium''),
+    (10, ''Glass'', ''Glass''),
+    (11, ''Paper, board or fibre-based composite material'', ''PaperOrBoardOrFibreBasedCompositeMaterial''),
+    (12, ''Plastic'', ''Plastic''),
+    (13, ''Steel'', ''Steel''),
+    (14, ''Wood'', ''Wood'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
+        SET IDENTITY_INSERT [Lookup].[SubGroup] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250508103111_SeedDataGroupandSubGroupTables'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250508103111_SeedDataGroupandSubGroupTables', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250508114330_SeedRegistrationFeesTablesExporterData'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
+        SET IDENTITY_INSERT [Lookup].[RegistrationFees] ON;
+    EXEC(N'INSERT INTO [Lookup].[RegistrationFees] ([Id], [Amount], [EffectiveFrom], [EffectiveTo], [GroupId], [RegulatorId], [SubGroupId])
+    VALUES (61, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 1, 9),
+    (62, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 1, 10),
+    (63, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 1, 11),
+    (64, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 1, 12),
+    (65, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 1, 13),
+    (66, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 1, 14),
+    (67, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 2, 9),
+    (68, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 2, 10),
+    (69, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 2, 11),
+    (70, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 2, 12),
+    (71, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 2, 13),
+    (72, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 2, 14),
+    (73, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 3, 9),
+    (74, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 3, 10),
+    (75, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 3, 11),
+    (76, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 3, 12),
+    (77, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 3, 13),
+    (78, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 3, 14),
+    (79, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 4, 9),
+    (80, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 4, 10),
+    (81, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 4, 11),
+    (82, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 4, 12),
+    (83, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 4, 13),
+    (84, 2921.0, ''2024-09-01T00:00:00.0000000Z'', ''9999-08-31T23:59:59.0000000Z'', 7, 4, 14)');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
+        SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250508114330_SeedRegistrationFeesTablesExporterData'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250508114330_SeedRegistrationFeesTablesExporterData', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
