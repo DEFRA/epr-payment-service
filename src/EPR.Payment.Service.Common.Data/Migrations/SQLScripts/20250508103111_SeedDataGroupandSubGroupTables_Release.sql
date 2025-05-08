@@ -24,7 +24,7 @@ IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Desc
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20250507145951_SeedDataGroupandSubGroupTables', N'8.0.4');
+VALUES (N'20250508103111_SeedDataGroupandSubGroupTables', N'8.0.4');
 GO
 
 COMMIT;

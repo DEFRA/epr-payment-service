@@ -50,7 +50,7 @@ SELECT @@ROWCOUNT;
 GO
 
 DELETE FROM [__EFMigrationsHistory]
-WHERE [MigrationId] = N'20250507145951_SeedDataGroupandSubGroupTables';
+WHERE [MigrationId] = N'20250508103111_SeedDataGroupandSubGroupTables';
 GO
 
 COMMIT;

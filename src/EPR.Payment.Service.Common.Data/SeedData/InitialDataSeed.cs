@@ -22,10 +22,6 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                 new PaymentStatus { Id = Enums.Status.UserCancelled, Status = "UserCancelled" }
                 );
 
-            modelBuilder.Entity<Group>().HasData(SeedGroupData.GetSeedData());
-
-            modelBuilder.Entity<SubGroup>().HasData(SeedSubGroupData.GetSeedData());
-
             modelBuilder.Entity<Regulator>().HasData(
                new Regulator { Id = 1, Type = "GB-ENG", Description = "England" },
                new Regulator { Id = 2, Type = "GB-SCT", Description = "Scotland" },

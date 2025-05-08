@@ -1,4 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.SeedData
@@ -6,11 +8,10 @@ namespace EPR.Payment.Service.Common.Data.SeedData
     [ExcludeFromCodeCoverage]
     public class SeedSubGroupData
     {
-        public static List<SubGroup> GetSeedData()
+        public static void SeedDataSubGroup(ModelBuilder builder)
         {
-            return new List<SubGroup>
-            {
-                new SubGroup { Id = 1, Type = "Large", Description = "Large producer" },
+            builder.Entity<SubGroup>().HasData(
+                 new SubGroup { Id = 1, Type = "Large", Description = "Large producer" },
                 new SubGroup { Id = 2, Type = "Small", Description = "Small producer" },
                 new SubGroup { Id = 3, Type = "Registration", Description = "Registration" },
                 new SubGroup { Id = 4, Type = "Online", Description = "Online Market" },
@@ -23,8 +24,7 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                 new SubGroup { Id = 11, Type = "PaperOrBoardOrFibreBasedCompositeMaterial", Description = "Paper, board or fibre-based composite material" },
                 new SubGroup { Id = 12, Type = "Plastic", Description = "Plastic" },
                 new SubGroup { Id = 13, Type = "Steel", Description = "Steel" },
-                new SubGroup { Id = 14, Type = "Wood", Description = "Wood" },
-            };
+                new SubGroup { Id = 14, Type = "Wood", Description = "Wood" });
         }
     }
 }

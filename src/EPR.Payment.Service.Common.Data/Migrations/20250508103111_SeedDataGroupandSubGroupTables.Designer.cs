@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250507145951_SeedDataGroupandSubGroupTables")]
+    [Migration("20250508103111_SeedDataGroupandSubGroupTables")]
     partial class SeedDataGroupandSubGroupTables
     {
         /// <inheritdoc />
