@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250508114330_SeedRegistrationFeesTablesExporterData")]
+    partial class SeedRegistrationFeesTablesExporterData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,18 +81,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Id = 6,
                             Description = "Compliance Scheme re-submitting a report",
                             Type = "ComplianceSchemeResubmission"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "Exporters",
-                            Type = "Exporters"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Description = "Reprocessors",
-                            Type = "Reprocessors"
                         });
                 });
 
@@ -1133,42 +1124,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Id = 8,
                             Description = "Late Fee",
                             Type = "LateFee"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Description = "Aluminium",
-                            Type = "Aluminium"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Description = "Glass",
-                            Type = "Glass"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Description = "Paper, board or fibre-based composite material",
-                            Type = "PaperOrBoardOrFibreBasedCompositeMaterial"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Description = "Plastic",
-                            Type = "Plastic"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Description = "Steel",
-                            Type = "Steel"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Description = "Wood",
-                            Type = "Wood"
                         });
                 });
 
