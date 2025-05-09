@@ -2718,62 +2718,45 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250508100718_CreateAccreditationFees'
+    WHERE [MigrationId] = N'20250508103111_SeedDataGroupandSubGroupTables'
 )
 BEGIN
-    CREATE TABLE [Lookup].[AccreditationFees] (
-        [Id] int NOT NULL IDENTITY,
-        [GroupId] int NOT NULL,
-        [SubGroupId] int NOT NULL,
-        [RegulatorId] int NOT NULL,
-        [TonnesUpTo] int NOT NULL,
-        [TonnesOver] int NOT NULL,
-        [Amount] decimal(19,4) NOT NULL,
-        [FeePerSite] int NOT NULL,
-        [EffectiveFrom] datetime2 NOT NULL,
-        [EffectiveTo] datetime2 NOT NULL,
-        CONSTRAINT [PK_AccreditationFees] PRIMARY KEY ([Id]),
-        CONSTRAINT [FK_AccreditationFees_Group_GroupId] FOREIGN KEY ([GroupId]) REFERENCES [Lookup].[Group] ([Id]) ON DELETE CASCADE,
-        CONSTRAINT [FK_AccreditationFees_Regulator_RegulatorId] FOREIGN KEY ([RegulatorId]) REFERENCES [Lookup].[Regulator] ([Id]) ON DELETE CASCADE,
-        CONSTRAINT [FK_AccreditationFees_SubGroup_SubGroupId] FOREIGN KEY ([SubGroupId]) REFERENCES [Lookup].[SubGroup] ([Id]) ON DELETE CASCADE
-    );
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[Group]'))
+        SET IDENTITY_INSERT [Lookup].[Group] ON;
+    EXEC(N'INSERT INTO [Lookup].[Group] ([Id], [Description], [Type])
+    VALUES (7, ''Exporters'', ''Exporters''),
+    (8, ''Reprocessors'', ''Reprocessors'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[Group]'))
+        SET IDENTITY_INSERT [Lookup].[Group] OFF;
 END;
 GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250508100718_CreateAccreditationFees'
+    WHERE [MigrationId] = N'20250508103111_SeedDataGroupandSubGroupTables'
 )
 BEGIN
-    CREATE INDEX [IX_AccreditationFees_GroupId] ON [Lookup].[AccreditationFees] ([GroupId]);
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
+        SET IDENTITY_INSERT [Lookup].[SubGroup] ON;
+    EXEC(N'INSERT INTO [Lookup].[SubGroup] ([Id], [Description], [Type])
+    VALUES (9, ''Aluminium'', ''Aluminium''),
+    (10, ''Glass'', ''Glass''),
+    (11, ''Paper, board or fibre-based composite material'', ''PaperOrBoardOrFibreBasedCompositeMaterial''),
+    (12, ''Plastic'', ''Plastic''),
+    (13, ''Steel'', ''Steel''),
+    (14, ''Wood'', ''Wood'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
+        SET IDENTITY_INSERT [Lookup].[SubGroup] OFF;
 END;
 GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250508100718_CreateAccreditationFees'
-)
-BEGIN
-    CREATE INDEX [IX_AccreditationFees_RegulatorId] ON [Lookup].[AccreditationFees] ([RegulatorId]);
-END;
-GO
-
-IF NOT EXISTS (
-    SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250508100718_CreateAccreditationFees'
-)
-BEGIN
-    CREATE INDEX [IX_AccreditationFees_SubGroupId] ON [Lookup].[AccreditationFees] ([SubGroupId]);
-END;
-GO
-
-IF NOT EXISTS (
-    SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250508100718_CreateAccreditationFees'
+    WHERE [MigrationId] = N'20250508103111_SeedDataGroupandSubGroupTables'
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250508100718_CreateAccreditationFees', N'8.0.4');
+    VALUES (N'20250508103111_SeedDataGroupandSubGroupTables', N'8.0.4');
 END;
 GO
 

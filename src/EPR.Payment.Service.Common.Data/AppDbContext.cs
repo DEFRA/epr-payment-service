@@ -64,6 +64,8 @@ namespace EPR.Payment.Service.Common.Data
             .IsUnique();
 
             // seed the lookup tables
+            SeedSubGroupData.SeedDataSubGroup(modelBuilder);
+            SeedGroupData.SeedDataGroup(modelBuilder);
             InitialDataSeed.Seed(modelBuilder);
 
             new AccreditationFeeTypeConfiguration().Configure(modelBuilder.Entity<AccreditationFee>());
