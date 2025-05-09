@@ -2874,7 +2874,7 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250509150246_CreateAccreditationFeesTable'
+    WHERE [MigrationId] = N'20250509154544_CreateAccreditationFeesTable'
 )
 BEGIN
     CREATE TABLE [Lookup].[AccreditationFees] (
@@ -2885,7 +2885,7 @@ BEGIN
         [TonnesUpTo] int NOT NULL,
         [TonnesOver] int NOT NULL,
         [Amount] decimal(19,4) NOT NULL,
-        [FeesPerSite] int NOT NULL,
+        [FeesPerSite] decimal(19,4) NOT NULL,
         [EffectiveFrom] datetime2 NOT NULL,
         [EffectiveTo] datetime2 NOT NULL,
         CONSTRAINT [PK_AccreditationFees] PRIMARY KEY ([Id]),
@@ -2898,7 +2898,7 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250509150246_CreateAccreditationFeesTable'
+    WHERE [MigrationId] = N'20250509154544_CreateAccreditationFeesTable'
 )
 BEGIN
     CREATE INDEX [IX_AccreditationFees_GroupId] ON [Lookup].[AccreditationFees] ([GroupId]);
@@ -2907,7 +2907,7 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250509150246_CreateAccreditationFeesTable'
+    WHERE [MigrationId] = N'20250509154544_CreateAccreditationFeesTable'
 )
 BEGIN
     CREATE INDEX [IX_AccreditationFees_RegulatorId] ON [Lookup].[AccreditationFees] ([RegulatorId]);
@@ -2916,7 +2916,7 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250509150246_CreateAccreditationFeesTable'
+    WHERE [MigrationId] = N'20250509154544_CreateAccreditationFeesTable'
 )
 BEGIN
     CREATE INDEX [IX_AccreditationFees_SubGroupId] ON [Lookup].[AccreditationFees] ([SubGroupId]);
@@ -2925,11 +2925,11 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250509150246_CreateAccreditationFeesTable'
+    WHERE [MigrationId] = N'20250509154544_CreateAccreditationFeesTable'
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250509150246_CreateAccreditationFeesTable', N'8.0.4');
+    VALUES (N'20250509154544_CreateAccreditationFeesTable', N'8.0.4');
 END;
 GO
 

@@ -5,7 +5,7 @@ DROP TABLE [Lookup].[AccreditationFees];
 GO
 
 DELETE FROM [__EFMigrationsHistory]
-WHERE [MigrationId] = N'20250509150246_CreateAccreditationFeesTable';
+WHERE [MigrationId] = N'20250509154544_CreateAccreditationFeesTable';
 GO
 
 COMMIT;

@@ -24,7 +24,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     TonnesUpTo = table.Column<int>(type: "int", nullable: false),
                     TonnesOver = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(19,4)", nullable: false),
-                    FeesPerSite = table.Column<int>(type: "int", nullable: false),
+                    FeesPerSite = table.Column<decimal>(type: "decimal(19,4)", nullable: false),
                     EffectiveFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EffectiveTo = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

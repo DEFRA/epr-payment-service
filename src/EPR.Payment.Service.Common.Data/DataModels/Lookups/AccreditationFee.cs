@@ -18,7 +18,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 
         public decimal Amount { get; set; }
 
-        public int FeesPerSite { get; set; }
+        public decimal FeesPerSite { get; set; }
 
         private DateTime _effectiveFrom;
         private DateTime _effectiveTo;

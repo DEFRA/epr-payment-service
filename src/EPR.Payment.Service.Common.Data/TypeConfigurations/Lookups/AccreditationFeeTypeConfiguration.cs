@@ -24,7 +24,8 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
                 .HasColumnType("decimal(19,4)")
                 .IsRequired();
             builder.Property(x => x.FeesPerSite)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnType("decimal(19,4)");
             builder.Property(x => x.EffectiveFrom)
                 .HasColumnType("datetime2")
                 .IsRequired();

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250509150246_CreateAccreditationFeesTable")]
+    [Migration("20250509154544_CreateAccreditationFeesTable")]
     partial class CreateAccreditationFeesTable
     {
         /// <inheritdoc />
@@ -42,8 +42,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<DateTime>("EffectiveTo")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FeesPerSite")
-                        .HasColumnType("int");
+                    b.Property<decimal>("FeesPerSite")
+                        .HasColumnType("decimal(19,4)");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
