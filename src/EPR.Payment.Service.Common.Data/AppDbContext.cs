@@ -1,9 +1,9 @@
-﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
-using EPR.Payment.Service.Common.Data.EntityTypeConfigurations;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.SeedData;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data
 {
@@ -36,39 +36,7 @@ namespace EPR.Payment.Service.Common.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<DataModels.Payment>()
-                .ToTable("Payment");
-
-            modelBuilder.Entity<DataModels.OnlinePayment>()
-               .ToTable("OnlinePayment")
-               .HasOne(p => p.Payment)
-               .WithOne(op => op.OnlinePayment)
-               .HasForeignKey<DataModels.OnlinePayment>(p => p.PaymentId);
-
-            modelBuilder.Entity<DataModels.OfflinePayment>()
-               .ToTable("OfflinePayment")
-               .HasOne(p => p.Payment)
-               .WithOne(op => op.OfflinePayment)
-               .HasForeignKey<DataModels.OfflinePayment>(p => p.PaymentId);
-
-            modelBuilder.Entity<DataModels.OnlinePayment>()
-            .HasIndex(a => a.GovPayPaymentId)
-            .IsUnique();
-
-            modelBuilder.Entity<DataModels.Payment>()
-             .Property(x => x.ExternalPaymentId)
-             .HasDefaultValueSql("NEWID()");
-
-            modelBuilder.Entity<DataModels.Payment>()
-            .HasIndex(a => a.ExternalPaymentId)
-            .IsUnique();
-
-            // seed the lookup tables
-            SeedSubGroupData.SeedDataSubGroup(modelBuilder);
-            SeedGroupData.SeedDataGroup(modelBuilder);
-            InitialDataSeed.Seed(modelBuilder);
-
-            new AccreditationFeeTypeConfiguration().Configure(modelBuilder.Entity<AccreditationFee>());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

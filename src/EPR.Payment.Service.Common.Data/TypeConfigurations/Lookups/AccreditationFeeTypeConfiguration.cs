@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EPR.Payment.Service.Common.Data.EntityTypeConfigurations
+namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
 {
     public class AccreditationFeeTypeConfiguration : IEntityTypeConfiguration<AccreditationFee>
     {
