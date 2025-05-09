@@ -22,52 +22,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.AccreditationFee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(19,4)");
-
-                    b.Property<DateTime>("EffectiveFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EffectiveTo")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FeePerSite")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RegulatorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubGroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TonnesOver")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TonnesUpTo")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("RegulatorId");
-
-                    b.HasIndex("SubGroupId");
-
-                    b.ToTable("AccreditationFees", "Lookup");
-                });
-
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.Group", b =>
                 {
                     b.Property<int>("Id")
@@ -1073,33 +1027,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.HasIndex("InternalStatusId");
 
                     b.ToTable("Payment", (string)null);
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.AccreditationFee", b =>
-                {
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.Regulator", "Regulator")
-                        .WithMany()
-                        .HasForeignKey("RegulatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.SubGroup", "SubGroup")
-                        .WithMany()
-                        .HasForeignKey("SubGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Group");
-
-                    b.Navigation("Regulator");
-
-                    b.Navigation("SubGroup");
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.RegistrationFees", b =>
