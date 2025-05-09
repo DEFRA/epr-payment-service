@@ -46,9 +46,5 @@
 			<SonarQubeExclude>true</SonarQubeExclude>
 		</None>
 	</ItemGroup>
-	
-	<ItemGroup>
-	  <Folder Include="Migrations\SQLScripts\" />
-	</ItemGroup>
 
 </Project>

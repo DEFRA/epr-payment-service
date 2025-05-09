@@ -25,6 +25,7 @@ namespace EPR.Payment.Service.Common.Data
         public DbSet<SubGroup> SubGroup => Set<SubGroup>();
         public DbSet<Regulator> Regulator => Set<Regulator>();
         public DbSet<RegistrationFees> RegistrationFees => Set<RegistrationFees>();
+        public DbSet<AccreditationFee> AccreditationFees => Set<AccreditationFee>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

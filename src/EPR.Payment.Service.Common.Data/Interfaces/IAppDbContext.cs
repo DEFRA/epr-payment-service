@@ -13,6 +13,7 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
         DbSet<SubGroup> SubGroup { get; }
         DbSet<Regulator> Regulator { get; }
         DbSet<RegistrationFees> RegistrationFees { get; }
+        DbSet<AccreditationFee> AccreditationFees { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
