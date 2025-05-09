@@ -1,12 +1,25 @@
-﻿namespace EPR.Payment.Service.Common.Data.Enums
+﻿using System.ComponentModel;
+
+namespace EPR.Payment.Service.Common.Data.Enums
 {
     public enum Status
     {
-        Initiated,
-        InProgress,
-        Success,
-        Failed,
-        Error,
-        UserCancelled
+        [Description("Initiated")]
+        Initiated = 0,
+
+        [Description("In-Progress")]
+        InProgress = 1,
+
+        [Description("Success")]
+        Success = 2,
+
+        [Description("Failed")]
+        Failed = 3,
+
+        [Description("Error")]
+        Error = 4,
+
+        [Description("User Cancelled")]
+        UserCancelled = 5
     }
 }

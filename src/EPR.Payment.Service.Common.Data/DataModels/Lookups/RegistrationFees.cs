@@ -1,23 +1,17 @@
-﻿using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
 
 namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 {
-    [Table("RegistrationFees", Schema = "Lookup")]
     [ExcludeFromCodeCoverage]
     public class RegistrationFees : BaseEntity
     {
-        [ForeignKey("Group")]
         public int GroupId { get; set; }
 
-        [ForeignKey("SubGroup")]
         public int SubGroupId { get; set; }
 
-        [ForeignKey("Regulator")]
         public int RegulatorId { get; set; }
 
-        [Column(TypeName = "decimal(19,4)")]
         public decimal Amount { get; set; }
 
         private DateTime _effectiveFrom;

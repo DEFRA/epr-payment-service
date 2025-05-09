@@ -55,21 +55,33 @@ builder.Services.AddFeatureManagement();
 
 var app = builder.Build();
 
-// Apply pending migrations at startup
-using (var scope = app.Services.CreateScope())
+var featureManager = app.Services.GetRequiredService<IFeatureManager>();
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
+
+bool enableApplyPendingMigrationsFeature = await featureManager.IsEnabledAsync("EnableApplyPendingMigrationsFeature");
+logger.LogInformation("EnableApplyPendingMigrationsFeature: {EnableApplyPendingMigrationsFeature}", enableApplyPendingMigrationsFeature);
+
+if (enableApplyPendingMigrationsFeature)
 {
+    // Apply pending migrations at startup
+    using var scope = app.Services.CreateScope();
+    
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
     try
     {
-        var pendingMigrations = dbContext.Database.GetPendingMigrations().ToList();
+        var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
+        
         if (pendingMigrations.Any())
         {
             Console.WriteLine("Applying pending migrations:");
+            
             foreach (var migration in pendingMigrations)
             {
                 Console.WriteLine($"- {migration}");
             }
-            dbContext.Database.Migrate();
+            
+            await dbContext.Database.MigrateAsync();
         }
         else
         {
@@ -81,9 +93,6 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"An error occurred while migrating the database: {ex.Message}");
     }
 }
-
-var featureManager = app.Services.GetRequiredService<IFeatureManager>();
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
 bool enableOnlinePaymentsFeature = await featureManager.IsEnabledAsync("EnableOnlinePaymentsFeature");
 bool enableOnlinePaymentInsert = await featureManager.IsEnabledAsync("EnableOnlinePaymentInsert");
@@ -98,7 +107,6 @@ logger.LogInformation("EnableOnlinePaymentsFeature: {EnableOnlinePaymentsFeature
 logger.LogInformation("EnableOnlinePaymentInsert: {EnableOnlinePaymentInsert}", enableOnlinePaymentInsert);
 logger.LogInformation("EnableOnlinePaymentUpdate: {EnableOnlinePaymentUpdate}", enableOnlinePaymentUpdate);
 logger.LogInformation("EnableGetOnlinePaymentByExternalPaymentId: {EnableGetOnlinePaymentByExternalPaymentId}", enableGetOnlinePaymentByExternalPaymentId);
-
 
 logger.LogInformation("EnableRegistrationFeesFeature: {EnableRegistrationFeesFeature}", enableRegistrationFeesFeature);
 logger.LogInformation("EnableProducerResubmissionAmount: {EnableProducerResubmissionAmount}", enableProducerResubmissionAmount);
@@ -123,4 +131,4 @@ app.UseMiddleware<ConditionalEndpointMiddleware>();
 app.MapControllers();
 
 app.MapHealthChecks("/admin/health", HealthCheckOptionsBuilder.Build()).AllowAnonymous();
-app.Run();
+await app.RunAsync();
