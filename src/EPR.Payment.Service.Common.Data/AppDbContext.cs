@@ -2,7 +2,6 @@
 using System.Reflection;
 using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using EPR.Payment.Service.Common.Data.Interfaces;
-using EPR.Payment.Service.Common.Data.SeedData;
 using Microsoft.EntityFrameworkCore;
 
 namespace EPR.Payment.Service.Common.Data
