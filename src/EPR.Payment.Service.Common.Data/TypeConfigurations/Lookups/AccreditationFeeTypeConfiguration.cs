@@ -1,9 +1,11 @@
-﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+﻿using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
 {
+    [ExcludeFromCodeCoverage]
     public class AccreditationFeeTypeConfiguration : IEntityTypeConfiguration<AccreditationFee>
     {
         public void Configure(EntityTypeBuilder<AccreditationFee> builder)
