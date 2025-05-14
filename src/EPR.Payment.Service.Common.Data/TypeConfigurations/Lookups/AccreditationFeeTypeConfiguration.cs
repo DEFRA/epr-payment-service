@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+using EPR.Payment.Service.Common.Data.SeedData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -34,6 +35,9 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
             builder.Property(x => x.EffectiveTo)
                 .HasColumnType("datetime2")
                 .IsRequired();
+
+
+            AccreditationFeesDataSeed.SeedAccreditationFees(builder);
         }
     }
 }
