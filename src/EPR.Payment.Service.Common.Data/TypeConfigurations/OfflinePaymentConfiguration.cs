@@ -27,6 +27,10 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
                    .HasColumnOrder(4)
                    .HasColumnType("nvarchar(255)");
 
+            builder.Property(p => p.PaymentMethod)
+                   .HasColumnOrder(5)
+                   .HasColumnType("nvarchar(20)");
+
             builder.HasOne(p => p.Payment)
                    .WithOne(op => op.OfflinePayment)
                    .HasForeignKey<OfflinePayment>(p => p.PaymentId);
