@@ -27,9 +27,8 @@ namespace EPR.Payment.Service.Controllers.Payments
             _offlinePaymentInsertRequestV2Validator = offlinePaymentInsertRequestV2Validator ?? throw new ArgumentNullException(nameof(offlinePaymentInsertRequestV2Validator)); ;
         }
 
-        [Route("v1/offline-payments")]
         [ApiExplorerSettings(GroupName = "v1")]
-        [HttpPost]
+        [HttpPost("v1/offline-payments")]
         [ProducesResponseType(typeof(NoContentResult), 204)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -53,9 +52,8 @@ namespace EPR.Payment.Service.Controllers.Payments
             return await ExecuteWithErrorHanding(() => _offlinePaymentsService.InsertOfflinePaymentAsync(offlinePaymentInsertRequest, cancellationToken));
         }
 
-        [Route("v2/offline-payments")]
         [ApiExplorerSettings(GroupName = "v2")]
-        [HttpPost]
+        [HttpPost("v2/offline-payments")]
         [ProducesResponseType(typeof(NoContentResult), 204)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
