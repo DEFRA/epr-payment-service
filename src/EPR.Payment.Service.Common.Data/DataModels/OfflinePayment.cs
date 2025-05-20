@@ -1,25 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
 
 namespace EPR.Payment.Service.Common.Data.DataModels
 {
-    public class OfflinePayment
+    [ExcludeFromCodeCoverage]
+    public class OfflinePayment : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(Order = 1)]
-        public int Id { get; set; }
-
-        [ForeignKey("Payment")]
-        [Column(Order = 2)]
         public int PaymentId { get; set; }
 
-        [Column(Order = 3)]
         public DateTime? PaymentDate { get; set; }
-
-        [MaxLength(255)]
-        [Column(Order = 4)]
+        
         public string? Comments { get; set; }
+
+        public string? PaymentMethod { get; set; }
 
         #region Navigation properties
 

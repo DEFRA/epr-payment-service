@@ -4,7 +4,7 @@ using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
 namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 {
     [ExcludeFromCodeCoverage]
-    public class RegistrationFees : BaseEntity
+    public class AccreditationFee: BaseEntity
     {
         public int GroupId { get; set; }
 
@@ -12,7 +12,13 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 
         public int RegulatorId { get; set; }
 
+        public int TonnesUpTo { get; set; }
+
+        public int TonnesOver { get; set; }
+
         public decimal Amount { get; set; }
+
+        public decimal FeesPerSite { get; set; }
 
         private DateTime _effectiveFrom;
         private DateTime _effectiveTo;

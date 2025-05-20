@@ -31,10 +31,10 @@
 
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
-			<value>Scripts/**,Migrations/**</value>
+			<value>Scripts/**,Migrations/**,TypeConfigurations/*.*</value>
 		</SonarQubeSetting>
 		<SonarQubeSetting Include="sonar.cpd.exclusions">
-			<Value>Scripts/**,Migrations/**</Value>
+			<Value>Scripts/**,Migrations/**,TypeConfigurations/*.*</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
 	
@@ -45,10 +45,6 @@
 		<None Update="Scripts\**\*">
 			<SonarQubeExclude>true</SonarQubeExclude>
 		</None>
-	</ItemGroup>
-	
-	<ItemGroup>
-	  <Folder Include="Migrations\SQLScripts\" />
 	</ItemGroup>
 
 </Project>
