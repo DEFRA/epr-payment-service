@@ -1,5 +1,4 @@
-﻿using Asp.Versioning;
-using EPR.Payment.Service.Common.Constants.Payments;
+﻿using EPR.Payment.Service.Common.Constants.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using FluentValidation;
@@ -57,7 +56,7 @@ namespace EPR.Payment.Service.Controllers.Payments
         [ProducesResponseType(typeof(NoContentResult), 204)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [FeatureGate("EnableOfflinePayment")]
+        [FeatureGate("EnableOfflinePaymentV2")]
         public async Task<ActionResult> InsertOfflinePaymentV2(
             [FromBody] OfflinePaymentInsertRequestV2Dto offlinePaymentInsertRequest,
             CancellationToken cancellationToken)
