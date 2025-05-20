@@ -1,5 +1,4 @@
-﻿using EPR.Payment.Service.Common.Constants.Fees;
-using EPR.Payment.Service.Common.Constants.Payments;
+﻿using EPR.Payment.Service.Common.Constants.Payments;
 using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using FluentValidation;
@@ -33,10 +32,8 @@ namespace EPR.Payment.Service.Validations.Payments
                 .WithMessage(ValidationMessages.InvalidRegulatorOffline);
 
             RuleFor(x => x.PaymentMethod)
-               .NotEmpty()
-               .WithMessage(ValidationMessages.OfflinePaymentMethodRequired)
-               .Must(text => text == OfflinePaymentMethodConstants.BankTransfer || text == OfflinePaymentMethodConstants.CreditOrDebitCard || text == OfflinePaymentMethodConstants.Cheque || text == OfflinePaymentMethodConstants.Cash)
-               .WithMessage(ValidationMessages.InvalidPaymentMethodOffline);
+               .NotNull()
+               .WithMessage(ValidationMessages.OfflinePaymentMethodRequired);
         }
     }
 }

@@ -1,7 +1,11 @@
-﻿namespace EPR.Payment.Service.Common.Dtos.Request.Payments
+﻿using System.Text.Json.Serialization;
+using EPR.Payment.Service.Common.Dtos.Enums;
+
+namespace EPR.Payment.Service.Common.Dtos.Request.Payments
 {
     public class OfflinePaymentInsertRequestV2Dto : OfflinePaymentInsertRequestDto
     {
-        public required string PaymentMethod { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public OfflinePaymentMethodTypes? PaymentMethod { get; set; }
     }
 }

@@ -21,9 +21,7 @@
         public const string OfflineReferenceRequired = "The Reference field is required.";
         public const string OfflineRegulatorRequired = "The Regulator field is required.";
         public const string OfflinePaymentMethodRequired = "The PaymentMethod field is required.";
-        public const string InvalidPaymentMethodOffline = "PaymentMethod is invalid; acceptable values are 'Bank transfer', 'Credit or debit card', 'Cheque' and 'Cash'.";
-
-
+      
         public const string ProducerTypeInvalid = "Producer Type must be one of the following: ";
         public const string NumberOfSubsidiariesRange = "Number of subsidiaries must be greater than or equal to 0";
         public const string NumberOfOMPSubsidiariesLessThanOrEqualToNumberOfSubsidiaries = "Number of online marketplace subsidiaries must be less than or equal to number of subsidiaries";
