@@ -20,6 +20,8 @@
         public const string InvalidRegulatorOffline = "Regulator is invalid; acceptable values are 'GB-ENG', 'GB-SCT', 'GB-WLS' and 'GB-NIR'.";
         public const string OfflineReferenceRequired = "The Reference field is required.";
         public const string OfflineRegulatorRequired = "The Regulator field is required.";
+        public const string OfflinePaymentMethodRequired = "The PaymentMethod field is required.";
+        public const string InvalidPaymentMethodOffline = "PaymentMethod is invalid; acceptable values are 'Bank transfer', 'Credit or debit card', 'Cheque' and 'Cash'.";
 
 
         public const string ProducerTypeInvalid = "Producer Type must be one of the following: ";

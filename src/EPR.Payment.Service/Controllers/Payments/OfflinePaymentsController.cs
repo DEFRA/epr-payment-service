@@ -8,29 +8,35 @@ using Microsoft.FeatureManagement.Mvc;
 
 namespace EPR.Payment.Service.Controllers.Payments
 {
-    [ApiVersion(1)]
     [ApiController]
-    [Route("api/v{version:apiVersion}/offline-payments")]
+    [Route("api/")]
     [FeatureGate("EnableOfflinePaymentsFeature")]
     public class OfflinePaymentsController : ControllerBase
     {
         private readonly IOfflinePaymentsService _offlinePaymentsService;
         private readonly IValidator<OfflinePaymentInsertRequestDto> _offlinePaymentInsertRequestValidator;
+        private readonly IValidator<OfflinePaymentInsertRequestV2Dto> _offlinePaymentInsertRequestV2Validator;
 
-        public OfflinePaymentsController(IOfflinePaymentsService paymentsService,
-            IValidator<OfflinePaymentInsertRequestDto> offlinePaymentInsertRequestValidator)
+        public OfflinePaymentsController(
+            IOfflinePaymentsService paymentsService,
+            IValidator<OfflinePaymentInsertRequestDto> offlinePaymentInsertRequestValidator,
+            IValidator<OfflinePaymentInsertRequestV2Dto> offlinePaymentInsertRequestV2Validator)
         {
             _offlinePaymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
             _offlinePaymentInsertRequestValidator = offlinePaymentInsertRequestValidator ?? throw new ArgumentNullException(nameof(offlinePaymentInsertRequestValidator));
+            _offlinePaymentInsertRequestV2Validator = offlinePaymentInsertRequestV2Validator ?? throw new ArgumentNullException(nameof(offlinePaymentInsertRequestV2Validator)); ;
         }
 
-        [MapToApiVersion(1)]
+        [Route("v1/offline-payments")]
+        [ApiExplorerSettings(GroupName = "v1")]
         [HttpPost]
         [ProducesResponseType(typeof(NoContentResult), 204)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableOfflinePayment")]
-        public async Task<ActionResult> InsertOfflinePayment([FromBody] OfflinePaymentInsertRequestDto offlinePaymentInsertRequest, CancellationToken cancellationToken)
+        public async Task<ActionResult> InsertOfflinePaymentV1(
+            [FromBody] OfflinePaymentInsertRequestDto offlinePaymentInsertRequest,
+            CancellationToken cancellationToken)
         {
             var validatorResult = _offlinePaymentInsertRequestValidator.Validate(offlinePaymentInsertRequest);
 
@@ -44,9 +50,40 @@ namespace EPR.Payment.Service.Controllers.Payments
                 });
             }
 
+            return await ExecuteWithErrorHanding(() => _offlinePaymentsService.InsertOfflinePaymentAsync(offlinePaymentInsertRequest, cancellationToken));
+        }
+
+        [Route("v2/offline-payments")]
+        [ApiExplorerSettings(GroupName = "v2")]
+        [HttpPost]
+        [ProducesResponseType(typeof(NoContentResult), 204)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [FeatureGate("EnableOfflinePayment")]
+        public async Task<ActionResult> InsertOfflinePaymentV2(
+            [FromBody] OfflinePaymentInsertRequestV2Dto offlinePaymentInsertRequest,
+            CancellationToken cancellationToken)
+        {
+            var validatorResult = _offlinePaymentInsertRequestV2Validator.Validate(offlinePaymentInsertRequest);
+
+            if (!validatorResult.IsValid)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Validation Error",
+                    Detail = string.Join("; ", validatorResult.Errors.Select(e => e.ErrorMessage)),
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+
+            return await ExecuteWithErrorHanding(() => _offlinePaymentsService.InsertOfflinePaymentAsync(offlinePaymentInsertRequest, cancellationToken));
+        }
+
+        private async Task<ActionResult> ExecuteWithErrorHanding(Func<Task> asyncAction)
+        {
             try
             {
-                await _offlinePaymentsService.InsertOfflinePaymentAsync(offlinePaymentInsertRequest, cancellationToken);
+                await asyncAction();
 
                 return NoContent();
             }

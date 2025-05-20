@@ -95,5 +95,24 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             await action.Should().NotThrowAsync();
 
         }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task InsertOfflinePaymentAsyncForV2_ValidInput_ShouldCallRespository()
+        {
+            // Arrange
+            var request = _fixture!.Build<OfflinePaymentInsertRequestV2Dto>().With(d => d.UserId, Guid.NewGuid()).Create();
+            request.PaymentMethod = "Bank Transfer";
+
+            _offlinePaymentsRepositoryMock.Setup(r =>
+               r.InsertOfflinePaymentAsync(It.IsAny<Common.Data.DataModels.Payment>(), _cancellationToken));
+
+            // Act
+            Func<Task> action = async () => await _service!.InsertOfflinePaymentAsync(request, _cancellationToken);
+
+            // Assert
+            await action.Should().NotThrowAsync();
+
+        }
     }
 }
