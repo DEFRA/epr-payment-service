@@ -1,8 +1,10 @@
 ﻿using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Common.Data.Helper;
 using EPR.Payment.Service.Common.Data.Interfaces;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
+using EPR.Payment.Service.Common.Data.Repositories.Fees;
 using EPR.Payment.Service.Common.Data.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
@@ -62,6 +64,7 @@ namespace EPR.Payment.Service.Extension
             services.AddTransient<IOnlinePaymentsRepository, OnlinePaymentsRepository>();
             services.AddTransient<IOfflinePaymentsRepository, OfflinePaymentsRepository>();
             services.AddTransient<IPaymentsRepository, PaymentsRepository>();
+            //services.AddTransient<IAccreditationFeesRepository, AccreditationFeesRepository>();
 
             // Register the main services
             services.AddScoped<IProducerFeesCalculatorService, ProducerFeesCalculatorService>();
@@ -71,7 +74,6 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IOnlinePaymentsService, OnlinePaymentsService>();
             services.AddScoped<IOfflinePaymentsService, OfflinePaymentsService>();
             services.AddScoped<IPaymentsService, PaymentsService>();
-
 
             services.AddScoped<FeesKeyValueStore>();
 
