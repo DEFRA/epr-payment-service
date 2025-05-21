@@ -6,8 +6,8 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees
     public interface IAccreditationFeesRepository 
     {
         Task<AccreditationFee?> GetFeeAsync(
-            string groupType,
-            string subGroupType,
+            int groupId,
+            int subGroupId,
             int tonnesOver,
             int tonnesUpto,            
             RegulatorType regulator,

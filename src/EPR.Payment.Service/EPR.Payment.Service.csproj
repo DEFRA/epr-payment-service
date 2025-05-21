@@ -46,7 +46,6 @@
 	  <Folder Include="Services\RegistrationFees\" />
 	  <Folder Include="Strategies\AccrediationFees\" />
 	  <Folder Include="Strategies\AccrediationFees\ReprocessorExporter\" />
-	  <Folder Include="Validations\AccrediationFees\ReprocessorExporter\" />
 	</ItemGroup>
 
 </Project>

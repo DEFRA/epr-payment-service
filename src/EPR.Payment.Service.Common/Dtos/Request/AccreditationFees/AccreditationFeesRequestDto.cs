@@ -1,16 +1,23 @@
-﻿namespace EPR.Payment.Service.Common.Dtos.Request.AccreditationFees
+﻿using EPR.Payment.Service.Common.Enums;
+using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
+using System.Text.Json.Serialization;
+
+namespace EPR.Payment.Service.Common.Dtos.Request.AccreditationFees
 {
     public class AccreditationFeesRequestDto
     {
-        public required string RequestType { get; set; } // "exporter" or "reprocessor", case insensitive, cannot be an empty string        
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public required Group RequestType { get; set; } // "exporter" or "reprocessor", case insensitive, cannot be an empty string        
 
-        public required string Regulator { get; set; } // "GB-ENG", "GB-SCT", etc.
+        public required string Regulator { get; set; }
 
-        public required string TonnageBand { get; set; }        
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public required TonnageBand TonnageBand { get; set; }        
 
         public int NumberOfOverseasSites { get; set; }
 
-        public required string MaterialType { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public required AccreditationFeesRequestMaterialType MaterialType { get; set; }
 
         public required string ApplicationReferenceNumber { get; set; }
 

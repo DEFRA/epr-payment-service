@@ -3,23 +3,27 @@ using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Extension;
 using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;
+using EPR.Payment.Service.Validations.AccreditationFees;
 using EPR.Payment.Service.Validations.Payments;
 using EPR.Payment.Service.Validations.RegistrationFees.Producer;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 
 builder.Services.AddFluentValidation(fv =>
 {
     fv.RegisterValidatorsFromAssemblyContaining<OnlinePaymentInsertRequestDtoValidator>();
     fv.RegisterValidatorsFromAssemblyContaining<ProducerRegistrationFeesRequestDtoValidator>();
+    fv.RegisterValidatorsFromAssemblyContaining<AccreditationFeesRequestDtoValidator>();
     fv.AutomaticValidationEnabled = false;
 });
 

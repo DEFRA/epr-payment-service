@@ -8,7 +8,7 @@
 
         public decimal TonnageBandCharge { get; set; }
 
-        public decimal TotalAccreditationFees { get; set; }
+        public decimal TotalAccreditationFees { get => TonnageBandCharge + TotalOverseasSitesCharges; }
 
         public AccreditationFeesPreviousPayment? PreviousPaymentDetail { get; set; }
     }

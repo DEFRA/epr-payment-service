@@ -2,7 +2,6 @@
 using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.Fees;
-using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.Mocks;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -11,6 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System.Data.Entity;
+using EPR.Payment.Service.Common.Enums;
 
 namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
 {
@@ -39,13 +39,13 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
 
             var regulator = RegulatorType.Create("GB-ENG");
             var submissionDate = DateTime.Today;
-            var groupType = GroupTypeConstants.Exporters;
-            var subGroupType = SubGroupTypeConstants.Aluminium;
+            var groupId = (int)Group.Exporters;
+            var subGroupId = (int)SubGroup.Aluminium;
             var tonnesOver = 0;
             var tonnesUpto = 500;            
 
             // Act
-            var result = await _accreditationFeesRepository.GetFeeAsync(groupType, subGroupType, tonnesOver, tonnesUpto, regulator, submissionDate, _cancellationToken);
+            var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, tonnesOver, tonnesUpto, regulator, submissionDate, _cancellationToken);
 
             // Assert
             result.Should().NotBeNull();            
@@ -62,9 +62,12 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
             _accreditationFeesMock = MockIAccreditationFeeRepository.GetAccreditationFeesMock();
             _dataContextMock.Setup(i => i.AccreditationFees).ReturnsDbSet(_accreditationFeesMock.Object);
 
+            var groupId = (int)Group.Exporters;
+            var subGroupId = (int)SubGroup.Aluminium;
+
             // Act
             // Set submission date to mimimum value
-            var result = await _accreditationFeesRepository.GetFeeAsync(GroupTypeConstants.Exporters, SubGroupTypeConstants.Aluminium, 0, 500, RegulatorType.Create("GB-ENG"), DateTime.MinValue, _cancellationToken);
+            var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, 0, 500, RegulatorType.Create("GB-ENG"), DateTime.MinValue, _cancellationToken);
 
             // Assert
             result.Should().Be(null);
@@ -81,8 +84,11 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
             _accreditationFeesMock = MockIAccreditationFeeRepository.GetEmptyAccreditationFeesMock();
             _dataContextMock.Setup(i => i.AccreditationFees).ReturnsDbSet(_accreditationFeesMock.Object);
 
+            var groupId = (int)Group.Exporters;
+            var subGroupId = (int)SubGroup.Aluminium;
+
             // Act
-            var result = await _accreditationFeesRepository.GetFeeAsync(GroupTypeConstants.Exporters, SubGroupTypeConstants.Aluminium, 0, 500, RegulatorType.Create("GB-ENG"), DateTime.UtcNow, _cancellationToken);
+            var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, 0, 500, RegulatorType.Create("GB-ENG"), DateTime.UtcNow, _cancellationToken);
 
             // Assert
             result.Should().Be(null); 

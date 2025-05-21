@@ -12,6 +12,8 @@ using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
+using EPR.Payment.Service.Services.AccreditationFees;
+using EPR.Payment.Service.Services.Interfaces.AccreditationFees;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
@@ -64,16 +66,17 @@ namespace EPR.Payment.Service.Extension
             services.AddTransient<IOnlinePaymentsRepository, OnlinePaymentsRepository>();
             services.AddTransient<IOfflinePaymentsRepository, OfflinePaymentsRepository>();
             services.AddTransient<IPaymentsRepository, PaymentsRepository>();
-            //services.AddTransient<IAccreditationFeesRepository, AccreditationFeesRepository>();
+            services.AddTransient<IAccreditationFeesRepository, AccreditationFeesRepository>();
 
             // Register the main services
-            services.AddScoped<IProducerFeesCalculatorService, ProducerFeesCalculatorService>();
+            services.AddScoped<IAccreditationFeesCalculatorService, AccreditationFeesCalculatorService>();
             services.AddScoped<IComplianceSchemeCalculatorService, ComplianceSchemeCalculatorService>();
             services.AddScoped<IProducerResubmissionService, ProducerResubmissionService>();
             services.AddScoped<IComplianceSchemeResubmissionService, ComplianceSchemeResubmissionService>();
             services.AddScoped<IOnlinePaymentsService, OnlinePaymentsService>();
             services.AddScoped<IOfflinePaymentsService, OfflinePaymentsService>();
             services.AddScoped<IPaymentsService, PaymentsService>();
+            services.AddScoped<IAccreditationFeesCalculatorService, AccreditationFeesCalculatorService>();
 
             services.AddScoped<FeesKeyValueStore>();
 

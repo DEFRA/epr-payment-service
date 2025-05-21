@@ -2,9 +2,9 @@
 {
     public class AccreditationFeesPreviousPayment
     {
-        public string PaymentMode { get; set; } // "offline" or "online"
+        public string? PaymentMode { get; set; } // "offline" or "online"
 
-        public string PaymentMethod { get; set; } 
+        public string? PaymentMethod { get; set; } 
         
         public decimal PaymentAmount { get; set; }
         

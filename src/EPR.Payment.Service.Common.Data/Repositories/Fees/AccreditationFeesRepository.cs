@@ -16,11 +16,11 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Fees
             _dataContext = dataContext;
         }        
 
-        public async Task<AccreditationFee?> GetFeeAsync(string groupType, string subGroupType, int tonnesOver, int tonnesUpto, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
+        public async Task<AccreditationFee?> GetFeeAsync(int groupId, int subGroupId, int tonnesOver, int tonnesUpto, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
             return await _dataContext.AccreditationFees
-                .Where(r => r.Group.Type.ToLower() == groupType.ToLower() &&
-                r.SubGroup.Type.ToLower() == subGroupType.ToLower() &&
+                .Where(r => r.GroupId == groupId &&
+                r.SubGroupId == subGroupId &&
                 r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
                 r.TonnesOver == tonnesOver && r.TonnesUpTo == tonnesUpto &&
                 submissionDate >= r.EffectiveFrom && submissionDate <= r.EffectiveTo).FirstOrDefaultAsync(cancellationToken);

@@ -1,4 +1,6 @@
-﻿namespace EPR.Payment.Service.Common.Constants.RegistrationFees
+﻿using EPR.Payment.Service.Common.Enums;
+
+namespace EPR.Payment.Service.Common.Constants.RegistrationFees
 {
     public static class ValidationMessages
     {
@@ -41,7 +43,13 @@
         public const string FutureResubmissionDate = "Resubmission date cannot be a date in the future.";
         public const string ResubmissionDateMustBeUtc = "Resubmission date must be in the UTC format which is YYYY-MM-DDTHH:MM:SSZ.";
         public const string ResubmissionDateIsNotInRange = "Fee data is not available for given resubmission date.";
-        public const string ReferenceNumberRequired = "Reference Number is required.";
+        public const string ReferenceNumberRequired = "Reference Number is required.";        
         public const string MemberCountGreaterThanZero = "Member Count must be greater than zero.";
+
+        //  AccreditationFeesRequestDto Validation Messages
+        public const string InvalidRequestType = "Request type must be one of the following: ";
+        public const string InvalidTonnageBand = "Tonnage Band must be one of the following: ";
+        public const string InvalidMaterialType = "Material Type must be one of the following: ";
+
     }
 }
