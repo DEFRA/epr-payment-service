@@ -223,7 +223,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         }
 
         [TestMethod]
-        public void Validate_InValidOverseasSiteForExporter_ShouldHaveError()
+        public void Validate_InValidOverseasSiteIsZeroForExporter_ShouldHaveError()
         {
             // Arrange
             var request = new AccreditationFeesRequestDto
@@ -241,8 +241,29 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var result = _validator.TestValidate(request);
 
             // Assert
-            result.ShouldHaveValidationErrorFor(x => x.NumberOfOverseasSites)
-                  .WithErrorMessage(ValidationMessages.InvalidNumberOfOverseasSiteForExporter);
+            result.ShouldHaveValidationErrorFor(x => x.NumberOfOverseasSites);                  
+        }
+
+        [TestMethod]
+        public void Validate_InValidOverseasSiteIsTooBigNumberForExporter_ShouldHaveError()
+        {
+            // Arrange
+            var request = new AccreditationFeesRequestDto
+            {
+                Regulator = RegulatorConstants.GBENG,
+                RequestorType = AccreditationFeesRequestorType.Exporters,
+                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                NumberOfOverseasSites = 471,
+                TonnageBand = TonnageBand.Upto500,
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
+            };
+
+            // Act
+            var result = _validator.TestValidate(request);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.NumberOfOverseasSites);                  
         }
 
         #endregion
@@ -438,7 +459,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
                     Regulator = RegulatorConstants.GBENG,
                     RequestorType = AccreditationFeesRequestorType.Exporters,
                     MaterialType = AccreditationFeesMaterialType.Aluminium,
-                    NumberOfOverseasSites = 10,
+                    NumberOfOverseasSites = 470,
                     TonnageBand = TonnageBand.Upto500,
                     ApplicationReferenceNumber = "A123",
                     SubmissionDate = DateTime.UtcNow.AddMinutes(-1)

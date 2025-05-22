@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Enums;
+﻿using EPR.Payment.Service.Common.Constants.Fees;
+using EPR.Payment.Service.Common.Enums;
 
 namespace EPR.Payment.Service.Common.Constants.RegistrationFees
 {
@@ -50,8 +51,8 @@ namespace EPR.Payment.Service.Common.Constants.RegistrationFees
         public const string InvalidRequestorType = "Requestor type must be one of the following: ";
         public const string InvalidTonnageBand = "Tonnage Band must be one of the following: ";
         public const string InvalidMaterialType = "Material Type must be one of the following: ";
-        public const string InvalidNumberOfOverseasSiteForExporter = "Number of Overseas site must be greater than 0 for request type is exporter.";
-        public const string InvalidNumberOfOverseasSiteForReprocessor = "Number of Overseas site must be 0 for request type is reprocessor.";
+        public static string InvalidNumberOfOverseasSiteForExporter = $"Number of Overseas site must be greater than 0 and less than equal to {ReprocessorExporterConstants.MaxNumberOfOverseasSitesAllowed} for requestor type of exporter.";
+        public const string InvalidNumberOfOverseasSiteForReprocessor = "Number of Overseas site must be 0 for requestor type of reprocessor.";
 
     }
 }

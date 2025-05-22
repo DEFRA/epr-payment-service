@@ -2,6 +2,7 @@
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
 using EPR.Payment.Service.Validations.Common;
+using EPR.Payment.Service.Common.Constants.Fees;
 using FluentValidation;
 
 namespace EPR.Payment.Service.Validations.AccreditationFees
@@ -36,8 +37,9 @@ namespace EPR.Payment.Service.Validations.AccreditationFees
                .IsInEnum()
                .WithMessage(ValidationMessages.InvalidMaterialType + string.Join(",", Enum.GetNames(typeof(AccreditationFeesMaterialType))));
 
-            RuleFor(x => x.NumberOfOverseasSites)                
-               .GreaterThan(0).When(x => x.RequestorType == AccreditationFeesRequestorType.Exporters).WithMessage(ValidationMessages.InvalidNumberOfOverseasSiteForExporter);
+            RuleFor(x => x.NumberOfOverseasSites)
+               .GreaterThan(0).When(x => x.RequestorType == AccreditationFeesRequestorType.Exporters)
+               .LessThanOrEqualTo(ReprocessorExporterConstants.MaxNumberOfOverseasSitesAllowed).When(x => x.RequestorType == AccreditationFeesRequestorType.Exporters).WithMessage(ValidationMessages.InvalidNumberOfOverseasSiteForExporter);
 
             RuleFor(x => x.NumberOfOverseasSites)
                .Equal(0).When(x => x.RequestorType == AccreditationFeesRequestorType.Reprocessors).WithMessage(ValidationMessages.InvalidNumberOfOverseasSiteForReprocessor);
