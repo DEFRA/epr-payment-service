@@ -7,17 +7,17 @@ namespace EPR.Payment.Service.Common.Dtos.Request.AccreditationFees
     public class AccreditationFeesRequestDto
     {
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public required AccreditationFeesRequestorType RequestorType { get; set; } // "exporter" or "reprocessor", case insensitive, cannot be an empty string        
+        public AccreditationFeesRequestorType? RequestorType { get; set; } // "exporter" or "reprocessor", case insensitive, cannot be an empty string        
 
         public required string Regulator { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public required TonnageBand TonnageBand { get; set; }        
+        public TonnageBand? TonnageBand { get; set; }        
 
         public int NumberOfOverseasSites { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public required AccreditationFeesMaterialType MaterialType { get; set; }
+        public AccreditationFeesMaterialType? MaterialType { get; set; }
 
         public required string ApplicationReferenceNumber { get; set; }
 
