@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
+﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
 using EPR.Payment.Service.Common.Dtos.Response.AccreditationFees;
@@ -19,14 +20,14 @@ namespace EPR.Payment.Service.Services.AccreditationFees
             CancellationToken cancellationToken)
         {
             AccreditationFeesResponseDto? response = null;
-            var regulatorType = RegulatorType.Create(request.Regulator);
+            RegulatorType regulatorType = RegulatorType.Create(request.Regulator);
 
             (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(request.TonnageBand);
 
-            var requestorType = request.RequestorType.HasValue ? (int)request.RequestorType : 0;
-            var materialType = request.MaterialType.HasValue ? (int)request.MaterialType : 0; 
+            int requestorType = request.RequestorType.HasValue ? (int)request.RequestorType : 0;
+            int materialType = request.MaterialType.HasValue ? (int)request.MaterialType : 0;
 
-            var accreditationFeesEntity = await accreditationFeesRepository.GetFeeAsync(
+            AccreditationFee? accreditationFeesEntity = await accreditationFeesRepository.GetFeeAsync(
                 requestorType,
                 materialType,
                 tonnesOver,
@@ -40,8 +41,6 @@ namespace EPR.Payment.Service.Services.AccreditationFees
             {
                 decimal totalOverseasSiteFees = request.NumberOfOverseasSites * accreditationFeesEntity.FeesPerSite;
 
-                Common.Data.DataModels.Payment? payment = await paymentsRepository.GetPreviousPaymentIncludeChildrenByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);                
-                
                 response = new AccreditationFeesResponseDto
                 {
                     OverseasSiteChargePerSite = accreditationFeesEntity.FeesPerSite,
@@ -49,22 +48,27 @@ namespace EPR.Payment.Service.Services.AccreditationFees
                     TonnageBandCharge = accreditationFeesEntity.Amount
                 };
 
-                if (payment is not null)
+                if (!string.IsNullOrWhiteSpace(request.ApplicationReferenceNumber))
                 {
-                    AccreditationFeesPreviousPayment previousPayment = new()
-                    {
-                        PaymentAmount = payment.Amount
-                    };
+                    Common.Data.DataModels.Payment? payment = await paymentsRepository.GetPreviousPaymentIncludeChildrenByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
 
-                    if (payment.OfflinePayment is not null)
+                    if (payment is not null)
                     {
-                        previousPayment.PaymentMethod = PaymentType.Offline.GetDescription();
-                        previousPayment.PaymentDate = payment.OfflinePayment.PaymentDate.GetValueOrDefault();                        
-                    }
-                    else if(payment.OnlinePayment is not null)
-                    {
-                        previousPayment.PaymentMethod = PaymentType.Online.GetDescription();
-                        previousPayment.PaymentDate = payment.UpdatedDate;                        
+                        AccreditationFeesPreviousPayment previousPayment = new()
+                        {
+                            PaymentAmount = payment.Amount
+                        };
+
+                        if (payment.OfflinePayment is not null)
+                        {
+                            previousPayment.PaymentMethod = PaymentType.Offline.GetDescription();
+                            previousPayment.PaymentDate = payment.OfflinePayment.PaymentDate.GetValueOrDefault();
+                        }
+                        else if (payment.OnlinePayment is not null)
+                        {
+                            previousPayment.PaymentMethod = PaymentType.Online.GetDescription();
+                            previousPayment.PaymentDate = payment.UpdatedDate;
+                        }
                     }
                 }
 
