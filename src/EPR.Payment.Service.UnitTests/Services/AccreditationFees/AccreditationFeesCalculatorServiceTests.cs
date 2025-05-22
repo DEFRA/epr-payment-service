@@ -33,7 +33,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPyament()
+        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPyament_WhenNoApplicationReferenceNumberSupplied()
         {
             // Arrange
             AccreditationFeesRequestDto accreditationFeesRequestDto = new()
@@ -44,7 +44,6 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 NumberOfOverseasSites = 10,
                 TonnageBand = TonnageBand.Upto500,
                 SubmissionDate = DateTime.UtcNow,
-                ApplicationReferenceNumber = Guid.NewGuid().ToString()
             };
             using CancellationTokenSource cancellationTokenSource = new();
 
@@ -100,10 +99,93 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                         cancellationTokenSource.Token),
                     Times.Once());
                 _paymentsRepositoryMock.Verify(r =>
-                    r.GetPreviousPaymentsByReferenceAsync(
-                        accreditationFeesRequestDto.ApplicationReferenceNumber,
+                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
+                        It.IsAny<string>(),
                         cancellationTokenSource.Token),
                         Times.Never());
+            }
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPyament_WhenApplicationReferenceNumberIsSuppliedButPaymentRecordNotFound()
+        {
+            // Arrange
+            AccreditationFeesRequestDto accreditationFeesRequestDto = new()
+            {
+                Regulator = RegulatorConstants.GBENG,
+                MaterialType = AccreditationFeesMaterialType.Plastic,
+                RequestorType = AccreditationFeesRequestorType.Exporters,
+                NumberOfOverseasSites = 10,
+                TonnageBand = TonnageBand.Upto500,
+                SubmissionDate = DateTime.UtcNow,
+                ApplicationReferenceNumber = Guid.NewGuid().ToString()
+            };
+            using CancellationTokenSource cancellationTokenSource = new();
+
+            AccreditationFee accreditationFee = new()
+            {
+                Id = 1,
+                RegulatorId = 1,
+                GroupId = (int)Common.Enums.Group.Exporters,
+                SubGroupId = (int)Common.Enums.SubGroup.Plastic,
+                Amount = 100,
+                FeesPerSite = 10,
+                EffectiveFrom = DateTime.UtcNow.AddDays(-1),
+                EffectiveTo = DateTime.UtcNow.AddDays(1),
+            };
+            Common.Data.DataModels.Payment? payment = null;
+
+            (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
+
+            //Setup
+            _accreditationFeesRepositoryMock.Setup(r =>
+                r.GetFeeAsync(
+                    (int)accreditationFeesRequestDto.RequestorType,
+                    (int)accreditationFeesRequestDto.MaterialType,
+                    tonnesOver,
+                    tonnesUpto,
+                    It.IsAny<RegulatorType>(),
+                    accreditationFeesRequestDto.SubmissionDate,
+                    cancellationTokenSource.Token))
+                .ReturnsAsync(accreditationFee);
+            _paymentsRepositoryMock.Setup(r =>
+                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
+                        accreditationFeesRequestDto.ApplicationReferenceNumber,
+                        cancellationTokenSource.Token))
+                .ReturnsAsync(payment);
+
+            // Act
+            AccreditationFeesResponseDto? accreditationFeesResponseDto = await _accreditationFeesCalculatorServiceUnderTest!.CalculateFeesAsync(
+                accreditationFeesRequestDto,
+                cancellationTokenSource.Token);
+
+            // Assert
+            // Assert
+            using (new AssertionScope())
+            {
+                accreditationFeesResponseDto.Should().NotBeNull();
+                accreditationFeesResponseDto!.TonnageBandCharge.Should().Be(accreditationFee.Amount);
+                accreditationFeesResponseDto!.OverseasSiteChargePerSite.Should().Be(accreditationFee.FeesPerSite);
+                accreditationFeesResponseDto!.TotalOverseasSitesCharges.Should().Be(accreditationFee.FeesPerSite * accreditationFeesRequestDto.NumberOfOverseasSites);
+                accreditationFeesResponseDto!.TotalAccreditationFees.Should().Be((accreditationFee.FeesPerSite * accreditationFeesRequestDto.NumberOfOverseasSites) + accreditationFee.Amount);
+
+                // Verify
+                _accreditationFeesRepositoryMock.Verify(r =>
+                    r.GetFeeAsync(
+                        (int)accreditationFeesRequestDto.RequestorType,
+                        (int)accreditationFeesRequestDto.MaterialType,
+                        tonnesOver,
+                        tonnesUpto,
+                        It.IsAny<RegulatorType>(),
+                        accreditationFeesRequestDto.SubmissionDate,
+                        cancellationTokenSource.Token),
+                    Times.Once());
+                _paymentsRepositoryMock.Verify(r =>
+                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
+                        accreditationFeesRequestDto.ApplicationReferenceNumber,
+                        cancellationTokenSource.Token),
+                        Times.Once());
             }
         }
     }
