@@ -19,7 +19,7 @@ namespace EPR.Payment.Service.Common.Dtos.Request.AccreditationFees
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public AccreditationFeesMaterialType? MaterialType { get; set; }
 
-        public required string ApplicationReferenceNumber { get; set; }
+        public string? ApplicationReferenceNumber { get; set; }
 
         public required DateTime SubmissionDate { get; set; }
     }
