@@ -1,15 +1,11 @@
-﻿using EPR.Payment.Service.Common.Constants.AccreditationFees.Exceptions;
-using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
+﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
-using EPR.Payment.Service.Common.Data.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
 using EPR.Payment.Service.Common.Dtos.Response.AccreditationFees;
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.Services.Interfaces.AccreditationFees;
-using Microsoft.AspNetCore.Mvc;
 
 namespace EPR.Payment.Service.Services.AccreditationFees
 {
@@ -25,45 +21,48 @@ namespace EPR.Payment.Service.Services.AccreditationFees
             _paymentsRepository = paymentsRepository ?? throw new ArgumentNullException(nameof(paymentsRepository));
         }
 
-        public async Task<AccreditationFeesResponseDto> CalculateFeesAsync(AccreditationFeesRequestDto request, CancellationToken cancellationToken)
+        public async Task<AccreditationFeesResponseDto?> CalculateFeesAsync(
+            AccreditationFeesRequestDto request,
+            CancellationToken cancellationToken)
         {
             AccreditationFeesResponseDto? response = null;
             var regulatorType = RegulatorType.Create(request.Regulator);
-            var tonnageValues = TonnageHelper.GetTonnageBoundaryByTonnageBand(request.TonnageBand);            
+            (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(request.TonnageBand);            
 
             var accreditationFeesEntity = await _accreditationFeesRepository.GetFeeAsync(
                 (int)request.RequestorType,
                 (int)request.MaterialType,
-                tonnageValues.Item1,
-                tonnageValues.Item2,
+                tonnesOver,
+                tonnesUpto,
                 regulatorType,
                 request.SubmissionDate,
                 cancellationToken
              );
 
-            if(accreditationFeesEntity != null)
+            if(accreditationFeesEntity is not null)
             {
-                var totalOverseasSiteFees = request.NumberOfOverseasSites * accreditationFeesEntity?.FeesPerSite;
+                decimal totalOverseasSiteFees = request.NumberOfOverseasSites * accreditationFeesEntity.FeesPerSite;
 
-                var payment = await _paymentsRepository.GetPreviousPaymentIncludeChildrenByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);                
+                Common.Data.DataModels.Payment? payment = await _paymentsRepository.GetPreviousPaymentIncludeChildrenByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);                
+                
                 response = new AccreditationFeesResponseDto
                 {
-                    OverseasSiteChargePerSite = accreditationFeesEntity?.FeesPerSite,
+                    OverseasSiteChargePerSite = accreditationFeesEntity.FeesPerSite,
                     TotalOverseasSitesCharges = totalOverseasSiteFees,
-                    TonnageBandCharge = accreditationFeesEntity?.Amount
+                    TonnageBandCharge = accreditationFeesEntity.Amount
                 };
 
-                if (payment != null)
+                if (payment is not null)
                 {
-                    var previousPayment = new AccreditationFeesPreviousPayment();
+                    AccreditationFeesPreviousPayment previousPayment = new();
                     previousPayment.PaymentAmount = payment.Amount;
                     
-                    if(payment.OfflinePayment != null)
+                    if(payment.OfflinePayment is not null)
                     {
                         previousPayment.PaymentMethod = Enum.GetName(PaymentType.Offline);
-                        previousPayment.PaymentDate = payment.OfflinePayment?.PaymentDate;                        
+                        previousPayment.PaymentDate = payment.OfflinePayment.PaymentDate.GetValueOrDefault();                        
                     }
-                    else if(payment.OnlinePayment != null)
+                    else if(payment.OnlinePayment is not null)
                     {
                         previousPayment.PaymentMethod = Enum.GetName(PaymentType.Online);
                         previousPayment.PaymentDate = payment.UpdatedDate;                        
