@@ -10,18 +10,9 @@ using EPR.Payment.Service.Services.Interfaces.AccreditationFees;
 
 namespace EPR.Payment.Service.Services.AccreditationFees
 {
-    public class AccreditationFeesCalculatorService : IAccreditationFeesCalculatorService
+    public class AccreditationFeesCalculatorService(IAccreditationFeesRepository accreditationFeesRepository,
+        IPaymentsRepository paymentsRepository) : IAccreditationFeesCalculatorService
     {   
-        private readonly IAccreditationFeesRepository _accreditationFeesRepository;
-        private readonly IPaymentsRepository _paymentsRepository;
-
-        public AccreditationFeesCalculatorService(IAccreditationFeesRepository accreditationFeesRepository,
-            IPaymentsRepository paymentsRepository)
-        {
-            _accreditationFeesRepository = accreditationFeesRepository ?? throw new ArgumentNullException(nameof(accreditationFeesRepository));
-            _paymentsRepository = paymentsRepository ?? throw new ArgumentNullException(nameof(paymentsRepository));
-        }
-
         public async Task<AccreditationFeesResponseDto?> CalculateFeesAsync(
             AccreditationFeesRequestDto request,
             CancellationToken cancellationToken)
@@ -30,7 +21,7 @@ namespace EPR.Payment.Service.Services.AccreditationFees
             var regulatorType = RegulatorType.Create(request.Regulator);
             (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(request.TonnageBand);            
 
-            var accreditationFeesEntity = await _accreditationFeesRepository.GetFeeAsync(
+            var accreditationFeesEntity = await accreditationFeesRepository.GetFeeAsync(
                 (int)request.RequestorType,
                 (int)request.MaterialType,
                 tonnesOver,
@@ -44,7 +35,7 @@ namespace EPR.Payment.Service.Services.AccreditationFees
             {
                 decimal totalOverseasSiteFees = request.NumberOfOverseasSites * accreditationFeesEntity.FeesPerSite;
 
-                Common.Data.DataModels.Payment? payment = await _paymentsRepository.GetPreviousPaymentIncludeChildrenByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);                
+                Common.Data.DataModels.Payment? payment = await paymentsRepository.GetPreviousPaymentIncludeChildrenByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);                
                 
                 response = new AccreditationFeesResponseDto
                 {
