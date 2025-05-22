@@ -5,7 +5,6 @@ using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
 using EPR.Payment.Service.Common.Dtos.Response.AccreditationFees;
 using EPR.Payment.Service.Common.Enums;
-using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.Services.AccreditationFees;
@@ -32,7 +31,67 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         }
 
         [TestMethod]
-        [AutoMoqData]
+        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnNullResponse_WhenAccreditationFeeRecordNotFound()
+        {
+            // Arrange
+            AccreditationFeesRequestDto accreditationFeesRequestDto = new()
+            {
+                Regulator = RegulatorConstants.GBENG,
+                MaterialType = AccreditationFeesMaterialType.Plastic,
+                RequestorType = AccreditationFeesRequestorType.Exporters,
+                NumberOfOverseasSites = 10,
+                TonnageBand = TonnageBand.Upto500,
+                SubmissionDate = DateTime.UtcNow,
+                ApplicationReferenceNumber = Guid.NewGuid().ToString()
+            };
+            using CancellationTokenSource cancellationTokenSource = new();
+
+            AccreditationFee? accreditationFee = null;
+            (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
+
+            //Setup
+            _accreditationFeesRepositoryMock.Setup(r =>
+                r.GetFeeAsync(
+                    (int)accreditationFeesRequestDto.RequestorType,
+                    (int)accreditationFeesRequestDto.MaterialType,
+                    tonnesOver,
+                    tonnesUpto,
+                    It.IsAny<RegulatorType>(),
+                    accreditationFeesRequestDto.SubmissionDate,
+                    cancellationTokenSource.Token))
+                .ReturnsAsync(accreditationFee);
+
+            // Act
+            AccreditationFeesResponseDto? accreditationFeesResponseDto = await _accreditationFeesCalculatorServiceUnderTest!.CalculateFeesAsync(
+                accreditationFeesRequestDto,
+                cancellationTokenSource.Token);
+
+            // Assert
+            // Assert
+            using (new AssertionScope())
+            {
+                accreditationFeesResponseDto.Should().BeNull();
+           
+                // Verify
+                _accreditationFeesRepositoryMock.Verify(r =>
+                    r.GetFeeAsync(
+                        (int)accreditationFeesRequestDto.RequestorType,
+                        (int)accreditationFeesRequestDto.MaterialType,
+                        tonnesOver,
+                        tonnesUpto,
+                        It.IsAny<RegulatorType>(),
+                        accreditationFeesRequestDto.SubmissionDate,
+                        cancellationTokenSource.Token),
+                    Times.Once());
+                _paymentsRepositoryMock.Verify(r =>
+                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
+                        It.IsAny<string>(),
+                        cancellationTokenSource.Token),
+                        Times.Never());
+            }
+        }
+
+        [TestMethod]
         public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPyament_WhenNoApplicationReferenceNumberSupplied()
         {
             // Arrange
@@ -107,7 +166,6 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         }
 
         [TestMethod]
-        [AutoMoqData]
         public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPyament_WhenApplicationReferenceNumberIsSuppliedButPaymentRecordNotFound()
         {
             // Arrange
