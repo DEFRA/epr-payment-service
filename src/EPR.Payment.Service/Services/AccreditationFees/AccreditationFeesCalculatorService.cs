@@ -61,14 +61,16 @@ namespace EPR.Payment.Service.Services.AccreditationFees
 
                         if (payment.OfflinePayment is not null)
                         {
-                            previousPayment.PaymentMethod = PaymentType.Offline.GetDescription();
+                            previousPayment.PaymentMode = PaymentType.Offline.GetDescription();
                             previousPayment.PaymentDate = payment.OfflinePayment.PaymentDate.GetValueOrDefault();
                         }
                         else if (payment.OnlinePayment is not null)
                         {
-                            previousPayment.PaymentMethod = PaymentType.Online.GetDescription();
+                            previousPayment.PaymentMode = PaymentType.Online.GetDescription();
                             previousPayment.PaymentDate = payment.UpdatedDate;
                         }
+
+                        response.PreviousPaymentDetail = previousPayment;
                     }
                 }
 
