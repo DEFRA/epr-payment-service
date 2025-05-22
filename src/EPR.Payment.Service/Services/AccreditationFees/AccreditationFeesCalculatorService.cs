@@ -3,6 +3,7 @@ using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
 using EPR.Payment.Service.Common.Dtos.Response.AccreditationFees;
 using EPR.Payment.Service.Common.Enums;
+using EPR.Payment.Service.Common.Extensions;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.Services.Interfaces.AccreditationFees;
@@ -59,12 +60,12 @@ namespace EPR.Payment.Service.Services.AccreditationFees
                     
                     if(payment.OfflinePayment is not null)
                     {
-                        previousPayment.PaymentMethod = Enum.GetName(PaymentType.Offline);
+                        previousPayment.PaymentMethod = PaymentType.Offline.GetDescription();
                         previousPayment.PaymentDate = payment.OfflinePayment.PaymentDate.GetValueOrDefault();                        
                     }
                     else if(payment.OnlinePayment is not null)
                     {
-                        previousPayment.PaymentMethod = Enum.GetName(PaymentType.Online);
+                        previousPayment.PaymentMethod = PaymentType.Online.GetDescription();
                         previousPayment.PaymentDate = payment.UpdatedDate;                        
                     }
                 }
