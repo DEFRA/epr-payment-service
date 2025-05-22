@@ -20,7 +20,7 @@ namespace EPR.Payment.Service.Controllers.AccreditationFees
         IAccreditationFeesCalculatorService accreditationFeesCalculatorService,
         IValidator<AccreditationFeesRequestDto> validator) : ControllerBase
     {
-        [HttpPost("accriditation-fee")]
+        [HttpPost("accreditation-fee")]
         [ProducesResponseType(typeof(ProducerResubmissionFeeResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
