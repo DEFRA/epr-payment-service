@@ -24,17 +24,17 @@ namespace EPR.Payment.Service.Validations.AccreditationFees
                 .NotEmpty().WithMessage(ValidationMessages.ApplicationReferenceNumberRequired);
 
             RuleFor(x => x.TonnageBand)
-                .NotNull()
+                .NotNull().WithMessage(ValidationMessages.EmptyTonnageBand)
                 .IsInEnum()        
                 .WithMessage(ValidationMessages.InvalidTonnageBand + string.Join(",", Enum.GetNames(typeof(TonnageBand))));
 
             RuleFor(x => x.RequestorType)
-                .NotNull()
+                .NotNull().WithMessage(ValidationMessages.EmptyRequestorType)
                 .IsInEnum()
                 .WithMessage(ValidationMessages.InvalidRequestorType + string.Join(",", Enum.GetNames(typeof(AccreditationFeesRequestorType))));
 
             RuleFor(x => x.MaterialType)
-               .NotNull()
+               .NotNull().WithMessage(ValidationMessages.EmptyMaterialType)
                .IsInEnum()
                .WithMessage(ValidationMessages.InvalidMaterialType + string.Join(",", Enum.GetNames(typeof(AccreditationFeesMaterialType))));
 

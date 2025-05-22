@@ -48,9 +48,12 @@ namespace EPR.Payment.Service.Common.Constants.RegistrationFees
         public const string MemberCountGreaterThanZero = "Member Count must be greater than zero.";
 
         //  AccreditationFeesRequestDto Validation Messages
+        public const string EmptyRequestorType = "Requestor type is required";
         public const string InvalidRequestorType = "Requestor type must be one of the following: ";
-        public const string InvalidTonnageBand = "Tonnage Band must be one of the following: ";
-        public const string InvalidMaterialType = "Material Type must be one of the following: ";
+        public const string EmptyTonnageBand = "Tonnage band is required";
+        public const string InvalidTonnageBand = "Tonnage band must be one of the following: ";
+        public const string EmptyMaterialType = "Material type is required";
+        public const string InvalidMaterialType = "Material type must be one of the following: ";
         public static string InvalidNumberOfOverseasSiteForExporter = $"Number of Overseas site must be greater than 0 and less than equal to {ReprocessorExporterConstants.MaxNumberOfOverseasSitesAllowed} for requestor type of exporter.";
         public const string InvalidNumberOfOverseasSiteForReprocessor = "Number of Overseas site must be 0 for requestor type of reprocessor.";
 
