@@ -96,7 +96,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         [DataRow(TonnageBand.Over500To5000)]
         [DataRow(TonnageBand.Over5000To10000)]
         [DataRow(TonnageBand.Over10000)]
-        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPyament_WhenNoApplicationReferenceNumberSupplied(
+        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPayment_WhenNoApplicationReferenceNumberSupplied(
             TonnageBand tonnageBand)
         {
             // Arrange
@@ -170,7 +170,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         }
 
         [TestMethod]
-        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPyament_WhenApplicationReferenceNumberIsSuppliedButPaymentRecordNotFound()
+        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPayment_WhenApplicationReferenceNumberIsSuppliedButPaymentRecordNotFound()
         {
             // Arrange
             AccreditationFeesRequestDto accreditationFeesRequestDto = new()
@@ -251,7 +251,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         }
 
         [TestMethod]
-        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithOfflincePreviousPyament()
+        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithOfflincePreviousPayment()
         {
             // Arrange
             AccreditationFeesRequestDto accreditationFeesRequestDto = new()
@@ -356,7 +356,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         }
 
         [TestMethod]
-        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithOnlinePreviousPyament()
+        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithOnlinePreviousPayment()
         {
             // Arrange
             AccreditationFeesRequestDto accreditationFeesRequestDto = new()
