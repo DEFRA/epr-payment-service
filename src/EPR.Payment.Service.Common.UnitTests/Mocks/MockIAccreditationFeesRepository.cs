@@ -1,4 +1,5 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
+using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using Moq;
 using System.Data.Entity;
@@ -15,21 +16,22 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
             var accreditationFeesData = new List<Common.Data.DataModels.Lookups.AccreditationFee>
         {   
             new() {
-                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.Exporters, Description = "Exporter" },
-                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type="Aluminium", Description = "Aluminium" },
+                GroupId = (int)Group.Exporters,
+                SubGroupId = (int) SubGroup.Aluminium,
                 Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
                 TonnesOver = 0,
                 TonnesUpTo = 500,
+                FeesPerSite = 10,
                 Amount = 50000m, // £500 represented in pence (50000 pence)
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
             },            
              new() {
-                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.Reprocessors, Description = "Reprocessors" },
-                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type="Aluminium", Description = "Aluminium" },
+                GroupId = (int)Group.Exporters,
+                SubGroupId = (int) SubGroup.Aluminium,
                 Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
                 TonnesOver = 0,
-                TonnesUpTo = 500,
+                TonnesUpTo = 500,               
                 Amount = 50000m, // £500 represented in pence (50000 pence)
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days

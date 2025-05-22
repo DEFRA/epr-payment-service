@@ -18,7 +18,7 @@ namespace EPR.Payment.Service.Validations.AccreditationFees
 
             RuleFor(x => x.SubmissionDate)
                 .Cascade(CascadeMode.Stop)
-                .MustBeValidResubmissionDate();
+                .MustBeValidSubmissionDate();
 
             RuleFor(x => x.ApplicationReferenceNumber)
                 .NotEmpty().WithMessage(ValidationMessages.ApplicationReferenceNumberRequired);
@@ -28,15 +28,20 @@ namespace EPR.Payment.Service.Validations.AccreditationFees
                 .IsInEnum()        
                 .WithMessage(ValidationMessages.InvalidTonnageBand + string.Join(",", Enum.GetNames(typeof(TonnageBand))));
 
-            RuleFor(x => x.RequestType)
-                .NotNull()
-                .Must(AccreditationRequestTypeValidationHelper.IsValidRequestType)
-                .WithMessage(ValidationMessages.InvalidRequestType + string.Join(",", AccreditationRequestTypeValidationHelper.ValidRequestTypes.ConvertAll(rt => rt.ToString())));
+            RuleFor(x => x.RequestorType)
+                .NotNull()                
+                .WithMessage(ValidationMessages.InvalidRequestType + string.Join(",", Enum.GetNames(typeof(AccreditationFeesMaterialType))));
 
             RuleFor(x => x.MaterialType)
                .NotNull()
                .IsInEnum()
-               .WithMessage(ValidationMessages.InvalidMaterialType + string.Join(",", Enum.GetNames(typeof(AccreditationFeesRequestMaterialType))));
+               .WithMessage(ValidationMessages.InvalidMaterialType + string.Join(",", Enum.GetNames(typeof(AccreditationFeesMaterialType))));
+
+            RuleFor(x => x.NumberOfOverseasSites)                
+               .GreaterThan(0).When(x => x.RequestorType == AccreditationFeesRequestorType.Exporters).WithMessage(ValidationMessages.InvalidNumberOfOverseasSiteForExporter);
+
+            RuleFor(x => x.NumberOfOverseasSites)
+               .Equal(0).When(x => x.RequestorType == AccreditationFeesRequestorType.Reprocessors).WithMessage(ValidationMessages.InvalidNumberOfOverseasSiteForReprocessor);
         }
     }
 }

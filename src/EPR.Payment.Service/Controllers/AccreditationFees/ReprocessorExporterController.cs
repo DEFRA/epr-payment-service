@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using EPR.Payment.Service.Common.Constants.AccreditationFees.Exceptions;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
@@ -57,6 +58,17 @@ namespace EPR.Payment.Service.Controllers.ResubmissionFees.Producer
             try
             {
                 var response = await _accreditationFeesCalculatorService.CalculateFeesAsync(request, cancellationToken);
+
+                if(response == null)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, new ProblemDetails
+                    {
+                        Title = "Accreditation fee record not found",
+                        Detail = AccreditationFeeCalculationExceptions.AccreditationFeeNotFoundError,
+                        Status = StatusCodes.Status404NotFound
+                    });
+                }
+
                 return Ok(response);
             }
             catch (ValidationException ex)

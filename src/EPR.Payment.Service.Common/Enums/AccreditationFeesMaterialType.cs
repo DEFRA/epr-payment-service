@@ -1,6 +1,6 @@
 ﻿namespace EPR.Payment.Service.Common.Enums
 {
-    public enum AccreditationFeesRequestMaterialType
+    public enum AccreditationFeesMaterialType
     {
         Aluminium = SubGroup.Aluminium,
         Glass = SubGroup.Glass,

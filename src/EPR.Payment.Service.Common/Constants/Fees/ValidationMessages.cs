@@ -50,6 +50,8 @@ namespace EPR.Payment.Service.Common.Constants.RegistrationFees
         public const string InvalidRequestType = "Request type must be one of the following: ";
         public const string InvalidTonnageBand = "Tonnage Band must be one of the following: ";
         public const string InvalidMaterialType = "Material Type must be one of the following: ";
+        public const string InvalidNumberOfOverseasSiteForExporter = "Number of Overseas site must be greater than 0 for request type is exporter.";
+        public const string InvalidNumberOfOverseasSiteForReprocessor = "Number of Overseas site must be 0 for request type is reprocessor.";
 
     }
 }

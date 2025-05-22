@@ -28,7 +28,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetAccreditationFeeAsync_ValidInput_ShouldReturnAccrediationFee(
+        public async Task GetAccreditationFeeAsync_ValidInput_ShouldReturnFee(
         [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] AccreditationFeesRepository _accreditationFeesRepository)
         {
@@ -48,7 +48,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
             var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, tonnesOver, tonnesUpto, regulator, submissionDate, _cancellationToken);
 
             // Assert
-            result.Should().NotBeNull();            
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]
@@ -70,7 +70,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
             var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, 0, 500, RegulatorType.Create("GB-ENG"), DateTime.MinValue, _cancellationToken);
 
             // Assert
-            result.Should().Be(null);
+            Assert.IsNull(result);
         }
 
         [TestMethod]
@@ -91,7 +91,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
             var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, 0, 500, RegulatorType.Create("GB-ENG"), DateTime.UtcNow, _cancellationToken);
 
             // Assert
-            result.Should().Be(null); 
+            Assert.IsNull(result);
         }
 
     }
