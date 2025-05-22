@@ -55,10 +55,12 @@ namespace EPR.Payment.Service.Services.AccreditationFees
 
                 if (payment is not null)
                 {
-                    AccreditationFeesPreviousPayment previousPayment = new();
-                    previousPayment.PaymentAmount = payment.Amount;
-                    
-                    if(payment.OfflinePayment is not null)
+                    AccreditationFeesPreviousPayment previousPayment = new()
+                    {
+                        PaymentAmount = payment.Amount
+                    };
+
+                    if (payment.OfflinePayment is not null)
                     {
                         previousPayment.PaymentMethod = PaymentType.Offline.GetDescription();
                         previousPayment.PaymentDate = payment.OfflinePayment.PaymentDate.GetValueOrDefault();                        
