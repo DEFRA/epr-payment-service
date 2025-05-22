@@ -173,6 +173,28 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         #region Application Reference Number Tests 
 
         [TestMethod]
+        public void Validate_ApplicationReferenceNumberIsNull_ShouldHaveError()
+        {
+            // Arrange
+            var request = new AccreditationFeesRequestDto
+            {
+                Regulator = RegulatorConstants.GBENG,
+                RequestorType = AccreditationFeesRequestorType.Exporters,
+                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                NumberOfOverseasSites = 0,
+                TonnageBand = TonnageBand.Upto500,
+                SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
+            };
+
+            // Act
+            var result = _validator.TestValidate(request);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.ApplicationReferenceNumber)
+                  .WithErrorMessage(ValidationMessages.ApplicationReferenceNumberRequired);
+        }
+
+        [TestMethod]
         public void Validate_EmptyApplicationReferenceNumber_ShouldHaveError()
         {
             // Arrange

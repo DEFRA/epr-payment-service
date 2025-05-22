@@ -20,6 +20,7 @@ namespace EPR.Payment.Service.Validations.AccreditationFees
                 .MustBeValidSubmissionDate();
 
             RuleFor(x => x.ApplicationReferenceNumber)
+                .NotNull()
                 .NotEmpty().WithMessage(ValidationMessages.ApplicationReferenceNumberRequired);
 
             RuleFor(x => x.TonnageBand)
