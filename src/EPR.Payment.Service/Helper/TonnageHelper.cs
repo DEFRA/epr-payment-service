@@ -4,7 +4,7 @@ namespace EPR.Payment.Service.Helper
 {
     public static class TonnageHelper
     {
-        public static (int TonnesOver, int TonnesUpto) GetTonnageBoundaryByTonnageBand(TonnageBand tonnageBand) => tonnageBand switch
+        public static (int TonnesOver, int TonnesUpto) GetTonnageBoundaryByTonnageBand(TonnageBand? tonnageBand) => tonnageBand switch
         {
             TonnageBand.Upto500 => new(0, 500),
             TonnageBand.Over500To5000 => new(500, 5000),

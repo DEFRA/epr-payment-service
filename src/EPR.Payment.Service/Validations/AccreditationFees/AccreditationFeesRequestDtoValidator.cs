@@ -3,7 +3,6 @@ using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
 using EPR.Payment.Service.Validations.Common;
 using FluentValidation;
-using EPR.Payment.Service.Helper;
 
 namespace EPR.Payment.Service.Validations.AccreditationFees
 {
@@ -11,8 +10,7 @@ namespace EPR.Payment.Service.Validations.AccreditationFees
     {
         public AccreditationFeesRequestDtoValidator()
         {
-            RuleFor(x => x.Regulator.ToString())
-                .NotNull()
+            RuleFor(x => x.Regulator)                
                 .NotEmpty().WithMessage(ValidationMessages.RegulatorRequired)
                 .Must(RegulatorValidationHelper.IsValidRegulator).WithMessage(ValidationMessages.RegulatorInvalid);
 
@@ -29,8 +27,9 @@ namespace EPR.Payment.Service.Validations.AccreditationFees
                 .WithMessage(ValidationMessages.InvalidTonnageBand + string.Join(",", Enum.GetNames(typeof(TonnageBand))));
 
             RuleFor(x => x.RequestorType)
-                .NotNull()                
-                .WithMessage(ValidationMessages.InvalidRequestType + string.Join(",", Enum.GetNames(typeof(AccreditationFeesMaterialType))));
+                .NotNull()
+                .IsInEnum()
+                .WithMessage(ValidationMessages.InvalidRequestorType + string.Join(",", Enum.GetNames(typeof(AccreditationFeesRequestorType))));
 
             RuleFor(x => x.MaterialType)
                .NotNull()
