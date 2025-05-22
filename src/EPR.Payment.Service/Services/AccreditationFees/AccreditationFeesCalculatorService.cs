@@ -10,7 +10,8 @@ using EPR.Payment.Service.Services.Interfaces.AccreditationFees;
 
 namespace EPR.Payment.Service.Services.AccreditationFees
 {
-    public class AccreditationFeesCalculatorService(IAccreditationFeesRepository accreditationFeesRepository,
+    public class AccreditationFeesCalculatorService(
+        IAccreditationFeesRepository accreditationFeesRepository,
         IPaymentsRepository paymentsRepository) : IAccreditationFeesCalculatorService
     {   
         public async Task<AccreditationFeesResponseDto?> CalculateFeesAsync(

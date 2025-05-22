@@ -10,25 +10,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace EPR.Payment.Service.Controllers.ResubmissionFees.Producer
+namespace EPR.Payment.Service.Controllers.AccreditationFees
 {
     [ApiVersion(1)]
     [ApiController]
     [Route("api/v{version:apiVersion}/reprocessorexporter")]
     [FeatureGate("EnableReprocessorExporterAccreditationFeesFeature")]
-    public class ReprocessorExporterController : ControllerBase
+    public class ReprocessorExporterController(
+        IAccreditationFeesCalculatorService accreditationFeesCalculatorService,
+        IValidator<AccreditationFeesRequestDto> validator) : ControllerBase
     {
-        private readonly IAccreditationFeesCalculatorService _accreditationFeesCalculatorService;
-        private readonly IValidator<AccreditationFeesRequestDto> _validator;
-
-        public ReprocessorExporterController(
-            IAccreditationFeesCalculatorService accreditationFeesCalculatorService,
-            IValidator<AccreditationFeesRequestDto> validator)
-        {
-            _accreditationFeesCalculatorService = accreditationFeesCalculatorService ?? throw new ArgumentNullException(nameof(accreditationFeesCalculatorService));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-        }
-
         [HttpPost("accriditation-fee")]
         [ProducesResponseType(typeof(ProducerResubmissionFeeResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -42,7 +33,7 @@ namespace EPR.Payment.Service.Controllers.ResubmissionFees.Producer
             [FromBody] AccreditationFeesRequestDto request,
             CancellationToken cancellationToken)
         {
-            var validationResult = _validator.Validate(request);
+            var validationResult = validator.Validate(request);
 
             if (!validationResult.IsValid)
             {
@@ -56,7 +47,7 @@ namespace EPR.Payment.Service.Controllers.ResubmissionFees.Producer
 
             try
             {
-                AccreditationFeesResponseDto? response = await _accreditationFeesCalculatorService.CalculateFeesAsync(request, cancellationToken);
+                AccreditationFeesResponseDto? response = await accreditationFeesCalculatorService.CalculateFeesAsync(request, cancellationToken);
 
                 if(response == null)
                 {
