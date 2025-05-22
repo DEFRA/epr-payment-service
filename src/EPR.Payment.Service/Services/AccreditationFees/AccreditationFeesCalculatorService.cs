@@ -20,6 +20,7 @@ namespace EPR.Payment.Service.Services.AccreditationFees
         {
             AccreditationFeesResponseDto? response = null;
             var regulatorType = RegulatorType.Create(request.Regulator);
+
             (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(request.TonnageBand);
 
             var requestorType = request.RequestorType.HasValue ? (int)request.RequestorType : 0;
@@ -35,7 +36,7 @@ namespace EPR.Payment.Service.Services.AccreditationFees
                 cancellationToken
              );
 
-            if(accreditationFeesEntity is not null)
+            if (accreditationFeesEntity is not null)
             {
                 decimal totalOverseasSiteFees = request.NumberOfOverseasSites * accreditationFeesEntity.FeesPerSite;
 
