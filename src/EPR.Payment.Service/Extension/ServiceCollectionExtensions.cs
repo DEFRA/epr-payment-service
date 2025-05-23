@@ -69,7 +69,7 @@ namespace EPR.Payment.Service.Extension
             services.AddTransient<IAccreditationFeesRepository, AccreditationFeesRepository>();
 
             // Register the main services
-            services.AddScoped<IAccreditationFeesCalculatorService, AccreditationFeesCalculatorService>();
+            services.AddScoped<IProducerFeesCalculatorService, ProducerFeesCalculatorService>();
             services.AddScoped<IComplianceSchemeCalculatorService, ComplianceSchemeCalculatorService>();
             services.AddScoped<IProducerResubmissionService, ProducerResubmissionService>();
             services.AddScoped<IComplianceSchemeResubmissionService, ComplianceSchemeResubmissionService>();
