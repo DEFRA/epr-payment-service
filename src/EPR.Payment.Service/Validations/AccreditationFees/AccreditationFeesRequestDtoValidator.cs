@@ -26,24 +26,24 @@ namespace EPR.Payment.Service.Validations.AccreditationFees
             RuleFor(x => x.TonnageBand)
                 .NotNull().WithMessage(ValidationMessages.EmptyTonnageBand)
                 .IsInEnum()        
-                .WithMessage(ValidationMessages.InvalidTonnageBand + string.Join(",", Enum.GetNames(typeof(TonnageBand))));
+                .WithMessage(ValidationMessages.InvalidTonnageBand + string.Join(",", Enum.GetNames(typeof(TonnageBands))));
 
             RuleFor(x => x.RequestorType)
                 .NotNull().WithMessage(ValidationMessages.EmptyRequestorType)
                 .IsInEnum()
-                .WithMessage(ValidationMessages.InvalidRequestorType + string.Join(",", Enum.GetNames(typeof(AccreditationFeesRequestorType))));
+                .WithMessage(ValidationMessages.InvalidRequestorType + string.Join(",", Enum.GetNames(typeof(RequestorTypes))));
 
             RuleFor(x => x.MaterialType)
                .NotNull().WithMessage(ValidationMessages.EmptyMaterialType)
                .IsInEnum()
-               .WithMessage(ValidationMessages.InvalidMaterialType + string.Join(",", Enum.GetNames(typeof(AccreditationFeesMaterialType))));
+               .WithMessage(ValidationMessages.InvalidMaterialType + string.Join(",", Enum.GetNames(typeof(MaterialTypes))));
 
             RuleFor(x => x.NumberOfOverseasSites)
-               .GreaterThan(0).When(x => x.RequestorType == AccreditationFeesRequestorType.Exporters)
-               .LessThanOrEqualTo(ReprocessorExporterConstants.MaxNumberOfOverseasSitesAllowed).When(x => x.RequestorType == AccreditationFeesRequestorType.Exporters).WithMessage(ValidationMessages.InvalidNumberOfOverseasSiteForExporter);
+               .GreaterThan(0).When(x => x.RequestorType == RequestorTypes.Exporters)
+               .LessThanOrEqualTo(ReprocessorExporterConstants.MaxNumberOfOverseasSitesAllowed).When(x => x.RequestorType == RequestorTypes.Exporters).WithMessage(ValidationMessages.InvalidNumberOfOverseasSiteForExporter);
 
             RuleFor(x => x.NumberOfOverseasSites)
-               .Equal(0).When(x => x.RequestorType == AccreditationFeesRequestorType.Reprocessors).WithMessage(ValidationMessages.InvalidNumberOfOverseasSiteForReprocessor);
+               .Equal(0).When(x => x.RequestorType == RequestorTypes.Reprocessors).WithMessage(ValidationMessages.InvalidNumberOfOverseasSiteForReprocessor);
         }
     }
 }

@@ -5,9 +5,9 @@ using FluentValidation;
 
 namespace EPR.Payment.Service.Validations.Payments
 {
-    public abstract class OfflinePaymentInsertRequestBaseDtoValidator<T> : AbstractValidator<T> where T : OfflinePaymentInsertRequestBaseDto 
+    public abstract class OfflinePaymentInsertRequestDtoCommonValidator<T> : AbstractValidator<T> where T : OfflinePaymentInsertRequestDto
     {
-        protected OfflinePaymentInsertRequestBaseDtoValidator(bool isAccerdiationFee = false)
+        protected OfflinePaymentInsertRequestDtoCommonValidator(bool isAccerdiationFee = false)
         {
             RuleFor(x => x.UserId)
                .NotNull()

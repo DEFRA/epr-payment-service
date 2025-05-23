@@ -28,10 +28,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = "X",
-                RequestorType = AccreditationFeesRequestorType.Exporters,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                RequestorType = RequestorTypes.Exporters,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 0,               
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow
             };
@@ -51,10 +51,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = string.Empty,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                RequestorType = RequestorTypes.Exporters,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 0,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow
             };
@@ -79,10 +79,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
                 var request = new AccreditationFeesRequestDto
                 {
                     Regulator = regulator,
-                    RequestorType = AccreditationFeesRequestorType.Exporters,
-                    MaterialType = AccreditationFeesMaterialType.Aluminium,
+                    RequestorType = RequestorTypes.Exporters,
+                    MaterialType = MaterialTypes.Aluminium,
                     NumberOfOverseasSites = 0,
-                    TonnageBand = TonnageBand.Upto500,
+                    TonnageBand = TonnageBands.Upto500,
                     ApplicationReferenceNumber = "A123",
                     SubmissionDate = DateTime.UtcNow
                 };
@@ -106,10 +106,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                RequestorType = RequestorTypes.Exporters,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 0,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = default
             };
@@ -129,10 +129,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                RequestorType = RequestorTypes.Exporters,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 0,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow.AddDays(10)
             };
@@ -152,10 +152,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                RequestorType = RequestorTypes.Exporters,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 0,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.Now
             };
@@ -179,10 +179,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                RequestorType = RequestorTypes.Exporters,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 0,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
             };
 
@@ -201,10 +201,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                RequestorType = RequestorTypes.Exporters,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 0,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 ApplicationReferenceNumber = string.Empty,
                 SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
             };
@@ -228,10 +228,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = AccreditationFeesRequestorType.Reprocessors,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                RequestorType = RequestorTypes.Reprocessors,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 10,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
             };
@@ -251,10 +251,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                RequestorType = RequestorTypes.Exporters,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 0,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
             };
@@ -273,10 +273,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                RequestorType = RequestorTypes.Exporters,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 471,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
             };
@@ -299,9 +299,9 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 0,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
             };
@@ -317,7 +317,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_ValidRequestorType_ShouldNotHaveError()
         {
             // Arrange
-            var validRequestorTypes = new[] { AccreditationFeesRequestorType.Exporters, AccreditationFeesRequestorType.Reprocessors };
+            var validRequestorTypes = new[] { RequestorTypes.Exporters, RequestorTypes.Reprocessors };
 
             foreach (var requestorType in validRequestorTypes)
             {
@@ -326,9 +326,9 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
                 {
                     Regulator = RegulatorConstants.GBENG,
                     RequestorType = requestorType,
-                    MaterialType = AccreditationFeesMaterialType.Aluminium,
+                    MaterialType = MaterialTypes.Aluminium,
                     NumberOfOverseasSites = 0,
-                    TonnageBand = TonnageBand.Upto500,
+                    TonnageBand = TonnageBands.Upto500,
                     ApplicationReferenceNumber = "A123",
                     SubmissionDate = DateTime.UtcNow
                 };
@@ -352,9 +352,9 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = AccreditationFeesRequestorType.Exporters,              
+                RequestorType = RequestorTypes.Exporters,              
                 NumberOfOverseasSites = 10,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
             };
@@ -370,11 +370,11 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_ValidMaterialType_ShouldNotHaveError()
         {
             // Arrange
-            var validMaterialTypes = new[] { AccreditationFeesMaterialType.Aluminium,
-                AccreditationFeesMaterialType.Plastic,
-                AccreditationFeesMaterialType.Glass,
-                AccreditationFeesMaterialType.PaperOrBoardOrFibreBasedCompositeMaterial,
-                AccreditationFeesMaterialType.Wood };
+            var validMaterialTypes = new[] { MaterialTypes.Aluminium,
+                MaterialTypes.Plastic,
+                MaterialTypes.Glass,
+                MaterialTypes.PaperOrBoardOrFibreBasedCompositeMaterial,
+                MaterialTypes.Wood };
 
             foreach (var materialType in validMaterialTypes)
             {
@@ -382,10 +382,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
                 var request = new AccreditationFeesRequestDto
                 {
                     Regulator = RegulatorConstants.GBENG,
-                    RequestorType = AccreditationFeesRequestorType.Exporters,
+                    RequestorType = RequestorTypes.Exporters,
                     MaterialType = materialType,
                     NumberOfOverseasSites = 10,
-                    TonnageBand = TonnageBand.Upto500,
+                    TonnageBand = TonnageBands.Upto500,
                     ApplicationReferenceNumber = "A123",
                     SubmissionDate = DateTime.UtcNow
                 };
@@ -409,8 +409,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var request = new AccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
-                MaterialType = AccreditationFeesMaterialType.Aluminium,
+                RequestorType = RequestorTypes.Exporters,
+                MaterialType = MaterialTypes.Aluminium,
                 NumberOfOverseasSites = 10,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
@@ -427,10 +427,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_ValidTonnageBand_ShouldNotHaveError()
         {
             // Arrange
-            var validTonnageBands = new[] { TonnageBand.Upto500,
-                TonnageBand.Over500To5000,
-                TonnageBand.Over5000To10000,
-                TonnageBand.Over10000,
+            var validTonnageBands = new[] { TonnageBands.Upto500,
+                TonnageBands.Over500To5000,
+                TonnageBands.Over5000To10000,
+                TonnageBands.Over10000,
                 };
 
             foreach (var tonnageBand in validTonnageBands)
@@ -439,8 +439,8 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
                 var request = new AccreditationFeesRequestDto
                 {
                     Regulator = RegulatorConstants.GBENG,
-                    RequestorType = AccreditationFeesRequestorType.Exporters,
-                    MaterialType = AccreditationFeesMaterialType.Plastic,
+                    RequestorType = RequestorTypes.Exporters,
+                    MaterialType = MaterialTypes.Plastic,
                     NumberOfOverseasSites = 10,
                     TonnageBand = tonnageBand,
                     ApplicationReferenceNumber = "A123",
@@ -468,10 +468,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
                 new ()
                 {
                     Regulator = RegulatorConstants.GBENG,
-                    RequestorType = AccreditationFeesRequestorType.Reprocessors,
-                    MaterialType = AccreditationFeesMaterialType.Aluminium,
+                    RequestorType = RequestorTypes.Reprocessors,
+                    MaterialType = MaterialTypes.Aluminium,
                     NumberOfOverseasSites = 0,
-                    TonnageBand = TonnageBand.Upto500,
+                    TonnageBand = TonnageBands.Upto500,
                     ApplicationReferenceNumber = "A123",
                     SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
                 },
@@ -479,10 +479,10 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
                 new ()
                 {
                     Regulator = RegulatorConstants.GBENG,
-                    RequestorType = AccreditationFeesRequestorType.Exporters,
-                    MaterialType = AccreditationFeesMaterialType.Aluminium,
+                    RequestorType = RequestorTypes.Exporters,
+                    MaterialType = MaterialTypes.Aluminium,
                     NumberOfOverseasSites = 440,
-                    TonnageBand = TonnageBand.Upto500,
+                    TonnageBand = TonnageBands.Upto500,
                     ApplicationReferenceNumber = "A123",
                     SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
                 }

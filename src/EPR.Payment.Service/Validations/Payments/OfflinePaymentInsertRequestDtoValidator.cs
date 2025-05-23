@@ -2,7 +2,7 @@
 
 namespace EPR.Payment.Service.Validations.Payments
 {
-    public class OfflinePaymentInsertRequestDtoValidator : OfflinePaymentInsertRequestBaseDtoValidator<OfflinePaymentInsertRequestDto>
+    public class OfflinePaymentInsertRequestDtoValidator : OfflinePaymentInsertRequestDtoCommonValidator<OfflinePaymentInsertRequestDto>
     {
         public OfflinePaymentInsertRequestDtoValidator() : base(false)
         {

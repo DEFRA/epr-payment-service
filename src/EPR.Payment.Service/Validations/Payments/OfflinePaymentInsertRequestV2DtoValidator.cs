@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace EPR.Payment.Service.Validations.Payments
 {
-    public class OfflinePaymentInsertRequestV2DtoValidator : OfflinePaymentInsertRequestBaseDtoValidator<OfflinePaymentInsertRequestV2Dto>
+    public class OfflinePaymentInsertRequestV2DtoValidator : OfflinePaymentInsertRequestDtoCommonValidator<OfflinePaymentInsertRequestV2Dto>
     {
         public OfflinePaymentInsertRequestV2DtoValidator() : base (true)
         {

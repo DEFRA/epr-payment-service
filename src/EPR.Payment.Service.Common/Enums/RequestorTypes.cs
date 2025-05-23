@@ -1,6 +1,6 @@
 ﻿namespace EPR.Payment.Service.Common.Enums
 {
-    public enum AccreditationFeesRequestorType
+    public enum RequestorTypes
     {
         Reprocessors = Group.Reprocessors,
         Exporters = Group.Exporters,

@@ -2,7 +2,7 @@
 
 namespace EPR.Payment.Service.Common.Enums
 {
-    public enum TonnageBand
+    public enum TonnageBands
     {
         [Description("Tonnage upto 500 tonnes")]
         Upto500,        

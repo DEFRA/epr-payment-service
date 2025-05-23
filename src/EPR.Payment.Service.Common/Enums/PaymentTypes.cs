@@ -2,7 +2,7 @@
 
 namespace EPR.Payment.Service.Common.Enums
 {
-    public enum PaymentType
+    public enum PaymentTypes
     {
         [Description("Offline")]
         Offline = 1,

@@ -38,10 +38,10 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
             AccreditationFeesRequestDto accreditationFeesRequestDto = new()
             {
                 Regulator = RegulatorConstants.GBENG,
-                MaterialType = AccreditationFeesMaterialType.Plastic,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
+                MaterialType = MaterialTypes.Plastic,
+                RequestorType = RequestorTypes.Exporters,
                 NumberOfOverseasSites = 10,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 SubmissionDate = DateTime.UtcNow,
                 ApplicationReferenceNumber = Guid.NewGuid().ToString()
             };
@@ -92,19 +92,19 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         }
 
         [TestMethod]
-        [DataRow(TonnageBand.Upto500)]
-        [DataRow(TonnageBand.Over500To5000)]
-        [DataRow(TonnageBand.Over5000To10000)]
-        [DataRow(TonnageBand.Over10000)]
+        [DataRow(TonnageBands.Upto500)]
+        [DataRow(TonnageBands.Over500To5000)]
+        [DataRow(TonnageBands.Over5000To10000)]
+        [DataRow(TonnageBands.Over10000)]
         public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPayment_WhenNoApplicationReferenceNumberSupplied(
-            TonnageBand tonnageBand)
+            TonnageBands tonnageBand)
         {
             // Arrange
             AccreditationFeesRequestDto accreditationFeesRequestDto = new()
             {
                 Regulator = RegulatorConstants.GBENG,
-                MaterialType = AccreditationFeesMaterialType.Plastic,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
+                MaterialType = MaterialTypes.Plastic,
+                RequestorType = RequestorTypes.Exporters,
                 NumberOfOverseasSites = 10,
                 TonnageBand = tonnageBand,
                 SubmissionDate = DateTime.UtcNow,
@@ -176,10 +176,10 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
             AccreditationFeesRequestDto accreditationFeesRequestDto = new()
             {
                 Regulator = RegulatorConstants.GBENG,
-                MaterialType = AccreditationFeesMaterialType.Plastic,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
+                MaterialType = MaterialTypes.Plastic,
+                RequestorType = RequestorTypes.Exporters,
                 NumberOfOverseasSites = 10,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 SubmissionDate = DateTime.UtcNow,
                 ApplicationReferenceNumber = Guid.NewGuid().ToString()
             };
@@ -257,10 +257,10 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
             AccreditationFeesRequestDto accreditationFeesRequestDto = new()
             {
                 Regulator = RegulatorConstants.GBENG,
-                MaterialType = AccreditationFeesMaterialType.Plastic,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
+                MaterialType = MaterialTypes.Plastic,
+                RequestorType = RequestorTypes.Exporters,
                 NumberOfOverseasSites = 10,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 SubmissionDate = DateTime.UtcNow,
                 ApplicationReferenceNumber = Guid.NewGuid().ToString()
             };
@@ -333,7 +333,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 accreditationFeesResponseDto!.TotalOverseasSitesCharges.Should().Be(accreditationFee.FeesPerSite * accreditationFeesRequestDto.NumberOfOverseasSites);
                 accreditationFeesResponseDto!.TotalAccreditationFees.Should().Be((accreditationFee.FeesPerSite * accreditationFeesRequestDto.NumberOfOverseasSites) + accreditationFee.Amount);
                 accreditationFeesResponseDto.PreviousPaymentDetail.Should().NotBeNull();
-                accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentMode.Should().Be(PaymentType.Offline.GetDescription());
+                accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentMode.Should().Be(PaymentTypes.Offline.GetDescription());
                 accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentAmount.Should().Be(payment.Amount);
                 accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentDate.Should().Be(payment.OfflinePayment.PaymentDate);
                 accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentMethod.Should().Be(payment.OfflinePayment.PaymentMethod);
@@ -364,10 +364,10 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
             AccreditationFeesRequestDto accreditationFeesRequestDto = new()
             {
                 Regulator = RegulatorConstants.GBENG,
-                MaterialType = AccreditationFeesMaterialType.Plastic,
-                RequestorType = AccreditationFeesRequestorType.Exporters,
+                MaterialType = MaterialTypes.Plastic,
+                RequestorType = RequestorTypes.Exporters,
                 NumberOfOverseasSites = 10,
-                TonnageBand = TonnageBand.Upto500,
+                TonnageBand = TonnageBands.Upto500,
                 SubmissionDate = DateTime.UtcNow,
                 ApplicationReferenceNumber = Guid.NewGuid().ToString()
             };
@@ -437,7 +437,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 accreditationFeesResponseDto!.TotalOverseasSitesCharges.Should().Be(accreditationFee.FeesPerSite * accreditationFeesRequestDto.NumberOfOverseasSites);
                 accreditationFeesResponseDto!.TotalAccreditationFees.Should().Be((accreditationFee.FeesPerSite * accreditationFeesRequestDto.NumberOfOverseasSites) + accreditationFee.Amount);
                 accreditationFeesResponseDto.PreviousPaymentDetail.Should().NotBeNull();
-                accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentMode.Should().Be(PaymentType.Online.GetDescription());
+                accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentMode.Should().Be(PaymentTypes.Online.GetDescription());
                 accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentAmount.Should().Be(payment.Amount);
                 accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentDate.Should().Be(payment.UpdatedDate);
                 accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentMethod.Should().BeNullOrEmpty();
