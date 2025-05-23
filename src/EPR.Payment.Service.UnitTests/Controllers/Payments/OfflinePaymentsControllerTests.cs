@@ -22,6 +22,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         private OfflinePaymentsController _controller = null!;
         private Mock<IOfflinePaymentsService> _offlinePaymentsServiceMock = null!;
         private Mock<IValidator<OfflinePaymentInsertRequestDto>> _offlinePaymentInsertRequestValidatorMock = null!;
+        private Mock<IValidator<OfflinePaymentInsertRequestV2Dto>> _offlinePaymentInsertRequestV2ValidatorMock = null!;
         private CancellationToken _cancellationToken;
 
         [TestInitialize]
@@ -29,8 +30,14 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _offlinePaymentsServiceMock = new Mock<IOfflinePaymentsService>();
-            _offlinePaymentInsertRequestValidatorMock = _fixture.Freeze<Mock<IValidator<OfflinePaymentInsertRequestDto>>>(); 
-            _controller = new OfflinePaymentsController(_offlinePaymentsServiceMock.Object, _offlinePaymentInsertRequestValidatorMock.Object);
+            _offlinePaymentInsertRequestValidatorMock = _fixture.Freeze<Mock<IValidator<OfflinePaymentInsertRequestDto>>>();
+            _offlinePaymentInsertRequestV2ValidatorMock = _fixture.Freeze<Mock<IValidator<OfflinePaymentInsertRequestV2Dto>>>();
+            
+            _controller = new OfflinePaymentsController(
+                _offlinePaymentsServiceMock.Object,
+                _offlinePaymentInsertRequestValidatorMock.Object,
+                _offlinePaymentInsertRequestV2ValidatorMock.Object);
+            
             _cancellationToken = new CancellationToken();
         }
 
@@ -38,8 +45,10 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         public void Constructor_WithValidArguments_ShouldInitializeCorrectly()
         {
             // Act
-            var controller = new OfflinePaymentsController(_offlinePaymentsServiceMock.Object, 
-                _offlinePaymentInsertRequestValidatorMock.Object);
+            var controller = new OfflinePaymentsController(
+                _offlinePaymentsServiceMock.Object, 
+                _offlinePaymentInsertRequestValidatorMock.Object,
+                _offlinePaymentInsertRequestV2ValidatorMock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -57,7 +66,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
 
             // Act
             Action act = () => new OfflinePaymentsController(offlinePaymentsServiceMock!,
-                                _offlinePaymentInsertRequestValidatorMock.Object);
+                                _offlinePaymentInsertRequestValidatorMock.Object,
+                                _offlinePaymentInsertRequestV2ValidatorMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -72,13 +82,29 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
 
             // Act
             Action act = () => new OfflinePaymentsController(_offlinePaymentsServiceMock.Object!,
-                                offlinePaymentInsertRequestValidatorMock!);
+                                offlinePaymentInsertRequestValidatorMock!,
+                                _offlinePaymentInsertRequestV2ValidatorMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
                 .WithMessage("Value cannot be null. (Parameter 'offlinePaymentInsertRequestValidator')");
         }
 
+        [TestMethod]
+        public void Constructor_WhenOfflinePaymentInsertRequestV2ValidatorIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            IValidator<OfflinePaymentInsertRequestV2Dto>? _offlinePaymentInsertRequestV2ValidatorMock = null;
+
+            // Act
+            Action act = () => new OfflinePaymentsController(_offlinePaymentsServiceMock.Object!,
+                                _offlinePaymentInsertRequestValidatorMock.Object!,
+                                _offlinePaymentInsertRequestV2ValidatorMock!);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'offlinePaymentInsertRequestV2Validator')");
+        }
 
         [TestMethod, AutoMoqData]
         public async Task InsertOfflinePayment_ValidInput_ShouldReturnOk()
@@ -87,7 +113,20 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             var request = _fixture.Build<OfflinePaymentInsertRequestDto>().Create();
 
             //Act
-            var result = await _controller.InsertOfflinePayment(request, _cancellationToken);
+            var result = await _controller.InsertOfflinePaymentV1(request, _cancellationToken);
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task InsertOfflinePaymentForV2_ValidInput_ShouldReturnOk()
+        {
+            // Arrange
+            var request = _fixture.Build<OfflinePaymentInsertRequestV2Dto>().Create();
+
+            //Act
+            var result = await _controller.InsertOfflinePaymentV2(request, _cancellationToken);
 
             //Assert
             result.Should().BeOfType<NoContentResult>();
@@ -108,7 +147,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
                 .Returns(new ValidationResult(validationFailures));
 
             // Act
-            var result = await _controller.InsertOfflinePayment(request, CancellationToken.None);
+            var result = await _controller.InsertOfflinePaymentV1(request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -116,6 +155,33 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
                 var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Which;
                 var problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
                 problemDetails.Detail.Should().Be("Reference is required; Regulator is required");
+            }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task InsertOnlinePaymentForV2_RequestValidationFails_ShouldReturnsBadRequestWithValidationErrorDetails(
+           [Frozen] OfflinePaymentInsertRequestV2Dto request)
+        {
+            // Arrange
+            var validationFailures = new List<ValidationFailure>
+            {
+                new ValidationFailure("Reference", "Reference is required"),
+                new ValidationFailure("Regulator", "Regulator is required"),
+                new ValidationFailure("PaymentMethod", "PaymentMethod is required")
+            };
+
+            _offlinePaymentInsertRequestV2ValidatorMock.Setup(v => v.Validate(It.IsAny<OfflinePaymentInsertRequestV2Dto>()))
+                .Returns(new ValidationResult(validationFailures));
+
+            // Act
+            var result = await _controller.InsertOfflinePaymentV2(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Which;
+                var problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
+                problemDetails.Detail.Should().Be("Reference is required; Regulator is required; PaymentMethod is required");
             }
         }
 
@@ -128,7 +194,22 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
                                .ThrowsAsync(new Exception("Test Exception"));
 
             // Act
-            var result = await _controller.InsertOfflinePayment(request, _cancellationToken);
+            var result = await _controller.InsertOfflinePaymentV1(request, _cancellationToken);
+
+            // Assert
+            result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task InsertOfflinePaymentForV2_ServiceThrowsException_ShouldReturnInternalServerError([Frozen] OfflinePaymentInsertRequestV2Dto request)
+        {
+            // Arrange
+
+            _offlinePaymentsServiceMock.Setup(service => service.InsertOfflinePaymentAsync(request, _cancellationToken))
+                               .ThrowsAsync(new Exception("Test Exception"));
+
+            // Act
+            var result = await _controller.InsertOfflinePaymentV2(request, _cancellationToken);
 
             // Assert
             result.Should().BeOfType<ObjectResult>().Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
@@ -143,7 +224,22 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
                                .ThrowsAsync(new ArgumentException("Test Exception"));
 
             // Act
-            var result = await _controller.InsertOfflinePayment(request, _cancellationToken);
+            var result = await _controller.InsertOfflinePaymentV1(request, _cancellationToken);
+
+            // Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task InsertOfflinePaymentForV2_ArgumentExceptionThrow_ShouldReturnBadRequest([Frozen] OfflinePaymentInsertRequestV2Dto request)
+        {
+            // Arrange
+
+            _offlinePaymentsServiceMock.Setup(service => service.InsertOfflinePaymentAsync(request, _cancellationToken))
+                               .ThrowsAsync(new ArgumentException("Test Exception"));
+
+            // Act
+            var result = await _controller.InsertOfflinePaymentV2(request, _cancellationToken);
 
             // Assert
             result.Should().BeOfType<BadRequestObjectResult>();
@@ -160,7 +256,30 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             _offlinePaymentsServiceMock.Setup(s => s.InsertOfflinePaymentAsync(It.IsAny<OfflinePaymentInsertRequestDto>(), _cancellationToken)).ThrowsAsync(validationException);
 
             // Act
-            var result = await _controller.InsertOfflinePayment(request, _cancellationToken);
+            var result = await _controller.InsertOfflinePaymentV1(request, _cancellationToken);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.Should().BeOfType<BadRequestObjectResult>();
+
+                var badRequestResult = result as BadRequestObjectResult;
+                badRequestResult.Should().NotBeNull();
+            }
+        }
+
+        [TestMethod]
+        public async Task InsertOfflinePaymentV2_ThrowsValidationException_ShouldReturnBadRequest()
+        {
+            // Arrange
+
+            var request = _fixture.Build<OfflinePaymentInsertRequestV2Dto>().Create();
+
+            var validationException = new ValidationException("Validation error");
+            _offlinePaymentsServiceMock.Setup(s => s.InsertOfflinePaymentAsync(It.IsAny<OfflinePaymentInsertRequestV2Dto>(), _cancellationToken)).ThrowsAsync(validationException);
+
+            // Act
+            var result = await _controller.InsertOfflinePaymentV2(request, _cancellationToken);
 
             // Assert
             using (new AssertionScope())
