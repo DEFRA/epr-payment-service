@@ -64,7 +64,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Regulator)
-                  .WithErrorMessage(ValidationMessages.RegulatorRequired);
+                  .WithErrorMessage(ValidationMessages.RegulatorInvalid);
         }
 
         [TestMethod]
@@ -481,7 +481,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
                     Regulator = RegulatorConstants.GBENG,
                     RequestorType = AccreditationFeesRequestorType.Exporters,
                     MaterialType = AccreditationFeesMaterialType.Aluminium,
-                    NumberOfOverseasSites = 470,
+                    NumberOfOverseasSites = 440,
                     TonnageBand = TonnageBand.Upto500,
                     ApplicationReferenceNumber = "A123",
                     SubmissionDate = DateTime.UtcNow.AddMinutes(-1)

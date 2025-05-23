@@ -2,6 +2,6 @@
 {
     public static class ReprocessorExporterConstants
     {
-        public const int MaxNumberOfOverseasSitesAllowed = 470;
+        public const int MaxNumberOfOverseasSitesAllowed = 440;
     }
 }

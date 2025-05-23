@@ -11,8 +11,8 @@ namespace EPR.Payment.Service.Validations.AccreditationFees
     {
         public AccreditationFeesRequestDtoValidator()
         {
-            RuleFor(x => x.Regulator)                
-                .NotEmpty().WithMessage(ValidationMessages.RegulatorRequired)
+            RuleFor(x => x.Regulator)
+                .NotEmpty().WithMessage(ValidationMessages.ReferenceRequired)
                 .Must(RegulatorValidationHelper.IsValidRegulator).WithMessage(ValidationMessages.RegulatorInvalid);
 
             RuleFor(x => x.SubmissionDate)
