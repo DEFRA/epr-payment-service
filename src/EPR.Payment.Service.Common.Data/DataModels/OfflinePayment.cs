@@ -12,6 +12,8 @@ namespace EPR.Payment.Service.Common.Data.DataModels
         
         public string? Comments { get; set; }
 
+        public string? PaymentMethod { get; set; }
+
         #region Navigation properties
 
         public virtual Payment Payment { get; set; } = null!;
