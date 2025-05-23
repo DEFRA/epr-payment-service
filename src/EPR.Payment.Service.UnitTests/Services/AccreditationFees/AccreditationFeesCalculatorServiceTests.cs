@@ -296,6 +296,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     PaymentId = 1,
                     PaymentDate = DateTime.UtcNow.AddDays(-1),
                     Comments = "Accreditation Fees Payment",
+                    PaymentMethod = "Bank Transfer",
                 }
             };
 
@@ -335,7 +336,8 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentMode.Should().Be(PaymentType.Offline.GetDescription());
                 accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentAmount.Should().Be(payment.Amount);
                 accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentDate.Should().Be(payment.OfflinePayment.PaymentDate);
-                
+                accreditationFeesResponseDto.PreviousPaymentDetail!.PaymentMethod.Should().Be(payment.OfflinePayment.PaymentMethod);
+
                 // Verify
                 _accreditationFeesRepositoryMock.Verify(r =>
                     r.GetFeeAsync(
