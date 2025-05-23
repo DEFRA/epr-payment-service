@@ -195,6 +195,47 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                         PaymentId = 4,
                         PaymentDate = new DateTime()
                     }
+                },
+                new Data.DataModels.Payment()
+                {
+                    Id = 5,
+                    ExternalPaymentId = Guid.Parse("dab3d8e1-409b-4b40-a610-1b41843e4712"),
+                    UserId = Guid.NewGuid(),
+                    Regulator = "Test Regulator",
+                    Reference = "Test Reference With Offline Payment",
+                    InternalStatusId = Data.Enums.Status.Success,
+                    Amount = 20.0M,
+                    ReasonForPayment = "Test",
+                    CreatedDate = new DateTime(),
+                    UpdatedByUserId = Guid.NewGuid(),
+                    UpdatedDate = new DateTime(),
+                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    {
+                        Id = 3,
+                        PaymentId = 4,
+                        PaymentDate = new DateTime()
+                    }
+                },
+                new Data.DataModels.Payment()
+                {
+                    Id = 6,
+                    ExternalPaymentId = Guid.Parse("dab3d8e1-409b-4b40-a610-1b41843e4713"),
+                    UserId = Guid.NewGuid(),
+                    Regulator = "Test Regulator",
+                    Reference = "Test Reference With Online Payment",
+                    InternalStatusId = Data.Enums.Status.Success,
+                    Amount = 20.0M,
+                    ReasonForPayment = "Test",
+                    CreatedDate = new DateTime(),
+                    UpdatedByUserId = Guid.NewGuid(),
+                    UpdatedDate = new DateTime(),
+                    OnlinePayment = new Data.DataModels.OnlinePayment()
+                    {
+                        Id = 2,
+                        PaymentId = 5,
+                        UpdatedByOrgId = Guid.NewGuid(),
+                        OrganisationId = Guid.NewGuid()
+                    }
                 }
             }.AsQueryable();
 

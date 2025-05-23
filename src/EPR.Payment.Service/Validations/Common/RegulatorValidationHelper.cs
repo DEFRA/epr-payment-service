@@ -12,9 +12,9 @@ namespace EPR.Payment.Service.Validations.Common
             RegulatorConstants.GBNIR
         };
 
-        public static bool IsValidRegulator(string regulator)
+        public static bool IsValidRegulator(string? regulator)
         {
-            return ValidRegulators.Contains(regulator);
+            return regulator != null && ValidRegulators.Contains(regulator);
         }
     }
 }
