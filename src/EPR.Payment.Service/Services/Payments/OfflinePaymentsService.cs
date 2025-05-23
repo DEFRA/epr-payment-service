@@ -15,12 +15,24 @@ namespace EPR.Payment.Service.Services.Payments
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _OfflinePaymentRepository = offlinePaymentRepository ?? throw new ArgumentNullException(nameof(offlinePaymentRepository));
         }
-        public async Task InsertOfflinePaymentAsync(OfflinePaymentInsertRequestDto paymentInsertRequest, CancellationToken cancellationToken)
+        public async Task InsertOfflinePaymentAsync(
+            OfflinePaymentInsertRequestDto paymentInsertRequest,
+            CancellationToken cancellationToken)
         {
-            var entity = _mapper.Map<Common.Data.DataModels.Payment>(paymentInsertRequest);
-            entity.OfflinePayment = _mapper.Map<Common.Data.DataModels.OfflinePayment>(paymentInsertRequest);
+            var paymentEntity = _mapper.Map<Common.Data.DataModels.Payment>(paymentInsertRequest);
+            paymentEntity.OfflinePayment = _mapper.Map<Common.Data.DataModels.OfflinePayment>(paymentInsertRequest);
 
-            await _OfflinePaymentRepository.InsertOfflinePaymentAsync(entity, cancellationToken);
+            await _OfflinePaymentRepository.InsertOfflinePaymentAsync(paymentEntity, cancellationToken);
+        }
+
+        public async Task InsertOfflinePaymentAsync(
+            OfflinePaymentInsertRequestV2Dto paymentInsertRequest,
+            CancellationToken cancellationToken)
+        {
+            var paymentEntity = _mapper.Map<Common.Data.DataModels.Payment>(paymentInsertRequest);
+            paymentEntity.OfflinePayment = _mapper.Map<Common.Data.DataModels.OfflinePayment>(paymentInsertRequest);
+
+            await _OfflinePaymentRepository.InsertOfflinePaymentAsync(paymentEntity, cancellationToken);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Asp.Versioning;
 using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Extension;
@@ -39,6 +40,7 @@ builder.Services.AddSwaggerGen(setupAction =>
 {
     setupAction.EnableAnnotations();
     setupAction.SwaggerDoc("v1", new OpenApiInfo { Title = "PaymentServiceApi", Version = "v1" });
+    setupAction.SwaggerDoc("v2", new OpenApiInfo { Title = "PaymentServiceApi", Version = "v2" });
     setupAction.DocumentFilter<FeatureEnabledDocumentFilter>();
     setupAction.OperationFilter<FeatureGateOperationFilter>();
 });
@@ -129,6 +131,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "PaymentServiceApi v1");
+    c.SwaggerEndpoint("/swagger/v2/swagger.json", "PaymentServiceApi v2");
     c.RoutePrefix = "swagger";
 });
 
