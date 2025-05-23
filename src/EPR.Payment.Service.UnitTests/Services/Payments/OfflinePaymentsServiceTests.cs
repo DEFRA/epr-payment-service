@@ -2,6 +2,7 @@
 using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Profiles;
+using EPR.Payment.Service.Common.Dtos.Enums;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services.Interfaces.Payments;
@@ -84,6 +85,25 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         {
             // Arrange
             var request = _fixture!.Build<OfflinePaymentInsertRequestDto>().With(d => d.UserId, Guid.NewGuid()).Create();
+
+            _offlinePaymentsRepositoryMock.Setup(r =>
+               r.InsertOfflinePaymentAsync(It.IsAny<Common.Data.DataModels.Payment>(), _cancellationToken));
+
+            // Act
+            Func<Task> action = async () => await _service!.InsertOfflinePaymentAsync(request, _cancellationToken);
+
+            // Assert
+            await action.Should().NotThrowAsync();
+
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task InsertOfflinePaymentAsyncForV2_ValidInput_ShouldCallRespository()
+        {
+            // Arrange
+            var request = _fixture!.Build<OfflinePaymentInsertRequestV2Dto>().With(d => d.UserId, Guid.NewGuid()).Create();
+            request.PaymentMethod = OfflinePaymentMethodTypes.BankTransfer;
 
             _offlinePaymentsRepositoryMock.Setup(r =>
                r.InsertOfflinePaymentAsync(It.IsAny<Common.Data.DataModels.Payment>(), _cancellationToken));

@@ -20,8 +20,8 @@
         public const string InvalidRegulatorOffline = "Regulator is invalid; acceptable values are 'GB-ENG', 'GB-SCT', 'GB-WLS' and 'GB-NIR'.";
         public const string OfflineReferenceRequired = "The Reference field is required.";
         public const string OfflineRegulatorRequired = "The Regulator field is required.";
-
-
+        public const string OfflinePaymentMethodRequired = "The PaymentMethod field is required.";
+      
         public const string ProducerTypeInvalid = "Producer Type must be one of the following: ";
         public const string NumberOfSubsidiariesRange = "Number of subsidiaries must be greater than or equal to 0";
         public const string NumberOfOMPSubsidiariesLessThanOrEqualToNumberOfSubsidiaries = "Number of online marketplace subsidiaries must be less than or equal to number of subsidiaries";
