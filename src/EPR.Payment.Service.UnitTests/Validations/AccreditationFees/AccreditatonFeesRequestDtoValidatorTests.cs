@@ -170,55 +170,6 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
 
         #endregion
 
-        #region Application Reference Number Tests 
-
-        [TestMethod]
-        public void Validate_ApplicationReferenceNumberIsNull_ShouldHaveError()
-        {
-            // Arrange
-            var request = new AccreditationFeesRequestDto
-            {
-                Regulator = RegulatorConstants.GBENG,
-                RequestorType = RequestorTypes.Exporters,
-                MaterialType = MaterialTypes.Aluminium,
-                NumberOfOverseasSites = 0,
-                TonnageBand = TonnageBands.Upto500,
-                SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
-            };
-
-            // Act
-            var result = _validator.TestValidate(request);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.ApplicationReferenceNumber)
-                  .WithErrorMessage(ValidationMessages.ApplicationReferenceNumberRequired);
-        }
-
-        [TestMethod]
-        public void Validate_EmptyApplicationReferenceNumber_ShouldHaveError()
-        {
-            // Arrange
-            var request = new AccreditationFeesRequestDto
-            {
-                Regulator = RegulatorConstants.GBENG,
-                RequestorType = RequestorTypes.Exporters,
-                MaterialType = MaterialTypes.Aluminium,
-                NumberOfOverseasSites = 0,
-                TonnageBand = TonnageBands.Upto500,
-                ApplicationReferenceNumber = string.Empty,
-                SubmissionDate = DateTime.UtcNow.AddMinutes(-1)
-            };
-
-            // Act
-            var result = _validator.TestValidate(request);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.ApplicationReferenceNumber)
-                  .WithErrorMessage(ValidationMessages.ApplicationReferenceNumberRequired);
-        }
-
-        #endregion
-               
         #region Number of Overseas site Tests 
 
         [TestMethod]
