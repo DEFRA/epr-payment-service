@@ -42,6 +42,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EPR.Payment.Service.Common.Data\EPR.Payment.Service.Common.Data.csproj" />
     <ProjectReference Include="..\EPR.Payment.Service.Common.UnitTests\EPR.Payment.Service.Common.UnitTests.csproj" />
+    <ProjectReference Include="..\EPR.Payment.Service.Common\EPR.Payment.Service.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿namespace EPR.Payment.Service.Common.Dtos.Request.Payments
 {
-    public class OfflinePaymentInsertRequestDto
+    public class OfflinePaymentInsertRequestDto 
     {
         public required Guid UserId { get; set; }
 

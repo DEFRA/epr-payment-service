@@ -1,4 +1,7 @@
-﻿namespace EPR.Payment.Service.Common.Constants.RegistrationFees
+﻿using EPR.Payment.Service.Common.Constants.Fees;
+using EPR.Payment.Service.Common.Enums;
+
+namespace EPR.Payment.Service.Common.Constants.RegistrationFees
 {
     public static class ValidationMessages
     {
@@ -41,7 +44,18 @@
         public const string FutureResubmissionDate = "Resubmission date cannot be a date in the future.";
         public const string ResubmissionDateMustBeUtc = "Resubmission date must be in the UTC format which is YYYY-MM-DDTHH:MM:SSZ.";
         public const string ResubmissionDateIsNotInRange = "Fee data is not available for given resubmission date.";
-        public const string ReferenceNumberRequired = "Reference Number is required.";
+        public const string ReferenceNumberRequired = "Reference Number is required.";        
         public const string MemberCountGreaterThanZero = "Member Count must be greater than zero.";
+
+        //  AccreditationFeesRequestDto Validation Messages
+        public const string EmptyRequestorType = "Requestor type is required";
+        public const string InvalidRequestorType = "Requestor type must be one of the following: ";
+        public const string EmptyTonnageBand = "Tonnage band is required";
+        public const string InvalidTonnageBand = "Tonnage band must be one of the following: ";
+        public const string EmptyMaterialType = "Material type is required";
+        public const string InvalidMaterialType = "Material type must be one of the following: ";
+        public static string InvalidNumberOfOverseasSiteForExporter = $"Number of Overseas site must be greater than 0 and less than equal to {ReprocessorExporterConstants.MaxNumberOfOverseasSitesAllowed} for requestor type of exporter.";
+        public const string InvalidNumberOfOverseasSiteForReprocessor = "Number of Overseas site must be 0 for requestor type of reprocessor.";
+
     }
 }
