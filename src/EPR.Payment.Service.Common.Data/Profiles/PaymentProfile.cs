@@ -23,6 +23,10 @@ namespace EPR.Payment.Service.Common.Data.Profiles
             CreateMap<OfflinePaymentInsertRequestDto, DataModels.Payment>().ForMember(dest => dest.ReasonForPayment, opt => opt.MapFrom(src => src.Description));
 
             CreateMap<OfflinePaymentInsertRequestDto, DataModels.OfflinePayment>().ReverseMap();
+
+            CreateMap<OfflinePaymentInsertRequestV2Dto, DataModels.Payment>().ForMember(dest => dest.ReasonForPayment, opt => opt.MapFrom(src => src.Description));
+
+            CreateMap<OfflinePaymentInsertRequestV2Dto, DataModels.OfflinePayment>().ReverseMap();
         }
     }
 }

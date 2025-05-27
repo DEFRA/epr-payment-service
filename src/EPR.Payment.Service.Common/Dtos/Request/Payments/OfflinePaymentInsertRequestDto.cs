@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace EPR.Payment.Service.Common.Dtos.Request.Payments
+﻿namespace EPR.Payment.Service.Common.Dtos.Request.Payments
 {
-    public class OfflinePaymentInsertRequestDto
+    public class OfflinePaymentInsertRequestDto 
     {
         public required Guid UserId { get; set; }
 
