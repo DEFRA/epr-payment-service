@@ -1,6 +1,7 @@
 ﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ReprocessorOrExporter;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter;
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.Extensions;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -11,13 +12,13 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter
         IReprocessorOrExporterFeeRepository feeRepository,
         IPaymentsRepository paymentsRepository) : IReprocessorOrExporterFeesCalculatorService
     {
-        public async Task<Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter.RegistrationFees?> CalculateFeesAsync(ReprocessorOrExporterRegistrationFeesRequestDto request, CancellationToken cancellationToken)
+        public async Task<ReprocessorOrExporterRegistrationFeesResponseDto?> CalculateFeesAsync(ReprocessorOrExporterRegistrationFeesRequestDto request, CancellationToken cancellationToken)
         {
-            Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter.RegistrationFees? response = default;
+            ReprocessorOrExporterRegistrationFeesResponseDto? response = default;
 
             var regulator = RegulatorType.Create(request.Regulator);
             
-            var registrationFeeEntity = await feeRepository.GetFeeAsync((int)request.RequestorType, (int)request.MaterialType, regulator, request.SubmissionDate, cancellationToken);
+            var registrationFeeEntity = await feeRepository.GetFeeAsync((int)request.RequestorType!, (int)request.MaterialType!, regulator, request.SubmissionDate, cancellationToken);
             if (registrationFeeEntity is null)
             {
                 return response;

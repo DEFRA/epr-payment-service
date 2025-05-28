@@ -9,6 +9,12 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ReprocessorOrExporter
     {
         public ReprocessorOrExporterRegistrationFeesRequestDtoValidator()
         {
+            RuleFor(x => x.RequestorType)
+                .NotEmpty().WithMessage(ValidationMessages.EmptyRequestorType);
+
+            RuleFor(x => x.MaterialType)
+                .NotEmpty().WithMessage(ValidationMessages.EmptyMaterialType);
+
             RuleFor(x => x.Regulator)
                 .NotEmpty().WithMessage(ValidationMessages.RegulatorRequired)
                 .Must(RegulatorValidationHelper.IsValidRegulator).WithMessage(ValidationMessages.RegulatorInvalid);

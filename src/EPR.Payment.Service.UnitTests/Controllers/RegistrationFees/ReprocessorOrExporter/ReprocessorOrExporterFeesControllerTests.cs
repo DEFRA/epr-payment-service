@@ -69,7 +69,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         [AutoMoqData]
         public async Task CalculateFeesAsync_WhenValidRequest_ReturnsOkResultWithCalculatedFees(
             [Frozen] ReprocessorOrExporterRegistrationFeesRequestDto request,
-            [Frozen] Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter.RegistrationFees response)
+            [Frozen] ReprocessorOrExporterRegistrationFeesResponseDto response)
         {
             // Arrange
             _validatorMock.Setup(v => v.Validate(It.IsAny<ReprocessorOrExporterRegistrationFeesRequestDto>()))

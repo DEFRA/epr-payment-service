@@ -33,14 +33,14 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.ReprocessorOrExporter
             Summary = "Calculates the registration fees for a reprocessor or an exporter",
             Description = "Calculates the total fees including base fee, subsidiaries fee, and any additional fees for a reprocessor or an exporter."
         )]
-        [SwaggerResponse(200, "Returns the calculated registration fees", typeof(Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter.RegistrationFees))]
+        [SwaggerResponse(200, "Returns the calculated registration fees", typeof(ReprocessorOrExporterRegistrationFeesResponseDto))]
         [SwaggerResponse(400, "Bad request due to validation errors or invalid input")]
         [SwaggerResponse(500, "Internal server error occurred while calculating fees")]
-        [ProducesResponseType(typeof(Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter.RegistrationFees), 200)]
+        [ProducesResponseType(typeof(ReprocessorOrExporterRegistrationFeesResponseDto), 200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableReprocessorOrExporterRegistrationFeesCalculation")]
-        public async Task<ActionResult<Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter.RegistrationFees>> CalculateFeesAsync(
+        public async Task<ActionResult<ReprocessorOrExporterRegistrationFeesResponseDto>> CalculateFeesAsync(
             [FromBody] ReprocessorOrExporterRegistrationFeesRequestDto request,
             CancellationToken cancellationToken)
         {

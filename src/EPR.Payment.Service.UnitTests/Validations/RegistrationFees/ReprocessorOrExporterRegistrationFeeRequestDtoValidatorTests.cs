@@ -19,6 +19,46 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         }
 
         [TestMethod]
+        public void Validate_EmptyRequestorType_ShouldHaveError()
+        {
+            // Arrange
+            var request = new ReprocessorOrExporterRegistrationFeesRequestDto
+            {
+                MaterialType = MaterialTypes.Aluminium,
+                Regulator = RegulatorConstants.GBENG,
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.UtcNow
+            };
+
+            // Act
+            var result = _validator.TestValidate(request);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.RequestorType)
+                  .WithErrorMessage(ValidationMessages.EmptyRequestorType);
+        }
+
+        [TestMethod]
+        public void Validate_EmptyMaterialType_ShouldHaveError()
+        {
+            // Arrange
+            var request = new ReprocessorOrExporterRegistrationFeesRequestDto
+            {
+                RequestorType = RequestorTypes.Exporters,
+                Regulator = RegulatorConstants.GBENG,
+                ApplicationReferenceNumber = "A123",
+                SubmissionDate = DateTime.UtcNow
+            };
+
+            // Act
+            var result = _validator.TestValidate(request);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.MaterialType)
+                  .WithErrorMessage(ValidationMessages.EmptyMaterialType);
+        }
+
+        [TestMethod]
         public void Validate_EmptyRegulator_ShouldHaveError()
         {
             // Arrange
