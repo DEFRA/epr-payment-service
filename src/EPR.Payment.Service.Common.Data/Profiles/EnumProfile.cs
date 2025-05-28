@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EPR.Payment.Service.Common.Enums;
+using EPR.Payment.Service.Common.Data.Enums;
 using System.Diagnostics.CodeAnalysis;
 using DTO = EPR.Payment.Service.Common.Dtos.Enums;
 
