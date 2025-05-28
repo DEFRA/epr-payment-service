@@ -2,10 +2,10 @@
 
 namespace EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter
 {
-    public class ReprocessorOrExporterRegistrationFeesResponseDto
+    public class RegistrationFees
     {
 
-        public MaterialType MaterialType { get; set; } = default!;
+        public MaterialTypes MaterialType { get; set; } = default!;
 
         public decimal RegistrationFee { get; set; }
 

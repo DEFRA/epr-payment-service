@@ -5,6 +5,6 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees
 {
     public interface IReprocessorOrExporterFeeRepository
     {
-        Task<decimal> GetBaseFeeAsync(RequestorType requestorType, MaterialType materialType, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken);
+        Task<DataModels.Lookups.RegistrationFees?> GetFeeAsync(int groupId, int subgroupId, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken);
     }
 }

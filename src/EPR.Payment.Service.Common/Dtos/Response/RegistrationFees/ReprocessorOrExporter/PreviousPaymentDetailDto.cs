@@ -4,7 +4,7 @@
     {
         public string PaymentMode { get; set; } = default!;
 
-        public string PaymentMethod { get; set; } = default!;
+        public string? PaymentMethod { get; set; } = default!;
 
         public decimal PaymentAmount { get; set; }
 

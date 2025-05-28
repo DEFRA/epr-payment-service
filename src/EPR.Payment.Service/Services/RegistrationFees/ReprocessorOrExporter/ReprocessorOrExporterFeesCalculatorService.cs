@@ -1,44 +1,61 @@
-﻿using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ReprocessorOrExporter;
-using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter;
+﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ReprocessorOrExporter;
+using EPR.Payment.Service.Common.Enums;
+using EPR.Payment.Service.Common.Extensions;
+using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ReprocessorOrExporter;
-using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ReprocessorOrExporter;
-using FluentValidation;
-
 namespace EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter
 {
-    public class ReprocessorOrExporterFeesCalculatorService: IReprocessorOrExporterFeesCalculatorService
+    public class ReprocessorOrExporterFeesCalculatorService(
+        IReprocessorOrExporterFeeRepository feeRepository,
+        IPaymentsRepository paymentsRepository) : IReprocessorOrExporterFeesCalculatorService
     {
-        private readonly IValidator<ReprocessorOrExporterRegistrationFeesRequestDto> _validator;
-        private readonly IBaseFeeCalculationStrategy _feeCalculationStrategy;
-
-        public ReprocessorOrExporterFeesCalculatorService(
-            IValidator<ReprocessorOrExporterRegistrationFeesRequestDto> validator,
-            IBaseFeeCalculationStrategy feeCalculationStrategy)
+        public async Task<Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter.RegistrationFees?> CalculateFeesAsync(ReprocessorOrExporterRegistrationFeesRequestDto request, CancellationToken cancellationToken)
         {
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _feeCalculationStrategy = feeCalculationStrategy ?? throw new ArgumentNullException(nameof(feeCalculationStrategy));
-        }
+            Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter.RegistrationFees? response = default;
 
-        public async Task<ReprocessorOrExporterRegistrationFeesResponseDto> CalculateFeesAsync(ReprocessorOrExporterRegistrationFeesRequestDto request, CancellationToken cancellationToken)
-        {
-            ValidateRequest(request);
-            var response = new ReprocessorOrExporterRegistrationFeesResponseDto
+            var regulator = RegulatorType.Create(request.Regulator);
+            
+            var registrationFeeEntity = await feeRepository.GetFeeAsync((int)request.RequestorType, (int)request.MaterialType, regulator, request.SubmissionDate, cancellationToken);
+            if (registrationFeeEntity is null)
             {
-                MaterialType = request.MaterialType
+                return response;
+            }
+
+            response = new()
+            {
+                MaterialType = request.MaterialType,
+                RegistrationFee = registrationFeeEntity.Amount
             };
 
-            response.RegistrationFee = await _feeCalculationStrategy.CalculateFeeAsync(request, cancellationToken);
+            if (!string.IsNullOrWhiteSpace(request.ApplicationReferenceNumber))
+            {
+                var payment = await paymentsRepository.GetPreviousPaymentIncludeChildrenByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
+                if (payment is null)
+                {
+                    return response;
+                }
+
+                response.PreviousPaymentDetail = new()
+                {
+                    PaymentAmount = payment.Amount
+                };
+
+                if (payment.OfflinePayment is not null)
+                {
+                    response.PreviousPaymentDetail.PaymentMode = PaymentTypes.Offline.GetDescription();
+                    response.PreviousPaymentDetail.PaymentDate = payment.OfflinePayment.PaymentDate.GetValueOrDefault();
+                    response.PreviousPaymentDetail.PaymentMethod = payment.OfflinePayment.PaymentMethod;
+                }
+                else if (payment.OnlinePayment is not null)
+                {
+                    response.PreviousPaymentDetail.PaymentMode = PaymentTypes.Online.GetDescription();
+                    response.PreviousPaymentDetail.PaymentDate = payment.UpdatedDate;
+                }
+            }
 
             return response;
-        }
-
-        private void ValidateRequest(ReprocessorOrExporterRegistrationFeesRequestDto request)
-        {
-            var validationResult = _validator.Validate(request);
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors);
-            }
         }
     }
 }

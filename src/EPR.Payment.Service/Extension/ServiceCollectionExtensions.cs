@@ -17,13 +17,16 @@ using EPR.Payment.Service.Services.Interfaces.AccreditationFees;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ReprocessorOrExporter;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.Producer;
 using EPR.Payment.Service.Services.Payments;
 using EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.RegistrationFees.Producer;
+using EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter;
 using EPR.Payment.Service.Services.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Services.ResubmissionFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.Common;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
@@ -34,6 +37,7 @@ using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
 using EPR.Payment.Service.Strategies.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.ResubmissionFees.Producer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Extension
@@ -67,6 +71,7 @@ namespace EPR.Payment.Service.Extension
             services.AddTransient<IOfflinePaymentsRepository, OfflinePaymentsRepository>();
             services.AddTransient<IPaymentsRepository, PaymentsRepository>();
             services.AddTransient<IAccreditationFeesRepository, AccreditationFeesRepository>();
+            services.AddScoped<IReprocessorOrExporterFeeRepository, ReprocessorOrExporterFeeRepository>();
 
             // Register the main services
             services.AddScoped<IProducerFeesCalculatorService, ProducerFeesCalculatorService>();
@@ -77,6 +82,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IOfflinePaymentsService, OfflinePaymentsService>();
             services.AddScoped<IPaymentsService, PaymentsService>();
             services.AddScoped<IAccreditationFeesCalculatorService, AccreditationFeesCalculatorService>();
+            services.AddScoped<IReprocessorOrExporterFeesCalculatorService, ReprocessorOrExporterFeesCalculatorService>();
 
             services.AddScoped<FeesKeyValueStore>();
 
