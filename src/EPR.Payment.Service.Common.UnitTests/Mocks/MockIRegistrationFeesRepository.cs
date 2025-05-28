@@ -1,4 +1,5 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
+using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using Moq;
 using System.Data.Entity;
@@ -246,7 +247,32 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 Amount = 43000m, // The fee for resubmission, represented in pence
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
-            }
+            },
+
+            // Exporters
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Id = 1, Type = "Exporters", Description = "Exporters" },
+                GroupId = (int)Group.Exporters,
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Id = (int)SubGroup.Aluminium, Type = "Aluminium", Description = "Aluminium" },
+                SubGroupId = (int)SubGroup.Aluminium,
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 2921, // The fee for resubmission, represented in pence
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
+                EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
+            },
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Id = (int)Group.Exporters, Type = "Exporters", Description = "Exporters" },
+                GroupId = (int)Group.Exporters,
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Id = (int)SubGroup.Glass, Type = "Glass", Description = "Glass" },
+                SubGroupId = (int)SubGroup.Glass,
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 2921, // The fee for resubmission, represented in pence
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
+                EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
+            },
+
 
         }.AsQueryable();
 
