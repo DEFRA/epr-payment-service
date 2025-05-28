@@ -6,6 +6,7 @@
         public const string RegulatorTypeInvalid = "Invalid regulator type: {0}.";
         public const string RegulatorCannotBeNullOrEmpty = "Regulator cannot be null or empty.";
         public const string FeeCalculationError = "An error occurred while calculating fees.";
+        public const string FeeErrorNotFoundError = "Fee for {0} not found.";
         public const string InvalidRegulatorError = "Base fee for compliance scheme with regulator '{0}' not found.";
     }
 }

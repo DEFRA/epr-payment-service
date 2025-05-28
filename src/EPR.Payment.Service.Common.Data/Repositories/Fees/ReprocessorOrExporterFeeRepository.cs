@@ -1,5 +1,4 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
-using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.Enums;
@@ -20,7 +19,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Fees
         public Task<decimal> GetBaseFeeAsync(RequestorType requestorType, MaterialType materialType, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
             var fee = GetFeeAsync(requestorType, materialType, regulator, submissionDate, cancellationToken);
-            ValidateFee(fee.Result, ReprocessorOrExporterFeesCalculationExceptions.InvalidFeeError);
+            ValidateFee(fee.Result, string.Format(ReprocessorOrExporterFeesCalculationExceptions.FeeErrorNotFoundError, requestorType.ToString()));
             return fee;
         }
 
