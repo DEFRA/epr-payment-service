@@ -3,7 +3,6 @@ using EPR.Payment.Service.Common.Constants.AccreditationFees.Exceptions;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
 using EPR.Payment.Service.Common.Dtos.Response.AccreditationFees;
-using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.Producer;
 using EPR.Payment.Service.Services.Interfaces.AccreditationFees;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +15,12 @@ namespace EPR.Payment.Service.Controllers.AccreditationFees
     [ApiController]
     [Route("api/v{version:apiVersion}/reprocessorexporter")]
     [FeatureGate("EnableReprocessorExporterAccreditationFeesFeature")]
-    public class ReprocessorExporterController(
+    public class ReprocessorExporterAccreditationFeesController(
         IAccreditationFeesCalculatorService accreditationFeesCalculatorService,
         IValidator<AccreditationFeesRequestDto> validator) : ControllerBase
     {
         [HttpPost("accreditation-fee")]
-        [ProducesResponseType(typeof(ProducerResubmissionFeeResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AccreditationFeesResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(

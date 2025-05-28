@@ -3,6 +3,7 @@ using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
 using EPR.Payment.Service.Common.Dtos.Response.AccreditationFees;
+using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.Extensions;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -54,7 +55,7 @@ namespace EPR.Payment.Service.Services.AccreditationFees
 
                     if (payment is not null)
                     {
-                        AccreditationFeesPreviousPayment previousPayment = new()
+                        PreviousPaymentDetailResponseDto previousPayment = new()
                         {
                             PaymentAmount = payment.Amount
                         };

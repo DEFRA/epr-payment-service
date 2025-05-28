@@ -1,9 +1,7 @@
-﻿using System.Threading;
-using AutoFixture;
+﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
-using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Common.Dtos.Response.AccreditationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.AccreditationFees;
@@ -19,19 +17,19 @@ using Moq;
 namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
 {
     [TestClass]
-    public class ReprocessorExporterControllerTests
+    public class ReprocessorExporterAccreditationFeesControllerTests
     {
         private IFixture _fixture = null!;
         private readonly Mock<IAccreditationFeesCalculatorService> _accreditationFeesCalculatorServiceMock = new();
         private readonly Mock<IValidator<AccreditationFeesRequestDto>> _accreditationFeesRequestDtoMock = new();
-        private ReprocessorExporterController? _reprocessorExporterControllerUnderTest;
+        private ReprocessorExporterAccreditationFeesController? _reprocessorExporterAccreditationFeesControllerUnderTest;
         private CancellationToken _cancellationToken;
 
         [TestInitialize]
         public void Setup()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _reprocessorExporterControllerUnderTest = new ReprocessorExporterController(
+            _reprocessorExporterAccreditationFeesControllerUnderTest = new ReprocessorExporterAccreditationFeesController(
                 _accreditationFeesCalculatorServiceMock.Object,
                 _accreditationFeesRequestDtoMock.Object);
             _cancellationToken = new CancellationToken();
@@ -54,7 +52,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
                 .Returns(new ValidationResult(validationFailures));
 
             // Act
-            IActionResult result = await _reprocessorExporterControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
+            IActionResult result = await _reprocessorExporterAccreditationFeesControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
 
             // Assert
             using (new AssertionScope())
@@ -83,7 +81,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
                 .ReturnsAsync(response);
 
             //Act
-            IActionResult result = await _reprocessorExporterControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
+            IActionResult result = await _reprocessorExporterAccreditationFeesControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
 
             // Assert
             using (new AssertionScope())
@@ -111,7 +109,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
                 .ReturnsAsync(response);
 
             //Act
-            IActionResult result = await _reprocessorExporterControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
+            IActionResult result = await _reprocessorExporterAccreditationFeesControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
 
             // Assert
             using (new AssertionScope())
@@ -139,7 +137,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
                 .ThrowsAsync(new Exception("Error"));
 
             //Act
-            IActionResult result = await _reprocessorExporterControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
+            IActionResult result = await _reprocessorExporterAccreditationFeesControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
 
             // Assert
             using (new AssertionScope())
