@@ -1,10 +1,11 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ReprocessorOrExporter;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter;
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.Extensions;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -16,7 +17,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
     public class ReprocessorOrExporterFeesCalculatorServiceTests
     {
         private readonly Mock<IReprocessorOrExporterFeeRepository> _reprocessorOrExporterFeeRepositoryMock = new();
-        private readonly Mock<IPaymentsRepository> _paymentsRepositoryMock = new();
+        private readonly Mock<IPreviousPaymentsHelper> _previousPaymentsHelperMock = new();
 
         private ReprocessorOrExporterFeesCalculatorService? _reprocessorOrExporterFeeCalculatorServiceUnderTest = null!;
 
@@ -25,7 +26,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
         {
             _reprocessorOrExporterFeeCalculatorServiceUnderTest = new ReprocessorOrExporterFeesCalculatorService(
                 _reprocessorOrExporterFeeRepositoryMock.Object,
-                _paymentsRepositoryMock.Object);
+                _previousPaymentsHelperMock.Object);
         }
 
         [TestMethod]
@@ -74,8 +75,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                     cancellationTokenSource.Token),
                     Times.Once());
 
-                _paymentsRepositoryMock.Verify(r =>
-                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
+                _previousPaymentsHelperMock.Verify(r =>
+                    r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
                         It.IsAny<string>(),
                         cancellationTokenSource.Token),
                         Times.Never());
@@ -138,8 +139,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                         cancellationTokenSource.Token),
                     Times.Once());
 
-                _paymentsRepositoryMock.Verify(r =>
-                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
+                _previousPaymentsHelperMock.Verify(r =>
+                    r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
                         It.IsAny<string>(),
                         cancellationTokenSource.Token),
                         Times.Never());
@@ -171,7 +172,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                 EffectiveTo = DateTime.UtcNow.AddDays(1),
             };
 
-            Common.Data.DataModels.Payment? paymentEntity = null;
+            PreviousPaymentDetailDto? previousPayment = null;
 
             //Setup
             _reprocessorOrExporterFeeRepositoryMock.Setup(r =>
@@ -183,11 +184,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                     cancellationTokenSource.Token))
                 .ReturnsAsync(registrationFeeEntity);
 
-            _paymentsRepositoryMock.Setup(r =>
-                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
+            _previousPaymentsHelperMock.Setup(r =>
+                r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
                         request.ApplicationReferenceNumber,
                         cancellationTokenSource.Token))
-                .ReturnsAsync(paymentEntity);
+                .ReturnsAsync(previousPayment);
 
             // Act
             var response = await _reprocessorOrExporterFeeCalculatorServiceUnderTest!.CalculateFeesAsync(
@@ -212,8 +213,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                         cancellationTokenSource.Token),
                     Times.Once());
 
-                _paymentsRepositoryMock.Verify(r =>
-                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
+                _previousPaymentsHelperMock.Verify(r =>
+                    r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
                         request.ApplicationReferenceNumber,
                         cancellationTokenSource.Token),
                         Times.Once());
@@ -221,7 +222,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
         }
 
         [TestMethod]
-        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithOfflincePreviousPayment()
+        public async Task CalculateFeesAsync_ShouldCallHelperAndReturnResponse()
         {
             // Arrange
             var request = new ReprocessorOrExporterRegistrationFeesRequestDto
@@ -245,27 +246,12 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                 EffectiveTo = DateTime.UtcNow.AddDays(1),
             };
 
-            var paymentEntity = new Common.Data.DataModels.Payment
+            PreviousPaymentDetailDto? previousPayment = new()
             {
-                Id = 1,
-                UserId = Guid.NewGuid(),
-                ExternalPaymentId = Guid.NewGuid(),
-                InternalStatusId = Common.Data.Enums.Status.Success,
-                Regulator = RegulatorConstants.GBENG,
-                Reference = request.ApplicationReferenceNumber,
-                Amount = 200,
-                ReasonForPayment = "Registration Fees",
-                CreatedDate = DateTime.UtcNow.AddDays(-1),
-                UpdatedByUserId = Guid.NewGuid(),
-                UpdatedDate = DateTime.UtcNow.AddDays(-1),
-                OfflinePayment = new()
-                {
-                    Id = 11,
-                    PaymentId = 1,
-                    PaymentDate = DateTime.UtcNow.AddDays(-1),
-                    Comments = "Registration Fees Payment",
-                    PaymentMethod = "Bank Transfer",
-                }
+                PaymentMode = PaymentTypes.Offline.GetDescription(),
+                PaymentAmount = 200,
+                PaymentDate = DateTime.UtcNow.AddDays(-1),
+                PaymentMethod = "Cheque"
             };
 
             //Setup
@@ -278,11 +264,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                     cancellationTokenSource.Token))
                 .ReturnsAsync(registrationFeeEntity);
 
-            _paymentsRepositoryMock.Setup(r =>
-                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
+            _previousPaymentsHelperMock.Setup(r =>
+                r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
                         request.ApplicationReferenceNumber,
                         cancellationTokenSource.Token))
-                .ReturnsAsync(paymentEntity);
+                .ReturnsAsync(previousPayment);
 
             // Act
             var response = await _reprocessorOrExporterFeeCalculatorServiceUnderTest!.CalculateFeesAsync(
@@ -296,11 +282,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                 response!.RegistrationFee.Should().Be(registrationFeeEntity.Amount);
                 response!.MaterialType.Should().Be((MaterialTypes)registrationFeeEntity.SubGroupId);
 
-                response!.PreviousPaymentDetail.Should().NotBeNull();
-                response.PreviousPaymentDetail!.PaymentMode.Should().Be(PaymentTypes.Offline.GetDescription());
-                response.PreviousPaymentDetail!.PaymentAmount.Should().Be(paymentEntity.Amount);
-                response.PreviousPaymentDetail!.PaymentDate.Should().Be(paymentEntity.OfflinePayment.PaymentDate);
-                response.PreviousPaymentDetail!.PaymentMethod.Should().Be(paymentEntity.OfflinePayment.PaymentMethod);
+                response!.PreviousPaymentDetail.Should().Be(previousPayment);
 
                 // Verify
                 _reprocessorOrExporterFeeRepositoryMock.Verify(r =>
@@ -312,105 +294,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                         cancellationTokenSource.Token),
                     Times.Once());
 
-                _paymentsRepositoryMock.Verify(r =>
-                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
-                        request.ApplicationReferenceNumber,
-                        cancellationTokenSource.Token),
-                        Times.Once());
-            }
-        }
-
-        [TestMethod]
-        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithOnlinePreviousPayment()
-        {
-            // Arrange
-            var request = new ReprocessorOrExporterRegistrationFeesRequestDto
-            {
-                Regulator = RegulatorConstants.GBENG,
-                MaterialType = MaterialTypes.Plastic,
-                RequestorType = RequestorTypes.Exporters,
-                SubmissionDate = DateTime.UtcNow,
-                ApplicationReferenceNumber = Guid.NewGuid().ToString()
-            };
-            using CancellationTokenSource cancellationTokenSource = new();
-
-            var registrationFeeEntity = new Common.Data.DataModels.Lookups.RegistrationFees
-            {
-                Id = 1,
-                RegulatorId = 1,
-                GroupId = (int)Group.Exporters,
-                SubGroupId = (int)SubGroup.Plastic,
-                Amount = 100,
-                EffectiveFrom = DateTime.UtcNow.AddDays(-1),
-                EffectiveTo = DateTime.UtcNow.AddDays(1),
-            };
-
-            var paymentEntity = new Common.Data.DataModels.Payment
-            {
-                Id = 1,
-                UserId = Guid.NewGuid(),
-                ExternalPaymentId = Guid.NewGuid(),
-                InternalStatusId = Common.Data.Enums.Status.Success,
-                Regulator = RegulatorConstants.GBENG,
-                Reference = request.ApplicationReferenceNumber,
-                Amount = 200,
-                ReasonForPayment = "Registration Fees",
-                CreatedDate = DateTime.UtcNow.AddDays(-1),
-                UpdatedByUserId = Guid.NewGuid(),
-                UpdatedDate = DateTime.UtcNow.AddDays(-1),
-                OnlinePayment = new()
-                {
-                    Id = 11,
-                    PaymentId = 1,
-                }
-            };
-
-            //Setup
-            _reprocessorOrExporterFeeRepositoryMock.Setup(r =>
-                r.GetFeeAsync(
-                    (int)request.RequestorType,
-                    (int)request.MaterialType,
-                    It.IsAny<RegulatorType>(),
-                    request.SubmissionDate,
-                    cancellationTokenSource.Token))
-                .ReturnsAsync(registrationFeeEntity);
-
-            _paymentsRepositoryMock.Setup(r =>
-                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
-                        request.ApplicationReferenceNumber,
-                        cancellationTokenSource.Token))
-                .ReturnsAsync(paymentEntity);
-
-            // Act
-            var response = await _reprocessorOrExporterFeeCalculatorServiceUnderTest!.CalculateFeesAsync(
-                request,
-                cancellationTokenSource.Token);
-
-            // Assert
-            using (new AssertionScope())
-            {
-                response.Should().NotBeNull();
-                response!.RegistrationFee.Should().Be(registrationFeeEntity.Amount);
-                response!.MaterialType.Should().Be((MaterialTypes)registrationFeeEntity.SubGroupId);
-
-                response.PreviousPaymentDetail.Should().NotBeNull();
-                response.PreviousPaymentDetail!.PaymentMode.Should().Be(PaymentTypes.Online.GetDescription());
-                response.PreviousPaymentDetail!.PaymentAmount.Should().Be(paymentEntity.Amount);
-                response.PreviousPaymentDetail!.PaymentDate.Should().Be(paymentEntity.UpdatedDate);
-                response.PreviousPaymentDetail!.PaymentMethod.Should().BeNullOrEmpty();
-
-                // Verify
-                _reprocessorOrExporterFeeRepositoryMock.Verify(r =>
-                    r.GetFeeAsync(
-                        (int)request.RequestorType,
-                        (int)request.MaterialType,
-                        It.IsAny<RegulatorType>(),
-                        request.SubmissionDate,
-                        cancellationTokenSource.Token),
-                    Times.Once());
-
-                _paymentsRepositoryMock.Verify(r =>
-                    r.GetPreviousPaymentIncludeChildrenByReferenceAsync(
+                _previousPaymentsHelperMock.Verify(r =>
+                    r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
                         request.ApplicationReferenceNumber,
                         cancellationTokenSource.Token),
                         Times.Once());

@@ -1,16 +1,15 @@
 ﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ReprocessorOrExporter;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter;
-using EPR.Payment.Service.Common.Enums;
-using EPR.Payment.Service.Common.Extensions;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ReprocessorOrExporter;
+
 namespace EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter
 {
     public class ReprocessorOrExporterFeesCalculatorService(
         IReprocessorOrExporterFeeRepository feeRepository,
-        IPaymentsRepository paymentsRepository) : IReprocessorOrExporterFeesCalculatorService
+        IPreviousPaymentsHelper previousPaymentsHelper) : IReprocessorOrExporterFeesCalculatorService
     {
         public async Task<ReprocessorOrExporterRegistrationFeesResponseDto?> CalculateFeesAsync(ReprocessorOrExporterRegistrationFeesRequestDto request, CancellationToken cancellationToken)
         {
@@ -32,28 +31,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter
 
             if (!string.IsNullOrWhiteSpace(request.ApplicationReferenceNumber))
             {
-                var payment = await paymentsRepository.GetPreviousPaymentIncludeChildrenByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
-                if (payment is null)
-                {
-                    return response;
-                }
-
-                response.PreviousPaymentDetail = new()
-                {
-                    PaymentAmount = payment.Amount
-                };
-
-                if (payment.OfflinePayment is not null)
-                {
-                    response.PreviousPaymentDetail.PaymentMode = PaymentTypes.Offline.GetDescription();
-                    response.PreviousPaymentDetail.PaymentDate = payment.OfflinePayment.PaymentDate.GetValueOrDefault();
-                    response.PreviousPaymentDetail.PaymentMethod = payment.OfflinePayment.PaymentMethod;
-                }
-                else if (payment.OnlinePayment is not null)
-                {
-                    response.PreviousPaymentDetail.PaymentMode = PaymentTypes.Online.GetDescription();
-                    response.PreviousPaymentDetail.PaymentDate = payment.UpdatedDate;
-                }
+                response.PreviousPaymentDetail = await previousPaymentsHelper.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(request.ApplicationReferenceNumber, cancellationToken);
             }
 
             return response;

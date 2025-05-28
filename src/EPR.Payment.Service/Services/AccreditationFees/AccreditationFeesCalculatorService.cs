@@ -8,19 +8,20 @@ using EPR.Payment.Service.Common.Extensions;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.Services.Interfaces.AccreditationFees;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 
 namespace EPR.Payment.Service.Services.AccreditationFees
 {
     public class AccreditationFeesCalculatorService(
         IAccreditationFeesRepository accreditationFeesRepository,
-        IPaymentsRepository paymentsRepository) : IAccreditationFeesCalculatorService
+        IPreviousPaymentsHelper previousPaymentsHelper) : IAccreditationFeesCalculatorService
     {   
         public async Task<AccreditationFeesResponseDto?> CalculateFeesAsync(
             AccreditationFeesRequestDto request,
             CancellationToken cancellationToken)
         {
             AccreditationFeesResponseDto? response = null;
-            RegulatorType regulatorType = RegulatorType.Create(request.Regulator);
+            RegulatorType regulatorType = RegulatorType.Create(request.Regulator!);
 
             (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(request.TonnageBand);
 
@@ -50,32 +51,10 @@ namespace EPR.Payment.Service.Services.AccreditationFees
 
                 if (!string.IsNullOrWhiteSpace(request.ApplicationReferenceNumber))
                 {
-                    Common.Data.DataModels.Payment? payment = await paymentsRepository.GetPreviousPaymentIncludeChildrenByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
-
-                    if (payment is not null)
-                    {
-                        AccreditationFeesPreviousPayment previousPayment = new()
-                        {
-                            PaymentAmount = payment.Amount
-                        };
-
-                        if (payment.OfflinePayment is not null)
-                        {
-                            previousPayment.PaymentMode = PaymentTypes.Offline.GetDescription();
-                            previousPayment.PaymentDate = payment.OfflinePayment.PaymentDate.GetValueOrDefault();
-                            previousPayment.PaymentMethod = payment.OfflinePayment.PaymentMethod;
-                        }
-                        else if (payment.OnlinePayment is not null)
-                        {
-                            previousPayment.PaymentMode = PaymentTypes.Online.GetDescription();
-                            previousPayment.PaymentDate = payment.UpdatedDate;
-                        }
-
-                        response.PreviousPaymentDetail = previousPayment;
-                    }
+                    response.PreviousPaymentDetail = await previousPaymentsHelper.GetPreviousPaymentAsync<AccreditationFeesPreviousPayment>(
+                        request.ApplicationReferenceNumber,
+                        cancellationToken);
                 }
-
-                return response;
             }          
 
             return response;

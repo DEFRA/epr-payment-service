@@ -81,6 +81,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IOnlinePaymentsService, OnlinePaymentsService>();
             services.AddScoped<IOfflinePaymentsService, OfflinePaymentsService>();
             services.AddScoped<IPaymentsService, PaymentsService>();
+            services.AddScoped<IPreviousPaymentsHelper, PreviousPaymentsHelper>();
             services.AddScoped<IAccreditationFeesCalculatorService, AccreditationFeesCalculatorService>();
             services.AddScoped<IReprocessorOrExporterFeesCalculatorService, ReprocessorOrExporterFeesCalculatorService>();
 
