@@ -20,7 +20,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test 1 Regulator",
                     Reference = "Test 1 Reference",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 10.0M,
                     ReasonForPayment = "Test 1",
                     CreatedDate = new DateTime(),
@@ -41,7 +41,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test 2 Regulator",
                     Reference = "Test 2 Reference",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 10.0M,
                     ReasonForPayment = "Test 2",
                     CreatedDate = new DateTime(),
@@ -61,7 +61,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 30.0M,
                     ReasonForPayment = "Test",
                     CreatedDate = new DateTime(),
@@ -81,7 +81,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 20.0M,
                     ReasonForPayment = "Test",
                     CreatedDate = new DateTime(),
@@ -102,7 +102,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator For Negative",
                     Reference = "Test Reference For Negative",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = -10.0M,
                     ReasonForPayment = "Test 1",
                     CreatedDate = new DateTime(),
@@ -123,7 +123,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator For Negative",
                     Reference = "Test Reference For Negative",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 50.0M,
                     ReasonForPayment = "Test 2",
                     CreatedDate = new DateTime(),
@@ -143,7 +143,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator For Negative",
                     Reference = "Test Reference For Negative",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 100.0M,
                     ReasonForPayment = "Test 2",
                     CreatedDate = new DateTime(),
@@ -163,7 +163,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference",
-                    InternalStatusId = Data.Enums.Status.Initiated,
+                    InternalStatusId = Enums.Status.Initiated,
                     Amount = 30.0M,
                     ReasonForPayment = "Test",
                     CreatedDate = new DateTime(),
@@ -183,7 +183,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference",
-                    InternalStatusId = Data.Enums.Status.Initiated,
+                    InternalStatusId = Enums.Status.Initiated,
                     Amount = 20.0M,
                     ReasonForPayment = "Test",
                     CreatedDate = new DateTime(),
@@ -221,17 +221,17 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
             {
                 new Data.DataModels.Lookups.PaymentStatus()
                 {
-                    Id = Data.Enums.Status.Initiated,
+                    Id = Enums.Status.Initiated,
                     Status = "Initiated"
                 },
                new Data.DataModels.Lookups.PaymentStatus()
                 {
-                    Id = Data.Enums.Status.InProgress,
+                    Id = Enums.Status.InProgress,
                     Status = "InProgress"
                 },
                new Data.DataModels.Lookups.PaymentStatus()
                 {
-                    Id = Data.Enums.Status.Success,
+                    Id = Enums.Status.Success,
                     Status = "Success"
                 }
             }.AsQueryable();

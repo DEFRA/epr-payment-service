@@ -42,8 +42,4 @@
 		</SonarQubeSetting>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Services\RegistrationFees\" />
-	</ItemGroup>
-
 </Project>

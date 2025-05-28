@@ -2,7 +2,6 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using EPR.Payment.Service.Common.Data.DataModels.Lookups;
-using EPR.Payment.Service.Common.Data.Enums;
 
 namespace EPR.Payment.Service.Common.Data.SeedData
 {

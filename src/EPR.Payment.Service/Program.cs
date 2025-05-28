@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Asp.Versioning;
 using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Extension;
@@ -20,7 +22,8 @@ if (builder.Environment.IsDevelopment())
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
 
 builder.Services.AddFluentValidation(fv =>
 {
