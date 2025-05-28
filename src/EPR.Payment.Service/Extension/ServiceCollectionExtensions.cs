@@ -26,7 +26,6 @@ using EPR.Payment.Service.Services.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter;
 using EPR.Payment.Service.Services.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Services.ResubmissionFees.Producer;
-using EPR.Payment.Service.Strategies.Interfaces.Common;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
@@ -37,7 +36,6 @@ using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
 using EPR.Payment.Service.Strategies.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.ResubmissionFees.Producer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
 using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Extension
