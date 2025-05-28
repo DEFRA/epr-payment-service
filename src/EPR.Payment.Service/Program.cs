@@ -5,12 +5,14 @@ using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Extension;
 using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;
+using EPR.Payment.Service.Validations.AccreditationFees;
 using EPR.Payment.Service.Validations.Payments;
 using EPR.Payment.Service.Validations.RegistrationFees.Producer;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,12 +25,12 @@ if (builder.Environment.IsDevelopment())
 // Add services to the container.
 
 builder.Services.AddControllers()
-    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
+    .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 
 builder.Services.AddFluentValidation(fv =>
 {
     fv.RegisterValidatorsFromAssemblyContaining<OnlinePaymentInsertRequestDtoValidator>();
-    fv.RegisterValidatorsFromAssemblyContaining<ProducerRegistrationFeesRequestDtoValidator>();
+    fv.RegisterValidatorsFromAssemblyContaining<ProducerRegistrationFeesRequestDtoValidator>();    
     fv.AutomaticValidationEnabled = false;
 });
 
@@ -38,6 +40,7 @@ builder.Services.AddSwaggerGen(setupAction =>
 {
     setupAction.EnableAnnotations();
     setupAction.SwaggerDoc("v1", new OpenApiInfo { Title = "PaymentServiceApi", Version = "v1" });
+    setupAction.SwaggerDoc("v2", new OpenApiInfo { Title = "PaymentServiceApi", Version = "v2" });
     setupAction.DocumentFilter<FeatureEnabledDocumentFilter>();
     setupAction.OperationFilter<FeatureGateOperationFilter>();
 });
@@ -128,6 +131,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "PaymentServiceApi v1");
+    c.SwaggerEndpoint("/swagger/v2/swagger.json", "PaymentServiceApi v2");
     c.RoutePrefix = "swagger";
 });
 
