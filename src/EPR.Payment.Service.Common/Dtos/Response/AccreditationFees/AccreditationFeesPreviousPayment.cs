@@ -1,13 +1,8 @@
-﻿namespace EPR.Payment.Service.Common.Dtos.Response.AccreditationFees
-{
-    public class AccreditationFeesPreviousPayment
-    {
-        public string? PaymentMode { get; set; } // "offline" or "online"
+﻿using EPR.Payment.Service.Common.Dtos.Response.Common;
 
-        public string? PaymentMethod { get; set; } 
-        
-        public decimal PaymentAmount { get; set; }
-        
-        public DateTime? PaymentDate { get; set; }
+namespace EPR.Payment.Service.Common.Dtos.Response.AccreditationFees
+{
+    public class AccreditationFeesPreviousPayment : BasePreviousPaymentDetailDto
+    {
     }
 }
