@@ -42,8 +42,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
             // Arrange
             var validationFailures = new List<ValidationFailure>
             {
-                new ValidationFailure("Reference", "Reference is required"),
-                new ValidationFailure("Regulator", "Regulator is required")
+                new("RequestorType", "RequestorType is required"),
+                new("Regulator", "Regulator is required")
             };
 
 
@@ -59,7 +59,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
             {
                 var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Which;
                 var problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
-                problemDetails.Detail.Should().Be("Reference is required; Regulator is required");
+                problemDetails.Detail.Should().Be("RequestorType is required; Regulator is required");
 
                 // Verify
                 _accreditationFeesRequestDtoMock.Verify(v => v.Validate(request), Times.Once());
@@ -89,6 +89,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
                 var okObjectResult = result.Should().BeOfType<OkObjectResult>().Which;
                 var accreditationFeesResponseDto = okObjectResult.Value.Should().BeOfType<AccreditationFeesResponseDto>().Which;
                 accreditationFeesResponseDto.Should().BeEquivalentTo(response);
+                
                 // Verify
                 _accreditationFeesRequestDtoMock.Verify(v => v.Validate(request), Times.Once());
                 _accreditationFeesCalculatorServiceMock.Verify(v => v.CalculateFeesAsync(request, _cancellationToken), Times.Once());
@@ -144,7 +145,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
             {
                 var objectResult = result.Should().BeOfType<ObjectResult>().Which;
                 var problemDetails = objectResult.Value.Should().BeOfType<ProblemDetails>().Which;
-                problemDetails.Detail.Should().Be("Internal server error: Error");
+                problemDetails.Detail.Should().Be("An error occurred while calculating accreditation fees.: Error");
 
                 // Verify
                 _accreditationFeesRequestDtoMock.Verify(v => v.Validate(request), Times.Once());

@@ -1,7 +1,7 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ReprocessorOrExporter;
-using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter;
+using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.Extensions;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -76,7 +76,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                     Times.Once());
 
                 _previousPaymentsHelperMock.Verify(r =>
-                    r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
+                    r.GetPreviousPaymentAsync(
                         It.IsAny<string>(),
                         cancellationTokenSource.Token),
                         Times.Never());
@@ -140,7 +140,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                     Times.Once());
 
                 _previousPaymentsHelperMock.Verify(r =>
-                    r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
+                    r.GetPreviousPaymentAsync(
                         It.IsAny<string>(),
                         cancellationTokenSource.Token),
                         Times.Never());
@@ -172,7 +172,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                 EffectiveTo = DateTime.UtcNow.AddDays(1),
             };
 
-            PreviousPaymentDetailDto? previousPayment = null;
+            PreviousPaymentDetailResponseDto? previousPayment = null;
 
             //Setup
             _reprocessorOrExporterFeeRepositoryMock.Setup(r =>
@@ -185,7 +185,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                 .ReturnsAsync(registrationFeeEntity);
 
             _previousPaymentsHelperMock.Setup(r =>
-                r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
+                r.GetPreviousPaymentAsync(
                         request.ApplicationReferenceNumber,
                         cancellationTokenSource.Token))
                 .ReturnsAsync(previousPayment);
@@ -214,7 +214,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                     Times.Once());
 
                 _previousPaymentsHelperMock.Verify(r =>
-                    r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
+                    r.GetPreviousPaymentAsync(
                         request.ApplicationReferenceNumber,
                         cancellationTokenSource.Token),
                         Times.Once());
@@ -246,7 +246,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                 EffectiveTo = DateTime.UtcNow.AddDays(1),
             };
 
-            PreviousPaymentDetailDto? previousPayment = new()
+            PreviousPaymentDetailResponseDto? previousPayment = new()
             {
                 PaymentMode = PaymentTypes.Offline.GetDescription(),
                 PaymentAmount = 200,
@@ -265,7 +265,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                 .ReturnsAsync(registrationFeeEntity);
 
             _previousPaymentsHelperMock.Setup(r =>
-                r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
+                r.GetPreviousPaymentAsync(
                         request.ApplicationReferenceNumber,
                         cancellationTokenSource.Token))
                 .ReturnsAsync(previousPayment);
@@ -295,7 +295,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
                     Times.Once());
 
                 _previousPaymentsHelperMock.Verify(r =>
-                    r.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(
+                    r.GetPreviousPaymentAsync(
                         request.ApplicationReferenceNumber,
                         cancellationTokenSource.Token),
                         Times.Once());

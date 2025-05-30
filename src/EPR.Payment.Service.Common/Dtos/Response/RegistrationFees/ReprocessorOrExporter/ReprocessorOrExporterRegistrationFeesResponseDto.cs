@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Common.Enums;
 
 namespace EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter
@@ -10,6 +11,6 @@ namespace EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ReprocessorO
 
         public required decimal RegistrationFee { get; set; }
 
-        public PreviousPaymentDetailDto? PreviousPaymentDetail { get; set; }
+        public PreviousPaymentDetailResponseDto? PreviousPaymentDetail { get; set; }
     }
 }

@@ -51,7 +51,7 @@ namespace EPR.Payment.Service.Services.AccreditationFees
 
                 if (!string.IsNullOrWhiteSpace(request.ApplicationReferenceNumber))
                 {
-                    response.PreviousPaymentDetail = await previousPaymentsHelper.GetPreviousPaymentAsync<AccreditationFeesPreviousPayment>(
+                    response.PreviousPaymentDetail = await previousPaymentsHelper.GetPreviousPaymentAsync(
                         request.ApplicationReferenceNumber,
                         cancellationToken);
                 }

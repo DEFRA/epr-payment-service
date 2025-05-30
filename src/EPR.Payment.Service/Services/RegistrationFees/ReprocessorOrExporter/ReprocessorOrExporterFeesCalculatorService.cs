@@ -16,8 +16,9 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter
             ReprocessorOrExporterRegistrationFeesResponseDto? response = default;
 
             var regulator = RegulatorType.Create(request.Regulator);
+
+            Common.Data.DataModels.Lookups.RegistrationFees? registrationFeeEntity = await feeRepository.GetFeeAsync((int)request.RequestorType!, (int)request.MaterialType!, regulator, request.SubmissionDate, cancellationToken);
             
-            var registrationFeeEntity = await feeRepository.GetFeeAsync((int)request.RequestorType!, (int)request.MaterialType!, regulator, request.SubmissionDate, cancellationToken);
             if (registrationFeeEntity is null)
             {
                 return response;
@@ -31,7 +32,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter
 
             if (!string.IsNullOrWhiteSpace(request.ApplicationReferenceNumber))
             {
-                response.PreviousPaymentDetail = await previousPaymentsHelper.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(request.ApplicationReferenceNumber, cancellationToken);
+                response.PreviousPaymentDetail = await previousPaymentsHelper.GetPreviousPaymentAsync(request.ApplicationReferenceNumber, cancellationToken);
             }
 
             return response;

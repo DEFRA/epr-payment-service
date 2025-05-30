@@ -3,6 +3,7 @@ using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
 using EPR.Payment.Service.Common.Dtos.Response.AccreditationFees;
+using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.Extensions;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -85,7 +86,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     Times.Once());
 
                 _previousPaymentsHelperMock.Verify(r =>
-                    r.GetPreviousPaymentAsync<AccreditationFeesPreviousPayment>(
+                    r.GetPreviousPaymentAsync(
                         It.IsAny<string>(),
                         cancellationTokenSource.Token),
                         Times.Never());
@@ -164,7 +165,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     Times.Once());
 
                 _previousPaymentsHelperMock.Verify(r =>
-                    r.GetPreviousPaymentAsync<AccreditationFeesPreviousPayment>(
+                    r.GetPreviousPaymentAsync(
                         It.IsAny<string>(),
                         cancellationTokenSource.Token),
                         Times.Never());
@@ -198,8 +199,8 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 EffectiveFrom = DateTime.UtcNow.AddDays(-1),
                 EffectiveTo = DateTime.UtcNow.AddDays(1),
             };
-            
-            AccreditationFeesPreviousPayment? previousPayment = null;
+
+            PreviousPaymentDetailResponseDto? previousPayment = null;
 
             (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
 
@@ -216,7 +217,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 .ReturnsAsync(accreditationFee);
 
             _previousPaymentsHelperMock.Setup(r =>
-                    r.GetPreviousPaymentAsync<AccreditationFeesPreviousPayment>(
+                    r.GetPreviousPaymentAsync(
                         accreditationFeesRequestDto.ApplicationReferenceNumber,
                         cancellationTokenSource.Token))
                 .ReturnsAsync(previousPayment);
@@ -248,7 +249,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     Times.Once());
 
                 _previousPaymentsHelperMock.Verify(r =>
-                    r.GetPreviousPaymentAsync<AccreditationFeesPreviousPayment>(
+                    r.GetPreviousPaymentAsync(
                         accreditationFeesRequestDto.ApplicationReferenceNumber,
                         cancellationTokenSource.Token),
                         Times.Once());
@@ -283,38 +284,14 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 EffectiveTo = DateTime.UtcNow.AddDays(1),
             };
 
-            AccreditationFeesPreviousPayment? previousPayment = new()
+            PreviousPaymentDetailResponseDto? previousPayment = new()
             {
                 PaymentMode = PaymentTypes.Offline.GetDescription(),
                 PaymentAmount = 200,
                 PaymentDate = DateTime.UtcNow.AddDays(-1),
                 PaymentMethod = "Bank Transfer"
             };
-
-            /*
-            Common.Data.DataModels.Payment? payment = new()
-            {
-                Id = 1,
-                UserId = Guid.NewGuid(),
-                ExternalPaymentId = Guid.NewGuid(),
-                InternalStatusId = Common.Data.Enums.Status.Success,
-                Regulator = RegulatorConstants.GBENG,
-                Reference = accreditationFeesRequestDto.ApplicationReferenceNumber,
-                Amount = 200,
-                ReasonForPayment = "Accreditation Fees",
-                CreatedDate = DateTime.UtcNow.AddDays(-1),
-                UpdatedByUserId = Guid.NewGuid(),
-                UpdatedDate = DateTime.UtcNow.AddDays(-1),
-                OfflinePayment = new()
-                {
-                    Id = 11,
-                    PaymentId = 1,
-                    PaymentDate = DateTime.UtcNow.AddDays(-1),
-                    Comments = "Accreditation Fees Payment",
-                    PaymentMethod = "Bank Transfer",
-                }
-            };
-            */
+           
 
             (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
 
@@ -331,7 +308,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 .ReturnsAsync(accreditationFee);
 
             _previousPaymentsHelperMock.Setup(r =>
-                    r.GetPreviousPaymentAsync<AccreditationFeesPreviousPayment>(
+                    r.GetPreviousPaymentAsync(
                         accreditationFeesRequestDto.ApplicationReferenceNumber,
                         cancellationTokenSource.Token))
                 .ReturnsAsync(previousPayment);
@@ -364,7 +341,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     Times.Once());
 
                 _previousPaymentsHelperMock.Verify(r =>
-                    r.GetPreviousPaymentAsync<AccreditationFeesPreviousPayment>(
+                    r.GetPreviousPaymentAsync(
                         accreditationFeesRequestDto.ApplicationReferenceNumber,
                         cancellationTokenSource.Token),
                         Times.Once());
