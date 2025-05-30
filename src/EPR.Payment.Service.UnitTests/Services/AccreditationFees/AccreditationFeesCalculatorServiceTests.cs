@@ -36,7 +36,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnNullResponse_WhenAccreditationFeeRecordNotFound()
         {
             // Arrange
-            AccreditationFeesRequestDto accreditationFeesRequestDto = new()
+            ReprocessorOrExporterAccreditationFeesRequestDto accreditationFeesRequestDto = new()
             {
                 Regulator = RegulatorConstants.GBENG,
                 MaterialType = MaterialTypes.Plastic,
@@ -64,7 +64,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 .ReturnsAsync(accreditationFee);
 
             // Act
-            AccreditationFeesResponseDto? accreditationFeesResponseDto = await _accreditationFeesCalculatorServiceUnderTest!.CalculateFeesAsync(
+            ReprocessorOrExporterAccreditationFeesResponseDto? accreditationFeesResponseDto = await _accreditationFeesCalculatorServiceUnderTest!.CalculateFeesAsync(
                 accreditationFeesRequestDto,
                 cancellationTokenSource.Token);
 
@@ -102,7 +102,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
             TonnageBands tonnageBand)
         {
             // Arrange
-            AccreditationFeesRequestDto accreditationFeesRequestDto = new()
+            ReprocessorOrExporterAccreditationFeesRequestDto accreditationFeesRequestDto = new()
             {
                 Regulator = RegulatorConstants.GBENG,
                 MaterialType = MaterialTypes.Plastic,
@@ -139,7 +139,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 .ReturnsAsync(accreditationFee);
 
             // Act
-            AccreditationFeesResponseDto? accreditationFeesResponseDto = await _accreditationFeesCalculatorServiceUnderTest!.CalculateFeesAsync(
+            ReprocessorOrExporterAccreditationFeesResponseDto? accreditationFeesResponseDto = await _accreditationFeesCalculatorServiceUnderTest!.CalculateFeesAsync(
                 accreditationFeesRequestDto,
                 cancellationTokenSource.Token);
 
@@ -176,7 +176,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPayment_WhenApplicationReferenceNumberIsSuppliedButPaymentRecordNotFound()
         {
             // Arrange
-            AccreditationFeesRequestDto accreditationFeesRequestDto = new()
+            ReprocessorOrExporterAccreditationFeesRequestDto accreditationFeesRequestDto = new()
             {
                 Regulator = RegulatorConstants.GBENG,
                 MaterialType = MaterialTypes.Plastic,
@@ -223,7 +223,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 .ReturnsAsync(previousPayment);
 
             // Act
-            AccreditationFeesResponseDto? accreditationFeesResponseDto = await _accreditationFeesCalculatorServiceUnderTest!.CalculateFeesAsync(
+            ReprocessorOrExporterAccreditationFeesResponseDto? accreditationFeesResponseDto = await _accreditationFeesCalculatorServiceUnderTest!.CalculateFeesAsync(
                 accreditationFeesRequestDto,
                 cancellationTokenSource.Token);
 
@@ -260,7 +260,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         public async Task CalculateFeesAsync_ShouldCallHelperAndReturnResponse()
         {
             // Arrange
-            AccreditationFeesRequestDto accreditationFeesRequestDto = new()
+            ReprocessorOrExporterAccreditationFeesRequestDto accreditationFeesRequestDto = new()
             {
                 Regulator = RegulatorConstants.GBENG,
                 MaterialType = MaterialTypes.Plastic,
@@ -314,7 +314,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 .ReturnsAsync(previousPayment);
 
             // Act
-            AccreditationFeesResponseDto? accreditationFeesResponseDto = await _accreditationFeesCalculatorServiceUnderTest!.CalculateFeesAsync(
+            ReprocessorOrExporterAccreditationFeesResponseDto? accreditationFeesResponseDto = await _accreditationFeesCalculatorServiceUnderTest!.CalculateFeesAsync(
                 accreditationFeesRequestDto,
                 cancellationTokenSource.Token);
 

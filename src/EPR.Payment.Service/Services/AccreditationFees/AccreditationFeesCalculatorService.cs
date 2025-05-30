@@ -16,11 +16,11 @@ namespace EPR.Payment.Service.Services.AccreditationFees
         IAccreditationFeesRepository accreditationFeesRepository,
         IPreviousPaymentsHelper previousPaymentsHelper) : IAccreditationFeesCalculatorService
     {   
-        public async Task<AccreditationFeesResponseDto?> CalculateFeesAsync(
-            AccreditationFeesRequestDto request,
+        public async Task<ReprocessorOrExporterAccreditationFeesResponseDto?> CalculateFeesAsync(
+            ReprocessorOrExporterAccreditationFeesRequestDto request,
             CancellationToken cancellationToken)
         {
-            AccreditationFeesResponseDto? response = null;
+            ReprocessorOrExporterAccreditationFeesResponseDto? response = null;
             RegulatorType regulatorType = RegulatorType.Create(request.Regulator!);
 
             (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(request.TonnageBand);
@@ -42,7 +42,7 @@ namespace EPR.Payment.Service.Services.AccreditationFees
             {
                 decimal totalOverseasSiteFees = request.NumberOfOverseasSites * accreditationFeesEntity.FeesPerSite;
 
-                response = new AccreditationFeesResponseDto
+                response = new ReprocessorOrExporterAccreditationFeesResponseDto
                 {
                     OverseasSiteChargePerSite = accreditationFeesEntity.FeesPerSite,
                     TotalOverseasSitesCharges = totalOverseasSiteFees,

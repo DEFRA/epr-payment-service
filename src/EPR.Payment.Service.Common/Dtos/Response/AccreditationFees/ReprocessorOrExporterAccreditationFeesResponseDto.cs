@@ -2,7 +2,7 @@
 
 namespace EPR.Payment.Service.Common.Dtos.Response.AccreditationFees
 {
-    public class AccreditationFeesResponseDto
+    public class ReprocessorOrExporterAccreditationFeesResponseDto
     {
         public decimal OverseasSiteChargePerSite { get; set; }
 

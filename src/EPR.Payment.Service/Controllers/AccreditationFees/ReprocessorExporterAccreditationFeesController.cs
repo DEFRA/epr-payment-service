@@ -18,7 +18,7 @@ namespace EPR.Payment.Service.Controllers.AccreditationFees
     [FeatureGate("EnableReprocessorExporterAccreditationFeesFeature")]
     public class ReprocessorExporterAccreditationFeesController(
         IAccreditationFeesCalculatorService accreditationFeesCalculatorService,
-        IValidator<AccreditationFeesRequestDto> validator) : ControllerBase
+        IValidator<ReprocessorOrExporterAccreditationFeesRequestDto> validator) : ControllerBase
     {
         [MapToApiVersion(1)]
         [HttpPost("accreditation-fee")]
@@ -30,13 +30,13 @@ namespace EPR.Payment.Service.Controllers.AccreditationFees
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Bad request due to validation errors or invalid input")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "Accreditation fees data not found.")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error occurred while calculating accreditation fees")]
-        [ProducesResponseType(typeof(AccreditationFeesResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ReprocessorOrExporterAccreditationFeesResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableReprocessorExporterAccreditationFeesCalculation")]
         public async Task<IActionResult> GetAccreditationFee(
-            [FromBody] AccreditationFeesRequestDto request,
+            [FromBody] ReprocessorOrExporterAccreditationFeesRequestDto request,
             CancellationToken cancellationToken)
         {
             ValidationResult validationResult = validator.Validate(request);
@@ -53,7 +53,7 @@ namespace EPR.Payment.Service.Controllers.AccreditationFees
 
             try
             {
-                AccreditationFeesResponseDto? response = await accreditationFeesCalculatorService.CalculateFeesAsync(request, cancellationToken);
+                ReprocessorOrExporterAccreditationFeesResponseDto? response = await accreditationFeesCalculatorService.CalculateFeesAsync(request, cancellationToken);
 
                 if(response is null)
                 {

@@ -127,7 +127,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
             {
                 response.Should().NotBeNull();
                 response!.RegistrationFee.Should().Be(registrationFeeEntity.Amount);
-                response!.MaterialType.Should().Be((MaterialTypes)registrationFeeEntity.SubGroupId);
                 
                 // Verify
                 _reprocessorOrExporterFeeRepositoryMock.Verify(r =>
@@ -200,7 +199,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
             {
                 response.Should().NotBeNull();
                 response!.RegistrationFee.Should().Be(registrationFeeEntity.Amount);
-                response!.MaterialType.Should().Be((MaterialTypes)registrationFeeEntity.SubGroupId);
                 response!.PreviousPaymentDetail.Should().BeNull();
 
                 // Verify
@@ -280,8 +278,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ReprocessorOrE
             {
                 response.Should().NotBeNull();
                 response!.RegistrationFee.Should().Be(registrationFeeEntity.Amount);
-                response!.MaterialType.Should().Be((MaterialTypes)registrationFeeEntity.SubGroupId);
-
                 response!.PreviousPaymentDetail.Should().Be(previousPayment);
 
                 // Verify

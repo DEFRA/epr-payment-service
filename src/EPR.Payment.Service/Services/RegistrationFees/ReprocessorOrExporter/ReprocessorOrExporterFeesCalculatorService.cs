@@ -26,7 +26,6 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter
 
             response = new()
             {
-                MaterialType = request.MaterialType,
                 RegistrationFee = registrationFeeEntity.Amount
             };
 
