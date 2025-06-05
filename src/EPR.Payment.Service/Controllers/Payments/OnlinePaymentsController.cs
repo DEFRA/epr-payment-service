@@ -22,7 +22,9 @@ namespace EPR.Payment.Service.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableOnlinePaymentInsert")]
-        public async Task<ActionResult<Guid>> InsertOnlinePayment([FromBody] OnlinePaymentInsertRequestDto onlinePaymentInsertRequest, CancellationToken cancellationToken)
+        public async Task<ActionResult<Guid>> InsertOnlinePayment(
+            [FromBody] OnlinePaymentInsertRequestDto onlinePaymentInsertRequest,
+            CancellationToken cancellationToken)
         {
             var validatorResult = onlinePaymentInsertRequestValidator.Validate(onlinePaymentInsertRequest);
 
