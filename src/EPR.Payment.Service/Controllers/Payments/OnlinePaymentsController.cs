@@ -41,11 +41,11 @@ namespace EPR.Payment.Service.Controllers
 
 
         [ApiExplorerSettings(GroupName = "v2")]
-        [HttpPost("v2/offline-payments")]
+        [HttpPost("v2/online-payments")]
         [ProducesResponseType(typeof(NoContentResult), 204)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [FeatureGate("EnableOfflinePaymentV2")]
+        [FeatureGate("EnableOnlinePaymentInsertV2")]
         public async Task<ActionResult<Guid>> InsertOnlinePaymentV2(
             [FromBody] OnlinePaymentInsertRequestV2Dto onlinePaymentInsertRequest,
             CancellationToken cancellationToken)
