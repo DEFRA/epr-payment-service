@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
-using EPR.Payment.Service.Common.Enums;
+using EPR.Payment.Service.Common.Dtos.Enums;
 
 namespace EPR.Payment.Service.Common.Dtos.Request.Payments
 {
     public class OnlinePaymentInsertRequestV2Dto: OnlinePaymentInsertRequestDto
     {
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public RequestorTypes? RequestorType { get; set; }
+        public OnlinePaymentRequestorTypes? RequestorType { get; set; }
     }
 }

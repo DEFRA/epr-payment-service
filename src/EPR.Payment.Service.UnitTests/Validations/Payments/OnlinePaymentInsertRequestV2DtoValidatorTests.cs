@@ -1,4 +1,5 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Enums;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Validations.Payments;
@@ -20,7 +21,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 ReasonForPayment = "Registration Fees",
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = Service.Common.Enums.RequestorTypes.Reprocessors,
+                RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
                 UserId = Guid.NewGuid(),
             };
 
@@ -39,7 +40,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 ReasonForPayment = "Registration Fees",
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = Service.Common.Enums.RequestorTypes.Reprocessors,
+                RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
                 UserId = Guid.NewGuid(),
             };
 
@@ -58,7 +59,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 ReasonForPayment = string.Empty,
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = Service.Common.Enums.RequestorTypes.Reprocessors,
+                RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
                 UserId = Guid.NewGuid(),
             };
 
@@ -77,7 +78,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 ReasonForPayment = "Registration Fees",
                 Reference = string.Empty, 
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = Service.Common.Enums.RequestorTypes.Reprocessors,
+                RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
                 UserId = Guid.NewGuid(), 
             };
 
@@ -96,7 +97,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 ReasonForPayment = "Registration Fees",
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = null,
-                RequestorType = Service.Common.Enums.RequestorTypes.Reprocessors,
+                RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
                 UserId = Guid.NewGuid(),
             };
 
@@ -134,7 +135,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 ReasonForPayment = "Registration Fees",
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = Service.Common.Enums.RequestorTypes.Reprocessors,
+                RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
                 UserId = null,
             };
 
@@ -153,7 +154,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 ReasonForPayment = "Registration Fees",
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = RegulatorConstants.GBENG,
-                RequestorType = Service.Common.Enums.RequestorTypes.Reprocessors,
+                RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
                 UserId = Guid.NewGuid(),
             };
 
