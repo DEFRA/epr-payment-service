@@ -191,6 +191,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
                 result.UpdatedByOrganisationId.Should().Be(expectedResult.UpdatedByOrganisationId);
                 result.UpdatedByUserId.Should().Be(expectedResult.UpdatedByUserId);
                 result.Description.Should().Be(expectedResult.Description);
+                result.RequestorType.Should().Be(expectedResult.RequestorType);
             }
         }        
     }
