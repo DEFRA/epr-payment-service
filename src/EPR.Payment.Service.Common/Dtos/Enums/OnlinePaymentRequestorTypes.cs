@@ -6,10 +6,6 @@ namespace EPR.Payment.Service.Common.Dtos.Enums
     {
         ProducerType = Group.ProducerType,
         ComplianceScheme = Group.ComplianceScheme,
-        ProducerSubsidiaries = Group.ProducerSubsidiaries,
-        ComplianceSchemeSubsidiaries = Group.ComplianceSchemeSubsidiaries,
-        ProducerResubmission = Group.ProducerResubmission,
-        ComplianceSchemeResubmission = Group.ComplianceSchemeResubmission,
         Exporters = Group.Exporters,
         Reprocessors = Group.Reprocessors,
     }
