@@ -1,9 +1,7 @@
-﻿using System.Threading;
-using AutoFixture;
+﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
-using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Common.Dtos.Response.AccreditationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.AccreditationFees;
@@ -19,19 +17,19 @@ using Moq;
 namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
 {
     [TestClass]
-    public class ReprocessorExporterControllerTests
+    public class ReprocessorExporterAccreditationFeesControllerTests
     {
         private IFixture _fixture = null!;
         private readonly Mock<IAccreditationFeesCalculatorService> _accreditationFeesCalculatorServiceMock = new();
-        private readonly Mock<IValidator<AccreditationFeesRequestDto>> _accreditationFeesRequestDtoMock = new();
-        private ReprocessorExporterController? _reprocessorExporterControllerUnderTest;
+        private readonly Mock<IValidator<ReprocessorOrExporterAccreditationFeesRequestDto>> _accreditationFeesRequestDtoMock = new();
+        private ReprocessorExporterAccreditationFeesController? _reprocessorExporterAccreditationFeesControllerUnderTest;
         private CancellationToken _cancellationToken;
 
         [TestInitialize]
         public void Setup()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _reprocessorExporterControllerUnderTest = new ReprocessorExporterController(
+            _reprocessorExporterAccreditationFeesControllerUnderTest = new ReprocessorExporterAccreditationFeesController(
                 _accreditationFeesCalculatorServiceMock.Object,
                 _accreditationFeesRequestDtoMock.Object);
             _cancellationToken = new CancellationToken();
@@ -39,13 +37,13 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
 
         [TestMethod, AutoMoqData]
         public async Task GetAccreditationFee_RequestValidationFails_ShouldReturnsBadRequestWithValidationErrorDetails(
-            [Frozen] AccreditationFeesRequestDto request)
+            [Frozen] ReprocessorOrExporterAccreditationFeesRequestDto request)
         {
             // Arrange
             var validationFailures = new List<ValidationFailure>
             {
-                new ValidationFailure("Reference", "Reference is required"),
-                new ValidationFailure("Regulator", "Regulator is required")
+                new("RequestorType", "RequestorType is required"),
+                new("Regulator", "Regulator is required")
             };
 
 
@@ -54,14 +52,14 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
                 .Returns(new ValidationResult(validationFailures));
 
             // Act
-            IActionResult result = await _reprocessorExporterControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
+            IActionResult result = await _reprocessorExporterAccreditationFeesControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
 
             // Assert
             using (new AssertionScope())
             {
                 var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Which;
                 var problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
-                problemDetails.Detail.Should().Be("Reference is required; Regulator is required");
+                problemDetails.Detail.Should().Be("RequestorType is required; Regulator is required");
 
                 // Verify
                 _accreditationFeesRequestDtoMock.Verify(v => v.Validate(request), Times.Once());
@@ -73,8 +71,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
         public async Task GetAccreditationFee_ValidInput_ShouldReturnOk_WhenServiceReturnResponseObject()
         {
             // Arrange
-            var request = _fixture.Build<AccreditationFeesRequestDto>().Create();
-            var response = _fixture.Build<AccreditationFeesResponseDto>().Create();
+            var request = _fixture.Build<ReprocessorOrExporterAccreditationFeesRequestDto>().Create();
+            var response = _fixture.Build<ReprocessorOrExporterAccreditationFeesResponseDto>().Create();
 
             // Setup
             _accreditationFeesRequestDtoMock.Setup(v => v.Validate(request))
@@ -83,14 +81,15 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
                 .ReturnsAsync(response);
 
             //Act
-            IActionResult result = await _reprocessorExporterControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
+            IActionResult result = await _reprocessorExporterAccreditationFeesControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
 
             // Assert
             using (new AssertionScope())
             {
                 var okObjectResult = result.Should().BeOfType<OkObjectResult>().Which;
-                var accreditationFeesResponseDto = okObjectResult.Value.Should().BeOfType<AccreditationFeesResponseDto>().Which;
+                var accreditationFeesResponseDto = okObjectResult.Value.Should().BeOfType<ReprocessorOrExporterAccreditationFeesResponseDto>().Which;
                 accreditationFeesResponseDto.Should().BeEquivalentTo(response);
+                
                 // Verify
                 _accreditationFeesRequestDtoMock.Verify(v => v.Validate(request), Times.Once());
                 _accreditationFeesCalculatorServiceMock.Verify(v => v.CalculateFeesAsync(request, _cancellationToken), Times.Once());
@@ -101,8 +100,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
         public async Task GetAccreditationFee_ValidInput_ShouldReturnNotFound_WhenServiceReturnNullResponseObject()
         {
             // Arrange
-            var request = _fixture.Build<AccreditationFeesRequestDto>().Create();
-            AccreditationFeesResponseDto? response = null;
+            var request = _fixture.Build<ReprocessorOrExporterAccreditationFeesRequestDto>().Create();
+            ReprocessorOrExporterAccreditationFeesResponseDto? response = null;
 
             // Setup
             _accreditationFeesRequestDtoMock.Setup(v => v.Validate(request))
@@ -111,7 +110,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
                 .ReturnsAsync(response);
 
             //Act
-            IActionResult result = await _reprocessorExporterControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
+            IActionResult result = await _reprocessorExporterAccreditationFeesControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
 
             // Assert
             using (new AssertionScope())
@@ -130,7 +129,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
         public async Task GetAccreditationFee_ValidInput_ShouldReturnServerError_WhenServiceCallsThrowsException()
         {
             // Arrange
-            var request = _fixture.Build<AccreditationFeesRequestDto>().Create();
+            var request = _fixture.Build<ReprocessorOrExporterAccreditationFeesRequestDto>().Create();
 
             // Setup
             _accreditationFeesRequestDtoMock.Setup(v => v.Validate(request))
@@ -139,14 +138,14 @@ namespace EPR.Payment.Service.UnitTests.Controllers.AccreditationFees
                 .ThrowsAsync(new Exception("Error"));
 
             //Act
-            IActionResult result = await _reprocessorExporterControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
+            IActionResult result = await _reprocessorExporterAccreditationFeesControllerUnderTest!.GetAccreditationFee(request, _cancellationToken);
 
             // Assert
             using (new AssertionScope())
             {
                 var objectResult = result.Should().BeOfType<ObjectResult>().Which;
                 var problemDetails = objectResult.Value.Should().BeOfType<ProblemDetails>().Which;
-                problemDetails.Detail.Should().Be("Internal server error: Error");
+                problemDetails.Detail.Should().Be("An error occurred while calculating accreditation fees.: Error");
 
                 // Verify
                 _accreditationFeesRequestDtoMock.Verify(v => v.Validate(request), Times.Once());

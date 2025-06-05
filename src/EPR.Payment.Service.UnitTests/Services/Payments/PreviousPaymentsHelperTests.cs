@@ -1,8 +1,7 @@
 ﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
-using EPR.Payment.Service.Common.Dtos.Response.AccreditationFees;
-using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ReprocessorOrExporter;
+using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services.Payments;
 using FluentAssertions;
@@ -29,7 +28,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
                 .ReturnsAsync(paymentEntity);
 
             // Act 
-            var result = await subjectUnderTest.GetPreviousPaymentAsync<AccreditationFeesPreviousPayment>(applicationReferenceNumber, CancellationToken.None);
+            PreviousPaymentDetailResponseDto? result = await subjectUnderTest.GetPreviousPaymentAsync(applicationReferenceNumber, CancellationToken.None);
 
             // Assert
             result.Should().BeNull();
@@ -73,7 +72,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
                 .ReturnsAsync(paymentEntity);
 
             // Act 
-            var result = await subjectUnderTest.GetPreviousPaymentAsync<AccreditationFeesPreviousPayment>(applicationReferenceNumber, CancellationToken.None);
+            PreviousPaymentDetailResponseDto? result = await subjectUnderTest.GetPreviousPaymentAsync(applicationReferenceNumber, CancellationToken.None);
 
             // Assert
             result.Should().NotBeNull();
@@ -119,7 +118,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
                 .ReturnsAsync(paymentEntity);
 
             // Act 
-            var result = await subjectUnderTest.GetPreviousPaymentAsync<PreviousPaymentDetailDto>(applicationReferenceNumber, CancellationToken.None);
+            PreviousPaymentDetailResponseDto? result = await subjectUnderTest.GetPreviousPaymentAsync(applicationReferenceNumber, CancellationToken.None);
 
             // Assert
             result.Should().NotBeNull();

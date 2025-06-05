@@ -3215,3 +3215,28 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250515115823_AddingRequestorTypeColumn'
+)
+BEGIN
+    ALTER TABLE [OnlinePayment] ADD [RequestorType] nvarchar(50) NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250515115823_AddingRequestorTypeColumn'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250515115823_AddingRequestorTypeColumn', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+

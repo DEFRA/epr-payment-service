@@ -11,12 +11,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
     [TestClass]
     public class AccreditatonFeesRequestDtoValidatorTests
     {
-        private AccreditationFeesRequestDtoValidator _validator = null!;
+        private ReprocessorOrExporterAccreditationFeesRequestDtoValidator _validator = null!;
 
         [TestInitialize]
         public void Setup()
         {
-            _validator = new AccreditationFeesRequestDtoValidator();
+            _validator = new ReprocessorOrExporterAccreditationFeesRequestDtoValidator();
         }
 
         #region Regulator Tests 
@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_InvalidRegulator_ShouldHaveError()
         {
             // Arrange
-            var request = new AccreditationFeesRequestDto
+            var request = new ReprocessorOrExporterAccreditationFeesRequestDto
             {
                 Regulator = "X",
                 RequestorType = RequestorTypes.Exporters,
@@ -48,7 +48,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_EmptyRegulator_ShouldHaveError()
         {
             // Arrange
-            var request = new AccreditationFeesRequestDto
+            var request = new ReprocessorOrExporterAccreditationFeesRequestDto
             {
                 Regulator = string.Empty,
                 RequestorType = RequestorTypes.Exporters,
@@ -76,7 +76,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             foreach (var regulator in validRegulators)
             {
                 // Arrange
-                var request = new AccreditationFeesRequestDto
+                var request = new ReprocessorOrExporterAccreditationFeesRequestDto
                 {
                     Regulator = regulator,
                     RequestorType = RequestorTypes.Exporters,
@@ -103,7 +103,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_InvalidSubmissionDate_ShouldHaveError()
         {
             // Arrange
-            var request = new AccreditationFeesRequestDto
+            var request = new ReprocessorOrExporterAccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = RequestorTypes.Exporters,
@@ -126,7 +126,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_FutureSubmissionDate_ShouldHaveError()
         {
             // Arrange
-            var request = new AccreditationFeesRequestDto
+            var request = new ReprocessorOrExporterAccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = RequestorTypes.Exporters,
@@ -149,7 +149,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_SubmissionDateNotUtc_ShouldHaveError()
         {
             // Arrange
-            var request = new AccreditationFeesRequestDto
+            var request = new ReprocessorOrExporterAccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = RequestorTypes.Exporters,
@@ -176,7 +176,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_InValidOverseasSiteForReprocessor_ShouldHaveError()
         {
             // Arrange
-            var request = new AccreditationFeesRequestDto
+            var request = new ReprocessorOrExporterAccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = RequestorTypes.Reprocessors,
@@ -199,7 +199,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_InValidOverseasSiteIsZeroForExporter_ShouldHaveError()
         {
             // Arrange
-            var request = new AccreditationFeesRequestDto
+            var request = new ReprocessorOrExporterAccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = RequestorTypes.Exporters,
@@ -221,7 +221,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_InValidOverseasSiteIsTooBigNumberForExporter_ShouldHaveError()
         {
             // Arrange
-            var request = new AccreditationFeesRequestDto
+            var request = new ReprocessorOrExporterAccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = RequestorTypes.Exporters,
@@ -247,7 +247,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_EmptyRequestorType_ShouldHaveError()
         {
             // Arrange
-            var request = new AccreditationFeesRequestDto
+            var request = new ReprocessorOrExporterAccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
                 MaterialType = MaterialTypes.Aluminium,
@@ -273,7 +273,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             foreach (var requestorType in validRequestorTypes)
             {
                 // Arrange
-                var request = new AccreditationFeesRequestDto
+                var request = new ReprocessorOrExporterAccreditationFeesRequestDto
                 {
                     Regulator = RegulatorConstants.GBENG,
                     RequestorType = requestorType,
@@ -300,7 +300,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_EmptyMaterialType_ShouldHaveError()
         {
             // Arrange
-            var request = new AccreditationFeesRequestDto
+            var request = new ReprocessorOrExporterAccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = RequestorTypes.Exporters,              
@@ -330,7 +330,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             foreach (var materialType in validMaterialTypes)
             {
                 // Arrange
-                var request = new AccreditationFeesRequestDto
+                var request = new ReprocessorOrExporterAccreditationFeesRequestDto
                 {
                     Regulator = RegulatorConstants.GBENG,
                     RequestorType = RequestorTypes.Exporters,
@@ -357,7 +357,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_EmptyTonnageBand_ShouldHaveError()
         {
             // Arrange
-            var request = new AccreditationFeesRequestDto
+            var request = new ReprocessorOrExporterAccreditationFeesRequestDto
             {
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = RequestorTypes.Exporters,
@@ -387,7 +387,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             foreach (var tonnageBand in validTonnageBands)
             {
                 // Arrange
-                var request = new AccreditationFeesRequestDto
+                var request = new ReprocessorOrExporterAccreditationFeesRequestDto
                 {
                     Regulator = RegulatorConstants.GBENG,
                     RequestorType = RequestorTypes.Exporters,
@@ -414,7 +414,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         public void Validate_ValidData_ShouldNotHaveError()
         {
             // Arrange
-            var accreditationFeesRequestDtoList = new List<AccreditationFeesRequestDto>
+            var accreditationFeesRequestDtoList = new List<ReprocessorOrExporterAccreditationFeesRequestDto>
             {
                 new ()
                 {
