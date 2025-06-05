@@ -17,5 +17,7 @@
         public const string OnlinePaymentTableName = "OnlinePayment";
 
         public const string OfflinePaymentTableName = "OfflinePayment";
+
+        public const string TonnageBandTableName = "TonnageBand";
     }
 }

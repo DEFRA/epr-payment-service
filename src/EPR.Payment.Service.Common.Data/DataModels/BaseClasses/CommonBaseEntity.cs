@@ -12,6 +12,8 @@ namespace EPR.Payment.Service.Common.Data.DataModels.BaseClasses
 
         #region Navigation properties
         public virtual ICollection<RegistrationFees> RegistrationFees { get; set; } = null!;
+
+        public virtual ICollection<AccreditationFee> AccreditationFeeFees { get; set; } = null!;
         #endregion
     }
 }
