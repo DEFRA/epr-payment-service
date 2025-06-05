@@ -46,6 +46,8 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.HasIndex(a => a.GovPayPaymentId)
                    .IsUnique();
 
+            builder.Property(p => p.RequestorType)
+                   .HasColumnType("nvarchar(50)");
 
             builder.HasOne(p => p.Payment)
                    .WithOne(op => op.OnlinePayment)
