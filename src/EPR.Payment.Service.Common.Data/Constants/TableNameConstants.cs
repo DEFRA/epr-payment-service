@@ -12,6 +12,8 @@
 
         public const string RegistrationFeesTableName = "RegistrationFees";
 
+        public const string AccreditationFeesTableName = "AccreditationFees";
+
         public const string PaymentTableName = "Payment";
 
         public const string OnlinePaymentTableName = "OnlinePayment";

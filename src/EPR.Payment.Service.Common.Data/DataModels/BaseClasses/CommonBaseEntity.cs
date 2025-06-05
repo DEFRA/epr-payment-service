@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 
 namespace EPR.Payment.Service.Common.Data.DataModels.BaseClasses
 {
@@ -9,11 +8,5 @@ namespace EPR.Payment.Service.Common.Data.DataModels.BaseClasses
         public string Type { get; set; } = null!;
 
         public string Description { get; set; } = null!;
-
-        #region Navigation properties
-        public virtual ICollection<RegistrationFees> RegistrationFees { get; set; } = null!;
-
-        public virtual ICollection<AccreditationFee> AccreditationFeeFees { get; set; } = null!;
-        #endregion
     }
 }

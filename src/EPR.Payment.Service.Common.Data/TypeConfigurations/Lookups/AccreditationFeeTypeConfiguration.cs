@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Data.Constants;
 using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using EPR.Payment.Service.Common.Data.SeedData;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +12,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
     {
         public void Configure(EntityTypeBuilder<AccreditationFee> builder)
         {
-            builder
-                .ToTable("AccreditationFees", "Lookup")
-                .HasKey(x => x.Id);
+            builder.ToTable(TableNameConstants.AccreditationFeesTableName, SchemaNameConstants.LookupSchemaName);
 
             builder.HasOne(x => x.Group).WithMany().HasForeignKey(x => x.GroupId);
             builder.HasOne(x => x.SubGroup).WithMany().HasForeignKey(x => x.SubGroupId);

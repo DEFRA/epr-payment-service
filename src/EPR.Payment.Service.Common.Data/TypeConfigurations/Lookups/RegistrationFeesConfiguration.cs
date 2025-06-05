@@ -15,6 +15,10 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
         {
             builder.ToTable(TableNameConstants.RegistrationFeesTableName, SchemaNameConstants.LookupSchemaName);
 
+            builder.HasOne(x => x.Group).WithMany().HasForeignKey(x => x.GroupId);
+            builder.HasOne(x => x.SubGroup).WithMany().HasForeignKey(x => x.SubGroupId);
+            builder.HasOne(x => x.Regulator).WithMany().HasForeignKey(x => x.RegulatorId);
+
             builder.Property(p => p.Amount)
                    .HasPrecision(19, 4);
 
