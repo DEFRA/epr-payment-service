@@ -1,5 +1,4 @@
-﻿using Asp.Versioning;
-using EPR.Payment.Service.Common.Constants.Payments;
+﻿using EPR.Payment.Service.Common.Constants.Payments;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Services.Interfaces.Payments;
@@ -9,35 +8,23 @@ using Microsoft.FeatureManagement.Mvc;
 
 namespace EPR.Payment.Service.Controllers
 {
-    [ApiVersion(1)]
     [ApiController]
-    [Route("api/v{version:apiVersion}/online-payments")]
+    [Route("api/")]
     [FeatureGate("EnableOnlinePaymentsFeature")]
-    public class OnlinePaymentsController : ControllerBase
+    public class OnlinePaymentsController(IOnlinePaymentsService onlinePaymentsService,
+        IValidator<OnlinePaymentInsertRequestDto> onlinePaymentInsertRequestValidator,
+        IValidator<OnlinePaymentInsertRequestV2Dto> onlinePaymentInsertRequestValidatorV2,
+        IValidator<OnlinePaymentUpdateRequestDto> onlinePaymentUpdateRequestValidator) : ControllerBase
     {
-        private readonly IOnlinePaymentsService _onlinePaymentsService;
-        private readonly IValidator<OnlinePaymentInsertRequestDto> _onlinePaymentInsertRequestValidator;
-        private readonly IValidator<OnlinePaymentUpdateRequestDto> _onlinePaymentUpdateRequestValidator;
-
-        public OnlinePaymentsController(IOnlinePaymentsService paymentsService,
-            IValidator<OnlinePaymentInsertRequestDto> onlinePaymentInsertRequestValidator,
-            IValidator<OnlinePaymentUpdateRequestDto> onlinePaymentUpdateRequestValidator)
-
-        {
-            _onlinePaymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
-            _onlinePaymentInsertRequestValidator = onlinePaymentInsertRequestValidator ?? throw new ArgumentNullException(nameof(onlinePaymentInsertRequestValidator));
-            _onlinePaymentUpdateRequestValidator = onlinePaymentUpdateRequestValidator ?? throw new ArgumentNullException(nameof(onlinePaymentUpdateRequestValidator));
-        }
-
-        [MapToApiVersion(1)]
-        [HttpPost]
+        [ApiExplorerSettings(GroupName = "v1")]
+        [HttpPost("v1/online-payments")]
         [ProducesResponseType(typeof(Guid), 200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableOnlinePaymentInsert")]
         public async Task<ActionResult<Guid>> InsertOnlinePayment([FromBody] OnlinePaymentInsertRequestDto onlinePaymentInsertRequest, CancellationToken cancellationToken)
         {
-            var validatorResult = _onlinePaymentInsertRequestValidator.Validate(onlinePaymentInsertRequest);
+            var validatorResult = onlinePaymentInsertRequestValidator.Validate(onlinePaymentInsertRequest);
 
             if (!validatorResult.IsValid)
             {
@@ -49,40 +36,44 @@ namespace EPR.Payment.Service.Controllers
                 });
             }
 
-            try
-            {
-                var externalPaymentId = await _onlinePaymentsService.InsertOnlinePaymentAsync(onlinePaymentInsertRequest, cancellationToken);
-                return Ok(externalPaymentId);
-            }
-            catch (ValidationException ex)
+            return await InsertWithErrorHanding(() => onlinePaymentsService.InsertOnlinePaymentAsync(onlinePaymentInsertRequest, cancellationToken), PaymentConstants.InsertingPaymentError);
+        }
+
+
+        [ApiExplorerSettings(GroupName = "v2")]
+        [HttpPost("v2/offline-payments")]
+        [ProducesResponseType(typeof(NoContentResult), 204)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [FeatureGate("EnableOfflinePaymentV2")]
+        public async Task<ActionResult<Guid>> InsertOnlinePaymentV2(
+            [FromBody] OnlinePaymentInsertRequestV2Dto onlinePaymentInsertRequest,
+            CancellationToken cancellationToken)
+        {
+            var validatorResult = onlinePaymentInsertRequestValidatorV2.Validate(onlinePaymentInsertRequest);
+
+            if (!validatorResult.IsValid)
             {
                 return BadRequest(new ProblemDetails
                 {
                     Title = "Validation Error",
-                    Detail = ex.Message,
+                    Detail = string.Join("; ", validatorResult.Errors.Select(e => e.ErrorMessage)),
                     Status = StatusCodes.Status400BadRequest
                 });
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
 
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{PaymentConstants.InsertingPaymentError}: {ex.Message}");
-            }
+            return await InsertWithErrorHanding(() => onlinePaymentsService.InsertOnlinePaymentAsync(onlinePaymentInsertRequest, cancellationToken), PaymentConstants.InsertingPaymentError);
         }
 
-        [MapToApiVersion(1)]
-        [HttpPut("{externalPaymentId}")]
+        [ApiExplorerSettings(GroupName = "v1")]
+        [HttpPut("v1/online-payments/{externalPaymentId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableOnlinePaymentUpdate")]
         public async Task<IActionResult> UpdateOnlinePayment(Guid externalPaymentId, [FromBody] OnlinePaymentUpdateRequestDto onlinePaymentUpdateRequest, CancellationToken cancellationToken)
         {
-            var validatorResult = _onlinePaymentUpdateRequestValidator.Validate(onlinePaymentUpdateRequest);
+            var validatorResult = onlinePaymentUpdateRequestValidator.Validate(onlinePaymentUpdateRequest);
 
             if (!validatorResult.IsValid)
             {
@@ -94,32 +85,11 @@ namespace EPR.Payment.Service.Controllers
                 });
             }
 
-            try
-            {
-                await _onlinePaymentsService.UpdateOnlinePaymentAsync(externalPaymentId, onlinePaymentUpdateRequest, cancellationToken);
-                return NoContent();
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "Validation Error",
-                    Detail = ex.Message,
-                    Status = StatusCodes.Status400BadRequest
-                });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{PaymentConstants.UpdatingPaymentError}: {ex.Message}");
-            }
+            return await UpdateWithErrorHanding(() => onlinePaymentsService.UpdateOnlinePaymentAsync(externalPaymentId, onlinePaymentUpdateRequest, cancellationToken), PaymentConstants.UpdatingPaymentError);
         }
 
-        [MapToApiVersion(1)]
-        [HttpGet("{externalPaymentId}")]
+        [ApiExplorerSettings(GroupName = "v1")]
+        [HttpGet("v1/online-payments/{externalPaymentId}")]
         [ProducesResponseType(typeof(OnlinePaymentResponseDto), 200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -137,12 +107,64 @@ namespace EPR.Payment.Service.Controllers
             }
             try
             {
-                var onlinePaymentResponse = await _onlinePaymentsService.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, cancellationToken);
+                var onlinePaymentResponse = await onlinePaymentsService.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, cancellationToken);
                 return Ok(onlinePaymentResponse);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{PaymentConstants.ReceivingPaymentError}: {ex.Message}");
+            }
+        }
+
+        private async Task<ActionResult> InsertWithErrorHanding<T>(Func<Task<T>> asyncAction, string errorMessage)
+        {
+            try
+            {
+                var result = await asyncAction();
+                return Ok(result);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Validation Error",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{errorMessage}: {ex.Message}");
+            }
+        }
+
+        private async Task<ActionResult> UpdateWithErrorHanding(Func<Task> asyncAction, string errorMessage)
+        {
+            try
+            {
+                await asyncAction();
+                return NoContent();
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Validation Error",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{errorMessage}: {ex.Message}");
             }
         }
     }

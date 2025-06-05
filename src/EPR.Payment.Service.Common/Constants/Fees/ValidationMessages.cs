@@ -24,7 +24,8 @@ namespace EPR.Payment.Service.Common.Constants.RegistrationFees
         public const string OfflineReferenceRequired = "The Reference field is required.";
         public const string OfflineRegulatorRequired = "The Regulator field is required.";
         public const string OfflinePaymentMethodRequired = "The PaymentMethod field is required.";
-      
+        public const string OnlineRequestorTypeRequired = "The RequestorType field is required.";
+
         public const string ProducerTypeInvalid = "Producer Type must be one of the following: ";
         public const string NumberOfSubsidiariesRange = "Number of subsidiaries must be greater than or equal to 0";
         public const string NumberOfOMPSubsidiariesLessThanOrEqualToNumberOfSubsidiaries = "Number of online marketplace subsidiaries must be less than or equal to number of subsidiaries";

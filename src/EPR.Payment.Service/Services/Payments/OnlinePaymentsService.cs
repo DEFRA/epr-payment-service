@@ -16,7 +16,16 @@ namespace EPR.Payment.Service.Services.Payments
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _onlinePaymentRepository = onlinePaymentRepository ?? throw new ArgumentNullException(nameof(onlinePaymentRepository));
         }
+
         public async Task<Guid> InsertOnlinePaymentAsync(OnlinePaymentInsertRequestDto onlinePaymentInsertRequest, CancellationToken cancellationToken)
+        {
+            var paymentEntity = _mapper.Map<Common.Data.DataModels.Payment>(onlinePaymentInsertRequest);
+            paymentEntity.OnlinePayment = _mapper.Map<Common.Data.DataModels.OnlinePayment>(onlinePaymentInsertRequest);
+
+            return await _onlinePaymentRepository.InsertOnlinePaymentAsync(paymentEntity, cancellationToken);
+        }
+
+        public async Task<Guid> InsertOnlinePaymentAsync(OnlinePaymentInsertRequestV2Dto onlinePaymentInsertRequest, CancellationToken cancellationToken)
         {
             var paymentEntity = _mapper.Map<Common.Data.DataModels.Payment>(onlinePaymentInsertRequest);
             paymentEntity.OnlinePayment = _mapper.Map<Common.Data.DataModels.OnlinePayment>(onlinePaymentInsertRequest);
@@ -32,6 +41,7 @@ namespace EPR.Payment.Service.Services.Payments
             _mapper.Map(onlinePaymentUpdateRequest, entity.OnlinePayment);
             await _onlinePaymentRepository.UpdateOnlinePayment(entity, cancellationToken);
         }
+
         public async Task<int> GetOnlinePaymentStatusCountAsync(CancellationToken cancellationToken)
         {
             return await _onlinePaymentRepository.GetPaymentStatusCount(cancellationToken);
