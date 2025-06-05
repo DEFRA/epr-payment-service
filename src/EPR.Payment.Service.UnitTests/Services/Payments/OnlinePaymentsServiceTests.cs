@@ -29,7 +29,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         {
             _fixture = new Fixture();
             _onlinePaymentsRepositoryMock = new Mock<IOnlinePaymentsRepository>();
-            var configuration = SetupAutomapper();
+            MapperConfiguration configuration = SetupAutomapper();
             _mapper = new Mapper(configuration);
             _cancellationToken = new CancellationToken();
             _service = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object);
@@ -37,7 +37,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
 
         private static MapperConfiguration SetupAutomapper()
         {
-            var myProfile = new PaymentProfile();
+            PaymentProfile myProfile = new PaymentProfile();
             return new MapperConfiguration(c => c.AddProfile(myProfile));
         }
 
@@ -45,7 +45,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public void Constructor_WhenAllDependenciesAreNotNull_ShouldInitialize()
         {
             // Act
-            var service = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object);
+            OnlinePaymentsService service = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -85,13 +85,13 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public async Task InsertOnlinePaymentStatusAsync_ValidInput_ShouldReturnGuid([Frozen] Guid expectedResult)
         {
             // Arrange
-            var request = _fixture!.Build<OnlinePaymentInsertRequestDto>().With(d => d.UserId, Guid.NewGuid()).With(x => x.OrganisationId, Guid.NewGuid()).Create();
+            OnlinePaymentInsertRequestDto request = _fixture!.Build<OnlinePaymentInsertRequestDto>().With(d => d.UserId, Guid.NewGuid()).With(x => x.OrganisationId, Guid.NewGuid()).Create();
 
             _onlinePaymentsRepositoryMock.Setup(r =>
                r.InsertOnlinePaymentAsync(It.IsAny<Common.Data.DataModels.Payment>(), _cancellationToken)).ReturnsAsync(expectedResult);
 
             // Act
-            var result = await _service!.InsertOnlinePaymentAsync(request, _cancellationToken);
+            Guid result = await _service!.InsertOnlinePaymentAsync(request, _cancellationToken);
 
             // Assert
             result.Should().Be(expectedResult);
@@ -102,7 +102,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public async Task InsertOnlinePaymentV2StatusAsync_ValidInput_ShouldReturnGuid(Guid expectedResult)
         {
             // Arrange
-            var request = _fixture!
+            OnlinePaymentInsertRequestV2Dto request = _fixture!
                 .Build<OnlinePaymentInsertRequestV2Dto>()
                 .With(d => d.UserId, Guid.NewGuid())
                 .With(x => x.OrganisationId, Guid.NewGuid())
@@ -113,7 +113,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
                 .ReturnsAsync(expectedResult);
 
             // Act
-            var result = await _service!.InsertOnlinePaymentAsync(request, _cancellationToken);
+            Guid result = await _service!.InsertOnlinePaymentAsync(request, _cancellationToken);
 
             // Assert
             result.Should().Be(expectedResult);
@@ -124,9 +124,9 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public async Task UpdateOnlinePaymentStatusAsync_ValidInput_NotThrowException([Frozen] Guid id)
         {
             // Arrange
-            var request = _fixture!.Build<OnlinePaymentUpdateRequestDto>().With(d => d.UpdatedByUserId, Guid.NewGuid()).With(x => x.UpdatedByOrganisationId, Guid.NewGuid()).Create();
+            OnlinePaymentUpdateRequestDto request = _fixture!.Build<OnlinePaymentUpdateRequestDto>().With(d => d.UpdatedByUserId, Guid.NewGuid()).With(x => x.UpdatedByOrganisationId, Guid.NewGuid()).Create();
 
-            var entity = new Common.Data.DataModels.Payment();
+            Common.Data.DataModels.Payment entity = new Common.Data.DataModels.Payment();
             _onlinePaymentsRepositoryMock.Setup(r => r.GetOnlinePaymentByExternalPaymentIdAsync(id, _cancellationToken)).ReturnsAsync(entity);
 
             entity = _mapper!.Map(request, entity);
@@ -150,7 +150,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             _onlinePaymentsRepositoryMock.Setup(i => i.GetPaymentStatusCount(_cancellationToken)).ReturnsAsync(onlinePaymentStatusCountResult);
 
             //Act
-            var result = await _service!.GetOnlinePaymentStatusCountAsync(_cancellationToken);
+            int result = await _service!.GetOnlinePaymentStatusCountAsync(_cancellationToken);
 
             //Assert
             result.Should().Be(onlinePaymentStatusCountResult);
@@ -163,7 +163,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             _onlinePaymentsRepositoryMock.Setup(i => i.GetPaymentStatusCount(_cancellationToken)).ReturnsAsync(0);
 
             //Act
-            var result = await _service!.GetOnlinePaymentStatusCountAsync(_cancellationToken);
+            int result = await _service!.GetOnlinePaymentStatusCountAsync(_cancellationToken);
 
             //Assert
             result.Should().Be(0);
@@ -179,10 +179,10 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             //Arrange
             _onlinePaymentsRepositoryMock.Setup(i => i.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken)).ReturnsAsync(onlinePaymentEntity);
 
-            var expectedResult = _mapper!.Map<OnlinePaymentResponseDto>(onlinePaymentEntity);
+            OnlinePaymentResponseDto expectedResult = _mapper!.Map<OnlinePaymentResponseDto>(onlinePaymentEntity);
 
             //Act
-            var result = await _service!.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken);
+            OnlinePaymentResponseDto result = await _service!.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, _cancellationToken);
 
             //Assert
             using (new AssertionScope())

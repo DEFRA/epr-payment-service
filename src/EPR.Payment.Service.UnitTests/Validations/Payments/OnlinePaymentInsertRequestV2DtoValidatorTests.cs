@@ -13,7 +13,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenAmount_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            var request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
             {
                 Amount = null,
                 OrganisationId = Guid.NewGuid(),
@@ -24,7 +24,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 UserId = Guid.NewGuid(),
             };
 
-            var result = validatorUnderTest.TestValidate(request);
+            TestValidationResult<OnlinePaymentInsertRequestV2Dto> result = validatorUnderTest.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(x => x.Amount);
         }
@@ -32,7 +32,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenOrganisationId_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            var request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
             {
                 Amount = 100,
                 OrganisationId = null,
@@ -43,7 +43,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 UserId = Guid.NewGuid(),
             };
 
-            var result = validatorUnderTest.TestValidate(request);
+            TestValidationResult<OnlinePaymentInsertRequestV2Dto> result = validatorUnderTest.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(x => x.OrganisationId);
         }
@@ -51,7 +51,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenReasonForPayment_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            var request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
             {
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
@@ -62,7 +62,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 UserId = Guid.NewGuid(),
             };
 
-            var result = validatorUnderTest.TestValidate(request);
+            TestValidationResult<OnlinePaymentInsertRequestV2Dto> result = validatorUnderTest.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(x => x.ReasonForPayment);
         }
@@ -70,7 +70,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_When_Reference_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            var request = new OnlinePaymentInsertRequestV2Dto 
+            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto 
             { 
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
@@ -81,7 +81,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 UserId = Guid.NewGuid(), 
             };
 
-            var result = validatorUnderTest.TestValidate(request);
+            TestValidationResult<OnlinePaymentInsertRequestV2Dto> result = validatorUnderTest.TestValidate(request);
             
             result.ShouldHaveValidationErrorFor(x => x.Reference);
         }
@@ -89,7 +89,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenRegulator_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            var request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
             {
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
@@ -100,7 +100,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 UserId = Guid.NewGuid(),
             };
 
-            var result = validatorUnderTest.TestValidate(request);
+            TestValidationResult<OnlinePaymentInsertRequestV2Dto> result = validatorUnderTest.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(x => x.Regulator);
         }
@@ -108,7 +108,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenRequestorType_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            var request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
             {
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
@@ -119,7 +119,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 UserId = Guid.NewGuid(),
             };
 
-            var result = validatorUnderTest.TestValidate(request);
+            TestValidationResult<OnlinePaymentInsertRequestV2Dto> result = validatorUnderTest.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(x => x.RequestorType);
         }
@@ -127,7 +127,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenUserId_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            var request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
             {
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
@@ -138,7 +138,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 UserId = null,
             };
 
-            var result = validatorUnderTest.TestValidate(request);
+            TestValidationResult<OnlinePaymentInsertRequestV2Dto> result = validatorUnderTest.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(x => x.UserId);
         }
@@ -146,7 +146,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Not_Have_Error_When_Request_Is_Valid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            var request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
             {
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
@@ -157,7 +157,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
                 UserId = Guid.NewGuid(),
             };
 
-            var result = validatorUnderTest.TestValidate(request);
+            TestValidationResult<OnlinePaymentInsertRequestV2Dto> result = validatorUnderTest.TestValidate(request);
 
             result.IsValid.Should().BeTrue();
         }

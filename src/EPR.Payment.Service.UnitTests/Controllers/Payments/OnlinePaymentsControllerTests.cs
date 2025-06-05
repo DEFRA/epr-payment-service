@@ -32,11 +32,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
                 .Returns(new ValidationResult());
 
             onlinePaymentsServiceMock
-                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestDto>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestDto>(), cancellationTokenSource.Token))
                 .ReturnsAsync(expectedResult);
 
             // Act
-            var result = await controllerUnderTest.InsertOnlinePayment(request, cancellationTokenSource.Token);
+            ActionResult<Guid> result = await controllerUnderTest.InsertOnlinePayment(request, cancellationTokenSource.Token);
 
             // Assert
             result.Result.Should().BeOfType<OkObjectResult>()
@@ -50,7 +50,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             OnlinePaymentInsertRequestDto request)
         {
             // Arrange
-            var validationFailures = new List<ValidationFailure>
+            List<ValidationFailure> validationFailures = new List<ValidationFailure>
             {
                 new ValidationFailure("Reference", "Reference is required"),
                 new ValidationFailure("Regulator", "Regulator is required")
@@ -60,13 +60,13 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
                 .Returns(new ValidationResult(validationFailures));
 
             // Act
-            var result = await controllerUnderTest.InsertOnlinePayment(request, CancellationToken.None);
+            ActionResult<Guid> result = await controllerUnderTest.InsertOnlinePayment(request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
             {
-                var badRequestResult = result.Result.Should().BeOfType<BadRequestObjectResult>().Which;
-                var problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
+                BadRequestObjectResult badRequestResult = result.Result.Should().BeOfType<BadRequestObjectResult>().Which;
+                ProblemDetails problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
                 problemDetails.Detail.Should().Be("Reference is required; Regulator is required");
             }
         }
@@ -85,11 +85,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
                 .Returns(new ValidationResult());
 
             onlinePaymentsServiceMock
-                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestDto>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestDto>(), cancellationTokenSource.Token))
                 .ThrowsAsync(new Exception("Test Exception"));
 
             // Act
-            var result = await controllerUnderTest.InsertOnlinePayment(request, cancellationTokenSource.Token);
+            ActionResult<Guid> result = await controllerUnderTest.InsertOnlinePayment(request, cancellationTokenSource.Token);
 
             // Assert
             result.Result.Should().BeOfType<ObjectResult>()
@@ -110,11 +110,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
                 .Returns(new ValidationResult());
 
             onlinePaymentsServiceMock
-                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestDto>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestDto>(), cancellationTokenSource.Token))
                 .ThrowsAsync(new ArgumentException("Test Exception"));
 
             // Act
-            var result = await controllerUnderTest.InsertOnlinePayment(request, cancellationTokenSource.Token);
+            ActionResult<Guid> result = await controllerUnderTest.InsertOnlinePayment(request, cancellationTokenSource.Token);
 
             // Assert
             result.Result.Should().BeOfType<BadRequestObjectResult>();
@@ -131,18 +131,18 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             // Arrange
             onlinePaymentsServiceMock
-                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestDto>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestDto>(), cancellationTokenSource.Token))
                 .ThrowsAsync(validationException);
 
             // Act
-            var result = await controllerUnderTest.InsertOnlinePayment(request, cancellationTokenSource.Token);
+            ActionResult<Guid> result = await controllerUnderTest.InsertOnlinePayment(request, cancellationTokenSource.Token);
 
             // Assert
             using (new AssertionScope())
             {
                 result.Result.Should().BeOfType<BadRequestObjectResult>();
 
-                var badRequestResult = result.Result as BadRequestObjectResult;
+                BadRequestObjectResult? badRequestResult = result.Result as BadRequestObjectResult;
                 badRequestResult.Should().NotBeNull();
             }
         }
@@ -158,15 +158,15 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             // Arrange
             validatorMock
-                .Setup(mock => mock.Validate(It.IsAny<OnlinePaymentInsertRequestV2Dto>()))
+                .Setup(mock => mock.Validate(request))
                 .Returns(new ValidationResult());
 
             onlinePaymentsServiceMock
-                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestV2Dto>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.InsertOnlinePaymentAsync(request, cancellationTokenSource.Token))
                 .ReturnsAsync(expectedResult);
 
             // Act
-            var result = await controllerUnderTest.InsertOnlinePaymentV2(request, cancellationTokenSource.Token);
+            ActionResult<Guid> result = await controllerUnderTest.InsertOnlinePaymentV2(request, cancellationTokenSource.Token);
 
             // Assert
             result.Result.Should().BeOfType<OkObjectResult>()
@@ -177,26 +177,27 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         public async Task InsertOnlinePaymentV2_RequestValidationFails_ShouldReturnsBadRequestWithValidationErrorDetails(
             [Frozen] Mock<IValidator<OnlinePaymentInsertRequestV2Dto>> validatorMock,
             [Greedy] OnlinePaymentsController controllerUnderTest,
-            OnlinePaymentInsertRequestV2Dto request)
+            OnlinePaymentInsertRequestV2Dto request,
+            CancellationTokenSource cancellationTokenSource)
         {
             // Arrange
-            var validationFailures = new List<ValidationFailure>
+            List<ValidationFailure> validationFailures = new List<ValidationFailure>
             {
                 new ValidationFailure("Reference", "Reference is required"),
                 new ValidationFailure("Regulator", "Regulator is required")
             };
 
-            validatorMock.Setup(v => v.Validate(It.IsAny<OnlinePaymentInsertRequestV2Dto>()))
+            validatorMock.Setup(v => v.Validate(request))
                 .Returns(new ValidationResult(validationFailures));
 
             // Act
-            var result = await controllerUnderTest.InsertOnlinePaymentV2(request, CancellationToken.None);
+            ActionResult<Guid> result = await controllerUnderTest.InsertOnlinePaymentV2(request, cancellationTokenSource.Token);
 
             // Assert
             using (new AssertionScope())
             {
-                var badRequestResult = result.Result.Should().BeOfType<BadRequestObjectResult>().Which;
-                var problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
+                BadRequestObjectResult badRequestResult = result.Result.Should().BeOfType<BadRequestObjectResult>().Which;
+                ProblemDetails problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
                 problemDetails.Detail.Should().Be("Reference is required; Regulator is required");
             }
         }
@@ -211,15 +212,15 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             // Arrange
             validatorMock
-                .Setup(mock => mock.Validate(It.IsAny<OnlinePaymentInsertRequestV2Dto>()))
+                .Setup(mock => mock.Validate(request))
                 .Returns(new ValidationResult());
 
             onlinePaymentsServiceMock
-                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestV2Dto>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.InsertOnlinePaymentAsync(request, cancellationTokenSource.Token))
                 .ThrowsAsync(new Exception("Test Exception"));
 
             // Act
-            var result = await controllerUnderTest.InsertOnlinePaymentV2(request, cancellationTokenSource.Token);
+            ActionResult<Guid> result = await controllerUnderTest.InsertOnlinePaymentV2(request, cancellationTokenSource.Token);
 
             // Assert
             result.Result.Should().BeOfType<ObjectResult>()
@@ -236,15 +237,15 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             // Arrange
             validatorMock
-                .Setup(mock => mock.Validate(It.IsAny<OnlinePaymentInsertRequestV2Dto>()))
+                .Setup(mock => mock.Validate(request))
                 .Returns(new ValidationResult());
 
             onlinePaymentsServiceMock
-                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestV2Dto>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.InsertOnlinePaymentAsync(request, cancellationTokenSource.Token))
                 .ThrowsAsync(new ArgumentException("Test Exception"));
 
             // Act
-            var result = await controllerUnderTest.InsertOnlinePaymentV2(request, cancellationTokenSource.Token);
+            ActionResult<Guid> result = await controllerUnderTest.InsertOnlinePaymentV2(request, cancellationTokenSource.Token);
 
             // Assert
             result.Result.Should().BeOfType<BadRequestObjectResult>();
@@ -261,18 +262,18 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             // Arrange
             onlinePaymentsServiceMock
-                .Setup(service => service.InsertOnlinePaymentAsync(It.IsAny<OnlinePaymentInsertRequestV2Dto>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.InsertOnlinePaymentAsync(request, cancellationTokenSource.Token))
                 .ThrowsAsync(validationException);
 
             // Act
-            var result = await controllerUnderTest.InsertOnlinePaymentV2(request, cancellationTokenSource.Token);
+            ActionResult<Guid> result = await controllerUnderTest.InsertOnlinePaymentV2(request, cancellationTokenSource.Token);
 
             // Assert
             using (new AssertionScope())
             {
                 result.Result.Should().BeOfType<BadRequestObjectResult>();
 
-                var badRequestResult = result.Result as BadRequestObjectResult;
+                BadRequestObjectResult? badRequestResult = result.Result as BadRequestObjectResult;
                 badRequestResult.Should().NotBeNull();
             }
         }
@@ -288,11 +289,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             // Arrange
             validatorMock
-                .Setup(mock => mock.Validate(It.IsAny<OnlinePaymentUpdateRequestDto>()))
+                .Setup(mock => mock.Validate(request))
                 .Returns(new ValidationResult());
 
             // Act
-            var result = await controllerUnderTest.UpdateOnlinePayment(id, request, cancellationTokenSource.Token);
+            IActionResult result = await controllerUnderTest.UpdateOnlinePayment(id, request, cancellationTokenSource.Token);
 
             //Assert
             result.Should().BeOfType<NoContentResult>();
@@ -308,23 +309,23 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             Guid id)
         {
             // Arrange
-            var validationFailures = new List<ValidationFailure>
+            List<ValidationFailure> validationFailures = new List<ValidationFailure>
             {
                 new ValidationFailure("GovPayPaymentId", "Gov Pay Payment ID cannot be null or empty."),
                 new ValidationFailure("Regulator", "Regulator is required")
             };
 
-            validatorMock.Setup(v => v.Validate(It.IsAny<OnlinePaymentUpdateRequestDto>()))
+            validatorMock.Setup(v => v.Validate(request))
                 .Returns(new ValidationResult(validationFailures));
 
             // Act
-            var result = await controllerUnderTest.UpdateOnlinePayment(id, request, cancellationTokenSource.Token);
+            IActionResult result = await controllerUnderTest.UpdateOnlinePayment(id, request, cancellationTokenSource.Token);
 
             // Assert
             using (new AssertionScope())
             {
-                var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Which;
-                var problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
+                BadRequestObjectResult badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Which;
+                ProblemDetails problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
                 problemDetails.Detail.Should().Be("Gov Pay Payment ID cannot be null or empty.; Regulator is required");
             }
         }
@@ -340,15 +341,15 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             // Arrange
             validatorMock
-                .Setup(mock => mock.Validate(It.IsAny<OnlinePaymentUpdateRequestDto>()))
+                .Setup(mock => mock.Validate(request))
                 .Returns(new ValidationResult());
 
             onlinePaymentsServiceMock
-                .Setup(service => service.UpdateOnlinePaymentAsync(It.IsAny<Guid>(), It.IsAny<OnlinePaymentUpdateRequestDto>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.UpdateOnlinePaymentAsync(id, request, cancellationTokenSource.Token))
                 .ThrowsAsync(new ArgumentException("Test Exception"));
 
             // Act
-            var result = await controllerUnderTest.UpdateOnlinePayment(id, request, cancellationTokenSource.Token);
+            IActionResult result = await controllerUnderTest.UpdateOnlinePayment(id, request, cancellationTokenSource.Token);
 
             // Assert
             result.Should().BeOfType<BadRequestObjectResult>();
@@ -365,15 +366,15 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             // Arrange
             validatorMock
-                .Setup(mock => mock.Validate(It.IsAny<OnlinePaymentUpdateRequestDto>()))
+                .Setup(mock => mock.Validate(request))
                 .Returns(new ValidationResult());
 
             onlinePaymentsServiceMock
-                .Setup(service => service.UpdateOnlinePaymentAsync(It.IsAny<Guid>(), It.IsAny<OnlinePaymentUpdateRequestDto>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.UpdateOnlinePaymentAsync(It.IsAny<Guid>(), request, cancellationTokenSource.Token))
                 .ThrowsAsync(new Exception("Test Exception"));
 
             // Act
-            var result = await controllerUnderTest.UpdateOnlinePayment(id, request, cancellationTokenSource.Token);
+            IActionResult result = await controllerUnderTest.UpdateOnlinePayment(id, request, cancellationTokenSource.Token);
 
             // Assert
             result.Should().BeOfType<ObjectResult>()
@@ -391,18 +392,18 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             // Arrange
             onlinePaymentsServiceMock
-                .Setup(service => service.UpdateOnlinePaymentAsync(It.IsAny<Guid>(), It.IsAny<OnlinePaymentUpdateRequestDto>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.UpdateOnlinePaymentAsync(It.IsAny<Guid>(), request, cancellationTokenSource.Token))
                 .ThrowsAsync(validationException);
 
             // Act
-            var result = await controllerUnderTest.UpdateOnlinePayment(id, request, cancellationTokenSource.Token);
+            IActionResult result = await controllerUnderTest.UpdateOnlinePayment(id, request, cancellationTokenSource.Token);
 
             // Assert
             using (new AssertionScope())
             {
                 result.Should().BeOfType<BadRequestObjectResult>();
 
-                var badRequestResult = result as BadRequestObjectResult;
+                BadRequestObjectResult? badRequestResult = result as BadRequestObjectResult;
                 badRequestResult.Should().NotBeNull();
             }
         }
@@ -417,11 +418,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             // Arrange
             onlinePaymentsServiceMock
-                .Setup(service => service.GetOnlinePaymentByExternalPaymentIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, cancellationTokenSource.Token))
                 .ReturnsAsync(expectedResult);
 
             // Act
-            var result = await controllerUnderTest.GetOnlinePaymentByExternalPaymentId(externalPaymentId, cancellationTokenSource.Token);
+            IActionResult result = await controllerUnderTest.GetOnlinePaymentByExternalPaymentId(externalPaymentId, cancellationTokenSource.Token);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
@@ -437,11 +438,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         {
             // Arrange
             onlinePaymentsServiceMock
-                .Setup(service => service.GetOnlinePaymentByExternalPaymentIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                .Setup(service => service.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, cancellationTokenSource.Token))
                 .ThrowsAsync(new Exception("Test Exception"));
 
             // Act
-            var result = await controllerUnderTest.GetOnlinePaymentByExternalPaymentId(externalPaymentId, cancellationTokenSource.Token);
+            IActionResult result = await controllerUnderTest.GetOnlinePaymentByExternalPaymentId(externalPaymentId, cancellationTokenSource.Token);
 
             // Assert
             result.Should().BeOfType<ObjectResult>()
@@ -454,9 +455,9 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             CancellationTokenSource cancellationTokenSource)
         {
             // Arrange
-            var externalPaymentId = Guid.Empty;
+            Guid externalPaymentId = Guid.Empty;
 
-            var result = await controllerUnderTest.GetOnlinePaymentByExternalPaymentId(externalPaymentId, cancellationTokenSource.Token);
+            IActionResult result = await controllerUnderTest.GetOnlinePaymentByExternalPaymentId(externalPaymentId, cancellationTokenSource.Token);
 
             result.Should().BeOfType<BadRequestObjectResult>();
         }

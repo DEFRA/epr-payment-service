@@ -19,7 +19,6 @@ namespace EPR.Payment.Service.Common.Data.Profiles
 
             CreateMap<OnlinePaymentInsertRequestV2Dto, DataModels.OnlinePayment>()
                 .IncludeBase<OnlinePaymentInsertRequestDto, DataModels.OnlinePayment>()
-                // .ForMember(dest => dest.RequestorType, opt => opt.MapFrom(src => src.RequestorType))
                 .ReverseMap();
 
             CreateMap<OnlinePaymentUpdateRequestDto, DataModels.Payment>()
