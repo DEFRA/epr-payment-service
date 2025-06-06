@@ -12,9 +12,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 
         public int RegulatorId { get; set; }
 
-        public int TonnesUpTo { get; set; }
-
-        public int TonnesOver { get; set; }
+        public int TonnageBandId { get; set; }
 
         public decimal Amount { get; set; }
 
@@ -38,8 +36,12 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
         #region Navigation properties
 
         public virtual Group Group { get; set; } = null!;
+        
         public virtual SubGroup SubGroup { get; set; } = null!;
+        
         public virtual Regulator Regulator { get; set; } = null!;
+        
+        public virtual TonnageBand TonnageBand { get; set; } = null!;
 
         #endregion Navigation properties
     }

@@ -19,8 +19,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 GroupId = (int)Group.Exporters,
                 SubGroupId = (int) SubGroup.Aluminium,
                 Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
-                TonnesOver = 0,
-                TonnesUpTo = 500,
+                TonnageBandId = (int)TonnageBands.Upto500, // 0-500 tonnes
                 FeesPerSite = 10,
                 Amount = 50000m, // £500 represented in pence (50000 pence)
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
@@ -30,8 +29,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 GroupId = (int)Group.Exporters,
                 SubGroupId = (int) SubGroup.Aluminium,
                 Regulator = new Common.Data.DataModels.Lookups.Regulator { Type="GB-ENG", Description = "England" },
-                TonnesOver = 0,
-                TonnesUpTo = 500,               
+                TonnageBandId = (int)TonnageBands.Upto500, // 0-500 tonnes            
                 Amount = 50000m, // £500 represented in pence (50000 pence)
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days

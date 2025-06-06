@@ -8,8 +8,7 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees
         Task<AccreditationFee?> GetFeeAsync(
             int groupId,
             int subGroupId,
-            int tonnesOver,
-            int tonnesUpto,            
+            int tonnageBandId,
             RegulatorType regulator,
             DateTime submissionDate,
             CancellationToken cancellationToken);

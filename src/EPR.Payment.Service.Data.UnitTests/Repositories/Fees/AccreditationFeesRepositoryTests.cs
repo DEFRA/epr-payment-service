@@ -1,16 +1,14 @@
-﻿using AutoFixture.MSTest;
-using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
+﻿using System.Data.Entity;
+using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.Fees;
+using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.UnitTests.Mocks;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
-using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.EntityFrameworkCore;
-using System.Data.Entity;
-using EPR.Payment.Service.Common.Enums;
 
 namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
 {
@@ -41,11 +39,10 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
             var submissionDate = DateTime.Today;
             var groupId = (int)Group.Exporters;
             var subGroupId = (int)SubGroup.Aluminium;
-            var tonnesOver = 0;
-            var tonnesUpto = 500;            
-
+            var tonnageBandId = (int)TonnageBands.Upto500;
+            
             // Act
-            var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, tonnesOver, tonnesUpto, regulator, submissionDate, _cancellationToken);
+            var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, tonnageBandId, regulator, submissionDate, _cancellationToken);
 
             // Assert
             Assert.IsNotNull(result);
@@ -64,10 +61,11 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
 
             var groupId = (int)Group.Exporters;
             var subGroupId = (int)SubGroup.Aluminium;
+            var tonnageBandId = (int)TonnageBands.Upto500;
 
             // Act
             // Set submission date to mimimum value
-            var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, 0, 500, RegulatorType.Create("GB-ENG"), DateTime.MinValue, _cancellationToken);
+            var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, tonnageBandId, RegulatorType.Create("GB-ENG"), DateTime.MinValue, _cancellationToken);
 
             // Assert
             Assert.IsNull(result);
@@ -86,9 +84,10 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Fees
 
             var groupId = (int)Group.Exporters;
             var subGroupId = (int)SubGroup.Aluminium;
+            var tonnageBandId = (int)TonnageBands.Upto500;
 
             // Act
-            var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, 0, 500, RegulatorType.Create("GB-ENG"), DateTime.UtcNow, _cancellationToken);
+            var result = await _accreditationFeesRepository.GetFeeAsync(groupId, subGroupId, tonnageBandId, RegulatorType.Create("GB-ENG"), DateTime.UtcNow, _cancellationToken);
 
             // Assert
             Assert.IsNull(result);

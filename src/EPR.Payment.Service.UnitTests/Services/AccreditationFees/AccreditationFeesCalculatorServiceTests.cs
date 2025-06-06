@@ -7,7 +7,6 @@ using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.Extensions;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
-using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.Services.AccreditationFees;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using FluentAssertions;
@@ -49,15 +48,13 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
             using CancellationTokenSource cancellationTokenSource = new();
 
             AccreditationFee? accreditationFee = null;
-            (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
-
+         
             //Setup
             _accreditationFeesRepositoryMock.Setup(r =>
                 r.GetFeeAsync(
                     (int)accreditationFeesRequestDto.RequestorType,
                     (int)accreditationFeesRequestDto.MaterialType,
-                    tonnesOver,
-                    tonnesUpto,
+                    (int)accreditationFeesRequestDto.TonnageBand,
                     It.IsAny<RegulatorType>(),
                     accreditationFeesRequestDto.SubmissionDate,
                     cancellationTokenSource.Token))
@@ -78,8 +75,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     r.GetFeeAsync(
                         (int)accreditationFeesRequestDto.RequestorType,
                         (int)accreditationFeesRequestDto.MaterialType,
-                        tonnesOver,
-                        tonnesUpto,
+                        (int)accreditationFeesRequestDto.TonnageBand,
                         It.IsAny<RegulatorType>(),
                         accreditationFeesRequestDto.SubmissionDate,
                         cancellationTokenSource.Token),
@@ -124,15 +120,13 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 EffectiveFrom = DateTime.UtcNow.AddDays(-1),
                 EffectiveTo = DateTime.UtcNow.AddDays(1),
             };
-            (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
-
+           
             //Setup
             _accreditationFeesRepositoryMock.Setup(r =>
                 r.GetFeeAsync(
                     (int)accreditationFeesRequestDto.RequestorType,
                     (int)accreditationFeesRequestDto.MaterialType,
-                    tonnesOver,
-                    tonnesUpto,
+                    (int)accreditationFeesRequestDto.TonnageBand,
                     It.IsAny<RegulatorType>(),
                     accreditationFeesRequestDto.SubmissionDate,
                     cancellationTokenSource.Token))
@@ -157,8 +151,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     r.GetFeeAsync(
                         (int)accreditationFeesRequestDto.RequestorType,
                         (int)accreditationFeesRequestDto.MaterialType,
-                        tonnesOver,
-                        tonnesUpto,
+                        (int)accreditationFeesRequestDto.TonnageBand,
                         It.IsAny<RegulatorType>(),
                         accreditationFeesRequestDto.SubmissionDate,
                         cancellationTokenSource.Token),
@@ -201,16 +194,13 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
             };
 
             PreviousPaymentDetailResponseDto? previousPayment = null;
-
-            (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
-
+         
             //Setup
             _accreditationFeesRepositoryMock.Setup(r =>
                 r.GetFeeAsync(
                     (int)accreditationFeesRequestDto.RequestorType,
                     (int)accreditationFeesRequestDto.MaterialType,
-                    tonnesOver,
-                    tonnesUpto,
+                    (int)accreditationFeesRequestDto.TonnageBand,
                     It.IsAny<RegulatorType>(),
                     accreditationFeesRequestDto.SubmissionDate,
                     cancellationTokenSource.Token))
@@ -241,8 +231,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     r.GetFeeAsync(
                         (int)accreditationFeesRequestDto.RequestorType,
                         (int)accreditationFeesRequestDto.MaterialType,
-                        tonnesOver,
-                        tonnesUpto,
+                        (int)accreditationFeesRequestDto.TonnageBand,
                         It.IsAny<RegulatorType>(),
                         accreditationFeesRequestDto.SubmissionDate,
                         cancellationTokenSource.Token),
@@ -292,16 +281,12 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 PaymentMethod = "Bank Transfer"
             };
            
-
-            (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
-
             //Setup
             _accreditationFeesRepositoryMock.Setup(r =>
                 r.GetFeeAsync(
                     (int)accreditationFeesRequestDto.RequestorType,
                     (int)accreditationFeesRequestDto.MaterialType,
-                    tonnesOver,
-                    tonnesUpto,
+                    (int)accreditationFeesRequestDto.TonnageBand,
                     It.IsAny<RegulatorType>(),
                     accreditationFeesRequestDto.SubmissionDate,
                     cancellationTokenSource.Token))
@@ -333,8 +318,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     r.GetFeeAsync(
                         (int)accreditationFeesRequestDto.RequestorType,
                         (int)accreditationFeesRequestDto.MaterialType,
-                        tonnesOver,
-                        tonnesUpto,
+                        (int)accreditationFeesRequestDto.TonnageBand,
                         It.IsAny<RegulatorType>(),
                         accreditationFeesRequestDto.SubmissionDate,
                         cancellationTokenSource.Token),
