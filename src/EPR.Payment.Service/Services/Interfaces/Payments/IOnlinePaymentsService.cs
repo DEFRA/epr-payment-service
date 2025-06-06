@@ -6,6 +6,7 @@ namespace EPR.Payment.Service.Services.Interfaces.Payments
     public interface IOnlinePaymentsService
     {
         Task<Guid> InsertOnlinePaymentAsync(OnlinePaymentInsertRequestDto onlinePaymentInsertRequest, CancellationToken cancellationToken);
+        Task<Guid> InsertOnlinePaymentAsync(OnlinePaymentInsertRequestV2Dto onlinePaymentInsertRequest, CancellationToken cancellationToken);
         Task UpdateOnlinePaymentAsync(Guid externalPaymentId, OnlinePaymentUpdateRequestDto onlinePaymentUpdateRequest, CancellationToken cancellationToken);
         Task<int> GetOnlinePaymentStatusCountAsync(CancellationToken cancellationToken);
         Task<OnlinePaymentResponseDto> GetOnlinePaymentByExternalPaymentIdAsync(Guid externalPaymentId, CancellationToken cancellationToken);
