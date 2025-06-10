@@ -18,15 +18,11 @@ namespace EPR.Payment.Service.Services.AccreditationFees
         {
             ReprocessorOrExporterAccreditationFeesResponseDto? response = null;
             RegulatorType regulatorType = RegulatorType.Create(request.Regulator!);
-
-            int requestorType = request.RequestorType.HasValue ? (int)request.RequestorType : 0;
-            int materialType = request.MaterialType.HasValue ? (int)request.MaterialType : 0;
-            int tonnageBand = request.TonnageBand.HasValue ? (int)request.TonnageBand : 0;
-
+           
             AccreditationFee? accreditationFeesEntity = await accreditationFeesRepository.GetFeeAsync(
-                requestorType,
-                materialType,
-                tonnageBand,
+                (int)request.RequestorType!.Value,
+                (int)request.MaterialType!.Value,
+                (int)request.TonnageBand!.Value,
                 regulatorType,
                 request.SubmissionDate,
                 cancellationToken

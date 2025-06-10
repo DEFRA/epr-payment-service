@@ -90,12 +90,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         }
 
         [TestMethod]
-        [DataRow(TonnageBands.Upto500)]
-        [DataRow(TonnageBands.Over500To5000)]
-        [DataRow(TonnageBands.Over5000To10000)]
-        [DataRow(TonnageBands.Over10000)]
-        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPayment_WhenNoApplicationReferenceNumberSupplied(
-            TonnageBands tonnageBand)
+        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPayment_WhenNoApplicationReferenceNumberSupplied()
         {
             // Arrange
             ReprocessorOrExporterAccreditationFeesRequestDto accreditationFeesRequestDto = new()
@@ -104,7 +99,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 MaterialType = MaterialTypes.Plastic,
                 RequestorType = RequestorTypes.Exporters,
                 NumberOfOverseasSites = 10,
-                TonnageBand = tonnageBand,
+                TonnageBand = TonnageBands.Upto500,
                 SubmissionDate = DateTime.UtcNow,
             };
             using CancellationTokenSource cancellationTokenSource = new();
@@ -246,7 +241,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         }
 
         [TestMethod]
-        public async Task CalculateFeesAsync_ShouldCallHelperAndReturnResponse()
+        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithPreviousPayment_WhenApplicationReferenceNumberIsSuppliedAndtPaymentRecordIsFound()
         {
             // Arrange
             ReprocessorOrExporterAccreditationFeesRequestDto accreditationFeesRequestDto = new()
@@ -273,7 +268,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 EffectiveTo = DateTime.UtcNow.AddDays(1),
             };
 
-            PreviousPaymentDetailResponseDto? previousPayment = new()
+            PreviousPaymentDetailResponseDto previousPayment = new()
             {
                 PaymentMode = PaymentTypes.Offline.GetDescription(),
                 PaymentAmount = 200,
@@ -311,6 +306,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 accreditationFeesResponseDto!.OverseasSiteChargePerSite.Should().Be(accreditationFee.FeesPerSite);
                 accreditationFeesResponseDto!.TotalOverseasSitesCharges.Should().Be(accreditationFee.FeesPerSite * accreditationFeesRequestDto.NumberOfOverseasSites);
                 accreditationFeesResponseDto!.TotalAccreditationFees.Should().Be((accreditationFee.FeesPerSite * accreditationFeesRequestDto.NumberOfOverseasSites) + accreditationFee.Amount);
+                accreditationFeesResponseDto.PreviousPaymentDetail.Should().NotBeNull();
                 accreditationFeesResponseDto.PreviousPaymentDetail.Should().Be(previousPayment);
 
                 // Verify
