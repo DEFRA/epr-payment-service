@@ -49,6 +49,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
         {
             var entity = await _dataContext.Payment
                 .Include(p => p.OnlinePayment)
+                .ThenInclude(op => op.RequestorType)
                 .Where(a => a.ExternalPaymentId == externalPaymentId)
                 .SingleOrDefaultAsync(cancellationToken);
 
