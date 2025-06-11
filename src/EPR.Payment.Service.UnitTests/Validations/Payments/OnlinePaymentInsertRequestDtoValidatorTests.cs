@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Constants.Payments;
+using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Validations.Payments;
 using FluentValidation.TestHelper;
@@ -73,9 +74,11 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         }
 
         [TestMethod]
-        public void Should_Not_Have_Error_When_ReasonForPayment_Is_Valid()
+        [DataRow(ReasonForPaymentConstants.RegistrationFee)]
+        [DataRow(ReasonForPaymentConstants.PackagingResubmissionFee)]
+        public void Should_Not_Have_Error_When_ReasonForPayment_Is_Valid(string reasonForPayment)
         {
-            var paymentStatusInsertRequestDto = new OnlinePaymentInsertRequestDto { ReasonForPayment = "Test ReasonForPayment" };
+            var paymentStatusInsertRequestDto = new OnlinePaymentInsertRequestDto { ReasonForPayment = reasonForPayment };
             var result = _validator.TestValidate(paymentStatusInsertRequestDto);
             result.ShouldNotHaveValidationErrorFor(x => x.ReasonForPayment);
         }
