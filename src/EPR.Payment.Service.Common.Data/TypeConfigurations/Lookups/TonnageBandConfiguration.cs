@@ -8,15 +8,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
 {
     [ExcludeFromCodeCoverage]
-    public class RegulatorConfiguration : CommonBaseEntityConfiguration<Regulator>
+    public class TonnageBandConfiguration : CommonBaseEntityConfiguration<TonnageBand>
     {
         /// <inheritdoc />
-        public override void Configure(EntityTypeBuilder<Regulator> builder)
+        public override void Configure(EntityTypeBuilder<TonnageBand> builder)
         {
-            builder.ToTable(TableNameConstants.RegulatorTableName, SchemaNameConstants.LookupSchemaName);
+            builder.ToTable(TableNameConstants.TonnageBandTableName, SchemaNameConstants.LookupSchemaName);
+
             base.Configure(builder);
 
-            RegulatorDataSeed.SeedRegulatorData(builder);
+            TonnageBandDataSeed.SeedTonnageBandData(builder);
         }
     }
 }

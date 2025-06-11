@@ -3240,3 +3240,2235 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250605112455_AddingTonnageBandTable'
+)
+BEGIN
+    CREATE TABLE [Lookup].[TonnageBand] (
+        [Id] int NOT NULL IDENTITY,
+        [Type] varchar(50) NOT NULL,
+        [Description] varchar(255) NOT NULL,
+        CONSTRAINT [PK_TonnageBand] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250605112455_AddingTonnageBandTable'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[TonnageBand]'))
+        SET IDENTITY_INSERT [Lookup].[TonnageBand] ON;
+    EXEC(N'INSERT INTO [Lookup].[TonnageBand] ([Id], [Description], [Type])
+    VALUES (1, ''Tonnage upto 500 tonnes'', ''Upto500''),
+    (2, ''Tonnage over 500 to 5000 tonnes'', ''Over500To5000''),
+    (3, ''Tonnage over 5000 to 10000 tonnes'', ''Over5000To10000''),
+    (4, ''Tonnage over 10000 tonnes'', ''Over10000'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[TonnageBand]'))
+        SET IDENTITY_INSERT [Lookup].[TonnageBand] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250605112455_AddingTonnageBandTable'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250605112455_AddingTonnageBandTable', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    DECLARE @var24 sysname;
+    SELECT @var24 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[AccreditationFees]') AND [c].[name] = N'TonnesOver');
+    IF @var24 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[AccreditationFees] DROP CONSTRAINT [' + @var24 + '];');
+    ALTER TABLE [Lookup].[AccreditationFees] DROP COLUMN [TonnesOver];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    DECLARE @var25 sysname;
+    SELECT @var25 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[AccreditationFees]') AND [c].[name] = N'TonnesUpTo');
+    IF @var25 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[AccreditationFees] DROP CONSTRAINT [' + @var25 + '];');
+    ALTER TABLE [Lookup].[AccreditationFees] DROP COLUMN [TonnesUpTo];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    ALTER TABLE [Lookup].[AccreditationFees] ADD [TonnageBandId] int NOT NULL DEFAULT 1;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 1;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 2;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 3;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 4;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 5;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 6;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 7;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 8;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 9;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 10;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 11;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 12;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 13;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 14;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 15;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 16;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 17;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 18;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 19;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 20;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 21;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 22;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 23;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 24;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 25;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 26;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 27;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 28;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 29;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 30;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 31;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 32;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 33;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 34;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 35;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 36;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 37;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 38;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 39;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 40;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 41;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 42;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 43;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 44;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 45;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 46;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 47;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 48;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 49;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 50;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 51;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 52;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 53;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 54;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 55;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 56;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 57;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 58;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 59;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 60;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 61;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 62;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 63;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 64;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 65;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 66;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 67;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 68;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 69;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 70;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 71;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 72;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 73;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 74;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 75;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 76;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 77;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 78;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 79;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 80;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 81;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 82;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 83;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 84;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 85;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 86;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 87;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 88;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 89;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 90;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 91;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 92;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 93;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 94;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 95;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 96;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 97;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 98;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 99;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 100;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 101;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 102;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 103;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 104;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 105;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 106;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 107;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 108;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 109;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 110;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 111;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 112;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 113;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 114;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 115;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 116;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 117;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 118;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 119;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 120;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 121;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 122;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 123;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 124;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 125;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 126;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 127;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 128;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 129;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 130;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 131;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 132;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 133;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 134;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 135;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 136;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 137;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 138;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 139;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 140;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 141;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 142;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 143;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 144;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 145;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 146;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 147;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 148;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 149;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 150;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 151;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 152;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 153;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 154;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 155;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 156;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 157;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 158;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 159;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 160;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 161;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 162;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 163;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 164;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 165;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 166;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 167;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 168;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 169;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 170;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 171;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 172;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 173;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 174;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 175;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 176;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 177;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 178;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 179;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 180;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 181;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 182;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 183;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 184;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 185;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 186;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 187;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 188;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 1
+    WHERE [Id] = 189;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 2
+    WHERE [Id] = 190;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 3
+    WHERE [Id] = 191;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[AccreditationFees] SET [TonnageBandId] = 4
+    WHERE [Id] = 192;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    CREATE INDEX [IX_AccreditationFees_TonnageBandId] ON [Lookup].[AccreditationFees] ([TonnageBandId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    ALTER TABLE [Lookup].[AccreditationFees] ADD CONSTRAINT [FK_AccreditationFees_TonnageBand_TonnageBandId] FOREIGN KEY ([TonnageBandId]) REFERENCES [Lookup].[TonnageBand] ([Id]) ON DELETE CASCADE;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250606151503_AccreditationFeeTableDesignChanges', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+

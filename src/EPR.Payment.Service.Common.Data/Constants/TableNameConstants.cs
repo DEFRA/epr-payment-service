@@ -12,10 +12,14 @@
 
         public const string RegistrationFeesTableName = "RegistrationFees";
 
+        public const string AccreditationFeesTableName = "AccreditationFees";
+
         public const string PaymentTableName = "Payment";
 
         public const string OnlinePaymentTableName = "OnlinePayment";
 
         public const string OfflinePaymentTableName = "OfflinePayment";
+
+        public const string TonnageBandTableName = "TonnageBand";
     }
 }

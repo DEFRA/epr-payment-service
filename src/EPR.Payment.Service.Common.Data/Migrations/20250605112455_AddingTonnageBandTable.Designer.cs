@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250605112455_AddingTonnageBandTable")]
+    partial class AddingTonnageBandTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,10 +54,11 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<int>("SubGroupId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TonnageBandId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                    b.Property<int>("TonnesOver")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TonnesUpTo")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -63,8 +67,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.HasIndex("RegulatorId");
 
                     b.HasIndex("SubGroupId");
-
-                    b.HasIndex("TonnageBandId");
 
                     b.ToTable("AccreditationFees", "Lookup");
 
@@ -79,7 +81,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 9,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -91,7 +94,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 9,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -103,7 +107,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 9,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -115,7 +120,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 9,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -127,7 +133,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 10,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -139,7 +146,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 10,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -151,7 +159,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 10,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -163,7 +172,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 10,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -175,7 +185,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 11,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -187,7 +198,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 11,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -199,7 +211,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 11,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -211,7 +224,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 11,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -223,7 +237,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 12,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -235,7 +250,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 12,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -247,7 +263,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 12,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -259,7 +276,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 12,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -271,7 +289,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 13,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -283,7 +302,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 13,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -295,7 +315,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 13,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -307,7 +328,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 13,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -319,7 +341,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 14,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -331,7 +354,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 14,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -343,7 +367,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 14,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -355,7 +380,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 1,
                             SubGroupId = 14,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -367,7 +393,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 9,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -379,7 +406,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 9,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -391,7 +419,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 9,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -403,7 +432,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 9,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -415,7 +445,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 10,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -427,7 +458,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 10,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -439,7 +471,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 10,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -451,7 +484,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 10,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -463,7 +497,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 11,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -475,7 +510,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 11,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -487,7 +523,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 11,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -499,7 +536,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 11,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -511,7 +549,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 12,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -523,7 +562,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 12,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -535,7 +575,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 12,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -547,7 +588,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 12,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -559,7 +601,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 13,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -571,7 +614,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 13,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -583,7 +627,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 13,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -595,7 +640,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 13,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -607,7 +653,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 14,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -619,7 +666,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 14,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -631,7 +679,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 14,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -643,7 +692,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 4,
                             SubGroupId = 14,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -655,7 +705,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 9,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -667,7 +718,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 9,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -679,7 +731,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 9,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -691,7 +744,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 9,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -703,7 +757,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 10,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -715,7 +770,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 10,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -727,7 +783,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 10,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -739,7 +796,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 10,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -751,7 +809,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 11,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -763,7 +822,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 11,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -775,7 +835,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 11,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -787,7 +848,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 11,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -799,7 +861,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 12,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -811,7 +874,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 12,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -823,7 +887,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 12,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -835,7 +900,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 12,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -847,7 +913,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 13,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -859,7 +926,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 13,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -871,7 +939,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 13,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -883,7 +952,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 13,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -895,7 +965,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 14,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -907,7 +978,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 14,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -919,7 +991,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 14,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -931,7 +1004,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 2,
                             SubGroupId = 14,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -943,7 +1017,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 9,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -955,7 +1030,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 9,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -967,7 +1043,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 9,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -979,7 +1056,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 9,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -991,7 +1069,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 10,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1003,7 +1082,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 10,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1015,7 +1095,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 10,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1027,7 +1108,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 10,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1039,7 +1121,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 11,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1051,7 +1134,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 11,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1063,7 +1147,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 11,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1075,7 +1160,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 11,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1087,7 +1173,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 12,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1099,7 +1186,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 12,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1111,7 +1199,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 12,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1123,7 +1212,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 12,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1135,7 +1225,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 13,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1147,7 +1238,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 13,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1159,7 +1251,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 13,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1171,7 +1264,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 13,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1183,7 +1277,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 14,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1195,7 +1290,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 14,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1207,7 +1303,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 14,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1219,7 +1316,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 7,
                             RegulatorId = 3,
                             SubGroupId = 14,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1231,7 +1329,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 9,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1243,7 +1342,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 9,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1255,7 +1355,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 9,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1267,7 +1368,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 9,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1279,7 +1381,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 10,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1291,7 +1394,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 10,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1303,7 +1407,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 10,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1315,7 +1420,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 10,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1327,7 +1433,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 11,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1339,7 +1446,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 11,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1351,7 +1459,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 11,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1363,7 +1472,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 11,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1375,7 +1485,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 12,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1387,7 +1498,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 12,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1399,7 +1511,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 12,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1411,7 +1524,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 12,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1423,7 +1537,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 13,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1435,7 +1550,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 13,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1447,7 +1563,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 13,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1459,7 +1576,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 13,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1471,7 +1589,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 14,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1483,7 +1602,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 14,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1495,7 +1615,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 14,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1507,7 +1628,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 1,
                             SubGroupId = 14,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1519,7 +1641,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 9,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1531,7 +1654,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 9,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1543,7 +1667,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 9,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1555,7 +1680,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 9,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1567,7 +1693,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 10,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1579,7 +1706,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 10,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1591,7 +1719,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 10,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1603,7 +1732,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 10,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1615,7 +1745,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 11,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1627,7 +1758,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 11,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1639,7 +1771,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 11,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1651,7 +1784,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 11,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1663,7 +1797,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 12,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1675,7 +1810,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 12,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1687,7 +1823,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 12,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1699,7 +1836,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 12,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1711,7 +1849,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 13,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1723,7 +1862,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 13,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1735,7 +1875,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 13,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1747,7 +1888,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 13,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1759,7 +1901,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 14,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1771,7 +1914,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 14,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1783,7 +1927,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 14,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1795,7 +1940,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 4,
                             SubGroupId = 14,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1807,7 +1953,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 9,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1819,7 +1966,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 9,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1831,7 +1979,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 9,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1843,7 +1992,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 9,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1855,7 +2005,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 10,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1867,7 +2018,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 10,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1879,7 +2031,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 10,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1891,7 +2044,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 10,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1903,7 +2057,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 11,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1915,7 +2070,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 11,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1927,7 +2083,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 11,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1939,7 +2096,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 11,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1951,7 +2109,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 12,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -1963,7 +2122,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 12,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -1975,7 +2135,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 12,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -1987,7 +2148,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 12,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -1999,7 +2161,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 13,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -2011,7 +2174,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 13,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -2023,7 +2187,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 13,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -2035,7 +2200,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 13,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -2047,7 +2213,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 14,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -2059,7 +2226,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 14,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -2071,7 +2239,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 14,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -2083,7 +2252,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 2,
                             SubGroupId = 14,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -2095,7 +2265,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 9,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -2107,7 +2278,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 9,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -2119,7 +2291,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 9,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -2131,7 +2304,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 9,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -2143,7 +2317,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 10,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -2155,7 +2330,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 10,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -2167,7 +2343,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 10,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -2179,7 +2356,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 10,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -2191,7 +2369,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 11,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -2203,7 +2382,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 11,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -2215,7 +2395,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 11,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -2227,7 +2408,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 11,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -2239,7 +2421,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 12,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -2251,7 +2434,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 12,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -2263,7 +2447,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 12,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -2275,7 +2460,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 12,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -2287,7 +2473,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 13,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -2299,7 +2486,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 13,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -2311,7 +2499,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 13,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -2323,7 +2512,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 13,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         },
                         new
                         {
@@ -2335,7 +2525,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 14,
-                            TonnageBandId = 1
+                            TonnesOver = 0,
+                            TonnesUpTo = 500
                         },
                         new
                         {
@@ -2347,7 +2538,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 14,
-                            TonnageBandId = 2
+                            TonnesOver = 500,
+                            TonnesUpTo = 5000
                         },
                         new
                         {
@@ -2359,7 +2551,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 14,
-                            TonnageBandId = 3
+                            TonnesOver = 5000,
+                            TonnesUpTo = 10000
                         },
                         new
                         {
@@ -2371,7 +2564,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 8,
                             RegulatorId = 3,
                             SubGroupId = 14,
-                            TonnageBandId = 4
+                            TonnesOver = 10000,
+                            TonnesUpTo = 99999999
                         });
                 });
 
@@ -3983,19 +4177,11 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.TonnageBand", "TonnageBand")
-                        .WithMany()
-                        .HasForeignKey("TonnageBandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Group");
 
                     b.Navigation("Regulator");
 
                     b.Navigation("SubGroup");
-
-                    b.Navigation("TonnageBand");
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.RegistrationFees", b =>

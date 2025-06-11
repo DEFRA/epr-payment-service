@@ -7,7 +7,6 @@ using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.Extensions;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
-using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.Services.AccreditationFees;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using FluentAssertions;
@@ -49,15 +48,13 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
             using CancellationTokenSource cancellationTokenSource = new();
 
             AccreditationFee? accreditationFee = null;
-            (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
-
+         
             //Setup
             _accreditationFeesRepositoryMock.Setup(r =>
                 r.GetFeeAsync(
                     (int)accreditationFeesRequestDto.RequestorType,
                     (int)accreditationFeesRequestDto.MaterialType,
-                    tonnesOver,
-                    tonnesUpto,
+                    (int)accreditationFeesRequestDto.TonnageBand,
                     It.IsAny<RegulatorType>(),
                     accreditationFeesRequestDto.SubmissionDate,
                     cancellationTokenSource.Token))
@@ -78,8 +75,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     r.GetFeeAsync(
                         (int)accreditationFeesRequestDto.RequestorType,
                         (int)accreditationFeesRequestDto.MaterialType,
-                        tonnesOver,
-                        tonnesUpto,
+                        (int)accreditationFeesRequestDto.TonnageBand,
                         It.IsAny<RegulatorType>(),
                         accreditationFeesRequestDto.SubmissionDate,
                         cancellationTokenSource.Token),
@@ -94,12 +90,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         }
 
         [TestMethod]
-        [DataRow(TonnageBands.Upto500)]
-        [DataRow(TonnageBands.Over500To5000)]
-        [DataRow(TonnageBands.Over5000To10000)]
-        [DataRow(TonnageBands.Over10000)]
-        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPayment_WhenNoApplicationReferenceNumberSupplied(
-            TonnageBands tonnageBand)
+        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithoutPreviousPayment_WhenNoApplicationReferenceNumberSupplied()
         {
             // Arrange
             ReprocessorOrExporterAccreditationFeesRequestDto accreditationFeesRequestDto = new()
@@ -108,7 +99,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 MaterialType = MaterialTypes.Plastic,
                 RequestorType = RequestorTypes.Exporters,
                 NumberOfOverseasSites = 10,
-                TonnageBand = tonnageBand,
+                TonnageBand = TonnageBands.Upto500,
                 SubmissionDate = DateTime.UtcNow,
             };
             using CancellationTokenSource cancellationTokenSource = new();
@@ -124,15 +115,13 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 EffectiveFrom = DateTime.UtcNow.AddDays(-1),
                 EffectiveTo = DateTime.UtcNow.AddDays(1),
             };
-            (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
-
+           
             //Setup
             _accreditationFeesRepositoryMock.Setup(r =>
                 r.GetFeeAsync(
                     (int)accreditationFeesRequestDto.RequestorType,
                     (int)accreditationFeesRequestDto.MaterialType,
-                    tonnesOver,
-                    tonnesUpto,
+                    (int)accreditationFeesRequestDto.TonnageBand,
                     It.IsAny<RegulatorType>(),
                     accreditationFeesRequestDto.SubmissionDate,
                     cancellationTokenSource.Token))
@@ -157,8 +146,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     r.GetFeeAsync(
                         (int)accreditationFeesRequestDto.RequestorType,
                         (int)accreditationFeesRequestDto.MaterialType,
-                        tonnesOver,
-                        tonnesUpto,
+                        (int)accreditationFeesRequestDto.TonnageBand,
                         It.IsAny<RegulatorType>(),
                         accreditationFeesRequestDto.SubmissionDate,
                         cancellationTokenSource.Token),
@@ -201,16 +189,13 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
             };
 
             PreviousPaymentDetailResponseDto? previousPayment = null;
-
-            (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
-
+         
             //Setup
             _accreditationFeesRepositoryMock.Setup(r =>
                 r.GetFeeAsync(
                     (int)accreditationFeesRequestDto.RequestorType,
                     (int)accreditationFeesRequestDto.MaterialType,
-                    tonnesOver,
-                    tonnesUpto,
+                    (int)accreditationFeesRequestDto.TonnageBand,
                     It.IsAny<RegulatorType>(),
                     accreditationFeesRequestDto.SubmissionDate,
                     cancellationTokenSource.Token))
@@ -241,8 +226,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     r.GetFeeAsync(
                         (int)accreditationFeesRequestDto.RequestorType,
                         (int)accreditationFeesRequestDto.MaterialType,
-                        tonnesOver,
-                        tonnesUpto,
+                        (int)accreditationFeesRequestDto.TonnageBand,
                         It.IsAny<RegulatorType>(),
                         accreditationFeesRequestDto.SubmissionDate,
                         cancellationTokenSource.Token),
@@ -257,7 +241,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
         }
 
         [TestMethod]
-        public async Task CalculateFeesAsync_ShouldCallHelperAndReturnResponse()
+        public async Task CalculateFeesAsync_ShouldCallRespositoryAndReturnResponseWithPreviousPayment_WhenApplicationReferenceNumberIsSuppliedAndtPaymentRecordIsFound()
         {
             // Arrange
             ReprocessorOrExporterAccreditationFeesRequestDto accreditationFeesRequestDto = new()
@@ -284,7 +268,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 EffectiveTo = DateTime.UtcNow.AddDays(1),
             };
 
-            PreviousPaymentDetailResponseDto? previousPayment = new()
+            PreviousPaymentDetailResponseDto previousPayment = new()
             {
                 PaymentMode = PaymentTypes.Offline.GetDescription(),
                 PaymentAmount = 200,
@@ -292,16 +276,12 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 PaymentMethod = "Bank Transfer"
             };
            
-
-            (int tonnesOver, int tonnesUpto) = TonnageHelper.GetTonnageBoundaryByTonnageBand(accreditationFeesRequestDto.TonnageBand);
-
             //Setup
             _accreditationFeesRepositoryMock.Setup(r =>
                 r.GetFeeAsync(
                     (int)accreditationFeesRequestDto.RequestorType,
                     (int)accreditationFeesRequestDto.MaterialType,
-                    tonnesOver,
-                    tonnesUpto,
+                    (int)accreditationFeesRequestDto.TonnageBand,
                     It.IsAny<RegulatorType>(),
                     accreditationFeesRequestDto.SubmissionDate,
                     cancellationTokenSource.Token))
@@ -326,6 +306,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                 accreditationFeesResponseDto!.OverseasSiteChargePerSite.Should().Be(accreditationFee.FeesPerSite);
                 accreditationFeesResponseDto!.TotalOverseasSitesCharges.Should().Be(accreditationFee.FeesPerSite * accreditationFeesRequestDto.NumberOfOverseasSites);
                 accreditationFeesResponseDto!.TotalAccreditationFees.Should().Be((accreditationFee.FeesPerSite * accreditationFeesRequestDto.NumberOfOverseasSites) + accreditationFee.Amount);
+                accreditationFeesResponseDto.PreviousPaymentDetail.Should().NotBeNull();
                 accreditationFeesResponseDto.PreviousPaymentDetail.Should().Be(previousPayment);
 
                 // Verify
@@ -333,8 +314,7 @@ namespace EPR.Payment.Service.UnitTests.Services.AccreditationFees
                     r.GetFeeAsync(
                         (int)accreditationFeesRequestDto.RequestorType,
                         (int)accreditationFeesRequestDto.MaterialType,
-                        tonnesOver,
-                        tonnesUpto,
+                        (int)accreditationFeesRequestDto.TonnageBand,
                         It.IsAny<RegulatorType>(),
                         accreditationFeesRequestDto.SubmissionDate,
                         cancellationTokenSource.Token),
