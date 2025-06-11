@@ -5472,3 +5472,51 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250611100506_AddingRequestorTypeTable'
+)
+BEGIN
+    CREATE TABLE [Lookup].[RequestorType] (
+        [Id] int NOT NULL IDENTITY,
+        [Type] varchar(50) NOT NULL,
+        [Description] varchar(255) NOT NULL,
+        CONSTRAINT [PK_RequestorType] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250611100506_AddingRequestorTypeTable'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[RequestorType]'))
+        SET IDENTITY_INSERT [Lookup].[RequestorType] ON;
+    EXEC(N'INSERT INTO [Lookup].[RequestorType] ([Id], [Description], [Type])
+    VALUES (1, ''Not Applicable'', ''NA''),
+    (2, ''Producers'', ''Producers''),
+    (3, ''ComplianceSchemes'', ''ComplianceSchemes''),
+    (4, ''Exporters'', ''Exporters''),
+    (5, ''Reprocessors'', ''Reprocessors'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[RequestorType]'))
+        SET IDENTITY_INSERT [Lookup].[RequestorType] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250611100506_AddingRequestorTypeTable'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250611100506_AddingRequestorTypeTable', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
