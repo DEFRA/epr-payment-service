@@ -2,9 +2,9 @@
 {
     public enum OnlinePaymentRequestorTypes
     {
-        Producers,
-        ComplianceSchemes,
-        Exporters,
-        Reprocessors,
+        Producers = 2,
+        ComplianceSchemes = 3,
+        Exporters = 4,
+        Reprocessors = 5,
     }
 }
