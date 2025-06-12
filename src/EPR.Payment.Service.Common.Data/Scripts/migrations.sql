@@ -5552,15 +5552,6 @@ IF NOT EXISTS (
     WHERE [MigrationId] = N'20250611164617_ChangedOnlinePaymentTable'
 )
 BEGIN
-    CREATE UNIQUE INDEX [IX_OnlinePayment_RequestorTypeId] ON [OnlinePayment] ([RequestorTypeId]);
-END;
-GO
-
-IF NOT EXISTS (
-    SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250611164617_ChangedOnlinePaymentTable'
-)
-BEGIN
     ALTER TABLE [OnlinePayment] ADD CONSTRAINT [FK_OnlinePayment_RequestorType_RequestorTypeId] FOREIGN KEY ([RequestorTypeId]) REFERENCES [Lookup].[RequestorType] ([Id]) ON DELETE CASCADE;
 END;
 GO

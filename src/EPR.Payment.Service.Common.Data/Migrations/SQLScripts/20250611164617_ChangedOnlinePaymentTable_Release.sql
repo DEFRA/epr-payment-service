@@ -13,9 +13,6 @@ GO
 ALTER TABLE [OnlinePayment] ADD [RequestorTypeId] int NOT NULL DEFAULT 1;
 GO
 
-CREATE UNIQUE INDEX [IX_OnlinePayment_RequestorTypeId] ON [OnlinePayment] ([RequestorTypeId]);
-GO
-
 ALTER TABLE [OnlinePayment] ADD CONSTRAINT [FK_OnlinePayment_RequestorType_RequestorTypeId] FOREIGN KEY ([RequestorTypeId]) REFERENCES [Lookup].[RequestorType] ([Id]) ON DELETE CASCADE;
 GO
 

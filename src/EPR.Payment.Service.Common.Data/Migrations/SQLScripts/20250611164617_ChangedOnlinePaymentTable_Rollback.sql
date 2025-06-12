@@ -4,9 +4,6 @@ GO
 ALTER TABLE [OnlinePayment] DROP CONSTRAINT [FK_OnlinePayment_RequestorType_RequestorTypeId];
 GO
 
-DROP INDEX [IX_OnlinePayment_RequestorTypeId] ON [OnlinePayment];
-GO
-
 DECLARE @var0 sysname;
 SELECT @var0 = [d].[name]
 FROM [sys].[default_constraints] [d]

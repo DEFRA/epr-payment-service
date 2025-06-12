@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using EPR.Payment.Service.Common.Data.Constants;
+﻿using EPR.Payment.Service.Common.Data.Constants;
 using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using EPR.Payment.Service.Common.Data.SeedData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
 {
@@ -16,6 +16,11 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
             builder.ToTable(TableNameConstants.RequestorTypeTableName, SchemaNameConstants.LookupSchemaName);
 
             base.Configure(builder);
+
+            builder.HasMany(e => e.OnlinePayments)
+                .WithOne()
+                .HasForeignKey(e => e.RequestorTypeId)
+                .IsRequired();
 
             RequestorTypeDataSeed.SeedRequestorTypeData(builder);
         }

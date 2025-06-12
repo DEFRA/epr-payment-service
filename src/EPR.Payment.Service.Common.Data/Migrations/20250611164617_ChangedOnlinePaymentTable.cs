@@ -21,12 +21,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 nullable: false,
                 defaultValue: 1);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_OnlinePayment_RequestorTypeId",
-                table: "OnlinePayment",
-                column: "RequestorTypeId",
-                unique: true);
-
             migrationBuilder.AddForeignKey(
                 name: "FK_OnlinePayment_RequestorType_RequestorTypeId",
                 table: "OnlinePayment",
@@ -42,10 +36,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_OnlinePayment_RequestorType_RequestorTypeId",
-                table: "OnlinePayment");
-
-            migrationBuilder.DropIndex(
-                name: "IX_OnlinePayment_RequestorTypeId",
                 table: "OnlinePayment");
 
             migrationBuilder.DropColumn(

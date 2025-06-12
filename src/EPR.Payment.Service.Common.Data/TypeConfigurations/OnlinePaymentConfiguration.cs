@@ -52,10 +52,6 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.HasOne(p => p.Payment)
                    .WithOne(op => op.OnlinePayment)
                    .HasForeignKey<OnlinePayment>(p => p.PaymentId);
-
-            builder.HasOne(p => p.RequestorType)
-                   .WithOne(op => op.OnlinePayment)
-                   .HasForeignKey<OnlinePayment>(p => p.RequestorTypeId);
         }
     }
 }

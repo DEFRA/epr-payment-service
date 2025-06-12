@@ -8,7 +8,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
     {
         #region Navigation properties
 
-        public virtual OnlinePayment OnlinePayment { get; set; } = null!;
+        public virtual ICollection<OnlinePayment> OnlinePayments { get; set; } = [];
 
         #endregion Navigation properties
     }
