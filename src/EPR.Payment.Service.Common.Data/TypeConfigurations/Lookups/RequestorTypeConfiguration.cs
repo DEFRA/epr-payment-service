@@ -17,11 +17,6 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
 
             base.Configure(builder);
 
-            builder.HasMany(e => e.OnlinePayments)
-                .WithOne()
-                .HasForeignKey(e => e.RequestorTypeId)
-                .IsRequired();
-
             RequestorTypeDataSeed.SeedRequestorTypeData(builder);
         }
     }
