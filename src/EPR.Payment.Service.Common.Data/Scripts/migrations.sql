@@ -5472,3 +5472,51 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250612130529_AddedPaymentMethodTable'
+)
+BEGIN
+    CREATE TABLE [Lookup].[PaymentMethod] (
+        [Id] int NOT NULL IDENTITY,
+        [Type] varchar(50) NOT NULL,
+        [Description] varchar(255) NOT NULL,
+        CONSTRAINT [PK_PaymentMethod] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250612130529_AddedPaymentMethodTable'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[PaymentMethod]'))
+        SET IDENTITY_INSERT [Lookup].[PaymentMethod] ON;
+    EXEC(N'INSERT INTO [Lookup].[PaymentMethod] ([Id], [Description], [Type])
+    VALUES (1, ''Not Applicable'', ''NA''),
+    (2, ''Bank transfer'', ''BankTransfer''),
+    (3, ''Credit or debit card'', ''CreditOrDebitCard''),
+    (4, ''Cheque'', ''Cheque''),
+    (5, ''Cash'', ''Cash'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[PaymentMethod]'))
+        SET IDENTITY_INSERT [Lookup].[PaymentMethod] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250612130529_AddedPaymentMethodTable'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250612130529_AddedPaymentMethodTable', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
