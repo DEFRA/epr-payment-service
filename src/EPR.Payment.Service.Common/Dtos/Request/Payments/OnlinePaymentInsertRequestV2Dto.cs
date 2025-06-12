@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using EPR.Payment.Service.Common.Dtos.Enums;
+using EPR.Payment.Service.Common.Enums;
 
 namespace EPR.Payment.Service.Common.Dtos.Request.Payments
 {

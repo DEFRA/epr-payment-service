@@ -81,7 +81,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod]
         public void Should_Have_Error_When_Status_Is_Not_InEnum()
         {
-            var paymentStatusUpdateRequestDto = new OnlinePaymentUpdateRequestDto { Status = (Service.Common.Dtos.Enums.Status)999 };
+            var paymentStatusUpdateRequestDto = new OnlinePaymentUpdateRequestDto { Status = (Service.Common.Enums.Status)999 };
             var result = _validator.TestValidate(paymentStatusUpdateRequestDto);
             result.ShouldHaveValidationErrorFor(x => x.Status);
         }
@@ -89,7 +89,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod]
         public void Should_Not_Have_Error_When_Status_Is_Valid()
         {
-            var paymentStatusUpdateRequestDto = new OnlinePaymentUpdateRequestDto { Status = Service.Common.Dtos.Enums.Status.Initiated };
+            var paymentStatusUpdateRequestDto = new OnlinePaymentUpdateRequestDto { Status = Service.Common.Enums.Status.Initiated };
             var result = _validator.TestValidate(paymentStatusUpdateRequestDto);
             result.ShouldNotHaveValidationErrorFor(x => x.Status);
         }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace EPR.Payment.Service.Common.Data.Enums
+namespace EPR.Payment.Service.Common.Enums
 {
     public enum Status
     {

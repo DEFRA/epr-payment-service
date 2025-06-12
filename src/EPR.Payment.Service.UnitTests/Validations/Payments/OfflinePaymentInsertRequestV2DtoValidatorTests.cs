@@ -1,7 +1,7 @@
 ﻿using EPR.Payment.Service.Common.Constants.Payments;
 using EPR.Payment.Service.Common.Constants.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Enums;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
+using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Validations.Payments;
 using FluentValidation.TestHelper;
 
