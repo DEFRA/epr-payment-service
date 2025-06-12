@@ -35,7 +35,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 {
                     { 1, "Not Applicable", "NA" },
                     { 2, "Producers", "Producers" },
-                    { 3, "ComplianceSchemes", "ComplianceSchemes" },
+                    { 3, "Compliance Schemes", "ComplianceSchemes" },
                     { 4, "Exporters", "Exporters" },
                     { 5, "Reprocessors", "Reprocessors" }
                 });

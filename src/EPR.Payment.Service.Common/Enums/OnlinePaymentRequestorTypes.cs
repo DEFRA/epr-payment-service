@@ -7,7 +7,7 @@ namespace EPR.Payment.Service.Common.Enums
         [Description("Producers")]
         Producers = 2,
         
-        [Description("ComplianceSchemes")]
+        [Description("Compliance Schemes")]
         ComplianceSchemes = 3,
 
         [Description("Exporters")]

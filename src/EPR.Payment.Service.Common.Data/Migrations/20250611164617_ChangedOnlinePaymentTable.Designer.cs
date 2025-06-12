@@ -3698,7 +3698,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         new
                         {
                             Id = 3,
-                            Description = "ComplianceSchemes",
+                            Description = "Compliance Schemes",
                             Type = "ComplianceSchemes"
                         },
                         new

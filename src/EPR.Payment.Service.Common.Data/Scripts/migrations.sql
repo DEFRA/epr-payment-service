@@ -5499,7 +5499,7 @@ BEGIN
     EXEC(N'INSERT INTO [Lookup].[RequestorType] ([Id], [Description], [Type])
     VALUES (1, ''Not Applicable'', ''NA''),
     (2, ''Producers'', ''Producers''),
-    (3, ''ComplianceSchemes'', ''ComplianceSchemes''),
+    (3, ''Compliance Schemes'', ''ComplianceSchemes''),
     (4, ''Exporters'', ''Exporters''),
     (5, ''Reprocessors'', ''Reprocessors'')');
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[RequestorType]'))
