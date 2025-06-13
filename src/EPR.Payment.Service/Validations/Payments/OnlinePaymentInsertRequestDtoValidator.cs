@@ -4,5 +4,8 @@ namespace EPR.Payment.Service.Validations.Payments
 {
     public class OnlinePaymentInsertRequestDtoValidator : OnlinePaymentInsertRequestDtoCommonValidator<OnlinePaymentInsertRequestDto>
     {
+        public OnlinePaymentInsertRequestDtoValidator() : base(false)
+        {
+        }
     }
 }

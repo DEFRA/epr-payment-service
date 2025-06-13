@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Constants.Payments;
+using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using FluentValidation;
 
@@ -7,7 +8,7 @@ namespace EPR.Payment.Service.Validations.Payments
     public class OnlinePaymentInsertRequestDtoCommonValidator<T> : AbstractValidator<T>
         where T : OnlinePaymentInsertRequestDto
     {
-        public OnlinePaymentInsertRequestDtoCommonValidator()
+        public OnlinePaymentInsertRequestDtoCommonValidator(bool isAccerdiationFee = false)
         {
             RuleFor(x => x.UserId)
                 .NotNull()
@@ -21,9 +22,24 @@ namespace EPR.Payment.Service.Validations.Payments
                 .NotEmpty()
                 .WithMessage(ValidationMessages.ReferenceRequired);
 
-            RuleFor(x => x.ReasonForPayment)
-                .NotEmpty()
-                .WithMessage(ValidationMessages.InvalidReasonForPayment);
+            if (isAccerdiationFee)
+            {
+                RuleFor(x => x.ReasonForPayment)
+                    .Cascade(CascadeMode.Stop)
+                    .NotEmpty()
+                    .WithMessage(ValidationMessages.ReasonForPaymentRequired)
+                    .Must(text => text == ReasonForPaymentConstants.RegistrationFee || text == ReasonForPaymentConstants.PackagingResubmissionFee || text == ReasonForPaymentConstants.AccreditationFee)
+                    .WithMessage(ValidationMessages.InvalidReasonForPaymentV2);
+            }
+            else
+            {
+                RuleFor(x => x.ReasonForPayment)
+                    .Cascade(CascadeMode.Stop)
+                    .NotEmpty()
+                    .WithMessage(ValidationMessages.ReasonForPaymentRequired)
+                    .Must(text => text == ReasonForPaymentConstants.RegistrationFee || text == ReasonForPaymentConstants.PackagingResubmissionFee)
+                    .WithMessage(ValidationMessages.InvalidReasonForPayment);
+            }
 
             RuleFor(x => x.Amount)
                 .NotNull()

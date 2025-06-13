@@ -1,6 +1,7 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
-using EPR.Payment.Service.Common.Dtos.Enums;
+﻿using EPR.Payment.Service.Common.Constants.Payments;
+using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
+using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Validations.Payments;
 using FluentAssertions;
@@ -14,11 +15,11 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenAmount_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new()
             {
                 Amount = null,
                 OrganisationId = Guid.NewGuid(),
-                ReasonForPayment = "Registration Fees",
+                ReasonForPayment = ReasonForPaymentConstants.RegistrationFee,
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
@@ -33,11 +34,11 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenOrganisationId_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new()
             {
                 Amount = 100,
                 OrganisationId = null,
-                ReasonForPayment = "Registration Fees",
+                ReasonForPayment = ReasonForPaymentConstants.AccreditationFee,
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
@@ -52,7 +53,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenReasonForPayment_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new()
             {
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
@@ -71,11 +72,11 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_When_Reference_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto 
+            OnlinePaymentInsertRequestV2Dto request = new() 
             { 
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
-                ReasonForPayment = "Registration Fees",
+                ReasonForPayment = ReasonForPaymentConstants.RegistrationFee,
                 Reference = string.Empty, 
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
@@ -90,11 +91,11 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenRegulator_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new()
             {
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
-                ReasonForPayment = "Registration Fees",
+                ReasonForPayment = ReasonForPaymentConstants.AccreditationFee,
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = null,
                 RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
@@ -109,11 +110,11 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenRequestorType_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new()
             {
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
-                ReasonForPayment = "Registration Fees",
+                ReasonForPayment = ReasonForPaymentConstants.PackagingResubmissionFee,
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = null,
@@ -128,11 +129,11 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Have_Error_WhenUserId_Is_Invalid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new()
             {
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
-                ReasonForPayment = "Registration Fees",
+                ReasonForPayment = ReasonForPaymentConstants.RegistrationFee,
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = OnlinePaymentRequestorTypes.Reprocessors,
@@ -147,11 +148,11 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
         [TestMethod, AutoMoqData]
         public void Should_Not_Have_Error_When_Request_Is_Valid(OnlinePaymentInsertRequestV2DtoValidator validatorUnderTest)
         {
-            OnlinePaymentInsertRequestV2Dto request = new OnlinePaymentInsertRequestV2Dto
+            OnlinePaymentInsertRequestV2Dto request = new()
             {
                 Amount = 100,
                 OrganisationId = Guid.NewGuid(),
-                ReasonForPayment = "Registration Fees",
+                ReasonForPayment = ReasonForPaymentConstants.AccreditationFee,
                 Reference = Guid.NewGuid().ToString(),
                 Regulator = RegulatorConstants.GBENG,
                 RequestorType = OnlinePaymentRequestorTypes.Reprocessors,

@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250611100506_AddingRequestorTypeTable")]
+    partial class AddingRequestorTypeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3932,10 +3935,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnOrder(2);
 
-                    b.Property<int>("RequestorTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                    b.Property<string>("RequestorType")
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid>("UpdatedByOrgId")
                         .HasColumnType("uniqueidentifier")
@@ -3949,8 +3950,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.HasIndex("PaymentId")
                         .IsUnique();
-
-                    b.HasIndex("RequestorTypeId");
 
                     b.ToTable("OnlinePayment", (string)null);
                 });
@@ -4101,15 +4100,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.RequestorType", "RequestorType")
-                        .WithMany("OnlinePayments")
-                        .HasForeignKey("RequestorTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Payment");
-
-                    b.Navigation("RequestorType");
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Payment", b =>
@@ -4126,11 +4117,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.PaymentStatus", b =>
                 {
                     b.Navigation("Payments");
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.RequestorType", b =>
-                {
-                    b.Navigation("OnlinePayments");
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Payment", b =>

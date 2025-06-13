@@ -8,20 +8,19 @@
 
   <ItemGroup>
     <Compile Remove="Dtos\Responses\**" />
+    <Compile Remove="Dtos\Response\Common\**" />
     <Compile Remove="RESTServices\**" />
     <EmbeddedResource Remove="Dtos\Responses\**" />
+    <EmbeddedResource Remove="Dtos\Response\Common\**" />
     <EmbeddedResource Remove="RESTServices\**" />
     <None Remove="Dtos\Responses\**" />
+    <None Remove="Dtos\Response\Common\**" />
     <None Remove="RESTServices\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dtos\Response\Common\" />
   </ItemGroup>
 
 </Project>

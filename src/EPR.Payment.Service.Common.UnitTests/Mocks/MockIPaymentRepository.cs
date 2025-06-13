@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.UnitTests.TestHelpers;
+﻿using EPR.Payment.Service.Common.Data.Constants;
+using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using Moq;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -20,7 +21,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test 1 Regulator",
                     Reference = "Test 1 Reference",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 10.0M,
                     ReasonForPayment = "Test 1",
                     CreatedDate = new DateTime(),
@@ -31,7 +32,13 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                         Id = 1,
                         PaymentId = 1,
                         UpdatedByOrgId = Guid.NewGuid(),
-                        OrganisationId = Guid.NewGuid()
+                        OrganisationId = Guid.NewGuid(),
+                        RequestorType = new Data.DataModels.Lookups.RequestorType()
+                        {
+                            Id = DefaultDataConstants.NotApplicableIdValue,
+                            Type = DefaultDataConstants.NotApplicableTypeValue,
+                            Description = DefaultDataConstants.NotApplicableDescriptionValue
+                        },
                     }
                 },
                new Data.DataModels.Payment()
@@ -41,7 +48,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test 2 Regulator",
                     Reference = "Test 2 Reference",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 10.0M,
                     ReasonForPayment = "Test 2",
                     CreatedDate = new DateTime(),
@@ -61,7 +68,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 30.0M,
                     ReasonForPayment = "Test",
                     CreatedDate = new DateTime(),
@@ -81,7 +88,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 20.0M,
                     ReasonForPayment = "Test",
                     CreatedDate = new DateTime(),
@@ -102,7 +109,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator For Negative",
                     Reference = "Test Reference For Negative",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = -10.0M,
                     ReasonForPayment = "Test 1",
                     CreatedDate = new DateTime(),
@@ -113,7 +120,13 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                         Id = 2,
                         PaymentId = 5,
                         UpdatedByOrgId = Guid.NewGuid(),
-                        OrganisationId = Guid.NewGuid()
+                        OrganisationId = Guid.NewGuid(),
+                        RequestorType = new Data.DataModels.Lookups.RequestorType()
+                        {
+                            Id = DefaultDataConstants.NotApplicableIdValue,
+                            Type = DefaultDataConstants.NotApplicableTypeValue,
+                            Description = DefaultDataConstants.NotApplicableDescriptionValue
+                        },
                     }
                 },
                 new Data.DataModels.Payment()
@@ -123,7 +136,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator For Negative",
                     Reference = "Test Reference For Negative",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 50.0M,
                     ReasonForPayment = "Test 2",
                     CreatedDate = new DateTime(),
@@ -143,7 +156,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator For Negative",
                     Reference = "Test Reference For Negative",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 100.0M,
                     ReasonForPayment = "Test 2",
                     CreatedDate = new DateTime(),
@@ -163,7 +176,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference",
-                    InternalStatusId = Data.Enums.Status.Initiated,
+                    InternalStatusId = Enums.Status.Initiated,
                     Amount = 30.0M,
                     ReasonForPayment = "Test",
                     CreatedDate = new DateTime(),
@@ -183,7 +196,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference",
-                    InternalStatusId = Data.Enums.Status.Initiated,
+                    InternalStatusId = Enums.Status.Initiated,
                     Amount = 20.0M,
                     ReasonForPayment = "Test",
                     CreatedDate = new DateTime(),
@@ -203,7 +216,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference With Offline Payment",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 20.0M,
                     ReasonForPayment = "Test",
                     CreatedDate = new DateTime(),
@@ -223,7 +236,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
                     Reference = "Test Reference With Online Payment",
-                    InternalStatusId = Data.Enums.Status.Success,
+                    InternalStatusId = Enums.Status.Success,
                     Amount = 20.0M,
                     ReasonForPayment = "Test",
                     CreatedDate = new DateTime(),
@@ -262,17 +275,17 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
             {
                 new Data.DataModels.Lookups.PaymentStatus()
                 {
-                    Id = Data.Enums.Status.Initiated,
+                    Id = Enums.Status.Initiated,
                     Status = "Initiated"
                 },
                new Data.DataModels.Lookups.PaymentStatus()
                 {
-                    Id = Data.Enums.Status.InProgress,
+                    Id = Enums.Status.InProgress,
                     Status = "InProgress"
                 },
                new Data.DataModels.Lookups.PaymentStatus()
                 {
-                    Id = Data.Enums.Status.Success,
+                    Id = Enums.Status.Success,
                     Status = "Success"
                 }
             }.AsQueryable();

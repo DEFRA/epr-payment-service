@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace EPR.Payment.Service.Common.Dtos.Enums
+namespace EPR.Payment.Service.Common.Enums
 {
     public enum OfflinePaymentMethodTypes
     {

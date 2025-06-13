@@ -31,10 +31,10 @@
 
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
-			<value>Scripts/**,Migrations/**,TypeConfigurations/*.*</value>
+			<value>Scripts/**,Migrations/**,TypeConfigurations/*.*,Constants/*.*</value>
 		</SonarQubeSetting>
 		<SonarQubeSetting Include="sonar.cpd.exclusions">
-			<Value>Scripts/**,Migrations/**,TypeConfigurations/*.*</Value>
+			<Value>Scripts/**,Migrations/**,TypeConfigurations/*.*,Constants/*.*</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
 	

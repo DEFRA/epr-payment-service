@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using EPR.Payment.Service.Common.Data.Constants;
+﻿using EPR.Payment.Service.Common.Data.Constants;
 using EPR.Payment.Service.Common.Data.DataModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.TypeConfigurations
 {
@@ -45,9 +45,9 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
 
             builder.HasIndex(a => a.GovPayPaymentId)
                    .IsUnique();
-
-            builder.Property(p => p.RequestorType)
-                   .HasColumnType("nvarchar(50)");
+            
+            builder.Property(p => p.RequestorTypeId)
+                   .HasDefaultValue(DefaultDataConstants.NotApplicableIdValue);
 
             builder.HasOne(p => p.Payment)
                    .WithOne(op => op.OnlinePayment)

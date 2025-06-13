@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using EPR.Payment.Service.Common.Data.Enums;
 using System.Diagnostics.CodeAnalysis;
-using DTO = EPR.Payment.Service.Common.Dtos.Enums;
 
 namespace EPR.Payment.Service.Common.Data.Profiles
 {
@@ -10,7 +8,7 @@ namespace EPR.Payment.Service.Common.Data.Profiles
     {
         public EnumProfile()
         {
-            CreateMap<Status, DTO.Status>().ReverseMap();
+            
         }
     }
 }

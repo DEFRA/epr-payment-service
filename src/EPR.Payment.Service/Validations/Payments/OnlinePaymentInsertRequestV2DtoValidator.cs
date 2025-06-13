@@ -6,7 +6,7 @@ namespace EPR.Payment.Service.Validations.Payments
 {
     public class OnlinePaymentInsertRequestV2DtoValidator : OnlinePaymentInsertRequestDtoCommonValidator<OnlinePaymentInsertRequestV2Dto>
     {
-        public OnlinePaymentInsertRequestV2DtoValidator() : base()
+        public OnlinePaymentInsertRequestV2DtoValidator() : base(true)
         {
             RuleFor(x => x.RequestorType)
                .NotEmpty()

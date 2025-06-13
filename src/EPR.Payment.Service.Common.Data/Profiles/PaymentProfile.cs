@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EPR.Payment.Service.Common.Data.Constants;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Common.Dtos.Response.Payments;
 
@@ -18,6 +19,8 @@ namespace EPR.Payment.Service.Common.Data.Profiles
                 .IncludeBase<OnlinePaymentInsertRequestDto, DataModels.Payment>();
 
             CreateMap<OnlinePaymentInsertRequestV2Dto, DataModels.OnlinePayment>()
+                .ForMember(dest => dest.RequestorTypeId, opt => opt.MapFrom(src => src.RequestorType.HasValue ? (int)src.RequestorType.Value : DefaultDataConstants.NotApplicableIdValue))
+                .ForMember(dest => dest.RequestorType, opt => opt.Ignore())
                 .IncludeBase<OnlinePaymentInsertRequestDto, DataModels.OnlinePayment>()
                 .ReverseMap();
 
@@ -31,7 +34,7 @@ namespace EPR.Payment.Service.Common.Data.Profiles
                 .ForMember(dest => dest.GovPayPaymentId, opt => opt.MapFrom(src => src.OnlinePayment.GovPayPaymentId))
                 .ForMember(dest => dest.UpdatedByOrganisationId, opt => opt.MapFrom(src => src.OnlinePayment.UpdatedByOrgId))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.ReasonForPayment))
-                .ForMember(dest => dest.RequestorType, opt => opt.MapFrom(src => src.OnlinePayment.RequestorType));
+                .ForMember(dest => dest.RequestorType, opt => opt.MapFrom(src => src.OnlinePayment.RequestorType.Type));
 
             CreateMap<OfflinePaymentInsertRequestDto, DataModels.Payment>()
                 .ForMember(dest => dest.ReasonForPayment, opt => opt.MapFrom(src => src.Description));
