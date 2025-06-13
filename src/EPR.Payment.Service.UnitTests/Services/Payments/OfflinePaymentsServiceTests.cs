@@ -2,8 +2,8 @@
 using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Profiles;
-using EPR.Payment.Service.Common.Dtos.Enums;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
+using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Payments;

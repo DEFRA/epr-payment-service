@@ -5477,6 +5477,112 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250611100506_AddingRequestorTypeTable'
+)
+BEGIN
+    CREATE TABLE [Lookup].[RequestorType] (
+        [Id] int NOT NULL IDENTITY,
+        [Type] varchar(50) NOT NULL,
+        [Description] varchar(255) NOT NULL,
+        CONSTRAINT [PK_RequestorType] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250611100506_AddingRequestorTypeTable'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[RequestorType]'))
+        SET IDENTITY_INSERT [Lookup].[RequestorType] ON;
+    EXEC(N'INSERT INTO [Lookup].[RequestorType] ([Id], [Description], [Type])
+    VALUES (1, ''Not Applicable'', ''NA''),
+    (2, ''Producers'', ''Producers''),
+    (3, ''Compliance Schemes'', ''ComplianceSchemes''),
+    (4, ''Exporters'', ''Exporters''),
+    (5, ''Reprocessors'', ''Reprocessors'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[RequestorType]'))
+        SET IDENTITY_INSERT [Lookup].[RequestorType] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250611100506_AddingRequestorTypeTable'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250611100506_AddingRequestorTypeTable', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250611164617_ChangedOnlinePaymentTable'
+)
+BEGIN
+    DECLARE @var26 sysname;
+    SELECT @var26 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[OnlinePayment]') AND [c].[name] = N'RequestorType');
+    IF @var26 IS NOT NULL EXEC(N'ALTER TABLE [OnlinePayment] DROP CONSTRAINT [' + @var26 + '];');
+    ALTER TABLE [OnlinePayment] DROP COLUMN [RequestorType];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250611164617_ChangedOnlinePaymentTable'
+)
+BEGIN
+    ALTER TABLE [OnlinePayment] ADD [RequestorTypeId] int NOT NULL DEFAULT 1;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250611164617_ChangedOnlinePaymentTable'
+)
+BEGIN
+    CREATE INDEX [IX_OnlinePayment_RequestorTypeId] ON [OnlinePayment] ([RequestorTypeId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250611164617_ChangedOnlinePaymentTable'
+)
+BEGIN
+    ALTER TABLE [OnlinePayment] ADD CONSTRAINT [FK_OnlinePayment_RequestorType_RequestorTypeId] FOREIGN KEY ([RequestorTypeId]) REFERENCES [Lookup].[RequestorType] ([Id]) ON DELETE CASCADE;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250611164617_ChangedOnlinePaymentTable'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250611164617_ChangedOnlinePaymentTable', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250612130529_AddedPaymentMethodTable'
 )
 BEGIN

@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250611164617_ChangedOnlinePaymentTable")]
+    partial class ChangedOnlinePaymentTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2443,59 +2446,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Id = 8,
                             Description = "Reprocessors",
                             Type = "Reprocessors"
-                        });
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.PaymentMethod", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PaymentMethod", "Lookup");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Not Applicable",
-                            Type = "NA"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Bank transfer",
-                            Type = "BankTransfer"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Credit or debit card",
-                            Type = "CreditOrDebitCard"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Cheque",
-                            Type = "Cheque"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Cash",
-                            Type = "Cash"
                         });
                 });
 

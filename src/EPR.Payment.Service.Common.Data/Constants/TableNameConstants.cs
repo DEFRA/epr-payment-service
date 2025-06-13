@@ -22,6 +22,8 @@
 
         public const string TonnageBandTableName = "TonnageBand";
 
+        public const string RequestorTypeTableName = "RequestorType";
+
         public const string PaymentMethodTableName = "PaymentMethod";
     }
 }

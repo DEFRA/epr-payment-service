@@ -1,5 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
+﻿using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
+using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.DataModels
 {
@@ -20,11 +21,13 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public Guid UpdatedByOrgId { get; set; }
 
-        public string? RequestorType { get; set; }
+        public int RequestorTypeId { get; set; }
 
         #region Navigation properties
 
         public virtual Payment Payment { get; set; } = null!;
+
+        public virtual RequestorType RequestorType { get; set; } = null!;
 
         #endregion
     }

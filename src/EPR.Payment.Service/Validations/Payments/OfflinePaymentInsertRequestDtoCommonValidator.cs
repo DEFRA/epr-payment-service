@@ -23,8 +23,8 @@ namespace EPR.Payment.Service.Validations.Payments
                     .Cascade(CascadeMode.Stop)
                     .NotEmpty()
                     .WithMessage(ValidationMessages.DescriptionRequired)
-                    .Must(text => text == OfflinePayDescConstants.RegistrationFee || text == OfflinePayDescConstants.PackagingResubmissionFee || text == OfflinePayDescConstants.AccreditationFee)
-                    .WithMessage(ValidationMessages.InvalidDescription);
+                    .Must(text => text == ReasonForPaymentConstants.RegistrationFee || text == ReasonForPaymentConstants.PackagingResubmissionFee || text == ReasonForPaymentConstants.AccreditationFee)
+                    .WithMessage(ValidationMessages.InvalidDescriptionV2);
             }
             else
             {
@@ -32,7 +32,7 @@ namespace EPR.Payment.Service.Validations.Payments
                     .Cascade(CascadeMode.Stop)
                     .NotEmpty()
                     .WithMessage(ValidationMessages.DescriptionRequired)
-                    .Must(text => text == OfflinePayDescConstants.RegistrationFee || text == OfflinePayDescConstants.PackagingResubmissionFee)
+                    .Must(text => text == ReasonForPaymentConstants.RegistrationFee || text == ReasonForPaymentConstants.PackagingResubmissionFee)
                     .WithMessage(ValidationMessages.InvalidDescription);
             }
 
