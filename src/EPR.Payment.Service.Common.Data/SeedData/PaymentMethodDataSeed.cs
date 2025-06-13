@@ -1,6 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Data.Constants;
 using EPR.Payment.Service.Common.Data.DataModels.Lookups;
-using EPR.Payment.Service.Common.Dtos.Enums;
+using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.Extensions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Diagnostics.CodeAnalysis;
