@@ -129,7 +129,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
 
             // Assert
             result.Should().NotBeNull();
-            result!.PaymentMethod.Should().BeNull();
+            result!.PaymentMethod.Should().Be("GovPay");
             result!.PaymentDate.Should().Be(paymentEntity.UpdatedDate);
             result!.PaymentAmount.Should().Be(paymentEntity.Amount);
             result!.PaymentMode.Should().Be("Online");
