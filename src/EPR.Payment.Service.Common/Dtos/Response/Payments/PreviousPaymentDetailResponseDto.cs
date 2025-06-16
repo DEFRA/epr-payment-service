@@ -4,7 +4,7 @@
     {
         public string PaymentMode { get; set; } = string.Empty;
 
-        public string? PaymentMethod { get; set; }
+        public string PaymentMethod { get; set; } = string.Empty;
 
         public DateTime PaymentDate { get; set; }
 

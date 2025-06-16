@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using EPR.Payment.Service.Common.Data.Constants;
+﻿using EPR.Payment.Service.Common.Data.Constants;
 using EPR.Payment.Service.Common.Data.DataModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.TypeConfigurations
 {
@@ -27,9 +27,8 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
                    .HasColumnOrder(4)
                    .HasColumnType("nvarchar(255)");
 
-            builder.Property(p => p.PaymentMethod)
-                   .HasColumnOrder(5)
-                   .HasColumnType("nvarchar(20)");
+            builder.Property(p => p.PaymentMethodId)
+                   .HasDefaultValue(DefaultDataConstants.NotApplicableIdValue);
 
             builder.HasOne(p => p.Payment)
                    .WithOne(op => op.OfflinePayment)

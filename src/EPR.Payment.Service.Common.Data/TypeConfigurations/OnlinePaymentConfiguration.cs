@@ -19,8 +19,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
 
             builder.Property(p => p.PaymentId)
                    .HasColumnOrder(2);
-
-            
+           
             builder.Property(p => p.OrganisationId)
                    .HasColumnOrder(3);
 

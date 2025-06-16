@@ -8,6 +8,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
     public class OnlinePaymentsRepository : IOnlinePaymentsRepository
     {
         private readonly IAppDbContext _dataContext;
+        
         public OnlinePaymentsRepository(IAppDbContext dataContext)
         {
             _dataContext = dataContext;
