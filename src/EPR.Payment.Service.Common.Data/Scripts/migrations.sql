@@ -5626,3 +5626,61 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250616080947_ChangedOfflinePaymentTable'
+)
+BEGIN
+    DECLARE @var27 sysname;
+    SELECT @var27 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[OfflinePayment]') AND [c].[name] = N'PaymentMethod');
+    IF @var27 IS NOT NULL EXEC(N'ALTER TABLE [OfflinePayment] DROP CONSTRAINT [' + @var27 + '];');
+    ALTER TABLE [OfflinePayment] DROP COLUMN [PaymentMethod];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250616080947_ChangedOfflinePaymentTable'
+)
+BEGIN
+    ALTER TABLE [OfflinePayment] ADD [PaymentMethodId] int NOT NULL DEFAULT 1;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250616080947_ChangedOfflinePaymentTable'
+)
+BEGIN
+    CREATE INDEX [IX_OfflinePayment_PaymentMethodId] ON [OfflinePayment] ([PaymentMethodId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250616080947_ChangedOfflinePaymentTable'
+)
+BEGIN
+    ALTER TABLE [OfflinePayment] ADD CONSTRAINT [FK_OfflinePayment_PaymentMethod_PaymentMethodId] FOREIGN KEY ([PaymentMethodId]) REFERENCES [Lookup].[PaymentMethod] ([Id]) ON DELETE CASCADE;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250616080947_ChangedOfflinePaymentTable'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250616080947_ChangedOfflinePaymentTable', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
