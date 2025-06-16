@@ -28,12 +28,13 @@ namespace EPR.Payment.Service.Services.Payments
             {
                 previousPayment.PaymentMode = PaymentTypes.Offline.GetDescription();
                 previousPayment.PaymentDate = payment.OfflinePayment.PaymentDate.GetValueOrDefault();
-                previousPayment.PaymentMethod = payment.OfflinePayment.PaymentMethod;
+                previousPayment.PaymentMethod = payment.OfflinePayment.PaymentMethod.Type;
             }
             else if (payment.OnlinePayment is not null)
             {
                 previousPayment.PaymentMode = PaymentTypes.Online.GetDescription();
                 previousPayment.PaymentDate = payment.UpdatedDate;
+                previousPayment.PaymentMethod = "GovPay";
             }
 
             return previousPayment;

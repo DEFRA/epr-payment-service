@@ -5,15 +5,15 @@ namespace EPR.Payment.Service.Common.Enums
     public enum OfflinePaymentMethodTypes
     {
         [Description("Bank transfer")]
-        BankTransfer = 1,
+        BankTransfer = 2,
 
         [Description("Credit or debit card")]
-        CreditOrDebitCard = 2,
+        CreditOrDebitCard = 3,
 
         [Description("Cheque")]
-        Cheque = 3,
+        Cheque = 4,
 
         [Description("Cash")]
-        Cash = 4
+        Cash = 5
     }
 }

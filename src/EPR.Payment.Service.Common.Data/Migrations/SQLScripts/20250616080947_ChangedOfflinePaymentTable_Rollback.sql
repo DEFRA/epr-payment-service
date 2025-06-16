@@ -1,0 +1,28 @@
+﻿BEGIN TRANSACTION;
+GO
+
+ALTER TABLE [OfflinePayment] DROP CONSTRAINT [FK_OfflinePayment_PaymentMethod_PaymentMethodId];
+GO
+
+DROP INDEX [IX_OfflinePayment_PaymentMethodId] ON [OfflinePayment];
+GO
+
+DECLARE @var0 sysname;
+SELECT @var0 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[OfflinePayment]') AND [c].[name] = N'PaymentMethodId');
+IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [OfflinePayment] DROP CONSTRAINT [' + @var0 + '];');
+ALTER TABLE [OfflinePayment] DROP COLUMN [PaymentMethodId];
+GO
+
+ALTER TABLE [OfflinePayment] ADD [PaymentMethod] nvarchar(20) NULL;
+GO
+
+DELETE FROM [__EFMigrationsHistory]
+WHERE [MigrationId] = N'20250616080947_ChangedOfflinePaymentTable';
+GO
+
+COMMIT;
+GO
+

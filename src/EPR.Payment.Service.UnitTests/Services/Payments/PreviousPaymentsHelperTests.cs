@@ -2,6 +2,8 @@
 using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Response.Payments;
+using EPR.Payment.Service.Common.Enums;
+using EPR.Payment.Service.Common.Extensions;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services.Payments;
 using FluentAssertions;
@@ -63,7 +65,12 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
                     PaymentId = 1,
                     PaymentDate = DateTime.UtcNow.AddDays(-1),
                     Comments = "Accreditation Fees Payment",
-                    PaymentMethod = "Bank Transfer",
+                    PaymentMethod = new Common.Data.DataModels.Lookups.PaymentMethod()
+                    {
+                        Id = (int)OfflinePaymentMethodTypes.BankTransfer,
+                        Type = OfflinePaymentMethodTypes.BankTransfer.ToString(),
+                        Description = OfflinePaymentMethodTypes.BankTransfer.GetDescription()
+                    },
                 }
             };
 
@@ -76,7 +83,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
 
             // Assert
             result.Should().NotBeNull();
-            result!.PaymentMethod.Should().Be(paymentEntity.OfflinePayment.PaymentMethod);
+            result!.PaymentMethod.Should().Be(paymentEntity.OfflinePayment.PaymentMethod.Type.ToString());
             result!.PaymentDate.Should().Be(paymentEntity.OfflinePayment.PaymentDate);
             result!.PaymentAmount.Should().Be(paymentEntity.Amount);
             result!.PaymentMode.Should().Be("Offline");
@@ -122,7 +129,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
 
             // Assert
             result.Should().NotBeNull();
-            result!.PaymentMethod.Should().BeNull();
+            result!.PaymentMethod.Should().Be("GovPay");
             result!.PaymentDate.Should().Be(paymentEntity.UpdatedDate);
             result!.PaymentAmount.Should().Be(paymentEntity.Amount);
             result!.PaymentMode.Should().Be("Online");

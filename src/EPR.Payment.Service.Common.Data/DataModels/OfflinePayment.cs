@@ -1,5 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
+﻿using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
+using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPR.Payment.Service.Common.Data.DataModels
 {
@@ -12,11 +13,13 @@ namespace EPR.Payment.Service.Common.Data.DataModels
         
         public string? Comments { get; set; }
 
-        public string? PaymentMethod { get; set; }
+        public int PaymentMethodId { get; set; }
 
         #region Navigation properties
 
         public virtual Payment Payment { get; set; } = null!;
+
+        public virtual PaymentMethod PaymentMethod { get; set; } = null!;
 
         #endregion
 
