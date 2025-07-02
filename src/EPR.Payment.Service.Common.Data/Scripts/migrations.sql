@@ -5684,3 +5684,28 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250702083006_AddingOrganisationIdColumn'
+)
+BEGIN
+    ALTER TABLE [OfflinePayment] ADD [OrganisationId] uniqueidentifier NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250702083006_AddingOrganisationIdColumn'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250702083006_AddingOrganisationIdColumn', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
