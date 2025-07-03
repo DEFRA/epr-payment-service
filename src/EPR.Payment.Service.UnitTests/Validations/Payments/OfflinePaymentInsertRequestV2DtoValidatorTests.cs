@@ -113,5 +113,13 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
             var result = _validator.TestValidate(offlinePaymentStatusInsertRequestDto);
             result.ShouldHaveValidationErrorFor(x => x.OrganisationId);
         }
+
+        [TestMethod]
+        public void Should_Have_Error_When_OrganisationId_Is_EmptyGuid()
+        {
+            var offlinePaymentStatusInsertRequestDto = new OfflinePaymentInsertRequestV2Dto { Reference = string.Empty, UserId = Guid.NewGuid(), Amount = 100, Description = ReasonForPaymentConstants.AccreditationFee, Regulator = RegulatorConstants.GBENG, PaymentMethod = OfflinePaymentMethodTypes.BankTransfer, OrganisationId = Guid.Empty };
+            var result = _validator.TestValidate(offlinePaymentStatusInsertRequestDto);
+            result.ShouldHaveValidationErrorFor(x => x.OrganisationId);
+        }
     }
 }
