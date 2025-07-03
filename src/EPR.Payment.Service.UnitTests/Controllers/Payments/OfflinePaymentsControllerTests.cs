@@ -185,7 +185,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             {
                 var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Which;
                 var problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
-                problemDetails.Detail.Should().Be("Reference is required; Regulator is required; PaymentMethod is required; Organisation ID is required.; User id is required.; The Description field is required. Description is invalid; acceptable values are 'Registration fee' or 'Packaging data resubmission fee'.");
+                problemDetails.Detail.Should().Be("Reference is required; Regulator is required; PaymentMethod is required; Organisation ID is required.; User id is required.; The Description field is required.; Description is invalid; acceptable values are 'Registration fee' or 'Packaging data resubmission fee'.");
             }
         }
 
