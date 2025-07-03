@@ -133,7 +133,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         }
 
         [TestMethod, AutoMoqData]
-        public async Task InsertOnlinePayment_RequestValidationFails_ShouldReturnsBadRequestWithValidationErrorDetails(
+        public async Task InsertOfflinePayment_RequestValidationFails_ShouldReturnsBadRequestWithValidationErrorDetails(
            [Frozen] OfflinePaymentInsertRequestDto request)
         {
             // Arrange
@@ -159,7 +159,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         }
 
         [TestMethod, AutoMoqData]
-        public async Task InsertOnlinePaymentForV2_RequestValidationFails_ShouldReturnsBadRequestWithValidationErrorDetails(
+        public async Task InsertOfflinePaymentForV2_RequestValidationFails_ShouldReturnsBadRequestWithValidationErrorDetails(
            [Frozen] OfflinePaymentInsertRequestV2Dto request)
         {
             // Arrange
@@ -167,7 +167,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             {
                 new ValidationFailure("Reference", "Reference is required"),
                 new ValidationFailure("Regulator", "Regulator is required"),
-                new ValidationFailure("PaymentMethod", "PaymentMethod is required")
+                new ValidationFailure("PaymentMethod", "PaymentMethod is required"),
+                new ValidationFailure("OrganisationId", "Organisation ID is required."),
+                new ValidationFailure("UserId", "User id is required."),
+                new ValidationFailure("Description", "The Description field is required."),
+                new ValidationFailure("Description", "Description is invalid; acceptable values are 'Registration fee' or 'Packaging data resubmission fee'.")
             };
 
             _offlinePaymentInsertRequestV2ValidatorMock.Setup(v => v.Validate(It.IsAny<OfflinePaymentInsertRequestV2Dto>()))
@@ -181,7 +185,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             {
                 var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Which;
                 var problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
-                problemDetails.Detail.Should().Be("Reference is required; Regulator is required; PaymentMethod is required");
+                problemDetails.Detail.Should().Be("Reference is required; Regulator is required; PaymentMethod is required; Organisation ID is required.; User id is required.; The Description field is required. Description is invalid; acceptable values are 'Registration fee' or 'Packaging data resubmission fee'.");
             }
         }
 
