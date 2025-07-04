@@ -8,6 +8,7 @@ namespace EPR.Payment.Service.Common.Constants.RegistrationFees
         // PaymentRequestDto Validation Messages
         public const string UserIdRequired = "User id is required.";
         public const string OrganisationIdRequired = "Organisation ID is required.";
+        public const string OrganisationIdInvalid = "Organisation ID is invalid, it should be the valid Guid.";
         public const string ReferenceRequired = "Reference is required.";
         public const string AmountRequiredAndGreaterThanZero = "Amount is required and must be greater than zero.";
         public const string RegulatorInvalid = "Invalid Regulator.";
