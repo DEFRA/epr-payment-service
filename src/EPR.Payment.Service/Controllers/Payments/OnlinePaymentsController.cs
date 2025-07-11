@@ -18,7 +18,7 @@ namespace EPR.Payment.Service.Controllers
     {
         [ApiExplorerSettings(GroupName = "v1")]
         [HttpPost("v1/online-payments")]
-        [ProducesResponseType(typeof(Guid), 200)]
+        [ProducesResponseType(typeof(NoContentResult), 204)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableOnlinePaymentInsert")]
@@ -69,7 +69,7 @@ namespace EPR.Payment.Service.Controllers
 
         [ApiExplorerSettings(GroupName = "v1")]
         [HttpPut("v1/online-payments/{externalPaymentId}")]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableOnlinePaymentUpdate")]
@@ -93,6 +93,7 @@ namespace EPR.Payment.Service.Controllers
         [ApiExplorerSettings(GroupName = "v1")]
         [HttpGet("v1/online-payments/{externalPaymentId}")]
         [ProducesResponseType(typeof(OnlinePaymentResponseDto), 200)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [FeatureGate("EnableGetOnlinePaymentByExternalPaymentId")]
