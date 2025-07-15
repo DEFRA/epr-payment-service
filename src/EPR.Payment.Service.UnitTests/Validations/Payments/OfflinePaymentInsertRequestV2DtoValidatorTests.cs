@@ -40,12 +40,15 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
             var offlinePaymentStatusInsertRequestDto = new OfflinePaymentInsertRequestV2Dto { Reference = "Test Reference", UserId = Guid.NewGuid(), Amount = 100, Description = ReasonForPaymentConstants.RegistrationFee, Regulator = RegulatorConstants.GBENG, PaymentMethod = OfflinePaymentMethodTypes.BankTransfer };
             var result = _validator.TestValidate(offlinePaymentStatusInsertRequestDto);
             result.ShouldNotHaveValidationErrorFor(x => x.Reference);
-        }
+        }        
 
         [TestMethod]
-        public void Should_Not_Have_Error_When_Amount_Is_Valid()
+        [DataRow(-10)]
+        [DataRow(0)]
+        [DataRow(10)]
+        public void Should_Not_Have_Error_When_Amount_Is_Valid(int Amount)
         {
-            var offlinePaymentStatusInsertRequestDto = new OfflinePaymentInsertRequestV2Dto { Amount = 10, Reference = "Test Reference", UserId = Guid.NewGuid(), Description = ReasonForPaymentConstants.RegistrationFee, Regulator = RegulatorConstants.GBENG, PaymentMethod = OfflinePaymentMethodTypes.BankTransfer };
+            var offlinePaymentStatusInsertRequestDto = new OfflinePaymentInsertRequestV2Dto { Amount = Amount, Reference = "Test Reference", UserId = Guid.NewGuid(), Description = ReasonForPaymentConstants.RegistrationFee, Regulator = RegulatorConstants.GBENG, PaymentMethod = OfflinePaymentMethodTypes.BankTransfer };
             var result = _validator.TestValidate(offlinePaymentStatusInsertRequestDto);
             result.ShouldNotHaveValidationErrorFor(x => x.Amount);
         }

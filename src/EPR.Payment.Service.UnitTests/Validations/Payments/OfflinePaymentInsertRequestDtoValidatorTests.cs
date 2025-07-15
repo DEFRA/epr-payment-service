@@ -1,6 +1,7 @@
 ﻿using EPR.Payment.Service.Common.Constants.Payments;
 using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
+using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Validations.Payments;
 using FluentValidation.TestHelper;
 
@@ -87,6 +88,17 @@ namespace EPR.Payment.Service.UnitTests.Validations.Payments
             var paymentStatusInsertRequestDto = new OfflinePaymentInsertRequestDto { Regulator = RegulatorConstants.GBSCT, Amount = 10, Reference = "Test Reference", UserId = Guid.NewGuid(), Description = "Test Description" };
             var result = _validator.TestValidate(paymentStatusInsertRequestDto);
             result.ShouldHaveValidationErrorFor(x => x.Description);
+        }
+
+        [TestMethod]
+        [DataRow(-10)]
+        [DataRow(0)]
+        [DataRow(10)]
+        public void Should_Not_Have_Error_When_Amount_Is_Valid(int Amount)
+        {
+            var offlinePaymentStatusInsertRequestDto = new OfflinePaymentInsertRequestDto { Amount = Amount, Reference = "Test Reference", UserId = Guid.NewGuid(), Description = ReasonForPaymentConstants.RegistrationFee, Regulator = RegulatorConstants.GBENG };
+            var result = _validator.TestValidate(offlinePaymentStatusInsertRequestDto);
+            result.ShouldNotHaveValidationErrorFor(x => x.Amount);
         }
     }
 }
