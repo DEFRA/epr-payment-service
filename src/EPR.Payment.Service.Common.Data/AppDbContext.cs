@@ -25,6 +25,10 @@ namespace EPR.Payment.Service.Common.Data
         public DbSet<Regulator> Regulator => Set<Regulator>();
         public DbSet<RegistrationFees> RegistrationFees => Set<RegistrationFees>();
         public DbSet<AccreditationFee> AccreditationFees => Set<AccreditationFee>();
+        public DbSet<DataModels.FeeSummary> FeeSummaries => Set<DataModels.FeeSummary>();
+        public DbSet<DataModels.FileFeeSummaryConnection> FileFeeSummaryConnections => Set<DataModels.FileFeeSummaryConnection>();
+        public DbSet<FeeType> FeeTypes => Set<FeeType>();
+        public DbSet<PayerType> PayerTypes => Set<PayerType>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
