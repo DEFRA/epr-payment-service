@@ -5714,12 +5714,12 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
 )
 BEGIN
     CREATE TABLE [Lookup].[FeeTypes] (
         [Id] int NOT NULL IDENTITY,
-        [Name] nvarchar(max) NOT NULL,
+        [Name] nvarchar(100) NOT NULL,
         CONSTRAINT [PK_FeeTypes] PRIMARY KEY ([Id])
     );
 END;
@@ -5727,12 +5727,12 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
 )
 BEGIN
     CREATE TABLE [Lookup].[PayerTypes] (
         [Id] int NOT NULL IDENTITY,
-        [Name] nvarchar(max) NOT NULL,
+        [Name] nvarchar(50) NOT NULL,
         CONSTRAINT [PK_PayerTypes] PRIMARY KEY ([Id])
     );
 END;
@@ -5740,54 +5740,48 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
 )
 BEGIN
     CREATE TABLE [FeeSummaries] (
         [Id] int NOT NULL IDENTITY,
         [ExternalId] uniqueidentifier NOT NULL,
-        [AppRefNo] nvarchar(max) NOT NULL,
-        [InvoiceDate] datetime2 NOT NULL,
-        [InvoicePeriod] datetime2 NOT NULL,
+        [AppRefNo] nvarchar(50) NOT NULL,
+        [InvoiceDate] datetimeoffset NOT NULL,
+        [InvoicePeriod] datetimeoffset NOT NULL,
         [PayerTypeId] int NOT NULL,
         [PayerId] int NOT NULL,
         [FeeTypeId] int NOT NULL,
         [UnitPrice] decimal(18,2) NULL,
-        [Quantity] int NOT NULL,
+        [Quantity] int NOT NULL DEFAULT 0,
         [Amount] decimal(18,2) NOT NULL,
-        [CreatedDate] datetime2 NOT NULL,
-        [UpdatedDate] datetime2 NULL,
-        [FeeTypeId1] int NULL,
-        [PayerTypeId1] int NULL,
+        [CreatedDate] datetimeoffset NOT NULL,
+        [UpdatedDate] datetimeoffset NULL,
         CONSTRAINT [PK_FeeSummaries] PRIMARY KEY ([Id]),
         CONSTRAINT [FK_FeeSummaries_FeeTypes_FeeTypeId] FOREIGN KEY ([FeeTypeId]) REFERENCES [Lookup].[FeeTypes] ([Id]) ON DELETE CASCADE,
-        CONSTRAINT [FK_FeeSummaries_FeeTypes_FeeTypeId1] FOREIGN KEY ([FeeTypeId1]) REFERENCES [Lookup].[FeeTypes] ([Id]),
-        CONSTRAINT [FK_FeeSummaries_PayerTypes_PayerTypeId] FOREIGN KEY ([PayerTypeId]) REFERENCES [Lookup].[PayerTypes] ([Id]) ON DELETE CASCADE,
-        CONSTRAINT [FK_FeeSummaries_PayerTypes_PayerTypeId1] FOREIGN KEY ([PayerTypeId1]) REFERENCES [Lookup].[PayerTypes] ([Id])
+        CONSTRAINT [FK_FeeSummaries_PayerTypes_PayerTypeId] FOREIGN KEY ([PayerTypeId]) REFERENCES [Lookup].[PayerTypes] ([Id]) ON DELETE CASCADE
     );
 END;
 GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
 )
 BEGIN
     CREATE TABLE [FileFeeSummaryConnections] (
         [Id] int NOT NULL IDENTITY,
         [FileId] uniqueidentifier NOT NULL,
         [FeeSummaryId] int NOT NULL,
-        [FeeSummaryId1] int NULL,
         CONSTRAINT [PK_FileFeeSummaryConnections] PRIMARY KEY ([Id]),
-        CONSTRAINT [FK_FileFeeSummaryConnections_FeeSummaries_FeeSummaryId] FOREIGN KEY ([FeeSummaryId]) REFERENCES [FeeSummaries] ([Id]) ON DELETE CASCADE,
-        CONSTRAINT [FK_FileFeeSummaryConnections_FeeSummaries_FeeSummaryId1] FOREIGN KEY ([FeeSummaryId1]) REFERENCES [FeeSummaries] ([Id])
+        CONSTRAINT [FK_FileFeeSummaryConnections_FeeSummaries_FeeSummaryId] FOREIGN KEY ([FeeSummaryId]) REFERENCES [FeeSummaries] ([Id]) ON DELETE CASCADE
     );
 END;
 GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
 )
 BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
@@ -5808,7 +5802,7 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
 )
 BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[PayerTypes]'))
@@ -5825,7 +5819,7 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
 )
 BEGIN
     CREATE INDEX [IX_FeeSummaries_FeeTypeId] ON [FeeSummaries] ([FeeTypeId]);
@@ -5834,16 +5828,7 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
-)
-BEGIN
-    CREATE INDEX [IX_FeeSummaries_FeeTypeId1] ON [FeeSummaries] ([FeeTypeId1]);
-END;
-GO
-
-IF NOT EXISTS (
-    SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
 )
 BEGIN
     CREATE INDEX [IX_FeeSummaries_PayerTypeId] ON [FeeSummaries] ([PayerTypeId]);
@@ -5852,16 +5837,7 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
-)
-BEGIN
-    CREATE INDEX [IX_FeeSummaries_PayerTypeId1] ON [FeeSummaries] ([PayerTypeId1]);
-END;
-GO
-
-IF NOT EXISTS (
-    SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
 )
 BEGIN
     CREATE INDEX [IX_FileFeeSummaryConnections_FeeSummaryId] ON [FileFeeSummaryConnections] ([FeeSummaryId]);
@@ -5870,20 +5846,11 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
-)
-BEGIN
-    CREATE INDEX [IX_FileFeeSummaryConnections_FeeSummaryId1] ON [FileFeeSummaryConnections] ([FeeSummaryId1]);
-END;
-GO
-
-IF NOT EXISTS (
-    SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250717103500_AddFeeSummaryTables'
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250717103500_AddFeeSummaryTables', N'8.0.4');
+    VALUES (N'20250718150533_AddFeeSummaryTables', N'8.0.4');
 END;
 GO
 

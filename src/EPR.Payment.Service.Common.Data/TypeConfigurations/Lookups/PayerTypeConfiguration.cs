@@ -14,7 +14,10 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
         {
             builder.ToTable(TableNameConstants.PayerTypesTableName, SchemaNameConstants.LookupSchemaName);
             builder.HasKey(p => p.Id);
-            builder.Property(p => p.Name).IsRequired();
+
+            builder.Property(p => p.Name)
+                   .HasMaxLength(50)
+                   .IsRequired();
 
             PayerTypeDataSeed.SeedPayerTypes(builder);
         }

@@ -11,9 +11,9 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public string AppRefNo { get; set; } = null!;
 
-        public DateTime InvoiceDate { get; set; }
+        public DateTimeOffset InvoiceDate { get; set; }
 
-        public DateTime InvoicePeriod { get; set; }
+        public DateTimeOffset InvoicePeriod { get; set; }
 
         public int PayerTypeId { get; set; }
 
@@ -27,9 +27,9 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public decimal Amount { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
 
-        public DateTime? UpdatedDate { get; set; }
+        public DateTimeOffset? UpdatedDate { get; set; }
 
         #region Navigation Properties
 

@@ -35,10 +35,11 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Property<string>("AppRefNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("ExternalId")
                         .HasColumnType("uniqueidentifier");
@@ -46,14 +47,11 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<int>("FeeTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FeeTypeId1")
-                        .HasColumnType("int");
+                    b.Property<DateTimeOffset>("InvoiceDate")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTime>("InvoiceDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("InvoicePeriod")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("InvoicePeriod")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("PayerId")
                         .HasColumnType("int");
@@ -61,27 +59,22 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<int>("PayerTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PayerTypeId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<decimal?>("UnitPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FeeTypeId");
 
-                    b.HasIndex("FeeTypeId1");
-
                     b.HasIndex("PayerTypeId");
-
-                    b.HasIndex("PayerTypeId1");
 
                     b.ToTable("FeeSummaries", (string)null);
                 });
@@ -97,17 +90,12 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<int>("FeeSummaryId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FeeSummaryId1")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("FileId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FeeSummaryId");
-
-                    b.HasIndex("FeeSummaryId1");
 
                     b.ToTable("FileFeeSummaryConnections", (string)null);
                 });
@@ -2475,7 +2463,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -2605,7 +2594,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -4270,24 +4260,16 @@ namespace EPR.Payment.Service.Common.Data.Migrations
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeSummary", b =>
                 {
                     b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.FeeType", "FeeType")
-                        .WithMany()
+                        .WithMany("FeeSummaries")
                         .HasForeignKey("FeeTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.FeeType", null)
-                        .WithMany("FeeSummaries")
-                        .HasForeignKey("FeeTypeId1");
-
                     b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.PayerType", "PayerType")
-                        .WithMany()
+                        .WithMany("FeeSummaries")
                         .HasForeignKey("PayerTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.PayerType", null)
-                        .WithMany("FeeSummaries")
-                        .HasForeignKey("PayerTypeId1");
 
                     b.Navigation("FeeType");
 
@@ -4297,14 +4279,10 @@ namespace EPR.Payment.Service.Common.Data.Migrations
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FileFeeSummaryConnection", b =>
                 {
                     b.HasOne("EPR.Payment.Service.Common.Data.DataModels.FeeSummary", "FeeSummary")
-                        .WithMany()
+                        .WithMany("FileFeeSummaryConnections")
                         .HasForeignKey("FeeSummaryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.FeeSummary", null)
-                        .WithMany("FileFeeSummaryConnections")
-                        .HasForeignKey("FeeSummaryId1");
 
                     b.Navigation("FeeSummary");
                 });

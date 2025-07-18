@@ -14,7 +14,9 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Lookups
         {
             builder.ToTable(TableNameConstants.FeeTypesTableName, SchemaNameConstants.LookupSchemaName);
             builder.HasKey(f => f.Id);
-            builder.Property(f => f.Name).IsRequired();
+            builder.Property(p => p.Name)
+                   .HasMaxLength(100)
+                   .IsRequired();
 
             FeeTypeDataSeed.SeedFeeTypes(builder);
         }

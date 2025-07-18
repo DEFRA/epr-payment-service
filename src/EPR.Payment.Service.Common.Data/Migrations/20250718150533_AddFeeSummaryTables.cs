@@ -20,7 +20,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,7 +34,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,19 +48,17 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ExternalId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AppRefNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InvoiceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    InvoicePeriod = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AppRefNo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    InvoiceDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    InvoicePeriod = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     PayerTypeId = table.Column<int>(type: "int", nullable: false),
                     PayerId = table.Column<int>(type: "int", nullable: false),
                     FeeTypeId = table.Column<int>(type: "int", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FeeTypeId1 = table.Column<int>(type: "int", nullable: true),
-                    PayerTypeId1 = table.Column<int>(type: "int", nullable: true)
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,24 +71,12 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FeeSummaries_FeeTypes_FeeTypeId1",
-                        column: x => x.FeeTypeId1,
-                        principalSchema: "Lookup",
-                        principalTable: "FeeTypes",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_FeeSummaries_PayerTypes_PayerTypeId",
                         column: x => x.PayerTypeId,
                         principalSchema: "Lookup",
                         principalTable: "PayerTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FeeSummaries_PayerTypes_PayerTypeId1",
-                        column: x => x.PayerTypeId1,
-                        principalSchema: "Lookup",
-                        principalTable: "PayerTypes",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -100,8 +86,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FeeSummaryId = table.Column<int>(type: "int", nullable: false),
-                    FeeSummaryId1 = table.Column<int>(type: "int", nullable: true)
+                    FeeSummaryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -112,11 +97,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         principalTable: "FeeSummaries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FileFeeSummaryConnections_FeeSummaries_FeeSummaryId1",
-                        column: x => x.FeeSummaryId1,
-                        principalTable: "FeeSummaries",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -153,29 +133,14 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 column: "FeeTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FeeSummaries_FeeTypeId1",
-                table: "FeeSummaries",
-                column: "FeeTypeId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FeeSummaries_PayerTypeId",
                 table: "FeeSummaries",
                 column: "PayerTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FeeSummaries_PayerTypeId1",
-                table: "FeeSummaries",
-                column: "PayerTypeId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FileFeeSummaryConnections_FeeSummaryId",
                 table: "FileFeeSummaryConnections",
                 column: "FeeSummaryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FileFeeSummaryConnections_FeeSummaryId1",
-                table: "FileFeeSummaryConnections",
-                column: "FeeSummaryId1");
         }
 
         /// <inheritdoc />
