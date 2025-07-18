@@ -5709,3 +5709,151 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
+)
+BEGIN
+    CREATE TABLE [Lookup].[FeeTypes] (
+        [Id] int NOT NULL IDENTITY,
+        [Name] nvarchar(100) NOT NULL,
+        CONSTRAINT [PK_FeeTypes] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
+)
+BEGIN
+    CREATE TABLE [Lookup].[PayerTypes] (
+        [Id] int NOT NULL IDENTITY,
+        [Name] nvarchar(50) NOT NULL,
+        CONSTRAINT [PK_PayerTypes] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
+)
+BEGIN
+    CREATE TABLE [FeeSummaries] (
+        [Id] int NOT NULL IDENTITY,
+        [ExternalId] uniqueidentifier NOT NULL,
+        [AppRefNo] nvarchar(50) NOT NULL,
+        [InvoiceDate] datetimeoffset NOT NULL,
+        [InvoicePeriod] datetimeoffset NOT NULL,
+        [PayerTypeId] int NOT NULL,
+        [PayerId] int NOT NULL,
+        [FeeTypeId] int NOT NULL,
+        [UnitPrice] decimal(18,2) NULL,
+        [Quantity] int NOT NULL DEFAULT 0,
+        [Amount] decimal(18,2) NOT NULL,
+        [CreatedDate] datetimeoffset NOT NULL,
+        [UpdatedDate] datetimeoffset NULL,
+        CONSTRAINT [PK_FeeSummaries] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_FeeSummaries_FeeTypes_FeeTypeId] FOREIGN KEY ([FeeTypeId]) REFERENCES [Lookup].[FeeTypes] ([Id]) ON DELETE CASCADE,
+        CONSTRAINT [FK_FeeSummaries_PayerTypes_PayerTypeId] FOREIGN KEY ([PayerTypeId]) REFERENCES [Lookup].[PayerTypes] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
+)
+BEGIN
+    CREATE TABLE [FileFeeSummaryConnections] (
+        [Id] int NOT NULL IDENTITY,
+        [FileId] uniqueidentifier NOT NULL,
+        [FeeSummaryId] int NOT NULL,
+        CONSTRAINT [PK_FileFeeSummaryConnections] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_FileFeeSummaryConnections_FeeSummaries_FeeSummaryId] FOREIGN KEY ([FeeSummaryId]) REFERENCES [FeeSummaries] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
+        SET IDENTITY_INSERT [Lookup].[FeeTypes] ON;
+    EXEC(N'INSERT INTO [Lookup].[FeeTypes] ([Id], [Name])
+    VALUES (1, N''Producer Registration Fee''),
+    (2, N''Compliance Scheme Registration Fee''),
+    (3, N''Producer OnlineMarketPlace Fee''),
+    (4, N''Member Registration Fee''),
+    (5, N''Member Late Registration Fee''),
+    (6, N''UnitOMP Fee''),
+    (7, N''Subsidiary Fee''),
+    (8, N''Late Registration Fee'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
+        SET IDENTITY_INSERT [Lookup].[FeeTypes] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[PayerTypes]'))
+        SET IDENTITY_INSERT [Lookup].[PayerTypes] ON;
+    EXEC(N'INSERT INTO [Lookup].[PayerTypes] ([Id], [Name])
+    VALUES (1, N''Direct Producer''),
+    (2, N''Compliance Scheme''),
+    (3, N''Reprocessor''),
+    (4, N''Exporter'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[PayerTypes]'))
+        SET IDENTITY_INSERT [Lookup].[PayerTypes] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
+)
+BEGIN
+    CREATE INDEX [IX_FeeSummaries_FeeTypeId] ON [FeeSummaries] ([FeeTypeId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
+)
+BEGIN
+    CREATE INDEX [IX_FeeSummaries_PayerTypeId] ON [FeeSummaries] ([PayerTypeId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
+)
+BEGIN
+    CREATE INDEX [IX_FileFeeSummaryConnections_FeeSummaryId] ON [FileFeeSummaryConnections] ([FeeSummaryId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250718150533_AddFeeSummaryTables', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+

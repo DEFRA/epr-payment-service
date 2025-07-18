@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using EPR.Payment.Service.Common.Data.DataModels;
 using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,10 @@ namespace EPR.Payment.Service.Common.Data
         public DbSet<Regulator> Regulator => Set<Regulator>();
         public DbSet<RegistrationFees> RegistrationFees => Set<RegistrationFees>();
         public DbSet<AccreditationFee> AccreditationFees => Set<AccreditationFee>();
+        public DbSet<FeeSummary> FeeSummaries => Set<FeeSummary>();
+        public DbSet<FileFeeSummaryConnection> FileFeeSummaryConnections => Set<FileFeeSummaryConnection>();
+        public DbSet<FeeType> FeeTypes => Set<FeeType>();
+        public DbSet<PayerType> PayerTypes => Set<PayerType>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

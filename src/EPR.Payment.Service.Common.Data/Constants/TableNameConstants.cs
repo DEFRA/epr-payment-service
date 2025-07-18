@@ -25,5 +25,13 @@
         public const string RequestorTypeTableName = "RequestorType";
 
         public const string PaymentMethodTableName = "PaymentMethod";
+
+        public const string FeeTypesTableName = "FeeTypes";
+
+        public const string PayerTypesTableName = "PayerTypes";
+
+        public const string FeeSummaryTableName = "FeeSummaries";
+
+        public const string FileFeeSummaryConnectionTableName = "FileFeeSummaryConnections";
     }
 }
