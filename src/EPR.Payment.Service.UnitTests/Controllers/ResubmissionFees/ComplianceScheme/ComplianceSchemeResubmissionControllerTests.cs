@@ -67,6 +67,9 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
             // Assert
             act.Should().Throw<ArgumentNullException>()
                 .WithParameterName("resubmissionFeeService");
+
+            // Use the instance to avoid CA1806
+            Assert.ThrowsException<ArgumentNullException>(() => new ComplianceSchemeResubmissionController(null!, _validatorMock.Object));
         }
 
         [TestMethod]
@@ -81,6 +84,9 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
             // Assert
             act.Should().Throw<ArgumentNullException>()
                 .WithParameterName("validator");
+
+            // Use the instance to avoid CA1806
+            Assert.ThrowsException<ArgumentNullException>(() => new ComplianceSchemeResubmissionController(_resubmissionFeeServiceMock.Object, null!));
         }
 
         [TestMethod, AutoMoqData]

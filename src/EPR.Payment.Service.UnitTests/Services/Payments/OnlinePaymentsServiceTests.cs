@@ -59,7 +59,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public void Constructor_WhenMapperIsNull_ShouldThrowArgumentNullException()
         {
             // Act
-            Action act = () => new OnlinePaymentsService(null!, _onlinePaymentsRepositoryMock.Object);
+            Action act = () => { var unused = new OnlinePaymentsService(null!, _onlinePaymentsRepositoryMock.Object); };
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -73,7 +73,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             IOnlinePaymentsRepository? onlinePaymentsRepository = null;
 
             // Act
-            Action act = () => new OnlinePaymentsService(_mapper, onlinePaymentsRepository!);
+            Action act = () => { var unused = new OnlinePaymentsService(_mapper, onlinePaymentsRepository!); };
 
             // Assert
             act.Should().Throw<ArgumentNullException>()

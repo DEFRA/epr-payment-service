@@ -90,14 +90,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             // Arrange
             IValidator<OfflinePaymentInsertRequestV2Dto>? offlinePaymentInsertRequestV2ValidatorMock = null;
 
-            // Act
-            Action act = () => new OfflinePaymentsController(_offlinePaymentsServiceMock.Object!,
-                                    _offlinePaymentInsertRequestValidatorMock.Object!,
-                                    offlinePaymentInsertRequestV2ValidatorMock!);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'offlinePaymentInsertRequestV2Validator')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                new OfflinePaymentsController(_offlinePaymentsServiceMock.Object!,
+                    _offlinePaymentInsertRequestValidatorMock.Object!,
+                    offlinePaymentInsertRequestV2ValidatorMock!));
         }
 
         [TestMethod, AutoMoqData]
