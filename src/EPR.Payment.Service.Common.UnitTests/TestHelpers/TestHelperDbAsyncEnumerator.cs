@@ -13,9 +13,11 @@ namespace EPR.Payment.Service.Common.UnitTests.TestHelpers
             _inner = inner;
         }
 
+        
         public void Dispose()
         {
-            _inner.Dispose();
+            GC.SuppressFinalize(_inner);
+   
         }
 
         public Task<bool> MoveNextAsync(CancellationToken cancellationToken)
