@@ -19,13 +19,13 @@
 	<ItemGroup>
 
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
-			<Value>Migrations/*,Scripts/*</Value>
+			<Value>Migrations/**,Scripts/**</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
 
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.cpd.exclusions">
-			<Value>Migrations/*,Scripts/*</Value>
+			<Value>Migrations/**,Scripts/**</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
 
