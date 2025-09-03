@@ -13,7 +13,7 @@
     </Target>
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.exclusions">
-			<Value>**/*.sql</Value>
+			<Value>**/*.sql,Scripts/**,Migrations/**</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
   <ItemGroup>
