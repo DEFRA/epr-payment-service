@@ -88,12 +88,12 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
         public void Constructor_WhenOfflinePaymentInsertRequestV2ValidatorIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
-            IValidator<OfflinePaymentInsertRequestV2Dto>? _offlinePaymentInsertRequestV2ValidatorMock = null;
+            IValidator<OfflinePaymentInsertRequestV2Dto>? offlinePaymentInsertRequestV2ValidatorMock = null;
 
             // Act
             Action act = () => new OfflinePaymentsController(_offlinePaymentsServiceMock.Object!,
-                                _offlinePaymentInsertRequestValidatorMock.Object!,
-                                _offlinePaymentInsertRequestV2ValidatorMock!);
+                                    _offlinePaymentInsertRequestValidatorMock.Object!,
+                                    offlinePaymentInsertRequestV2ValidatorMock!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
