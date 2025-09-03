@@ -16,6 +16,25 @@
 			<Value>**/*.sql,Scripts/**,Migrations/**</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
+	<ItemGroup>
+
+		<SonarQubeSetting Include="sonar.coverage.exclusions">
+			<Value>Migrations/*,Scripts/*</Value>
+		</SonarQubeSetting>
+	</ItemGroup>
+
+	<ItemGroup>
+		<SonarQubeSetting Include="sonar.cpd.exclusions">
+			<Value>Migrations/*,Scripts/*</Value>
+		</SonarQubeSetting>
+	</ItemGroup>
+
+	<!--<ItemGroup>
+		<SonarQubeSetting Include="sonar.exclusions">
+			<Value>Scripts/*,Migrations/**</Value>
+		</SonarQubeSetting>
+	</ItemGroup>-->
+	
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Azure.Identity" Version="1.11.4" />
