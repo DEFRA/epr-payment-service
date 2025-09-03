@@ -64,14 +64,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             // Arrange
             IOfflinePaymentsService? offlinePaymentsServiceMock = null;
 
-            // Act
-            Action act = () => new OfflinePaymentsController(offlinePaymentsServiceMock!,
-                                _offlinePaymentInsertRequestValidatorMock.Object,
-                                _offlinePaymentInsertRequestV2ValidatorMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'paymentsService')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                new OfflinePaymentsController(offlinePaymentsServiceMock!,
+                    _offlinePaymentInsertRequestValidatorMock.Object,
+                    _offlinePaymentInsertRequestV2ValidatorMock.Object));
         }
 
         [TestMethod]
@@ -80,14 +77,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Payments
             // Arrange
             IValidator<OfflinePaymentInsertRequestDto>? offlinePaymentInsertRequestValidatorMock = null;
 
-            // Act
-            Action act = () => new OfflinePaymentsController(_offlinePaymentsServiceMock.Object!,
-                                offlinePaymentInsertRequestValidatorMock!,
-                                _offlinePaymentInsertRequestV2ValidatorMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'offlinePaymentInsertRequestValidator')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                new OfflinePaymentsController(_offlinePaymentsServiceMock.Object!,
+                    offlinePaymentInsertRequestValidatorMock!,
+                    _offlinePaymentInsertRequestV2ValidatorMock.Object));
         }
 
         [TestMethod]

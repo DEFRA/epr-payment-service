@@ -16,7 +16,7 @@ namespace EPR.Payment.Service.Common.UnitTests.TestHelpers
         
         public void Dispose()
         {
-            GC.SuppressFinalize(_inner);
+            GC.SuppressFinalize(this);
    
         }
 
