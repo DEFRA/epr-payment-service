@@ -71,3 +71,6 @@ extends:
     serviceName: $(serviceName)
     sonarqubeInstance: ${{ parameters.sonarqubeInstance }}
     dotnetVersion: ${{ variables.dotnetVersion }}
+    extraProperties: |
+      sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+      sonar.exclusions=**/*.sql
