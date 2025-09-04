@@ -1,51 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	  <SonarQubeCpdExclusions>Scripts/**,Migrations/**</SonarQubeCpdExclusions>
- 
-  </PropertyGroup>
-
-    <Target Name="GenerateSqlScript" AfterTargets="AfterBuild" Condition="$(AzureBuild) != true">
-        <Exec Condition="$(Configuration) == Release" Command="dotnet-ef migrations script --configuration Release --verbose --no-build --context EPR.Payment.Service.Common.Data.AppDbContext --idempotent --output Scripts/migrations.sql" />
-    </Target>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+	<Target Name="GenerateSqlScript" AfterTargets="AfterBuild" Condition="$(AzureBuild) != true">
+		<Exec Condition="$(Configuration) == Release" Command="dotnet-ef migrations script --configuration Release --verbose --no-build --context EPR.Payment.Service.Common.Data.AppDbContext --idempotent --output Scripts/migrations.sql" />
+	</Target>
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.exclusions">
 			<Value>**/*.sql,Scripts/**,Migrations/**</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
 	<ItemGroup>
-
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
 			<Value>Migrations/**,Scripts/**</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
-
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.cpd.exclusions">
 			<Value>Migrations/**,Scripts/**</Value>
 		</SonarQubeSetting>
-	</ItemGroup>	
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="Azure.Identity" Version="1.11.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="Azure.Identity" Version="1.11.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\EPR.Payment.Service.Common\EPR.Payment.Service.Common.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\EPR.Payment.Service.Common\EPR.Payment.Service.Common.csproj" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
@@ -55,7 +49,7 @@
 			<Value>Scripts/**,Migrations/**,TypeConfigurations/*.*,Constants/*.*</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<Compile Update="Migrations\*.cs">
 			<SonarQubeExclude>true</SonarQubeExclude>
