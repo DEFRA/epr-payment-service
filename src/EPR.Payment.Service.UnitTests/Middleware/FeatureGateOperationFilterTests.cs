@@ -107,9 +107,9 @@ namespace EPR.Payment.Service.UnitTests.Middleware
         public class TestController
         {
             [FeatureGate("TestFeature")]
-            public void FeatureGatedMethod() { }
+            public static void FeatureGatedMethod() { }
 
-            public void NoFeatureGateMethod() { }
+            public static void NoFeatureGateMethod() { }
         }
     }
 }

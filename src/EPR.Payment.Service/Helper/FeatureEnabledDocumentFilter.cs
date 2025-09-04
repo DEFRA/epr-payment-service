@@ -8,12 +8,11 @@ namespace EPR.Payment.Service.Helper
     public class FeatureEnabledDocumentFilter : IDocumentFilter
     {
         private readonly IFeatureManager _featureManager;
-        private readonly ILogger<FeatureEnabledDocumentFilter> _logger;
 
-        public FeatureEnabledDocumentFilter(IFeatureManager featureManager, ILogger<FeatureEnabledDocumentFilter> logger)
+
+        public FeatureEnabledDocumentFilter(IFeatureManager featureManager)
         {
             _featureManager = featureManager;
-            _logger = logger;
         }
 
         public async void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)

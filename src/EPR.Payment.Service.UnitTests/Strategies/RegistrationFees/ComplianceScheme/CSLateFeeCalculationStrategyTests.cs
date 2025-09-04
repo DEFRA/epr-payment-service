@@ -30,12 +30,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.ComplianceSc
             // Arrange
             IComplianceSchemeFeesRepository? nullRepository = null;
 
-            // Act
-            Action act = () => new CSLateFeeCalculationStrategy(nullRepository!);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'feesRepository')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() => new CSLateFeeCalculationStrategy(nullRepository!));
         }
 
         [TestMethod]

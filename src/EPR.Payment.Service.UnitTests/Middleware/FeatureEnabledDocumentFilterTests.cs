@@ -31,7 +31,7 @@ namespace EPR.Payment.Service.UnitTests.Middleware
             var loggerMock = fixture.Freeze<Mock<ILogger<FeatureEnabledDocumentFilter>>>();
             _output = new StringWriter();
             Console.SetOut(_output);
-            _filter = new FeatureEnabledDocumentFilter(_featureManagerMock.Object, loggerMock.Object);
+            _filter = new FeatureEnabledDocumentFilter(_featureManagerMock.Object);
         }
 
         [TestMethod]

@@ -58,7 +58,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public void Constructor_WhenMapperIsNull_ShouldThrowArgumentNullException()
         {
             // Act
-            Action act = () => new OfflinePaymentsService(null!, _offlinePaymentsRepositoryMock.Object);
+            Action act = () => { var unused = new OfflinePaymentsService(null!, _offlinePaymentsRepositoryMock.Object); };
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -72,7 +72,11 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             IOfflinePaymentsRepository? offlinePaymentsRepositoryMock = null;
 
             // Act
-            Action act = () => new OfflinePaymentsService(_mapper, offlinePaymentsRepositoryMock!);
+            Action act = () =>
+            {
+                // Assign the instance to a variable to avoid CA1806
+                var unused = new OfflinePaymentsService(_mapper, offlinePaymentsRepositoryMock!);
+            };
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
