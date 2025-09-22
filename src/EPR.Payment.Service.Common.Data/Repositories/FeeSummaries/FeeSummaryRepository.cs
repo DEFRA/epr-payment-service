@@ -7,9 +7,12 @@ namespace EPR.Payment.Service.Common.Data.Repositories.FeeSummaries
 {
     public class FeeSummaryRepository : IFeeSummaryRepository
     {
-        private readonly IAppDbContext _db;
+        private readonly IAppDbContext _dbContext;
 
-        public FeeSummaryRepository(IAppDbContext db) => _db = db;
+        public FeeSummaryRepository(IAppDbContext dbContext)
+        {
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        }
 
         public async Task UpsertAsync(
             Guid externalId,
@@ -24,7 +27,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.FeeSummaries
         {
             foreach (var item in items)
             {
-                var existing = await _db.FeeSummaries
+                var existing = await _dbContext.FeeSummaries
                     .Include(s => s.FileFeeSummaryConnections)
                     .FirstOrDefaultAsync(s =>
                         s.AppRefNo == appRefNo &&
@@ -43,8 +46,8 @@ namespace EPR.Payment.Service.Common.Data.Repositories.FeeSummaries
                     item.PayerId = payerId;
                     item.CreatedDate = DateTimeOffset.UtcNow;
 
-                    await _db.FeeSummaries.AddAsync(item);
-                    await _db.FileFeeSummaryConnections.AddAsync(new FileFeeSummaryConnection
+                    await _dbContext.FeeSummaries.AddAsync(item);
+                    await _dbContext.FileFeeSummaryConnections.AddAsync(new FileFeeSummaryConnection
                     {
                         FileId = fileId,
                         FeeSummary = item
@@ -60,7 +63,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.FeeSummaries
                     var hasLink = existing.FileFeeSummaryConnections.Any(x => x.FileId == fileId);
                     if (!hasLink)
                     {
-                        await _db.FileFeeSummaryConnections.AddAsync(new FileFeeSummaryConnection
+                        await _dbContext.FileFeeSummaryConnections.AddAsync(new FileFeeSummaryConnection
                         {
                             FileId = fileId,
                             FeeSummaryId = existing.Id
@@ -69,7 +72,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.FeeSummaries
                 }
             }
 
-            await _db.SaveChangesAsync(cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

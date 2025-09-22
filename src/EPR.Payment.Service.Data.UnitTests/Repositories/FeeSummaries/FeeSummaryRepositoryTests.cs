@@ -120,7 +120,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.FeeSummaries
                 Quantity      = 2,
                 Amount        = 20m,
                 CreatedDate   = DateTimeOffset.UtcNow,
-                FileFeeSummaryConnections = new List<FileFeeSummaryConnection>() // no link yet
+                FileFeeSummaryConnections = new List<FileFeeSummaryConnection>()
             };
             feeSummaries.Add(existing);
 
@@ -137,18 +137,18 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.FeeSummaries
                 externalId, appRefNo, invoiceDate, invoicePeriod,
                 payerTypeId, payerId, fileIdToLink, new[] { incoming }, CancellationToken.None);
 
-            // Assert: existing amounts should be updated
+            // Assert
             existing.UnitPrice.Should().Be(50m);
             existing.Quantity.Should().Be(3);
             existing.Amount.Should().Be(150m);
             existing.UpdatedDate.Should().NotBeNull();
 
-            // Assert: link added for the existing entity
+            // Assert
             capturedLink.Should().NotBeNull();
             capturedLink!.FileId.Should().Be(fileIdToLink);
             capturedLink.FeeSummaryId.Should().Be(existing.Id);
 
-            // Assert: interactions
+            // Assert
             linkSetMock.Verify(s => s.AddAsync(It.IsAny<FileFeeSummaryConnection>(), It.IsAny<CancellationToken>()), Times.Once);
             db.Verify(d => d.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
@@ -210,12 +210,12 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.FeeSummaries
                 externalId, appRefNo, invoiceDate, invoicePeriod,
                 payerTypeId, payerId, fileId, new[] { incoming }, CancellationToken.None);
 
-            // Assert: entity updated
+            // Assert
             existing.UnitPrice.Should().Be(75m);
             existing.Quantity.Should().Be(2);
             existing.Amount.Should().Be(150m);
 
-            // Assert: no duplicate link creation
+            // Assert
             linkSetMock.Verify(s => s.AddAsync(It.IsAny<FileFeeSummaryConnection>(), It.IsAny<CancellationToken>()), Times.Never);
             db.Verify(d => d.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
