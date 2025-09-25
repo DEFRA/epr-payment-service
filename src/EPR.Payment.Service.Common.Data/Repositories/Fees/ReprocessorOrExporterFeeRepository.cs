@@ -13,7 +13,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Fees
                 .Where(r => 
                     r.GroupId == groupId &&
                     r.SubGroupId == subgroupId &&
-                    r.Regulator.Type.Equals(regulator.Value, StringComparison.CurrentCultureIgnoreCase) &&
+                    EF.Functions.Like(r.Regulator.Type, regulator.Value) && 
                     r.EffectiveFrom <= submissionDate &&
                     r.EffectiveTo > submissionDate)
                .SingleOrDefaultAsync(cancellationToken);

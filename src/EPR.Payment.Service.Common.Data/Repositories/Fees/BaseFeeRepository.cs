@@ -34,9 +34,9 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             }
 
             var registrationFees = await _dataContext.RegistrationFees
-                .Where(r => r.Group.Type.Equals(groupType, StringComparison.CurrentCultureIgnoreCase) &&
-                r.SubGroup.Type.Equals(subGroupType, StringComparison.CurrentCultureIgnoreCase) &&
-                r.Regulator.Type.Equals(regulator.Value, StringComparison.CurrentCultureIgnoreCase))
+                .Where(r => EF.Functions.Like(r.Group.Type, groupType) && 
+                EF.Functions.Like(r.SubGroup.Type, subGroupType) && 
+                EF.Functions.Like(r.Regulator.Type, regulator.Value)) 
                .ToListAsync(cancellationToken);
 
             if (registrationFees.Count==0)

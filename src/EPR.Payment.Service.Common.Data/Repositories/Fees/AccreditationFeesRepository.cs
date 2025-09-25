@@ -25,8 +25,8 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Fees
         {
             return await _dataContext.AccreditationFees
                 .Where(r => r.GroupId == groupId &&
-                r.SubGroupId == subGroupId &&
-                r.Regulator.Type.Equals(regulator.Value, StringComparison.CurrentCultureIgnoreCase) &&
+                r.SubGroupId == subGroupId &&                
+                EF.Functions.Like(r.Regulator.Type, regulator.Value) &&
                 r.TonnageBandId == tonnageBandId &&
                 submissionDate >= r.EffectiveFrom && submissionDate <= r.EffectiveTo).FirstOrDefaultAsync(cancellationToken);
         }
