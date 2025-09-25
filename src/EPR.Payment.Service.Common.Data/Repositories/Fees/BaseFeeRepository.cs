@@ -34,12 +34,12 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             }
 
             var registrationFees = await _dataContext.RegistrationFees
-                .Where(r => r.Group.Type.ToLower() == groupType.ToLower() &&
-                r.SubGroup.Type.ToLower() == subGroupType.ToLower() &&
-                r.Regulator.Type.ToLower() == regulator.Value.ToLower())
+                .Where(r => r.Group.Type.Equals(groupType, StringComparison.CurrentCultureIgnoreCase) &&
+                r.SubGroup.Type.Equals(subGroupType, StringComparison.CurrentCultureIgnoreCase) &&
+                r.Regulator.Type.Equals(regulator.Value, StringComparison.CurrentCultureIgnoreCase))
                .ToListAsync(cancellationToken);
 
-            if (!registrationFees.Any())
+            if (registrationFees.Count==0)
             {
                 _keyValueStore.Add(inMemoryKey, fee);
                 return fee;

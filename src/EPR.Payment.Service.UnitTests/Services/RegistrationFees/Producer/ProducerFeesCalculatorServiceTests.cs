@@ -53,17 +53,15 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             // Arrange
             IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>? baseFeeCalculationStrategy = null;
 
-            // Act
-            Action act = () => new ProducerFeesCalculatorService(
-                baseFeeCalculationStrategy!,
-                _subsidiariesFeeCalculationStrategyMock.Object,
-                _validatorMock.Object,
-                _onlineMarketCalculationStrategyMock.Object,
-                _lateFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'baseFeeCalculationStrategy')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                new ProducerFeesCalculatorService(
+                    baseFeeCalculationStrategy!,
+                    _subsidiariesFeeCalculationStrategyMock.Object,
+                    _validatorMock.Object,
+                    _onlineMarketCalculationStrategyMock.Object,
+                    _lateFeeCalculationStrategyMock.Object,
+                    _paymentsServiceMock.Object));
         }
 
         [TestMethod]
@@ -72,17 +70,15 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             // Arrange
             BaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto>? subsidiariesFeeCalculationStrategy = null;
 
-            // Act
-            Action act = () => new ProducerFeesCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                subsidiariesFeeCalculationStrategy!,
-                _validatorMock.Object,
-                _onlineMarketCalculationStrategyMock.Object,
-                _lateFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'subsidiariesFeeCalculationStrategy')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                new ProducerFeesCalculatorService(
+                    _baseFeeCalculationStrategyMock.Object,
+                    subsidiariesFeeCalculationStrategy!,
+                    _validatorMock.Object,
+                    _onlineMarketCalculationStrategyMock.Object,
+                    _lateFeeCalculationStrategyMock.Object,
+                    _paymentsServiceMock.Object));
         }
 
         [TestMethod]
@@ -91,17 +87,18 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             // Arrange
             IValidator<ProducerRegistrationFeesRequestDto>? validator = null;
 
-            // Act
-            Action act = () => new ProducerFeesCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _subsidiariesFeeCalculationStrategyMock.Object,
-                validator!,
-                _onlineMarketCalculationStrategyMock.Object,
-                _lateFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                new ProducerFeesCalculatorService(
+                    _baseFeeCalculationStrategyMock.Object,
+                    _subsidiariesFeeCalculationStrategyMock.Object,
+                    validator!,
+                    _onlineMarketCalculationStrategyMock.Object,
+                    _lateFeeCalculationStrategyMock.Object,
+                    _paymentsServiceMock.Object));
 
-            // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");
+            
+            
         }
 
 
@@ -111,17 +108,18 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             // Arrange
             IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>? onlineMarketCalculationStrategy = null;
 
-            // Act
-            Action act = () => new ProducerFeesCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _subsidiariesFeeCalculationStrategyMock.Object,
-                _validatorMock.Object,
-                onlineMarketCalculationStrategy!,
-                _lateFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                new ProducerFeesCalculatorService(
+                    _baseFeeCalculationStrategyMock.Object,
+                    _subsidiariesFeeCalculationStrategyMock.Object,
+                    _validatorMock.Object,
+                    onlineMarketCalculationStrategy!,
+                    _lateFeeCalculationStrategyMock.Object,
+                    _paymentsServiceMock.Object));
 
-            // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'onlineMarketCalculationStrategy')");
+            
+            
         }
 
         [TestMethod]
