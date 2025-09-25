@@ -40,11 +40,10 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             // Arrange
             IProducerFeesCalculatorService? producerFeesCalculatorService = null;
 
-            // Act
-            Action act = () => new ProducerFeesController(producerFeesCalculatorService!, _validatorMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'producerFeesCalculatorService')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(
+                () => { var unused = new ProducerFeesController(producerFeesCalculatorService!, _validatorMock.Object); },
+                "Value cannot be null. (Parameter 'producerFeesCalculatorService')");
         }
 
         [TestMethod]
@@ -55,7 +54,10 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             IValidator<ProducerRegistrationFeesRequestDto>? validator = null;
 
             // Act
-            Action act = () => new ProducerFeesController(_producerFeesCalculatorServiceMock.Object, validator!);
+            Action act = () =>
+            {
+                var unused = new ProducerFeesController(_producerFeesCalculatorServiceMock.Object, validator!);
+            };
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");

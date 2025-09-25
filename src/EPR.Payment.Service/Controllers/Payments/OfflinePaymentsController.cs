@@ -23,7 +23,7 @@ namespace EPR.Payment.Service.Controllers.Payments
         {
             _offlinePaymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
             _offlinePaymentInsertRequestValidator = offlinePaymentInsertRequestValidator ?? throw new ArgumentNullException(nameof(offlinePaymentInsertRequestValidator));
-            _offlinePaymentInsertRequestV2Validator = offlinePaymentInsertRequestV2Validator ?? throw new ArgumentNullException(nameof(offlinePaymentInsertRequestV2Validator)); ;
+            _offlinePaymentInsertRequestV2Validator = offlinePaymentInsertRequestV2Validator ?? throw new ArgumentNullException(nameof(offlinePaymentInsertRequestV2Validator));
         }
 
         [ApiExplorerSettings(GroupName = "v1")]

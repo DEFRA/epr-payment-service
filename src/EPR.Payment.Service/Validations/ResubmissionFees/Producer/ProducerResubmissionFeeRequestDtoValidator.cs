@@ -20,10 +20,5 @@ namespace EPR.Payment.Service.Validations.ResubmissionFees.Producer
             RuleFor(x => x.ReferenceNumber)
                 .NotEmpty().WithMessage(ValidationMessages.ReferenceNumberRequired);
         }
-
-        private bool BeInUtc(DateTime dateTime)
-        {
-            return dateTime.Kind == DateTimeKind.Utc;
-        }
     }
 }
