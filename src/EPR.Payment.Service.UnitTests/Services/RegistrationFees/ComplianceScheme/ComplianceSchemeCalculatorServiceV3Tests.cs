@@ -14,7 +14,7 @@ using Moq;
 namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceScheme
 {
     [TestClass]
-    public class ComplianceSchemeCalculatorServiceTests
+    public class ComplianceSchemeCalculatorServiceV3Tests
     {
         private Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>> _baseFeeCalculationStrategyMock = null!;
         private Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestV3Dto, decimal>> _baseFeeCalculationStrategyV3Mock = null!;
@@ -46,162 +46,19 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         }
 
         [TestMethod]
-        public void Constructor_WhenBaseFeeCalculationStrategyIsNull_ShouldThrowArgumentNullException()
-        {
-            // Arrange
-            ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>? baseFeeCalculationStrategy = null;
-
-            // Act
-            Action act = () => new ComplianceSchemeCalculatorService(
-                baseFeeCalculationStrategy!,
-                _baseFeeCalculationStrategyV3Mock.Object,
-                _complianceSchemeOnlineMarketStrategyMock.Object, 
-                _complianceSchemeLateFeeStrategyMock.Object, 
-                _complianceSchemeMemberStrategyMock.Object, 
-                _subsidiariesFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'baseFeeCalculationStrategy')");
-        }
-
-        [TestMethod]
-        public void Constructor_WhenComplianceSchemeOnlineMarketStrategyIsNull_ShouldThrowArgumentNullException()
-        {
-            // Arrange
-            ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>? complianceSchemeOnlineMarketStrategy = null;
-
-            // Act
-            Action act = () => new ComplianceSchemeCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _baseFeeCalculationStrategyV3Mock.Object,
-                complianceSchemeOnlineMarketStrategy!, 
-                _complianceSchemeLateFeeStrategyMock.Object, 
-                _complianceSchemeMemberStrategyMock.Object, 
-                _subsidiariesFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'complianceSchemeOnlineMarketStrategy')");
-        }
-
-        [TestMethod]
-        public void Constructor_WhenComplianceSchemeLateFeeStrategyIsNull_ShouldThrowArgumentNullException()
-        {
-            // Arrange
-            ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>? complianceSchemeLateFeeStrategy = null;
-
-            // Act
-            Action act = () => new ComplianceSchemeCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _baseFeeCalculationStrategyV3Mock.Object,
-                _complianceSchemeOnlineMarketStrategyMock.Object, 
-                complianceSchemeLateFeeStrategy!, 
-                _complianceSchemeMemberStrategyMock.Object, 
-                _subsidiariesFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'complianceSchemeLateFeeStrategy')");
-        }
-
-        [TestMethod]
-        public void Constructor_WhenComplianceSchemeMemberStrategyIsNull_ShouldThrowArgumentNullException()
-        {
-            // Arrange
-            ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>? complianceSchemeMemberStrategy = null;
-
-            // Act
-            Action act = () => new ComplianceSchemeCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _baseFeeCalculationStrategyV3Mock.Object,
-                _complianceSchemeOnlineMarketStrategyMock.Object, 
-                _complianceSchemeLateFeeStrategyMock.Object, 
-                complianceSchemeMemberStrategy!, 
-                _subsidiariesFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'complianceSchemeMemberStrategy')");
-        }
-
-        [TestMethod]
-        public void Constructor_WhenSubsidiariesFeeCalculationStrategyIsNull_ShouldThrowArgumentNullException()
-        {
-            // Arrange
-            BaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto>? subsidiariesFeeCalculationStrategy = null;
-
-            // Act
-            Action act = () => new ComplianceSchemeCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _baseFeeCalculationStrategyV3Mock.Object,
-                _complianceSchemeOnlineMarketStrategyMock.Object, 
-                _complianceSchemeLateFeeStrategyMock.Object, 
-                _complianceSchemeMemberStrategyMock.Object, 
-                subsidiariesFeeCalculationStrategy!,
-                _paymentsServiceMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'subsidiariesFeeCalculationStrategy')");
-        }
-
-
-        [TestMethod]
-        public void Constructor_WhenPaymentServiceIsNull_ShouldThrowArgumentNullException()
-        {
-            // Arrange
-            IPaymentsService? paymentsService = null;
-
-            // Act
-            Action act = () => new ComplianceSchemeCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _baseFeeCalculationStrategyV3Mock.Object,
-                _complianceSchemeOnlineMarketStrategyMock.Object,
-                _complianceSchemeLateFeeStrategyMock.Object,
-                _complianceSchemeMemberStrategyMock.Object,
-                _subsidiariesFeeCalculationStrategyMock.Object,
-                paymentsService!);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'paymentsService')");
-        }
-
-        [TestMethod]
-        public void Constructor_WhenAllDependenciesAreNotNull_ShouldInitializeComplianceSchemeBaseFeeService()
-        {
-            // Act
-            var service = new ComplianceSchemeCalculatorService(
-                _baseFeeCalculationStrategyMock.Object,
-                _baseFeeCalculationStrategyV3Mock.Object,
-                _complianceSchemeOnlineMarketStrategyMock.Object, 
-                _complianceSchemeLateFeeStrategyMock.Object, 
-                _complianceSchemeMemberStrategyMock.Object, 
-                _subsidiariesFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
-
-            // Assert
-            using (new AssertionScope())
-            {
-                service.Should().NotBeNull();
-                service.Should().BeAssignableTo<IComplianceSchemeCalculatorService>();
-            }
-        }
-
-        [TestMethod]
         public async Task CalculateFeesAsync_WithSmallMemberTypeAnd5Subsidiaries_ReturnsCorrectFees()
         {
             // Arrange
-            var request = new ComplianceSchemeFeesRequestDto
+            var request = new ComplianceSchemeFeesRequestV3Dto
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
                 SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
@@ -216,8 +73,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             }
             };
 
-            _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _baseFeeCalculationStrategyV3Mock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -269,11 +126,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public async Task CalculateFeesAsync_WithLargeMemberTypeAnd105SubsidiariesWithOMP_ReturnsCorrectFees()
         {
             // Arrange
-            var request = new ComplianceSchemeFeesRequestDto
+            var request = new ComplianceSchemeFeesRequestV3Dto
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
                 SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
@@ -288,8 +150,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             }
             };
 
-            _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _baseFeeCalculationStrategyV3Mock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -341,11 +203,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public async Task CalculateFeesAsync_WithTwoMembersOneSmallOneLargeWithMemberOMP_ReturnsCorrectAggregatedFees()
         {
             // Arrange
-            var request = new ComplianceSchemeFeesRequestDto
+            var request = new ComplianceSchemeFeesRequestV3Dto
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
                 SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
@@ -370,8 +237,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             };
             var cancellationToken = CancellationToken.None;
 
-            _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), cancellationToken))
+            _baseFeeCalculationStrategyV3Mock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), cancellationToken))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -449,11 +316,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public async Task CalculateFeesAsync_WithTwoMembersOneSmallOneLargeWithMemberAndSubsidiariesOMP_ReturnsCorrectAggregatedFees()
         {
             // Arrange
-            var request = new ComplianceSchemeFeesRequestDto
+            var request = new ComplianceSchemeFeesRequestV3Dto
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
                 SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
@@ -478,8 +350,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             };
             var cancellationToken = CancellationToken.None;
 
-            _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), cancellationToken))
+            _baseFeeCalculationStrategyV3Mock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), cancellationToken))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -557,16 +429,21 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public async Task CalculateFeesAsync_WithNoMembers_ReturnsOnlyRegistrationFee()
         {
             // Arrange
-            var request = new ComplianceSchemeFeesRequestDto
+            var request = new ComplianceSchemeFeesRequestV3Dto
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1,
             };
 
             // Mock base fee calculation
-            _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _baseFeeCalculationStrategyV3Mock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(100);
 
             // Act
@@ -587,11 +464,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public async Task CalculateFeesAsync_InvalidRegulator_ThrowsInvalidOperationException()
         {
             // Arrange
-            var request = new ComplianceSchemeFeesRequestDto
+            var request = new ComplianceSchemeFeesRequestV3Dto
             {
                 Regulator = "InvalidRegulator",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1,
             };
             var cancellationToken = CancellationToken.None;
 
@@ -607,11 +489,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public async Task CalculateFeesAsync_CSWith1MemberWithLateFee_ReturnsCorrectFees()
         {
             // Arrange
-            var request = new ComplianceSchemeFeesRequestDto
+            var request = new ComplianceSchemeFeesRequestV3Dto
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
                 SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {
                 new ComplianceSchemeMemberDto
@@ -626,8 +513,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             }
             };
 
-            _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _baseFeeCalculationStrategyV3Mock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -690,11 +577,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public async Task CalculateFeesAsync_CSWith2MembersWithLateFee_ReturnsCorrectAggregatedFees()
         {
             // Arrange
-            var request = new ComplianceSchemeFeesRequestDto
+            var request = new ComplianceSchemeFeesRequestV3Dto
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
                 SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
         {
             new ComplianceSchemeMemberDto
@@ -719,8 +611,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             };
             var cancellationToken = CancellationToken.None;
 
-            _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), cancellationToken))
+            _baseFeeCalculationStrategyV3Mock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), cancellationToken))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock
@@ -811,11 +703,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public async Task CalculateFeesAsync_CSWith2MembersWith1LateMemberRegstrationFee_ReturnsCorrectAggregatedFees()
         {
             // Arrange
-            var request = new ComplianceSchemeFeesRequestDto
+            var request = new ComplianceSchemeFeesRequestV3Dto
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
                 SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
                 {
                     new ComplianceSchemeMemberDto
@@ -840,8 +737,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             };
             var cancellationToken = CancellationToken.None;
 
-            _baseFeeCalculationStrategyMock
-                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), cancellationToken))
+            _baseFeeCalculationStrategyV3Mock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), cancellationToken))
                 .ReturnsAsync(1380400);
 
             _complianceSchemeMemberStrategyMock

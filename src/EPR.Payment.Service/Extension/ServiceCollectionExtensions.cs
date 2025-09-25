@@ -56,6 +56,7 @@ namespace EPR.Payment.Service.Extension
 
             // Register the specific implementations of IFeeCalculationStrategy for Compliance Scheme
             services.AddScoped<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>, CSBaseFeeCalculationStrategy>();
+            services.AddScoped<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestV3Dto, decimal>, CSBaseFeeCalculationStrategyV3>();
             services.AddScoped<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSMemberFeeCalculationStrategy>();
             services.AddScoped<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSOnlineMarketCalculationStrategy>();
             services.AddScoped<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>, CSLateFeeCalculationStrategy>();
