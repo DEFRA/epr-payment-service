@@ -5,9 +5,9 @@ using FluentValidation;
 
 namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
 {
-    public class ComplianceSchemeFeesRequestvV3DtoValidator : AbstractValidator<ComplianceSchemeFeesRequestV3Dto>
+    public class ComplianceSchemeFeesRequestV3DtoValidator : AbstractValidator<ComplianceSchemeFeesRequestV3Dto>
     {
-        public ComplianceSchemeFeesRequestvV3DtoValidator()
+        public ComplianceSchemeFeesRequestV3DtoValidator()
         {
             RuleFor(x => x.Regulator)
                     .NotEmpty().WithMessage(ValidationMessages.RegulatorRequired)
@@ -30,14 +30,14 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
                     .NotEmpty().WithMessage(ValidationMessages.InvoicePeriodRequired);
 
             RuleFor(x => x.PayerTypeId)
-                    .NotEmpty().WithMessage(ValidationMessages.PayerTypeIdRequired);
+                    .LessThan(1).WithMessage(ValidationMessages.PayerTypeIdRequired);
 
             RuleFor(x => x.PayerId)
-                    .NotEmpty().WithMessage(ValidationMessages.PayerIdRequired);
+                    .LessThan(1).WithMessage(ValidationMessages.PayerIdRequired);
 
             RuleForEach(x => x.ComplianceSchemeMembers)
-            .SetValidator(new ComplianceSchemeMemberDtoValidator())
-            .WithMessage(ValidationMessages.InvalidComplianceSchemeMember);
+                    .SetValidator(new ComplianceSchemeMemberDtoValidator())
+                    .WithMessage(ValidationMessages.InvalidComplianceSchemeMember);
         }
     }
 }
