@@ -1,4 +1,5 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+using EPR.Payment.Service.Common.Data.Extensions;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -25,8 +26,8 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Fees
         {
             return await _dataContext.AccreditationFees
                 .Where(r => r.GroupId == groupId &&
-                r.SubGroupId == subGroupId &&
-                r.Regulator.Type.Equals(regulator.Value, StringComparison.CurrentCultureIgnoreCase) &&
+                r.SubGroupId == subGroupId &&                
+                r.Regulator.Type.ToLower().Equals(regulator.Value.ToLower()) &&
                 r.TonnageBandId == tonnageBandId &&
                 submissionDate >= r.EffectiveFrom && submissionDate <= r.EffectiveTo).FirstOrDefaultAsync(cancellationToken);
         }
