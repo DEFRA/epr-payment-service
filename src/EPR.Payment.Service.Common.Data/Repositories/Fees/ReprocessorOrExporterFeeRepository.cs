@@ -7,13 +7,13 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Fees
 {
     public class ReprocessorOrExporterFeeRepository(IAppDbContext dataContext) : IReprocessorOrExporterFeeRepository
     {
-        public async Task<DataModels.Lookups.RegistrationFees?> GetFeeAsync(int groupId, int subGroupId, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
+        public async Task<DataModels.Lookups.RegistrationFees?> GetFeeAsync(int groupId, int subgroupId, RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
             return await dataContext.RegistrationFees
                 .Where(r => 
                     r.GroupId == groupId &&
-                    r.SubGroupId == subGroupId &&
-                    r.Regulator.Type.ToLower() == regulator.Value.ToLower() &&
+                    r.SubGroupId == subgroupId &&
+                    r.Regulator.Type.Equals(regulator.Value, StringComparison.CurrentCultureIgnoreCase) &&
                     r.EffectiveFrom <= submissionDate &&
                     r.EffectiveTo > submissionDate)
                .SingleOrDefaultAsync(cancellationToken);

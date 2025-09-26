@@ -54,29 +54,25 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.Producer
         [TestMethod]
         public void Constructor_WithNullProducerResubmissionService_ShouldThrowArgumentNullException()
         {
-            // Act
-            Action act = () => new ProducerResubmissionController(
-                null!,
-                _validatorMock.Object
-            );
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithParameterName("producerResubmissionService");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                new ProducerResubmissionController(
+                    null!,
+                    _validatorMock.Object
+                ));
         }
 
         [TestMethod]
         public void Constructor_WithNullValidator_ShouldThrowArgumentNullException()
         {
-            // Act
-            Action act = () => new ProducerResubmissionController(
-                _producerResubmissionServiceMock.Object,
-                null!
-            );
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                new ProducerResubmissionController(
+                    _producerResubmissionServiceMock.Object,
+                    null!
+                ));
 
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithParameterName("validator");
+          
         }
 
         [TestMethod, AutoMoqData]

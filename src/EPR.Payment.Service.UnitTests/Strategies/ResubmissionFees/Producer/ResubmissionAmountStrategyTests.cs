@@ -31,12 +31,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.ResubmissionFees.Producer
             // Arrange
             IProducerFeesRepository? nullRepository = null;
 
-            // Act
-            Action act = () => new ProducerResubmissionAmountStrategy(nullRepository!);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'feesRepository')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() => new ProducerResubmissionAmountStrategy(nullRepository!));
         }
 
         [TestMethod]

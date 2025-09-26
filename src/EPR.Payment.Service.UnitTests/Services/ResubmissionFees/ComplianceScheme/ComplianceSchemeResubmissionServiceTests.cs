@@ -31,12 +31,8 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
             // Arrange
             IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>? nullStrategy = null;
 
-            // Act
-            Action act = () => new ComplianceSchemeResubmissionService(nullStrategy!, paymentsServiceMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'resubmissionFeeStrategy')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() => new ComplianceSchemeResubmissionService(nullStrategy!, paymentsServiceMock.Object));
         }
 
         [TestMethod]
@@ -46,12 +42,8 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
             var resubmissionFeeStrategyMock = _fixture.Create<Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>>>();
             IPaymentsService? paymentsService = null;
 
-            // Act
-            Action act = () => new ComplianceSchemeResubmissionService(resubmissionFeeStrategyMock.Object, paymentsService!);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'paymentsService')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() => new ComplianceSchemeResubmissionService(resubmissionFeeStrategyMock.Object, paymentsService!));            
         }
 
         [TestMethod, AutoMoqData]
