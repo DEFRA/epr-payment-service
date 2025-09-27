@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Data.Interfaces;
+﻿using EPR.Payment.Service.Common.Data.Extensions;
+using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Fees
                 .Where(r => 
                     r.GroupId == groupId &&
                     r.SubGroupId == subgroupId &&
-                    r.Regulator.Type.Equals(regulator.Value, StringComparison.CurrentCultureIgnoreCase) &&
+                    r.Regulator.Type.ToLower().Equals(regulator.Value.ToLower()) && 
                     r.EffectiveFrom <= submissionDate &&
                     r.EffectiveTo > submissionDate)
                .SingleOrDefaultAsync(cancellationToken);
