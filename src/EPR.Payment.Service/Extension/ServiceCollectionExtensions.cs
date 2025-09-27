@@ -90,7 +90,9 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IReprocessorOrExporterFeesCalculatorService, ReprocessorOrExporterFeesCalculatorService>();
            
             services.AddScoped<IFeeSummaryRepository, FeeSummaryRepository>();
+            services.AddScoped<IFeeSummarySaveProducerRequestMapper, FeeSummarySaveProducerRequestMapper>();
             services.AddScoped<IFeeSummarySaveRequestMapper, FeeSummarySaveRequestMapper>();
+            
             services.AddScoped<IFeeSummaryWriter, FeeSummaryWriter>();
 
             services.AddScoped<FeesKeyValueStore>();
