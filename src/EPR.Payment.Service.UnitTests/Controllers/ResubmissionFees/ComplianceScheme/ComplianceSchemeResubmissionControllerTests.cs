@@ -70,31 +70,23 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
         [TestMethod]
         public void Constructor_WithNullResubmissionFeeService_ShouldThrowArgumentNullException()
         {
-            // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(() => new ComplianceSchemeResubmissionController(
-                null!,
-                _validatorMock.Object,
-                _feeSummaryWriterMock.Object,
-                _mapperMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithParameterName("resubmissionFeeService");
+                      null!,
+                      _validatorMock.Object,
+                      _feeSummaryWriterMock.Object,
+                        _mapperMock.Object
+                  ));
         }
 
         [TestMethod]
         public void Constructor_WithNullValidator_ShouldThrowArgumentNullException()
         {
-            // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(() => new ComplianceSchemeResubmissionController(
-                _resubmissionFeeServiceMock.Object,
-                null!,
-                _feeSummaryWriterMock.Object,
-                _mapperMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithParameterName("validator");
+                            _resubmissionFeeServiceMock.Object,
+                            null!,
+                            _feeSummaryWriterMock.Object,
+                            _mapperMock.Object
+                       ));
         }
 
         [TestMethod, AutoMoqData]
