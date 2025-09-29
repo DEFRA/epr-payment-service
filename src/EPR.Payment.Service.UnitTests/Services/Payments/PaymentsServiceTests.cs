@@ -46,9 +46,9 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             // Act
             IPaymentsRepository? paymentsRepository = null;
 
-            Action act = () => new PaymentsService(paymentsRepository!);
-
             // Assert
+            Action act = () => { var unused = new PaymentsService(paymentsRepository!); };
+
             act.Should().Throw<ArgumentNullException>()
                 .WithMessage("Value cannot be null. (Parameter 'paymentsRepository')");
         }

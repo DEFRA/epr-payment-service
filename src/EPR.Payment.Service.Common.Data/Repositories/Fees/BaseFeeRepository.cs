@@ -1,5 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.LookUps;
+using EPR.Payment.Service.Common.Data.Extensions;
 using EPR.Payment.Service.Common.Data.Helper;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
@@ -32,14 +33,14 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             {
                 return (decimal)cachedFee;
             }
-
+       
             var registrationFees = await _dataContext.RegistrationFees
-                .Where(r => r.Group.Type.ToLower() == groupType.ToLower() &&
-                r.SubGroup.Type.ToLower() == subGroupType.ToLower() &&
-                r.Regulator.Type.ToLower() == regulator.Value.ToLower())
+                .Where(r => r.Group.Type.ToLower().Equals(groupType.ToLower())  &&
+                r.SubGroup.Type.ToLower().Equals(subGroupType.ToLower()) &&
+                r.Regulator.Type.ToLower().Equals(regulator.Value.ToLower())) 
                .ToListAsync(cancellationToken);
 
-            if (!registrationFees.Any())
+            if (registrationFees.Count==0)
             {
                 _keyValueStore.Add(inMemoryKey, fee);
                 return fee;

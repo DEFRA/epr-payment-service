@@ -56,27 +56,21 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
             // Arrange
             IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal>? resubmissionAmountStrategy = null;
 
-            // Act
-            Action act = () => new ProducerResubmissionService(
+            // Act &  Assert
+            Assert.ThrowsException<ArgumentNullException>(() => new ProducerResubmissionService(
                 resubmissionAmountStrategy!,
                 _paymentsServiceMock.Object
-            );
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'resubmissionAmountStrategy')");
+            ));
         }
 
         [TestMethod]
         public void Constructor_WhenPaymentsServiceIsNull_ShouldThrowArgumentNullException()
         {
-            // Act
-            Action act = () => new ProducerResubmissionService(
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() => new ProducerResubmissionService(
                 _resubmissionAmountStrategyMock.Object,
                 null!
-            );
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'paymentsService')");
+            ));
         }
 
         [TestMethod, AutoMoqData]

@@ -28,7 +28,7 @@ namespace EPR.Payment.Service.UnitTests.Middleware
             _middleware = new ConditionalEndpointMiddleware(_nextMock.Object, _featureManagerMock.Object, _loggerMock.Object);
         }
 
-        private DefaultHttpContext CreateHttpContextWithEndpoint(Endpoint? endpoint)
+        private static DefaultHttpContext CreateHttpContextWithEndpoint(Endpoint? endpoint)
         {
             var context = new DefaultHttpContext();
             context.SetEndpoint(endpoint);

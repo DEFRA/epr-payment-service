@@ -2,6 +2,7 @@
 using Microsoft.FeatureManagement.Mvc;
 using Microsoft.FeatureManagement;
 using System.Reflection;
+using EPR.Payment.Service.Constants;
 
 namespace EPR.Payment.Service.Helper
 {
@@ -26,7 +27,7 @@ namespace EPR.Payment.Service.Helper
                 var controllerActionDescriptor = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
                 if (controllerActionDescriptor != null)
                 {
-                    _logger.LogInformation($"Evaluating feature gate for {controllerActionDescriptor.ControllerName}.{controllerActionDescriptor.ActionName}");
+                    _logger.LogInformation(LogMessages.ConditionalEndpointFeatureGateEvaluation, controllerActionDescriptor.ControllerName, controllerActionDescriptor.ActionName);
 
                     var featureAttributes = controllerActionDescriptor.ControllerTypeInfo
                         .GetCustomAttributes<FeatureGateAttribute>(true)
@@ -38,11 +39,11 @@ namespace EPR.Payment.Service.Helper
                         foreach (var featureName in featureAttribute.Features)
                         {
                             var isEnabled = await _featureManager.IsEnabledAsync(featureName);
-                            _logger.LogInformation($"Feature '{featureName}' is enabled: {isEnabled}");
+                            _logger.LogInformation(LogMessages.ConditionalEndpointFeatureGateEnabled, featureName, isEnabled);
 
                             if (!isEnabled)
                             {
-                                _logger.LogInformation($"Feature '{featureName}' is disabled. Returning 404.");
+                                _logger.LogInformation(LogMessages.ConditionalEndpointFeatureGateDisabled , featureName);
                                 context.Response.StatusCode = StatusCodes.Status404NotFound;
                                 await context.Response.WriteAsync("Feature not available.");
                                 return;
