@@ -2,14 +2,11 @@
 using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Dtos.FeeSummaries;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
-using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.ResubmissionFees.ComplianceScheme;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.FeeSummaries;
 using EPR.Payment.Service.Strategies.Interfaces.FeeSummary;
@@ -20,7 +17,6 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Linq;
 
 namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceScheme
 {
@@ -120,7 +116,6 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
                 .Setup(v => v.ValidateAsync(request, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new ValidationResult());
 
-            // mapper not asserted here; allow default behavior
             _mapperMock
                 .Setup(m => m.BuildComplianceSchemeResubmissionFeeSummaryRecord(
                     It.IsAny<ComplianceSchemeResubmissionFeeRequestDto>(),
@@ -256,7 +251,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
             [Frozen] ComplianceSchemeResubmissionFeeRequestDto request)
         {
             // Arrange
-            request.ResubmissionDate = DateTime.UtcNow; // flagged by validator
+            request.ResubmissionDate = DateTime.UtcNow; 
             request.FileId = Guid.NewGuid();
             request.ExternalId = Guid.NewGuid();
             request.PayerId = 789;
