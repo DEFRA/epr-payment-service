@@ -13,6 +13,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
     public class ProducerFeesCalculatorService : IProducerFeesCalculatorService
     {
         private readonly IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _baseFeeCalculationStrategy;
+        private readonly IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestV3Dto, decimal> _baseFeeCalculationStrategyV3;
         private readonly IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown> _subsidiariesFeeCalculationStrategy;
         private readonly IValidator<ProducerRegistrationFeesRequestDto> _validator;
         private readonly IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _onlineMarketCalculationStrategy;
@@ -21,6 +22,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 
         public ProducerFeesCalculatorService(
             IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> baseFeeCalculationStrategy,
+            IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestV3Dto, decimal> baseFeeCalculationStrategyV3,
             IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown> subsidiariesFeeCalculationStrategy,
             IValidator<ProducerRegistrationFeesRequestDto> validator,
             IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> onlineMarketCalculationStrategy,
@@ -28,6 +30,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             IPaymentsService paymentsService)
         {
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
+            _baseFeeCalculationStrategyV3 = baseFeeCalculationStrategyV3 ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategyV3));
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _onlineMarketCalculationStrategy = onlineMarketCalculationStrategy ?? throw new ArgumentNullException(nameof(onlineMarketCalculationStrategy));
@@ -56,6 +59,27 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             return response;
         }
 
+/*        public async Task<RegistrationFeesResponseDto> CalculateFeesAsync(ProducerRegistrationFeesRequestV3Dto request, CancellationToken cancellationToken)
+        {
+            ValidateRequest(request);
+            decimal lateFee = await _lateFeeCalculationStrategyV3.CalculateFeeAsync(request, cancellationToken);
+            decimal subsidiariesLateFee = request.NumberOfSubsidiaries * lateFee;
+            var response = new RegistrationFeesResponseDto
+            {
+                ProducerRegistrationFee = await _baseFeeCalculationStrategyV3.CalculateFeeAsync(request, cancellationToken),
+                ProducerOnlineMarketPlaceFee = await _onlineMarketCalculationStrategyV3.CalculateFeeAsync(request, cancellationToken),
+                ProducerLateRegistrationFee = lateFee + subsidiariesLateFee,
+                SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategyV3.CalculateFeeAsync(request, cancellationToken)
+            };
+
+            response.SubsidiariesFee = response.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + response.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
+            response.TotalFee = response.ProducerRegistrationFee + response.ProducerOnlineMarketPlaceFee + response.SubsidiariesFee + response.ProducerLateRegistrationFee;
+            response.PreviousPayment = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
+            response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
+
+            return response;
+        }*/
+
         private void ValidateRequest(ProducerRegistrationFeesRequestDto request)
         {
             var validationResult = _validator.Validate(request);
@@ -64,5 +88,14 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
                 throw new ValidationException(validationResult.Errors);
             }
         }
+
+       /* private void ValidateRequest(ProducerRegistrationFeesRequestV3Dto request)
+        {
+            var validationResult = _validator.Validate(request);
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+        }*/
     }
 }

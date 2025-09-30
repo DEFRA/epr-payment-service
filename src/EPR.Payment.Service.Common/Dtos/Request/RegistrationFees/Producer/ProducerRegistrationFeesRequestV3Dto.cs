@@ -1,7 +1,9 @@
 ﻿namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer
 {
-    public class ProducerRegistrationFeesRequestDto
+    public class ProducerRegistrationFeesRequestV3Dto
     {
+        public required string ApplicationReferenceNumber { get; set; }
+
         public required string ProducerType { get; set; } // "large" or "small", case insensitive, cannot be an empty string
 
         public int NumberOfSubsidiaries { get; set; } // Any integer >= 0
@@ -14,8 +16,6 @@
 
         public bool IsLateFeeApplicable { get; set; } // True or False
 
-        public required string ApplicationReferenceNumber { get; set; }
-
         public DateTime SubmissionDate { get; set; }
 
         public Guid? FileId { get; set; }
@@ -27,6 +27,5 @@
         public required DateTimeOffset InvoicePeriod { get; set; }
 
         public required int PayerTypeId { get; set; }
-
     }
 }
