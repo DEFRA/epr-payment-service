@@ -27,7 +27,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -49,7 +54,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -70,7 +80,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -91,7 +106,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -112,7 +132,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -133,7 +158,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -155,7 +185,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = string.Empty,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -178,7 +213,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -201,7 +241,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -223,7 +268,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -246,7 +296,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -272,7 +327,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                     Regulator = regulator,
                     IsProducerOnlineMarketplace = false,
                     ApplicationReferenceNumber = "A123",
-                    SubmissionDate = DateTime.UtcNow
+                    SubmissionDate = DateTime.UtcNow,
+                    FileId = Guid.NewGuid(),
+                    ExternalId = Guid.NewGuid(),
+                    InvoicePeriod = new DateTimeOffset(),
+                    PayerId = 1,
+                    PayerTypeId = 1
                 };
 
                 // Act
@@ -295,7 +355,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = string.Empty,
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -318,7 +383,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 IsProducerOnlineMarketplace = false,
                 NoOfSubsidiariesOnlineMarketplace = -5,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -341,7 +411,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 IsProducerOnlineMarketplace = false,
                 IsLateFeeApplicable = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = default
+                SubmissionDate = DateTime.Now,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -349,7 +424,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
-                  .WithErrorMessage(ValidationMessages.InvalidSubmissionDate);
+                  .WithErrorMessage(ValidationMessages.SubmissionDateMustBeUtc);
         }
 
         [TestMethod]
@@ -364,7 +439,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 IsProducerOnlineMarketplace = false,
                 IsLateFeeApplicable = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow.AddDays(10)
+                SubmissionDate = DateTime.UtcNow.AddDays(10),
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -387,7 +467,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 IsProducerOnlineMarketplace = false,
                 IsLateFeeApplicable = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.Now,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act

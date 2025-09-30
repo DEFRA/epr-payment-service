@@ -192,7 +192,9 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeSummary
                 SubmissionDate = DateTime.UtcNow,
                 FileId = Guid.NewGuid(),
                 ExternalId = Guid.NewGuid(),
-                PayerId = 42
+                PayerId = 42,
+                InvoicePeriod = new DateTimeOffset(),
+                PayerTypeId = 1
             };
 
             var resp = new RegistrationFeesResponseDto
