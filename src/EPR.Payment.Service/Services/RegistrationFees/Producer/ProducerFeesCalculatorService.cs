@@ -22,7 +22,6 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 
         public ProducerFeesCalculatorService(
             IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> baseFeeCalculationStrategy,
-            IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestV3Dto, decimal> baseFeeCalculationStrategyV3,
             IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown> subsidiariesFeeCalculationStrategy,
             IValidator<ProducerRegistrationFeesRequestDto> validator,
             IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> onlineMarketCalculationStrategy,
@@ -30,7 +29,6 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             IPaymentsService paymentsService)
         {
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
-            _baseFeeCalculationStrategyV3 = baseFeeCalculationStrategyV3 ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategyV3));
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _onlineMarketCalculationStrategy = onlineMarketCalculationStrategy ?? throw new ArgumentNullException(nameof(onlineMarketCalculationStrategy));

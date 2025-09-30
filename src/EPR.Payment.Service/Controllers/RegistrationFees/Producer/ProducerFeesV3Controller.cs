@@ -14,7 +14,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
 {
-    [ApiVersion(1)]
+    [ApiVersion(3)]
     [ApiController]
     [Route("api/v{version:apiVersion}/producer")]
     [FeatureGate("EnableRegistrationFeesFeature")]
@@ -35,7 +35,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
             _feeSummarySaveRequestMapper = feeSummarySaveRequestMapper ?? throw new ArgumentNullException(nameof(feeSummarySaveRequestMapper));
         }
 
-        [MapToApiVersion(1)]
+        [MapToApiVersion(3)]
         [HttpPost("registration-fee")]
         [SwaggerOperation(
             Summary = "Calculates the registration fees for a producer",

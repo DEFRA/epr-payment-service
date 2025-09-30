@@ -82,6 +82,6 @@ namespace EPR.Payment.Service.Strategies.FeeSummary
                     }
                 }
             };
-        }       
-    }    
-}
+        }
+    }
+} 
