@@ -7,6 +7,7 @@ using EPR.Payment.Service.Services.ResubmissionFees.Producer;
 using EPR.Payment.Service.Strategies.Interfaces.ResubmissionFees.Producer;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using Microsoft.FeatureManagement;
 using Moq;
 
 namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
@@ -17,6 +18,8 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
         private Mock<IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal>> _resubmissionAmountStrategyMock = null!;
         private Mock<IPaymentsService> _paymentsServiceMock = null!;
         private ProducerResubmissionService _resubmissionService = null!;
+        private Mock<IFeatureManager> featureManagerMock = null!;
+
         private CancellationToken _cancellationToken;
 
         [TestInitialize]
@@ -24,10 +27,12 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
         {
             _resubmissionAmountStrategyMock = new Mock<IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal>>();
             _paymentsServiceMock = new Mock<IPaymentsService>();
+            featureManagerMock = new Mock<IFeatureManager>();
 
             _resubmissionService = new ProducerResubmissionService(
                 _resubmissionAmountStrategyMock.Object,
-                _paymentsServiceMock.Object
+                _paymentsServiceMock.Object,
+                featureManagerMock.Object
             );
 
             _cancellationToken = new CancellationToken();
@@ -39,7 +44,8 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
             // Act
             var service = new ProducerResubmissionService(
                 _resubmissionAmountStrategyMock.Object,
-                _paymentsServiceMock.Object
+                _paymentsServiceMock.Object,
+                featureManagerMock.Object
             );
 
             // Assert
@@ -59,7 +65,8 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
             // Act &  Assert
             Assert.ThrowsException<ArgumentNullException>(() => new ProducerResubmissionService(
                 resubmissionAmountStrategy!,
-                _paymentsServiceMock.Object
+                _paymentsServiceMock.Object,
+                featureManagerMock.Object
             ));
         }
 
@@ -69,17 +76,69 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(() => new ProducerResubmissionService(
                 _resubmissionAmountStrategyMock.Object,
-                null!
+                null!,
+                featureManagerMock.Object
             ));
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetResubmissionFeeAsync_ShouldReturnCalculatedResponse(
+        public async Task GetResubmissionFeeAsync_ShouldReturnCalculatedResponse_MemberCountTimesBasefee(
             [Frozen] ProducerResubmissionFeeRequestDto request,
             [Frozen] decimal baseFee,
             [Frozen] decimal previousPayments)
         {
             // Arrange
+            Mock<IFeatureManager> _featureManagerMock = new Mock<IFeatureManager>();
+
+            _featureManagerMock
+                .Setup(fm => fm.IsEnabledAsync("EnableResubmissionProducerMemberCountBaseFeeMultiplication"))
+                .ReturnsAsync(true);
+
+            _resubmissionService = new ProducerResubmissionService(
+                _resubmissionAmountStrategyMock.Object,
+                _paymentsServiceMock.Object,
+                _featureManagerMock.Object
+            );
+
+            _resubmissionAmountStrategyMock
+                .Setup(strategy => strategy.CalculateFeeAsync(request, _cancellationToken))
+                .ReturnsAsync(baseFee);
+
+            _paymentsServiceMock
+                .Setup(service => service.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, _cancellationToken))
+                .ReturnsAsync(previousPayments);
+
+            // Act
+            var result = await _resubmissionService.GetResubmissionFeeAsync(request, _cancellationToken);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.TotalResubmissionFee.Should().Be(request.MemberCount * baseFee);
+                result.PreviousPayments.Should().Be(previousPayments);
+                result.OutstandingPayment.Should().Be(request.MemberCount * baseFee - previousPayments);
+            }
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetResubmissionFeeAsync_ShouldReturnCalculatedResponse_SingleBaseFee(
+            [Frozen] ProducerResubmissionFeeRequestDto request,
+            [Frozen] decimal baseFee,
+            [Frozen] decimal previousPayments)
+        {
+            // Arrange
+            Mock<IFeatureManager> _featureManagerMock = new Mock<IFeatureManager>();
+
+            _featureManagerMock
+                .Setup(fm => fm.IsEnabledAsync("EnableResubmissionProducerMemberCountBaseFeeMultiplication"))
+                .ReturnsAsync(false);
+
+            _resubmissionService = new ProducerResubmissionService(
+                _resubmissionAmountStrategyMock.Object,
+                _paymentsServiceMock.Object,
+                _featureManagerMock.Object
+            );
+
             _resubmissionAmountStrategyMock
                 .Setup(strategy => strategy.CalculateFeeAsync(request, _cancellationToken))
                 .ReturnsAsync(baseFee);
