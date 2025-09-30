@@ -1,8 +1,12 @@
 ﻿using Asp.Versioning;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.Enums;
+using EPR.Payment.Service.Services.Interfaces.FeeSummaries;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Strategies.Interfaces.FeeSummary;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
@@ -18,13 +22,17 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
     {
         private readonly IProducerFeesCalculatorService _producerFeesCalculatorService;
         private readonly IValidator<ProducerRegistrationFeesRequestDto> _validator;
+        private readonly IFeeSummaryWriter _feeSummaryWriter;
+        private readonly IFeeSummarySaveProducerRequestMapper _feeSummarySaveRequestMapper;
 
         public ProducerFeesController(
             IProducerFeesCalculatorService producerFeesCalculatorService,
-            IValidator<ProducerRegistrationFeesRequestDto> validator)
+            IValidator<ProducerRegistrationFeesRequestDto> validator, IFeeSummaryWriter feeSummaryWriter, IFeeSummarySaveProducerRequestMapper feeSummarySaveRequestMapper)
         {
             _producerFeesCalculatorService = producerFeesCalculatorService ?? throw new ArgumentNullException(nameof(producerFeesCalculatorService));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _feeSummaryWriter = feeSummaryWriter ?? throw new ArgumentNullException(nameof(feeSummaryWriter));
+            _feeSummarySaveRequestMapper = feeSummarySaveRequestMapper ?? throw new ArgumentNullException(nameof(feeSummarySaveRequestMapper));
         }
 
         [MapToApiVersion(1)]
@@ -59,8 +67,22 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
 
             try
             {
-                var result = await _producerFeesCalculatorService.CalculateFeesAsync(request, cancellationToken);
-                return Ok(result); // Return the calculated fees as a resource
+                var Response = await _producerFeesCalculatorService.CalculateFeesAsync(request, cancellationToken);
+                
+                if (request.PayerId != null && request.FileId != null && request.ExternalId != null)
+                {
+                    var invoicePeriod = new DateTimeOffset(request.SubmissionDate, TimeSpan.Zero);
+
+                    var save = _feeSummarySaveRequestMapper.BuildRegistrationFeeSummaryRecord(
+                        request,
+                        invoicePeriod,
+                        (int)PayerTypeIds.DirectProducer,
+                        Response
+                    );
+
+                    await _feeSummaryWriter.Save(save, cancellationToken);
+                }
+                return Ok(Response);
             }
             catch (ValidationException ex)
             {

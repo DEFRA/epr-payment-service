@@ -2510,6 +2510,16 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         {
                             Id = 8,
                             Name = "Late Registration Fee"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Producer Resubmission Fee"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Compliance Scheme Resubmission Fee"
                         });
                 });
 

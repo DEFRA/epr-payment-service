@@ -2,9 +2,11 @@
 using EPR.Payment.Service.Common.Data.Helper;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.FeeSummaries;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Data.Repositories.Fees;
+using EPR.Payment.Service.Common.Data.Repositories.FeeSummaries;
 using EPR.Payment.Service.Common.Data.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
@@ -13,7 +15,9 @@ using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Services.AccreditationFees;
+using EPR.Payment.Service.Services.FeeSummaries;
 using EPR.Payment.Service.Services.Interfaces.AccreditationFees;
+using EPR.Payment.Service.Services.Interfaces.FeeSummaries;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
@@ -37,6 +41,8 @@ using EPR.Payment.Service.Strategies.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.ResubmissionFees.Producer;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Strategies.FeeSummary;
+using EPR.Payment.Service.Strategies.Interfaces.FeeSummary;
 
 namespace EPR.Payment.Service.Extension
 {
@@ -56,6 +62,7 @@ namespace EPR.Payment.Service.Extension
 
             // Register the specific implementations of IFeeCalculationStrategy for Compliance Scheme
             services.AddScoped<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>, CSBaseFeeCalculationStrategy>();
+            services.AddScoped<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestV3Dto, decimal>, CSBaseFeeCalculationStrategyV3>();
             services.AddScoped<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSMemberFeeCalculationStrategy>();
             services.AddScoped<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSOnlineMarketCalculationStrategy>();
             services.AddScoped<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>, CSLateFeeCalculationStrategy>();
@@ -82,6 +89,12 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IPreviousPaymentsHelper, PreviousPaymentsHelper>();
             services.AddScoped<IAccreditationFeesCalculatorService, AccreditationFeesCalculatorService>();
             services.AddScoped<IReprocessorOrExporterFeesCalculatorService, ReprocessorOrExporterFeesCalculatorService>();
+           
+            services.AddScoped<IFeeSummaryRepository, FeeSummaryRepository>();
+            services.AddScoped<IFeeSummarySaveProducerRequestMapper, FeeSummarySaveProducerRequestMapper>();
+            services.AddScoped<IFeeSummarySaveRequestMapper, FeeSummarySaveRequestMapper>();
+            
+            services.AddScoped<IFeeSummaryWriter, FeeSummaryWriter>();
 
             services.AddScoped<FeesKeyValueStore>();
 

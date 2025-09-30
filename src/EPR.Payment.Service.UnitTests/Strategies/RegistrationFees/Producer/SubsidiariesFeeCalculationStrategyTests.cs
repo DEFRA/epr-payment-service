@@ -58,7 +58,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
                 NoOfSubsidiariesOnlineMarketplace = 0,
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
@@ -93,7 +98,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
                 NoOfSubsidiariesOnlineMarketplace = 2,
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
@@ -132,7 +142,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 Regulator = "GB-ENG",
                 NoOfSubsidiariesOnlineMarketplace = 0,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
@@ -170,7 +185,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 Regulator = "GB-ENG",
                 NoOfSubsidiariesOnlineMarketplace = 2,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
@@ -211,7 +231,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 NumberOfSubsidiaries = 0,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -234,7 +259,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 NumberOfSubsidiaries = 10,
                 Regulator = null!,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act & Assert
@@ -254,7 +284,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 NumberOfSubsidiaries = 10,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
@@ -286,7 +321,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 Regulator = "GB-ENG",
                 NoOfSubsidiariesOnlineMarketplace = 2,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);

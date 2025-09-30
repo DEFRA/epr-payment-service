@@ -1,8 +1,14 @@
 ﻿using Asp.Versioning;
+using Azure.Core;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+using EPR.Payment.Service.Common.Dtos.FeeSummaries;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Common.Enums;
+using EPR.Payment.Service.Helper;
+using EPR.Payment.Service.Services.Interfaces.FeeSummaries;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Strategies.Interfaces.FeeSummary;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
@@ -18,13 +24,17 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme
     {
         private readonly IComplianceSchemeCalculatorService _complianceSchemeCalculatorService;
         private readonly IValidator<ComplianceSchemeFeesRequestDto> _validator;
+        private readonly IFeeSummaryWriter _feeSummaryWriter;
+        private readonly IFeeSummarySaveRequestMapper _feeSummarySaveRequestMapper;
 
         public ComplianceSchemeFeesController(
             IComplianceSchemeCalculatorService complianceSchemeCalculatorService,
-            IValidator<ComplianceSchemeFeesRequestDto> validator)
+            IValidator<ComplianceSchemeFeesRequestDto> validator, IFeeSummaryWriter feeSummaryWriter, IFeeSummarySaveRequestMapper feeSummarySaveRequestMapper)
         {
             _complianceSchemeCalculatorService = complianceSchemeCalculatorService ?? throw new ArgumentNullException(nameof(complianceSchemeCalculatorService));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _feeSummaryWriter = feeSummaryWriter ?? throw new ArgumentNullException(nameof(feeSummaryWriter));
+            _feeSummarySaveRequestMapper = feeSummarySaveRequestMapper ?? throw new ArgumentNullException(nameof(feeSummarySaveRequestMapper));
         }
 
         [MapToApiVersion(1)]
@@ -57,6 +67,20 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme
             try
             {
                 var result = await _complianceSchemeCalculatorService.CalculateFeesAsync(complianceSchemeFeesRequestDto, cancellationToken);
+                
+                if (complianceSchemeFeesRequestDto.PayerId != null && complianceSchemeFeesRequestDto.FileId != null && complianceSchemeFeesRequestDto.ExternalId != null)
+                {
+                    var invoicePeriod = new DateTimeOffset(complianceSchemeFeesRequestDto.SubmissionDate, TimeSpan.Zero);
+
+                    var save = _feeSummarySaveRequestMapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(
+                        complianceSchemeFeesRequestDto,
+                        invoicePeriod,
+                        (int)PayerTypeIds.ComplianceScheme,
+                        result
+                    );
+
+                    await _feeSummaryWriter.Save(save, cancellationToken);
+                }
                 return Ok(result);
             }
             catch (ValidationException ex)
