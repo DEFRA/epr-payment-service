@@ -14,7 +14,6 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
     public class ComplianceSchemeCalculatorService : IComplianceSchemeCalculatorService
     {
         private readonly ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal> _baseFeeCalculationStrategy;
-        private readonly ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestV3Dto, decimal> _baseFeeCalculationStrategyV3;
         private readonly ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeOnlineMarketStrategy;
         private readonly ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal> _complianceSchemeLateFeeStrategy;
         private readonly ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeMemberStrategy;
@@ -31,7 +30,6 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
             IPaymentsService paymentsService)
         {
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
-            _baseFeeCalculationStrategyV3 = baseFeeCalculationStrategyV3 ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategyV3));
             _complianceSchemeOnlineMarketStrategy = complianceSchemeOnlineMarketStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeOnlineMarketStrategy));
             _complianceSchemeLateFeeStrategy = complianceSchemeLateFeeStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeLateFeeStrategy));
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
@@ -98,82 +96,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
             return response;
         }
 
-        public async Task<ComplianceSchemeFeesResponseDto> CalculateFeesAsync(ComplianceSchemeFeesRequestV3Dto request, CancellationToken cancellationToken)
-        {
-            var regulatorType = RegulatorType.Create(request.Regulator);
-
-            var response = new ComplianceSchemeFeesResponseDto
-            {
-                ComplianceSchemeRegistrationFee = await _baseFeeCalculationStrategyV3.CalculateFeeAsync(request, cancellationToken),
-                ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>()
-            };
-
-            decimal memberLateFee = await GetMemberLateFee(request, regulatorType, cancellationToken);
-
-            foreach (var item in request.ComplianceSchemeMembers)
-            {
-                var complianceSchemeMemberWithRegulatorDto = new ComplianceSchemeMemberWithRegulatorDto
-                {
-                    Regulator = regulatorType,
-                    MemberType = item.MemberType,
-                    IsOnlineMarketplace = item.IsOnlineMarketplace,
-                    IsLateFeeApplicable = item.IsLateFeeApplicable,
-                    NumberOfSubsidiaries = item.NumberOfSubsidiaries,
-                    NoOfSubsidiariesOnlineMarketplace = item.NoOfSubsidiariesOnlineMarketplace,
-                    SubmissionDate = request.SubmissionDate
-                };
-
-                var member = new ComplianceSchemeMembersWithFeesDto
-                {
-                    MemberId = item.MemberId,
-                    MemberRegistrationFee = await _complianceSchemeMemberStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
-                    MemberOnlineMarketPlaceFee = await _complianceSchemeOnlineMarketStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
-                    SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken)
-                };
-
-                member.SubsidiariesFee = member.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees
-                                         + member.SubsidiariesFeeBreakdown.FeeBreakdowns.Sum(i => i.TotalPrice);
-
-                if (item.IsLateFeeApplicable)
-                {
-                    var subsidiariesLateFee = item.NumberOfSubsidiaries * memberLateFee;
-                    member.MemberLateRegistrationFee = memberLateFee + subsidiariesLateFee;
-                }
-
-                member.TotalMemberFee = member.MemberRegistrationFee
-                                        + member.MemberOnlineMarketPlaceFee
-                                        + member.SubsidiariesFee
-                                        + member.MemberLateRegistrationFee;
-
-                // Add to response collection
-                response.ComplianceSchemeMembersWithFees.Add(member);
-            }
-
-            response.TotalFee = response.ComplianceSchemeRegistrationFee
-                                + response.ComplianceSchemeMembersWithFees.Sum(m => m.TotalMemberFee);
-            response.PreviousPayment = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
-            response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
-
-            return response;
-        }
-
         private async Task<decimal> GetMemberLateFee(ComplianceSchemeFeesRequestDto request, RegulatorType regulatorType, CancellationToken cancellationToken)
-        {
-            if (request.ComplianceSchemeMembers.Exists(m => m.IsLateFeeApplicable))
-            {
-                return await _complianceSchemeLateFeeStrategy.CalculateFeeAsync(
-                    new ComplianceSchemeLateFeeRequestDto
-                    {
-                        Regulator = regulatorType,
-                        SubmissionDate = request.SubmissionDate,
-                        IsLateFeeApplicable = true
-                    },
-                    cancellationToken);
-            }
-            return 0;
-        }
-
-        private async Task<decimal> GetMemberLateFee(ComplianceSchemeFeesRequestV3Dto request, RegulatorType regulatorType, CancellationToken cancellationToken)
         {
             if (request.ComplianceSchemeMembers.Exists(m => m.IsLateFeeApplicable))
             {
