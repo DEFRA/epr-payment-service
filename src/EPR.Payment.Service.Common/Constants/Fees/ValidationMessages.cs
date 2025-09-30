@@ -51,6 +51,10 @@ namespace EPR.Payment.Service.Common.Constants.RegistrationFees
         public const string ResubmissionDateIsNotInRange = "Fee data is not available for given resubmission date.";
         public const string ReferenceNumberRequired = "Reference Number is required.";        
         public const string MemberCountGreaterThanZero = "Member Count must be greater than zero.";
+        public const string NumberOfLateSubsidiariesRange = "NumberOfLateSubsidiaries must be 0 or greater.";
+        public const string LateFeeMutualExclusion = "When IsLateFeeApplicable is true, NumberOfLateSubsidiaries must be 0.";
+        
+        
 
         //  AccreditationFeesRequestDto Validation Messages
         public const string EmptyRequestorType = "Requestor type is required";
