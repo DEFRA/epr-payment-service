@@ -82,9 +82,9 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             {
                 ProducerType = "Large",
                 IsLateFeeApplicable = true,
-                NumberOfLateSubsidiaries = 5, // ignored
+                NumberOfLateSubsidiaries = 5, 
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A1",
+                ApplicationReferenceNumber = "",
                 SubmissionDate = DateTime.UtcNow
             };
 
@@ -108,7 +108,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 IsLateFeeApplicable = false,
                 NumberOfLateSubsidiaries = 0,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A2",
+                ApplicationReferenceNumber = "",
                 SubmissionDate = DateTime.UtcNow
             };
 
@@ -133,7 +133,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                     IsLateFeeApplicable = false,
                     NumberOfLateSubsidiaries = 2,
                     Regulator = null!,
-                    ApplicationReferenceNumber = "A3",
+                    ApplicationReferenceNumber = "",
                     SubmissionDate = DateTime.UtcNow
                 },
                 new ProducerRegistrationFeesRequestDto
@@ -142,7 +142,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                     IsLateFeeApplicable = false,
                     NumberOfLateSubsidiaries = 2,
                     Regulator = "   ",
-                    ApplicationReferenceNumber = "A4",
+                    ApplicationReferenceNumber = "",
                     SubmissionDate = DateTime.UtcNow
                 }
             };
@@ -169,7 +169,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 IsLateFeeApplicable = false,
                 NumberOfLateSubsidiaries = count,
                 Regulator = "GB-ENG",
-                ApplicationReferenceNumber = "A5",
+                ApplicationReferenceNumber = "",
                 SubmissionDate = DateTime.UtcNow
             };
 

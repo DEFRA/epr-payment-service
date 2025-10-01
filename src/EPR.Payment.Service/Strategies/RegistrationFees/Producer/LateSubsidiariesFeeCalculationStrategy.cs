@@ -26,7 +26,11 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
                 return 0m;
 
             if (string.IsNullOrWhiteSpace(request.Regulator))
-                throw new ArgumentException(ProducerFeesCalculationExceptions.RegulatorMissing, nameof(request.Regulator));
+            {
+                throw new ArgumentException($"{ProducerFeesCalculationExceptions.RegulatorMissing} (invalid property: {nameof(request.Regulator)})",
+                nameof(request));
+            }
+                 
 
             var regulator = RegulatorType.Create(request.Regulator);
             var perSubsidiaryLateFee = await _feesRepository
