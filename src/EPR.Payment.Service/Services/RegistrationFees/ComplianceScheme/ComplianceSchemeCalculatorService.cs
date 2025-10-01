@@ -15,6 +15,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
         private readonly ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal> _baseFeeCalculationStrategy;
         private readonly ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeOnlineMarketStrategy;
         private readonly ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal> _complianceSchemeLateFeeStrategy;
+        private readonly ICSLateSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeLateSubsidiariesFeeStrategy;
         private readonly ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeMemberStrategy;
         private readonly IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown> _subsidiariesFeeCalculationStrategy;
         private readonly IPaymentsService _paymentsService;
@@ -25,7 +26,8 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
             ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal> complianceSchemeLateFeeStrategy,
             ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeMemberStrategy,
             IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown> subsidiariesFeeCalculationStrategy,
-            IPaymentsService paymentsService)
+            IPaymentsService paymentsService,
+            ICSLateSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeLateSubsidiariesFeeStrategy)
         {
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
             _complianceSchemeOnlineMarketStrategy = complianceSchemeOnlineMarketStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeOnlineMarketStrategy));
@@ -33,6 +35,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
             _complianceSchemeMemberStrategy = complianceSchemeMemberStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeMemberStrategy));
             _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
+            _complianceSchemeLateSubsidiariesFeeStrategy = complianceSchemeLateSubsidiariesFeeStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeLateSubsidiariesFeeStrategy)); ;
         }
 
         public async Task<ComplianceSchemeFeesResponseDto> CalculateFeesAsync(ComplianceSchemeFeesRequestDto request, CancellationToken cancellationToken)
@@ -57,7 +60,8 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                     IsLateFeeApplicable = item.IsLateFeeApplicable,
                     NumberOfSubsidiaries = item.NumberOfSubsidiaries,
                     NoOfSubsidiariesOnlineMarketplace = item.NoOfSubsidiariesOnlineMarketplace,
-                    SubmissionDate = request.SubmissionDate
+                    SubmissionDate = request.SubmissionDate,
+                    NumberOfLateSubsidiaries = item.NumberOfLateSubsidiaries
                 };
 
                 var member = new ComplianceSchemeMembersWithFeesDto
@@ -77,10 +81,13 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                     member.MemberLateRegistrationFee = memberLateFee + subsidiariesLateFee;
                 }
 
+                member.SubsidiariesLateRegistrationFee = await _complianceSchemeLateSubsidiariesFeeStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken);
+
                 member.TotalMemberFee = member.MemberRegistrationFee
                                         + member.MemberOnlineMarketPlaceFee
                                         + member.SubsidiariesFee
-                                        + member.MemberLateRegistrationFee;
+                                        + member.MemberLateRegistrationFee
+                                        + member.SubsidiariesLateRegistrationFee;
 
                 // Add to response collection
                 response.ComplianceSchemeMembersWithFees.Add(member);

@@ -60,6 +60,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSMemberFeeCalculationStrategy>();
             services.AddScoped<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSOnlineMarketCalculationStrategy>();
             services.AddScoped<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>, CSLateFeeCalculationStrategy>();
+            services.AddScoped<ICSLateSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSLateSubsidiariesFeeCalculationStrategy>();
             services.AddScoped<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>, CSSubsidiariesFeeCalculationStrategy>();
             services.AddScoped<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>, ComplianceSchemeResubmissionStrategy>();
 
