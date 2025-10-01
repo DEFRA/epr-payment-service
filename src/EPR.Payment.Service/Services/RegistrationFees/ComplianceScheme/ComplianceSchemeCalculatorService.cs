@@ -35,7 +35,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
             _complianceSchemeMemberStrategy = complianceSchemeMemberStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeMemberStrategy));
             _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
-            _complianceSchemeLateSubsidiariesFeeStrategy = complianceSchemeLateSubsidiariesFeeStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeLateSubsidiariesFeeStrategy)); ;
+            _complianceSchemeLateSubsidiariesFeeStrategy = complianceSchemeLateSubsidiariesFeeStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeLateSubsidiariesFeeStrategy));
         }
 
         public async Task<ComplianceSchemeFeesResponseDto> CalculateFeesAsync(ComplianceSchemeFeesRequestDto request, CancellationToken cancellationToken)
