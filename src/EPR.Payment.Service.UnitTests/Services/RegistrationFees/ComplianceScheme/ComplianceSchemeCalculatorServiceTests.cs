@@ -115,6 +115,30 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         }
 
         [TestMethod]
+        public void Constructor_WhenComplianceSchemeLateSubsidiariesFeeStrategyIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            ICSLateSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>? complianceSchemeLateSubsidiariesFeeStrategy = null;
+
+            // Act
+            Action act = () =>
+            {
+                var unused = new ComplianceSchemeCalculatorService(
+                    _baseFeeCalculationStrategyMock.Object,
+                    _complianceSchemeOnlineMarketStrategyMock.Object,
+                    _complianceSchemeLateFeeStrategyMock.Object!,
+                    _complianceSchemeMemberStrategyMock.Object,
+                    _subsidiariesFeeCalculationStrategyMock.Object,
+                    _paymentsServiceMock.Object,
+                    complianceSchemeLateSubsidiariesFeeStrategy!);
+            };
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'complianceSchemeLateSubsidiariesFeeStrategy')");
+        }
+
+        [TestMethod]
         public void Constructor_WhenComplianceSchemeMemberStrategyIsNull_ShouldThrowArgumentNullException()
         {
             // Arrange
