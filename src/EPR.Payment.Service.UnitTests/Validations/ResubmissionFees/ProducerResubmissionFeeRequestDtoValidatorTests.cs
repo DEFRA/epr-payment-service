@@ -130,6 +130,26 @@ namespace EPR.Payment.Service.UnitTests.Validations.ResubmissionFees
                   .WithErrorMessage(ValidationMessages.ReferenceNumberRequired);
         }
 
+        [TestMethod]
+        public void Validate_NegativeMemberCount_ShouldHaveError()
+        {
+            // Arrange
+            var request = new ProducerResubmissionFeeRequestDto
+            {
+                Regulator = "GB-ENG",
+                ReferenceNumber = "REF1234",
+                ResubmissionDate = DateTime.UtcNow,
+                MemberCount = -1
+            };
+
+            // Act
+            var result = _validator.TestValidate(request);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.MemberCount)
+                .WithErrorMessage(ValidationMessages.ProducerMemberCountGreaterThanOrEqualToZero);
+        }
+
         [TestMethod, AutoMoqData]
         public void Validate_AllFieldsAreValid_ShouldNotHaveAnyValidationErrors()
         {
