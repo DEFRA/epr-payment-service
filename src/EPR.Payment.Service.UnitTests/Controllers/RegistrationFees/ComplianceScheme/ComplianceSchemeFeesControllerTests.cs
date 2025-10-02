@@ -22,6 +22,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
         private IFixture _fixture = null!;
         private Mock<IComplianceSchemeCalculatorService> _complianceSchemeCalculatorServiceMock = null!;
         private Mock<IValidator<ComplianceSchemeFeesRequestDto>> _validatorMock = null!;
+        private Mock<IValidator<ComplianceSchemeFeesRequestV2Dto>> _validatorV2Mock = null!;
         private ComplianceSchemeFeesController _controller = null!;
 
         [TestInitialize]
@@ -30,9 +31,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _complianceSchemeCalculatorServiceMock = _fixture.Freeze<Mock<IComplianceSchemeCalculatorService>>();
             _validatorMock = _fixture.Freeze<Mock<IValidator<ComplianceSchemeFeesRequestDto>>>();
+            _validatorV2Mock = _fixture.Freeze<Mock<IValidator<ComplianceSchemeFeesRequestV2Dto>>>();
             _controller = new ComplianceSchemeFeesController(
                 _complianceSchemeCalculatorServiceMock.Object,
-                _validatorMock.Object);
+                _validatorMock.Object,
+                _validatorV2Mock.Object);
         }
 
         [TestMethod]
@@ -41,7 +44,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             // Act
             var controller = new ComplianceSchemeFeesController(
                 _complianceSchemeCalculatorServiceMock.Object,
-                _validatorMock.Object);
+                _validatorMock.Object,
+                _validatorV2Mock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -59,7 +63,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
 
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(
-                () => new ComplianceSchemeFeesController(baseFeeService!, _validatorMock.Object));
+                () => new ComplianceSchemeFeesController(baseFeeService!, _validatorMock.Object, _validatorV2Mock.Object));
         }
 
         [TestMethod]
@@ -70,7 +74,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
 
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(
-                () => new ComplianceSchemeFeesController(_complianceSchemeCalculatorServiceMock.Object, validator!));
+                () => new ComplianceSchemeFeesController(_complianceSchemeCalculatorServiceMock.Object, validator!, _validatorV2Mock.Object));
         }
 
         [TestMethod, AutoMoqData]

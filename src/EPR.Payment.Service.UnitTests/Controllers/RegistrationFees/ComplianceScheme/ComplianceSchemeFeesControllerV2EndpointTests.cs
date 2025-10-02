@@ -17,37 +17,41 @@ using Moq;
 namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceScheme
 {
     [TestClass]
-    public class ComplianceSchemeFeesV3ControllerTests
+    public class ComplianceSchemeFeesControllerV2EndpointTests
     {
         private IFixture _fixture = null!;
         private Mock<IComplianceSchemeCalculatorService> _complianceSchemeCalculatorServiceMock = null!;
-        private Mock<IValidator<ComplianceSchemeFeesRequestV3Dto>> _validatorMock = null!;
-        private ComplianceSchemeFeesV3Controller _controller = null!;
+        private Mock<IValidator<ComplianceSchemeFeesRequestDto>> _validatorMock = null!;
+        private Mock<IValidator<ComplianceSchemeFeesRequestV2Dto>> _validatorV2Mock = null!;
+        private ComplianceSchemeFeesController _controller = null!;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _complianceSchemeCalculatorServiceMock = _fixture.Freeze<Mock<IComplianceSchemeCalculatorService>>();
-            _validatorMock = _fixture.Freeze<Mock<IValidator<ComplianceSchemeFeesRequestV3Dto>>>();
-            _controller = new ComplianceSchemeFeesV3Controller(
+            _validatorMock = _fixture.Freeze<Mock<IValidator<ComplianceSchemeFeesRequestDto>>>();
+            _validatorV2Mock = _fixture.Freeze<Mock<IValidator<ComplianceSchemeFeesRequestV2Dto>>>();
+            _controller = new ComplianceSchemeFeesController(
                 _complianceSchemeCalculatorServiceMock.Object,
-                _validatorMock.Object);
+                _validatorMock.Object,
+                _validatorV2Mock.Object);
         }
 
         [TestMethod]
         public void Constructor_WithValidArguments_ShouldInitializeCorrectly()
         {
             // Act
-            var controller = new ComplianceSchemeFeesV3Controller(
+            var controller = new ComplianceSchemeFeesController(
                 _complianceSchemeCalculatorServiceMock.Object,
-                _validatorMock.Object);
+                _validatorMock.Object,
+                _validatorV2Mock.Object);
 
             // Assert
             using (new AssertionScope())
             {
                 controller.Should().NotBeNull();
-                controller.Should().BeAssignableTo<ComplianceSchemeFeesV3Controller>();
+                controller.Should().BeAssignableTo<ComplianceSchemeFeesController>();
             }
         }
 
@@ -58,7 +62,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             IComplianceSchemeCalculatorService? baseFeeService = null;
 
             // Act
-            Action act = () => new ComplianceSchemeFeesV3Controller(baseFeeService!, _validatorMock.Object);
+            Action act = () => new ComplianceSchemeFeesController(baseFeeService!, _validatorMock.Object, _validatorV2Mock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -66,33 +70,33 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
         }
 
         [TestMethod]
-        public void Constructor_WhenComplianceSchemeFeesRequestV3DtoValidatorIsNull_ThrowsArgumentNullException()
+        public void Constructor_WhenComplianceSchemeFeesRequestV2DtoValidatorV2IsNull_ThrowsArgumentNullException()
         {
             // Arrange
-            IValidator<ComplianceSchemeFeesRequestV3Dto>? validator = null;
+            IValidator<ComplianceSchemeFeesRequestV2Dto>? validatorV2 = null;
 
             // Act
-            Action act = () => new ComplianceSchemeFeesV3Controller(_complianceSchemeCalculatorServiceMock.Object, validator!);
+            Action act = () => new ComplianceSchemeFeesController(_complianceSchemeCalculatorServiceMock.Object, _validatorMock.Object, validatorV2!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
-                .WithMessage("Value cannot be null. (Parameter 'validator')");
+                .WithMessage("Value cannot be null. (Parameter 'validatorV2')");
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenValidRequest_ReturnsOkResultWithCalculatedFees(
-            [Frozen] ComplianceSchemeFeesRequestV3Dto request,
+        public async Task CalculateFeesAsyncV2_WhenValidRequest_ReturnsOkResultWithCalculatedFees(
+            [Frozen] ComplianceSchemeFeesRequestV2Dto request,
             [Frozen] ComplianceSchemeFeesResponseDto response)
         {
             // Arrange
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ComplianceSchemeFeesRequestV3Dto>()))
+            _validatorV2Mock.Setup(v => v.Validate(It.IsAny<ComplianceSchemeFeesRequestV2Dto>()))
                 .Returns(new ValidationResult());
 
-            _complianceSchemeCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), It.IsAny<CancellationToken>()))
+            _complianceSchemeCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ComplianceSchemeFeesRequestV2Dto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
 
             // Act
-            var result = await _controller.CalculateFeesAsyncV3(request, CancellationToken.None);
+            var result = await _controller.CalculateFeesAsyncV2(request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -102,8 +106,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenRequestValidationFails_ReturnsBadRequestWithValidationErrorDetails(
-            [Frozen] ComplianceSchemeFeesRequestV3Dto request)
+        public async Task CalculateFeesAsyncV2_WhenRequestValidationFails_ReturnsBadRequestWithValidationErrorDetails(
+            [Frozen] ComplianceSchemeFeesRequestV2Dto request)
         {
             // Arrange
             var validationFailures = new List<ValidationFailure>
@@ -112,11 +116,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
                 new ValidationFailure("Regulator", "Regulator is required")
             };
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ComplianceSchemeFeesRequestV3Dto>()))
+            _validatorV2Mock.Setup(v => v.Validate(It.IsAny<ComplianceSchemeFeesRequestV2Dto>()))
                 .Returns(new ValidationResult(validationFailures));
 
             // Act
-            var result = await _controller.CalculateFeesAsyncV3(request, CancellationToken.None);
+            var result = await _controller.CalculateFeesAsyncV2(request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -128,20 +132,20 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenCalculationThrowsValidationException_ReturnsBadRequestWithValidationExceptionDetails(
-            [Frozen] ComplianceSchemeFeesRequestV3Dto request)
+        public async Task CalculateFeesAsyncV2_WhenCalculationThrowsValidationException_ReturnsBadRequestWithValidationExceptionDetails(
+            [Frozen] ComplianceSchemeFeesRequestV2Dto request)
         {
             // Arrange
             var exceptionMessage = "Validation failed";
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ComplianceSchemeFeesRequestV3Dto>()))
+            _validatorV2Mock.Setup(v => v.Validate(It.IsAny<ComplianceSchemeFeesRequestV2Dto>()))
                 .Returns(new ValidationResult());
 
-            _complianceSchemeCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), It.IsAny<CancellationToken>()))
+            _complianceSchemeCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ComplianceSchemeFeesRequestV2Dto>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new ValidationException(exceptionMessage));
 
             // Act
-            var result = await _controller.CalculateFeesAsyncV3(request, CancellationToken.None);
+            var result = await _controller.CalculateFeesAsyncV2(request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -153,20 +157,20 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenCalculationThrowsArgumentException_ReturnsBadRequestWithArgumentExceptionDetails(
-            [Frozen] ComplianceSchemeFeesRequestV3Dto request)
+        public async Task CalculateFeesAsyncV2_WhenCalculationThrowsArgumentException_ReturnsBadRequestWithArgumentExceptionDetails(
+            [Frozen] ComplianceSchemeFeesRequestV2Dto request)
         {
             // Arrange
             var exceptionMessage = "Invalid argument";
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ComplianceSchemeFeesRequestV3Dto>()))
+            _validatorMock.Setup(v => v.Validate(It.IsAny<ComplianceSchemeFeesRequestV2Dto>()))
                 .Returns(new ValidationResult());
 
-            _complianceSchemeCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), It.IsAny<CancellationToken>()))
+            _complianceSchemeCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ComplianceSchemeFeesRequestV2Dto>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new ArgumentException(exceptionMessage));
 
             // Act
-            var result = await _controller.CalculateFeesAsyncV3(request, CancellationToken.None);
+            var result = await _controller.CalculateFeesAsyncV2(request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())
@@ -178,16 +182,16 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
 
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenCalculationThrowsException_ShouldReturnInternalServerError(
-              [Frozen] ComplianceSchemeFeesRequestV3Dto request)
+        public async Task CalculateFeesAsyncV2_WhenCalculationThrowsException_ShouldReturnInternalServerError(
+              [Frozen] ComplianceSchemeFeesRequestV2Dto request)
         {
             // Arrange
             var exceptionMessage = "exception";
-            _complianceSchemeCalculatorServiceMock.Setup(i => i.CalculateFeesAsync(It.IsAny<ComplianceSchemeFeesRequestV3Dto>(), It.IsAny<CancellationToken>()))
+            _complianceSchemeCalculatorServiceMock.Setup(i => i.CalculateFeesAsync(It.IsAny<ComplianceSchemeFeesRequestV2Dto>(), It.IsAny<CancellationToken>()))
                                .ThrowsAsync(new Exception(exceptionMessage));
 
             // Act
-            var result = await _controller.CalculateFeesAsyncV3(request, CancellationToken.None);
+            var result = await _controller.CalculateFeesAsyncV2(request, CancellationToken.None);
 
             // Assert
             using (new AssertionScope())

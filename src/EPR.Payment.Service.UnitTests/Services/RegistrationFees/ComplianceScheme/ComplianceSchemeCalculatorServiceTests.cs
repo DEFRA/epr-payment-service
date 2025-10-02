@@ -17,7 +17,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
     public class ComplianceSchemeCalculatorServiceTests
     {
         private Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>> _baseFeeCalculationStrategyMock = null!;
-        private Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestV3Dto, decimal>> _baseFeeCalculationStrategyV3Mock = null!;
         private Mock<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeOnlineMarketStrategyMock = null!;
         private Mock<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>> _complianceSchemeLateFeeStrategyMock = null!;
         private Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeMemberStrategyMock = null!;
@@ -29,7 +28,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         public void TestInitialize()
         {
             _baseFeeCalculationStrategyMock = new Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>>();
-            _baseFeeCalculationStrategyV3Mock = new Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestV3Dto, decimal>>();
             _complianceSchemeOnlineMarketStrategyMock = new Mock<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _complianceSchemeLateFeeStrategyMock = new Mock<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>>();
             _complianceSchemeMemberStrategyMock = new Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
@@ -37,7 +35,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             _paymentsServiceMock = new Mock<IPaymentsService>();
             _service = new ComplianceSchemeCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
-                _baseFeeCalculationStrategyV3Mock.Object,
                 _complianceSchemeOnlineMarketStrategyMock.Object, 
                 _complianceSchemeLateFeeStrategyMock.Object, 
                 _complianceSchemeMemberStrategyMock.Object, 
@@ -54,7 +51,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             // Act
             var act = () => new ComplianceSchemeCalculatorService(
                 baseFeeCalculationStrategy!,
-                _baseFeeCalculationStrategyV3Mock.Object,
                 _complianceSchemeOnlineMarketStrategyMock.Object,
                 _complianceSchemeLateFeeStrategyMock.Object,
                 _complianceSchemeMemberStrategyMock.Object,
@@ -77,7 +73,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 var unused = new ComplianceSchemeCalculatorService(
                     _baseFeeCalculationStrategyMock.Object,
-                    _baseFeeCalculationStrategyV3Mock.Object,
                     complianceSchemeOnlineMarketStrategy!,
                     _complianceSchemeLateFeeStrategyMock.Object,
                     _complianceSchemeMemberStrategyMock.Object,
@@ -101,7 +96,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 var unused = new ComplianceSchemeCalculatorService(
                     _baseFeeCalculationStrategyMock.Object,
-                    _baseFeeCalculationStrategyV3Mock.Object,
                     _complianceSchemeOnlineMarketStrategyMock.Object,
                     complianceSchemeLateFeeStrategy!,
                     _complianceSchemeMemberStrategyMock.Object,
@@ -125,7 +119,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 var unused = new ComplianceSchemeCalculatorService(
                     _baseFeeCalculationStrategyMock.Object,
-                    _baseFeeCalculationStrategyV3Mock.Object,
                     _complianceSchemeOnlineMarketStrategyMock.Object,
                     _complianceSchemeLateFeeStrategyMock.Object,
                     complianceSchemeMemberStrategy!,
@@ -149,7 +142,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 var unused = new ComplianceSchemeCalculatorService(
                     _baseFeeCalculationStrategyMock.Object,
-                    _baseFeeCalculationStrategyV3Mock.Object,
                     _complianceSchemeOnlineMarketStrategyMock.Object,
                     _complianceSchemeLateFeeStrategyMock.Object,
                     _complianceSchemeMemberStrategyMock.Object,
@@ -174,7 +166,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 var unused = new ComplianceSchemeCalculatorService(
                     _baseFeeCalculationStrategyMock.Object,
-                    _baseFeeCalculationStrategyV3Mock.Object,
                     _complianceSchemeOnlineMarketStrategyMock.Object,
                     _complianceSchemeLateFeeStrategyMock.Object,
                     _complianceSchemeMemberStrategyMock.Object,
@@ -193,7 +184,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             // Act
             var service = new ComplianceSchemeCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
-                _baseFeeCalculationStrategyV3Mock.Object,
                 _complianceSchemeOnlineMarketStrategyMock.Object, 
                 _complianceSchemeLateFeeStrategyMock.Object, 
                 _complianceSchemeMemberStrategyMock.Object, 

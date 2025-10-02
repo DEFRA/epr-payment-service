@@ -1,6 +1,6 @@
 ﻿namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme
 {
-    public class ComplianceSchemeFeesRequestV3Dto : ComplianceSchemeFeesRequestDto
+    public class ComplianceSchemeFeesRequestV2Dto : ComplianceSchemeFeesRequestDto
     {
         public required Guid FileId { get; set; }
         public required Guid ExternalId { get; set; }

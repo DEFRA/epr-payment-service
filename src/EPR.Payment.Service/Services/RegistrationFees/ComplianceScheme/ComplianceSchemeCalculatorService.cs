@@ -22,7 +22,6 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
 
         public ComplianceSchemeCalculatorService(
             ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal> baseFeeCalculationStrategy,
-            ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestV3Dto, decimal> baseFeeCalculationStrategyV3,
             ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeOnlineMarketStrategy,
             ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal> complianceSchemeLateFeeStrategy,
             ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeMemberStrategy,

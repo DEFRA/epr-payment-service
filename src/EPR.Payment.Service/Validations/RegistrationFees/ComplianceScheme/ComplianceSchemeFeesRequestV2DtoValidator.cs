@@ -5,9 +5,9 @@ using FluentValidation;
 
 namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
 {
-    public class ComplianceSchemeFeesRequestV3DtoValidator : AbstractValidator<ComplianceSchemeFeesRequestV3Dto>
+    public class ComplianceSchemeFeesRequestV2DtoValidator : AbstractValidator<ComplianceSchemeFeesRequestV2Dto>
     {
-        public ComplianceSchemeFeesRequestV3DtoValidator()
+        public ComplianceSchemeFeesRequestV2DtoValidator()
         {
             RuleFor(x => x.Regulator)
                     .NotEmpty().WithMessage(ValidationMessages.RegulatorRequired)

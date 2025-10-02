@@ -38,7 +38,6 @@ builder.Services.AddSwaggerGen(setupAction =>
     setupAction.EnableAnnotations();
     setupAction.SwaggerDoc("v1", new OpenApiInfo { Title = "PaymentServiceApi", Version = "v1" });
     setupAction.SwaggerDoc("v2", new OpenApiInfo { Title = "PaymentServiceApi", Version = "v2" });
-    setupAction.SwaggerDoc("v3", new OpenApiInfo { Title = "PaymentServiceApi", Version = "v3" });
     setupAction.DocumentFilter<FeatureEnabledDocumentFilter>();
     setupAction.OperationFilter<FeatureGateOperationFilter>();
 });
@@ -130,7 +129,6 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "PaymentServiceApi v1");
     c.SwaggerEndpoint("/swagger/v2/swagger.json", "PaymentServiceApi v2");
-    c.SwaggerEndpoint("/swagger/v3/swagger.json", "PaymentServiceApi v3");
     c.RoutePrefix = "swagger";
 });
 
