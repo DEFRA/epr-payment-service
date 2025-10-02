@@ -3,6 +3,7 @@ using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.Producer;
 using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.Producer;
 using EPR.Payment.Service.Strategies.Interfaces.ResubmissionFees.Producer;
+using Microsoft.FeatureManagement;
 
 namespace EPR.Payment.Service.Services.ResubmissionFees.Producer
 {
@@ -10,13 +11,16 @@ namespace EPR.Payment.Service.Services.ResubmissionFees.Producer
     {
         private readonly IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal> _resubmissionAmountStrategy;
         private readonly IPaymentsService _paymentsService;
+        private readonly IFeatureManager _featureManager;
 
         public ProducerResubmissionService(
             IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal> resubmissionAmountStrategy,
-            IPaymentsService paymentsService)
+            IPaymentsService paymentsService,
+            IFeatureManager featureManager)
         {
             _resubmissionAmountStrategy = resubmissionAmountStrategy ?? throw new ArgumentNullException(nameof(resubmissionAmountStrategy));
             _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
+            _featureManager = featureManager ?? throw new ArgumentNullException(nameof(featureManager));
         }
 
         public async Task<ProducerResubmissionFeeResponseDto> GetResubmissionFeeAsync(
@@ -25,7 +29,17 @@ namespace EPR.Payment.Service.Services.ResubmissionFees.Producer
             var baseFee = await _resubmissionAmountStrategy.CalculateFeeAsync(request, cancellationToken);
             var previousPayments = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, cancellationToken);
 
-            var totalFee = baseFee;
+            decimal totalFee;
+
+            if (await _featureManager.IsEnabledAsync("EnableResubmissionProducerMemberCountBaseFeeMultiplication"))
+            {
+                totalFee = baseFee * request.MemberCount;
+            }
+            else
+            {
+                totalFee = baseFee;
+            }
+
             var outstandingPayment = totalFee - previousPayments;
 
             return new ProducerResubmissionFeeResponseDto
