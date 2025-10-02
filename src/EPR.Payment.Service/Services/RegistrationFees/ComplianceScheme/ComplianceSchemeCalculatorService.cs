@@ -7,6 +7,7 @@ using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees;
 using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
 
 namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
 {
@@ -109,6 +110,5 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
             }
             return 0;
         }
-
     }
 }

@@ -34,7 +34,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             _subsidiariesFeeCalculationStrategyMock = new Mock<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>>();
             _paymentsServiceMock = new Mock<IPaymentsService>();
             _service = new ComplianceSchemeCalculatorService(
-                _baseFeeCalculationStrategyMock.Object, 
+                _baseFeeCalculationStrategyMock.Object,
                 _complianceSchemeOnlineMarketStrategyMock.Object, 
                 _complianceSchemeLateFeeStrategyMock.Object, 
                 _complianceSchemeMemberStrategyMock.Object, 
@@ -183,7 +183,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         {
             // Act
             var service = new ComplianceSchemeCalculatorService(
-                _baseFeeCalculationStrategyMock.Object, 
+                _baseFeeCalculationStrategyMock.Object,
                 _complianceSchemeOnlineMarketStrategyMock.Object, 
                 _complianceSchemeLateFeeStrategyMock.Object, 
                 _complianceSchemeMemberStrategyMock.Object, 
