@@ -9,6 +9,7 @@
         public decimal TotalFee { get; set; } // Total fee will be computed
         public decimal PreviousPayment { get; set; }
         public decimal OutstandingPayment { get; set; }
+        public decimal SubsidiariesLateRegistrationFee { get; set; } = 0;
         public required SubsidiariesFeeBreakdown SubsidiariesFeeBreakdown { get; set; }
     }
 }
