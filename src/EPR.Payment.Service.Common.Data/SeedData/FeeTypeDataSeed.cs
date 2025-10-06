@@ -17,7 +17,9 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                 new FeeType { Id = 5, Name = "Member Late Registration Fee" },
                 new FeeType { Id = 6, Name = "UnitOMP Fee" },
                 new FeeType { Id = 7, Name = "Subsidiary Fee" },
-                new FeeType { Id = 8, Name = "Late Registration Fee" }
+                new FeeType { Id = 8, Name = "Late Registration Fee" },
+                new FeeType { Id = 9, Name = "Producer Resubmission Fee" },
+                new FeeType { Id = 10, Name = "Compliance Scheme Resubmission Fee" }
             );
         }
     }
