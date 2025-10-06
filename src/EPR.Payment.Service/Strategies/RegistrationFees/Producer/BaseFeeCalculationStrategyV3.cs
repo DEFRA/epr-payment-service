@@ -6,16 +6,16 @@ using EPR.Payment.Service.Strategies.Interfaces.RegistrationFees.Producer;
 
 namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
 {
-   /* public class BaseFeeCalculationStrategyV3 : IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestV3Dto, decimal>
+    public class BaseFeeCalculationStrategyV2 : IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestV2Dto, decimal>
     {
         private readonly IProducerFeesRepository _feesRepository;
 
-        public BaseFeeCalculationStrategyV3(IProducerFeesRepository feesRepository)
+        public BaseFeeCalculationStrategyV2(IProducerFeesRepository feesRepository)
         {
             _feesRepository = feesRepository ?? throw new ArgumentNullException(nameof(feesRepository));
         }
 
-        public async Task<decimal> CalculateFeeAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
+        public async Task<decimal> CalculateFeeAsync(ProducerRegistrationFeesRequestV2Dto request, CancellationToken cancellationToken)
         {
             // If ProducerType is empty, return a base fee of zero
             if (string.IsNullOrEmpty(request.ProducerType))
@@ -28,5 +28,5 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             var regulator = RegulatorType.Create(request.Regulator);
             return await _feesRepository.GetBaseFeeAsync(request.ProducerType, regulator, request.SubmissionDate, cancellationToken);
         }
-    }*/
+    }
 }

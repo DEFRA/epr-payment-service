@@ -11,7 +11,7 @@ namespace EPR.Payment.Service.Strategies.Interfaces.FeeSummary
     public interface IFeeSummarySaveProducerRequestMapper
     {
         FeeSummarySaveRequest BuildRegistrationFeeSummaryRecord(
-            ProducerRegistrationFeesRequestDto dto,
+            ProducerRegistrationFeesRequestV2Dto dto,
             DateTimeOffset invoicePeriod,
             int payerTypeId,
             RegistrationFeesResponseDto resp,

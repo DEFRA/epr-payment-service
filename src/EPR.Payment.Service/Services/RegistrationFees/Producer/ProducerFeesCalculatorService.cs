@@ -13,7 +13,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
     public class ProducerFeesCalculatorService : IProducerFeesCalculatorService
     {
         private readonly IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _baseFeeCalculationStrategy;
-        private readonly IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestV3Dto, decimal> _baseFeeCalculationStrategyV3;
+        private readonly IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestV2Dto, decimal> _baseFeeCalculationStrategyV2;
         private readonly IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown> _subsidiariesFeeCalculationStrategy;
         private readonly IValidator<ProducerRegistrationFeesRequestDto> _validator;
         private readonly IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _onlineMarketCalculationStrategy;
@@ -57,17 +57,17 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             return response;
         }
 
-/*        public async Task<RegistrationFeesResponseDto> CalculateFeesAsync(ProducerRegistrationFeesRequestV3Dto request, CancellationToken cancellationToken)
+        public async Task<RegistrationFeesResponseDto> CalculateFeesAsync(ProducerRegistrationFeesRequestV2Dto request, CancellationToken cancellationToken)
         {
             ValidateRequest(request);
-            decimal lateFee = await _lateFeeCalculationStrategyV3.CalculateFeeAsync(request, cancellationToken);
+            decimal lateFee = await _baseFeeCalculationStrategyV2.CalculateFeeAsync(request, cancellationToken);
             decimal subsidiariesLateFee = request.NumberOfSubsidiaries * lateFee;
             var response = new RegistrationFeesResponseDto
             {
-                ProducerRegistrationFee = await _baseFeeCalculationStrategyV3.CalculateFeeAsync(request, cancellationToken),
-                ProducerOnlineMarketPlaceFee = await _onlineMarketCalculationStrategyV3.CalculateFeeAsync(request, cancellationToken),
+                ProducerRegistrationFee = await _baseFeeCalculationStrategyV2.CalculateFeeAsync(request, cancellationToken),
+                ProducerOnlineMarketPlaceFee = await _onlineMarketCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
                 ProducerLateRegistrationFee = lateFee + subsidiariesLateFee,
-                SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategyV3.CalculateFeeAsync(request, cancellationToken)
+                SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken)
             };
 
             response.SubsidiariesFee = response.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + response.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
@@ -76,7 +76,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
 
             return response;
-        }*/
+        }
 
         private void ValidateRequest(ProducerRegistrationFeesRequestDto request)
         {
@@ -85,15 +85,6 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             {
                 throw new ValidationException(validationResult.Errors);
             }
-        }
-
-       /* private void ValidateRequest(ProducerRegistrationFeesRequestV3Dto request)
-        {
-            var validationResult = _validator.Validate(request);
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors);
-            }
-        }*/
+        }      
     }
 }
