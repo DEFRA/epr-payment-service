@@ -183,7 +183,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeSummary
             // Arrange
             var mapper = new FeeSummarySaveProducerRequestMapper();
 
-            var dto = new ProducerRegistrationFeesRequestDto
+            var dto = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 IsLateFeeApplicable = true,

@@ -2,6 +2,7 @@
 using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
@@ -19,7 +20,7 @@ using Moq;
 namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
 {
     [TestClass]
-    public class ProducerFeesControllerV3Tests
+    public class ProducerFeesControllerV2Tests
     {
         private IFixture _fixture = null!;
         private Mock<IProducerFeesCalculatorService> _producerFeesCalculatorServiceMock = null!;
@@ -27,6 +28,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         private ProducerFeesController _controller = null!;
         private Mock<IFeeSummaryWriter> _feeSummaryWriterMock = null!;
         private Mock<IFeeSummarySaveProducerRequestMapper> _mapperMock = null!;
+        private Mock<IValidator<ProducerRegistrationFeesRequestV2Dto>> _validatorV2Mock = null!;
         [TestInitialize]
         public void TestInitialize()
         {
@@ -39,7 +41,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
                     _producerFeesCalculatorServiceMock.Object,
                     _validatorMock.Object,
                     _feeSummaryWriterMock.Object,
-                    _mapperMock.Object);
+                    _mapperMock.Object,
+                    _validatorV2Mock.Object);
         }
 
         [TestMethod]
@@ -54,7 +57,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
                 producerFeesCalculatorService!,
                     _validatorMock.Object,
                     _feeSummaryWriterMock.Object,
-                    _mapperMock.Object);
+                     _mapperMock.Object,
+                    _validatorV2Mock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'producerFeesCalculatorService')");
@@ -72,7 +76,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
                 _producerFeesCalculatorServiceMock.Object, 
                 _validator!,
                 _feeSummaryWriterMock.Object,
-                _mapperMock.Object);
+                _mapperMock.Object,
+                _validatorV2Mock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");

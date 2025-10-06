@@ -57,7 +57,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             OnlineMarketCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 IsProducerOnlineMarketplace = true,
@@ -89,7 +89,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             OnlineMarketCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 IsProducerOnlineMarketplace = false,
@@ -115,7 +115,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             OnlineMarketCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 IsProducerOnlineMarketplace = true,
