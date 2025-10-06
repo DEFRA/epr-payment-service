@@ -29,8 +29,9 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme
 
         public ComplianceSchemeFeesController(
             IComplianceSchemeCalculatorService complianceSchemeCalculatorService,
-            IValidator<ComplianceSchemeFeesRequestDto> validator, IFeeSummaryWriter feeSummaryWriter, IFeeSummarySaveRequestMapper feeSummarySaveRequestMapper)
-            IValidator<ComplianceSchemeFeesRequestDto> validator,
+            IValidator<ComplianceSchemeFeesRequestDto> validator, 
+            IFeeSummaryWriter feeSummaryWriter, 
+            IFeeSummarySaveRequestMapper feeSummarySaveRequestMapper,
             IValidator<ComplianceSchemeFeesRequestV2Dto> validatorV2)
         {
             _complianceSchemeCalculatorService = complianceSchemeCalculatorService ?? throw new ArgumentNullException(nameof(complianceSchemeCalculatorService));

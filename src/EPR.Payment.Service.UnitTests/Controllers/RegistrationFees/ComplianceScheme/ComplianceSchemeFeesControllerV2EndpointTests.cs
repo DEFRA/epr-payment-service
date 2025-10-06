@@ -6,7 +6,9 @@ using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Services.Interfaces.FeeSummaries;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Strategies.Interfaces.FeeSummary;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -22,6 +24,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
         private IFixture _fixture = null!;
         private Mock<IComplianceSchemeCalculatorService> _complianceSchemeCalculatorServiceMock = null!;
         private Mock<IValidator<ComplianceSchemeFeesRequestDto>> _validatorMock = null!;
+        private Mock<IFeeSummaryWriter> _feeSummaryWriterMock = null!;
+        private Mock<IFeeSummarySaveRequestMapper> _mapperMock = null!;
         private Mock<IValidator<ComplianceSchemeFeesRequestV2Dto>> _validatorV2Mock = null!;
         private ComplianceSchemeFeesController _controller = null!;
 
@@ -35,6 +39,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             _controller = new ComplianceSchemeFeesController(
                 _complianceSchemeCalculatorServiceMock.Object,
                 _validatorMock.Object,
+                _feeSummaryWriterMock.Object,
+                _mapperMock.Object,
                 _validatorV2Mock.Object);
         }
 
@@ -45,6 +51,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             var controller = new ComplianceSchemeFeesController(
                 _complianceSchemeCalculatorServiceMock.Object,
                 _validatorMock.Object,
+                _feeSummaryWriterMock.Object,
+                _mapperMock.Object,
                 _validatorV2Mock.Object);
 
             // Assert
@@ -62,7 +70,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             IComplianceSchemeCalculatorService? baseFeeService = null;
 
             // Act
-            Action act = () => new ComplianceSchemeFeesController(baseFeeService!, _validatorMock.Object, _validatorV2Mock.Object);
+            Action act = () => new ComplianceSchemeFeesController(baseFeeService!, _validatorMock.Object, _feeSummaryWriterMock.Object,
+                _mapperMock.Object, _validatorV2Mock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -76,7 +85,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             IValidator<ComplianceSchemeFeesRequestV2Dto>? validatorV2 = null;
 
             // Act
-            Action act = () => new ComplianceSchemeFeesController(_complianceSchemeCalculatorServiceMock.Object, _validatorMock.Object, validatorV2!);
+            Action act = () => new ComplianceSchemeFeesController(_complianceSchemeCalculatorServiceMock.Object, _validatorMock.Object, _feeSummaryWriterMock.Object,
+                _mapperMock.Object, validatorV2!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
