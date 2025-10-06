@@ -7,21 +7,21 @@ using FluentValidation.TestHelper;
 namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
 {
     [TestClass]
-    public class ComplianceSchemeFeesRequestV3DtoValidatorTests
+    public class ComplianceSchemeFeesRequestV2DtoValidatorTests
     {
-        private ComplianceSchemeFeesRequestV3DtoValidator _validator = null!;
+        private ComplianceSchemeFeesRequestV2DtoValidator _validator = null!;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _validator = new ComplianceSchemeFeesRequestV3DtoValidator();
+            _validator = new ComplianceSchemeFeesRequestV2DtoValidator();
         }
 
         [TestMethod]
         public void Validator_Should_Fail_When_Regulator_Is_Empty()
         {
             // Arrange
-            var dto = new ComplianceSchemeFeesRequestV3Dto
+            var dto = new ComplianceSchemeFeesRequestV2Dto
             {
                 Regulator = "",
                 ApplicationReferenceNumber = "Ref123",
@@ -46,7 +46,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validator_Should_Fail_When_ApplicationReferenceNumber_Is_Empty()
         {
             // Arrange
-            var dto = new ComplianceSchemeFeesRequestV3Dto
+            var dto = new ComplianceSchemeFeesRequestV2Dto
             {
                 Regulator = RegulatorConstants.GBENG,
                 ApplicationReferenceNumber = "",
@@ -71,7 +71,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validator_Should_Validate_ComplianceSchemeMember()
         {
             // Arrange
-            var dto = new ComplianceSchemeFeesRequestV3Dto
+            var dto = new ComplianceSchemeFeesRequestV2Dto
             {
                 Regulator = RegulatorConstants.GBENG,
                 ApplicationReferenceNumber = "Ref123",
@@ -103,7 +103,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validator_Should_Fail_When_SubmissionDate_Is_Not_Valid()
         {
             // Arrange
-            var dto = new ComplianceSchemeFeesRequestV3Dto
+            var dto = new ComplianceSchemeFeesRequestV2Dto
             {
                 Regulator = RegulatorConstants.GBENG,
                 ApplicationReferenceNumber = "Ref123",
@@ -128,7 +128,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validator_Should_Fail_When_SubmissionDate_Is_Future_Date()
         {
             // Arrange
-            var dto = new ComplianceSchemeFeesRequestV3Dto
+            var dto = new ComplianceSchemeFeesRequestV2Dto
             {
                 Regulator = RegulatorConstants.GBENG,
                 ApplicationReferenceNumber = "Ref123",
@@ -153,7 +153,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_SubmissionDateNotUtc_ShouldHaveError()
         {
             // Arrange
-            var dto = new ComplianceSchemeFeesRequestV3Dto
+            var dto = new ComplianceSchemeFeesRequestV2Dto
             {
                 Regulator = RegulatorConstants.GBENG,
                 ApplicationReferenceNumber = "Ref123",
@@ -178,7 +178,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validator_Should_Fail_When_FileId_Is_Empty()
         {
             // Arrange
-            var dto = new ComplianceSchemeFeesRequestV3Dto
+            var dto = new ComplianceSchemeFeesRequestV2Dto
             {
                 Regulator = "",
                 ApplicationReferenceNumber = "Ref123",
@@ -203,7 +203,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validator_Should_Fail_When_ExternalId_Is_Empty()
         {
             // Arrange
-            var dto = new ComplianceSchemeFeesRequestV3Dto
+            var dto = new ComplianceSchemeFeesRequestV2Dto
             {
                 Regulator = "",
                 ApplicationReferenceNumber = "Ref123",
@@ -227,7 +227,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validator_Should_Fail_When_InvoicePeriod_Is_Not_Valid()
         {
             // Arrange
-            var dto = new ComplianceSchemeFeesRequestV3Dto
+            var dto = new ComplianceSchemeFeesRequestV2Dto
             {
                 Regulator = "Abc regulator",
                 ApplicationReferenceNumber = "Ref123",
@@ -252,7 +252,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validator_Should_Fail_When_PayerTypeId_Is_Not_Valid()
         {
             // Arrange
-            var dto = new ComplianceSchemeFeesRequestV3Dto
+            var dto = new ComplianceSchemeFeesRequestV2Dto
             {
                 Regulator = "",
                 ApplicationReferenceNumber = "Ref123",
@@ -277,7 +277,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validator_Should_Fail_When_PayerId_Is_Not_Valid()
         {
             // Arrange
-            var dto = new ComplianceSchemeFeesRequestV3Dto
+            var dto = new ComplianceSchemeFeesRequestV2Dto
             {
                 Regulator = "",
                 ApplicationReferenceNumber = "Ref123",

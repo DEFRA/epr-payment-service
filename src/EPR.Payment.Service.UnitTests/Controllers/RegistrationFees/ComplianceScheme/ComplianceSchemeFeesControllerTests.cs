@@ -27,6 +27,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
         private Mock<IValidator<ComplianceSchemeFeesRequestDto>> _validatorMock = null!;
         private Mock<IFeeSummaryWriter> _feeSummaryWriterMock = null!;
         private Mock<IFeeSummarySaveRequestMapper> _mapperMock = null!;
+        private Mock<IValidator<ComplianceSchemeFeesRequestV2Dto>> _validatorV2Mock = null!;
         private ComplianceSchemeFeesController _controller = null!;
 
         [TestInitialize]
@@ -38,11 +39,14 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             _feeSummaryWriterMock = _fixture.Freeze<Mock<IFeeSummaryWriter>>();
             _mapperMock = _fixture.Freeze<Mock<IFeeSummarySaveRequestMapper>>();
 
+            _validatorV2Mock = _fixture.Freeze<Mock<IValidator<ComplianceSchemeFeesRequestV2Dto>>>();
             _controller = new ComplianceSchemeFeesController(
                 _complianceSchemeCalculatorServiceMock.Object,
                 _validatorMock.Object,
                 _feeSummaryWriterMock.Object,
                 _mapperMock.Object);
+                _validatorMock.Object,
+                _validatorV2Mock.Object);
         }
 
         [TestMethod]
@@ -54,6 +58,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
                 _validatorMock.Object,
                 _feeSummaryWriterMock.Object,
                 _mapperMock.Object);
+                _validatorMock.Object,
+                _validatorV2Mock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -79,6 +85,9 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             // Assert
             act.Should().Throw<ArgumentNullException>()
                 .WithMessage("Value cannot be null. (Parameter 'complianceSchemeCalculatorService')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(
+                () => new ComplianceSchemeFeesController(baseFeeService!, _validatorMock.Object, _validatorV2Mock.Object));
         }
 
         [TestMethod]
@@ -97,6 +106,9 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             // Assert
             act.Should().Throw<ArgumentNullException>()
                 .WithMessage("Value cannot be null. (Parameter 'validator')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(
+                () => new ComplianceSchemeFeesController(_complianceSchemeCalculatorServiceMock.Object, validator!, _validatorV2Mock.Object));
         }
 
         [TestMethod, AutoMoqData]
