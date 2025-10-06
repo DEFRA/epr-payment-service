@@ -58,7 +58,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             BaseFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 Regulator = "GB-ENG",
@@ -114,7 +114,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             BaseFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = string.Empty, // ProducerType is empty
                 Regulator = "GB-ENG", // Valid Regulator

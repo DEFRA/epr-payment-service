@@ -142,7 +142,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             LateFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 IsLateFeeApplicable = true,

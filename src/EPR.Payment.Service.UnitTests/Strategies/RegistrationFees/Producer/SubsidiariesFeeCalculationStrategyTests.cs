@@ -51,7 +51,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 50,
@@ -91,7 +91,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 50,
@@ -135,7 +135,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 101,
@@ -178,7 +178,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 101,
@@ -225,7 +225,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 0,
@@ -253,7 +253,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
@@ -278,7 +278,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
@@ -314,7 +314,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,

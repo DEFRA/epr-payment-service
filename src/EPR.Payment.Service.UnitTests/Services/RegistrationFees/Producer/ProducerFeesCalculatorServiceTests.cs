@@ -280,7 +280,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
         public async Task CalculateFeesAsync_WhenLargeProducerWith10Subsidiaries_ReturnsCorrectFees([Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
@@ -785,7 +785,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
@@ -833,7 +833,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 0,
@@ -884,7 +884,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
