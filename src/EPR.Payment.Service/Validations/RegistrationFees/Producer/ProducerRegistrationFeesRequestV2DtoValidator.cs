@@ -5,9 +5,9 @@ using FluentValidation;
 
 namespace EPR.Payment.Service.Validations.RegistrationFees.Producer
 {
-    public class ProducerRegistrationFeesRequestV3DtoValidator : AbstractValidator<ProducerRegistrationFeesRequestV2Dto>
+    public class ProducerRegistrationFeesRequestV2DtoValidator : AbstractValidator<ProducerRegistrationFeesRequestV2Dto>
     {
-        public ProducerRegistrationFeesRequestV3DtoValidator()
+        public ProducerRegistrationFeesRequestV2DtoValidator()
         {
 
             var validProducerTypes = new List<string> { "LARGE", "SMALL" };

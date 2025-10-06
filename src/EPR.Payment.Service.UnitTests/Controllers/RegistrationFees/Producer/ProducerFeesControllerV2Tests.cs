@@ -37,6 +37,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             _validatorMock = _fixture.Freeze<Mock<IValidator<ProducerRegistrationFeesRequestDto>>>();
             _feeSummaryWriterMock = _fixture.Freeze<Mock<IFeeSummaryWriter>>();
             _mapperMock = _fixture.Freeze<Mock<IFeeSummarySaveProducerRequestMapper>>();
+            _validatorV2Mock = _fixture.Freeze<Mock<IValidator<ProducerRegistrationFeesRequestV2Dto>>>();
             _controller = new ProducerFeesController(
                     _producerFeesCalculatorServiceMock.Object,
                     _validatorMock.Object,

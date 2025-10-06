@@ -57,7 +57,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             return response;
         }
 
-        public async Task<RegistrationFeesResponseDto> CalculateFeesAsync(ProducerRegistrationFeesRequestV2Dto request, CancellationToken cancellationToken)
+      /*  public async Task<RegistrationFeesResponseDto> CalculateFeesAsync(ProducerRegistrationFeesRequestV2Dto request, CancellationToken cancellationToken)
         {
             ValidateRequest(request);
             decimal lateFee = await _baseFeeCalculationStrategyV2.CalculateFeeAsync(request, cancellationToken);
@@ -76,7 +76,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
 
             return response;
-        }
+        }*/
 
         private void ValidateRequest(ProducerRegistrationFeesRequestDto request)
         {

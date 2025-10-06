@@ -36,6 +36,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             _complianceSchemeCalculatorServiceMock = _fixture.Freeze<Mock<IComplianceSchemeCalculatorService>>();
             _validatorMock = _fixture.Freeze<Mock<IValidator<ComplianceSchemeFeesRequestDto>>>();
             _validatorV2Mock = _fixture.Freeze<Mock<IValidator<ComplianceSchemeFeesRequestV2Dto>>>();
+            _mapperMock = _fixture.Freeze<Mock<IFeeSummarySaveRequestMapper>>();
             _controller = new ComplianceSchemeFeesController(
                 _complianceSchemeCalculatorServiceMock.Object,
                 _validatorMock.Object,
