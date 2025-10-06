@@ -20,7 +20,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_InvalidProducerType_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "X",
                 NumberOfSubsidiaries = 10,
@@ -47,7 +47,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_UpperCaseProducerTypeLarge_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
@@ -73,7 +73,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_LowerCaseProducerTypeLarge_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "large",  // Lowercase
                 NumberOfSubsidiaries = 10,
@@ -99,7 +99,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_UpperCaseProducerTypeSmall_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "SMALL",
                 NumberOfSubsidiaries = 10,
@@ -125,7 +125,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_LowerCaseProducerTypeSmall_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "small",  // Lowercase
                 NumberOfSubsidiaries = 10,
@@ -151,7 +151,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_NumberOfSubsidiariesLessThanZero_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = -5,
@@ -178,7 +178,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_EmptyRegulator_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
@@ -206,7 +206,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         {
             // Arrange
             var validProducerTypes = new List<string> { "LARGE", "SMALL" };
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = string.Empty,
                 NumberOfSubsidiaries = 10,
@@ -233,7 +233,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_NumberOfOMPSubsidiaries_ShouldBeLessThanOrEqualToNumberOfSubsidiaries()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
@@ -261,7 +261,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_ValidRequestWithProducerType_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
@@ -289,7 +289,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_EmptyProducerTypeAndGreaterThanZeroSubsidiaries_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = string.Empty, // No base fee required
                 NumberOfSubsidiaries = 10,
@@ -320,7 +320,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
 
             foreach (var regulator in validRegulators)
             {
-                var request = new ProducerRegistrationFeesRequestDto
+                var request = new ProducerRegistrationFeesRequestV2Dto
                 {
                     ProducerType = "LARGE",
                     NumberOfSubsidiaries = 10,
@@ -348,7 +348,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_EmptyApplicationReferenceNumber_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
@@ -375,7 +375,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_NoOfSubsidiariesOnlineMarketplaceLessThanZero_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 0,
@@ -403,7 +403,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_InvalidSubmissionDate_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
@@ -431,7 +431,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_FutureSubmissionDate_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
@@ -459,7 +459,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_SubmissionDateNotUtc_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
