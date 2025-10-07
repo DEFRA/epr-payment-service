@@ -58,7 +58,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
             [FromBody] ProducerRegistrationFeesRequestDto request,
             CancellationToken cancellationToken)
         {
-            // Manually validate the request
+            // Manually validate the request.
             var validationResult = _validator.Validate(request);
 
             if (!validationResult.IsValid)
