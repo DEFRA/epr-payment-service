@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EPR.Payment.Service.Common.Data
 {
+
     [ExcludeFromCodeCoverage]
     public class AppDbContext : DbContext, IAppDbContext
     {

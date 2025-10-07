@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+﻿using EPR.Payment.Service.Common.Data.DataModels;
+using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using Microsoft.EntityFrameworkCore;
 
 namespace EPR.Payment.Service.Common.Data.Interfaces
@@ -14,6 +15,9 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
         DbSet<Regulator> Regulator { get; }
         DbSet<RegistrationFees> RegistrationFees { get; }
         DbSet<AccreditationFee> AccreditationFees { get; }
+        DbSet<FeeItem> FeeItems { get; }
+        DbSet<FeeType> FeeTypes { get; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
