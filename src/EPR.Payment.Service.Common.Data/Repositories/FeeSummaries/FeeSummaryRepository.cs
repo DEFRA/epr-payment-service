@@ -28,7 +28,6 @@ namespace EPR.Payment.Service.Common.Data.Repositories.FeeSummaries
             foreach (var item in items)
             {
                 var existing = await _dbContext.FeeSummaries
-                    .Include(s => s.FileFeeSummaryConnections)
                     .FirstOrDefaultAsync(s =>
                         s.AppRefNo == appRefNo &&
                         s.InvoicePeriod == invoicePeriod &&
@@ -45,30 +44,28 @@ namespace EPR.Payment.Service.Common.Data.Repositories.FeeSummaries
                     item.PayerTypeId = payerTypeId; 
                     item.PayerId = payerId;
                     item.CreatedDate = DateTimeOffset.UtcNow;
-
+                    item.FileId = fileId;
                     await _dbContext.FeeSummaries.AddAsync(item);
-                    await _dbContext.FileFeeSummaryConnections.AddAsync(new FileFeeSummaryConnection
-                    {
-                        FileId = fileId,
-                        FeeSummary = item
-                    });
+ 
                 }
-                else
+                else if ((existing is not null) && (existing.FileId == fileId) && (existing.InvoicePeriod == invoicePeriod))
                 {
                     existing.UnitPrice = item.UnitPrice;
                     existing.Quantity = item.Quantity;
                     existing.Amount = item.Amount;
-                    existing.UpdatedDate = DateTimeOffset.UtcNow;
-
-                    var hasLink = existing.FileFeeSummaryConnections.Any(x => x.FileId == fileId);
-                    if (!hasLink)
-                    {
-                        await _dbContext.FileFeeSummaryConnections.AddAsync(new FileFeeSummaryConnection
-                        {
-                            FileId = fileId,
-                            FeeSummaryId = existing.Id
-                        });
-                    }
+                    existing.UpdatedDate = DateTimeOffset.UtcNow;                 
+                }
+                else if ((existing is not null) && (existing.FileId != fileId) && (existing.InvoicePeriod != invoicePeriod))
+                {
+                    item.ExternalId = externalId;
+                    item.AppRefNo = appRefNo;
+                    item.InvoiceDate = invoiceDate;
+                    item.InvoicePeriod = invoicePeriod;
+                    item.PayerTypeId = payerTypeId;
+                    item.PayerId = payerId;
+                    item.CreatedDate = DateTimeOffset.UtcNow;
+                    item.FileId = fileId;
+                    await _dbContext.FeeSummaries.AddAsync(item);
                 }
             }
 
