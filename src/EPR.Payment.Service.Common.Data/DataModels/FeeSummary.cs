@@ -39,6 +39,8 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public virtual PayerType PayerType { get; set; } = null!;
 
+        public virtual ICollection<FileFeeSummaryConnection> FileFeeSummaryConnections { get; set; } = new List<FileFeeSummaryConnection>();
+
         #endregion Navigation Properties
     }
 }
