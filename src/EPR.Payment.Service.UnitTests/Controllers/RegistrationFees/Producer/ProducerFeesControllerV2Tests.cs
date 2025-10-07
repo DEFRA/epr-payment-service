@@ -6,6 +6,7 @@ using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
+using EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Controllers.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.Interfaces.FeeSummaries;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
@@ -47,6 +48,25 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         }
 
         [TestMethod]
+        public void Constructor_WithValidArguments_ShouldInitialize()
+        {
+            // Act
+            var controller = new ProducerFeesController(
+                _producerFeesCalculatorServiceMock.Object,
+                _validatorMock.Object,
+                _feeSummaryWriterMock.Object,
+                _mapperMock.Object,
+                _validatorV2Mock.Object);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                controller.Should().NotBeNull();
+                controller.Should().BeAssignableTo<ProducerFeesController>();
+            }
+        }
+
+        [TestMethod]
         [AutoMoqData]
         public void Constructor_WhenProducerFeesCalculatorServiceIsNull_ThrowsArgumentNullException()
         {
@@ -58,7 +78,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
                 producerFeesCalculatorService!,
                     _validatorMock.Object,
                     _feeSummaryWriterMock.Object,
-                     _mapperMock.Object,
+                    _mapperMock.Object,
                     _validatorV2Mock.Object);
 
             // Assert
@@ -70,31 +90,31 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         public void Constructor_WhenValidatorIsNull_ThrowsArgumentNullException()
         {
             // Arrange
-            IValidator<ProducerRegistrationFeesRequestDto>? _validator = null;
+            IValidator<ProducerRegistrationFeesRequestV2Dto>? _validator2 = null;
 
             // Act
             Action act = () => new ProducerFeesController(
-                _producerFeesCalculatorServiceMock.Object, 
-                _validator!,
+                _producerFeesCalculatorServiceMock.Object,
+                _validatorMock.Object,
                 _feeSummaryWriterMock.Object,
                 _mapperMock.Object,
-                _validatorV2Mock.Object);
+                _validator2);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter '_validator2')");
         }
 
         [TestMethod]
         [AutoMoqData]
         public async Task CalculateFeesAsync_WhenValidRequest_ReturnsOkResultWithCalculatedFees(
-            [Frozen] ProducerRegistrationFeesRequestDto request,
+            [Frozen] ProducerRegistrationFeesRequestV2Dto request,
             [Frozen] RegistrationFeesResponseDto response)
         {
             // Arrange
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
+            _validatorV2Mock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
                 .Returns(new ValidationResult());
 
-            _producerFeesCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _producerFeesCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestV2Dto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
 
             // Act
@@ -110,7 +130,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         [TestMethod]
         [AutoMoqData]
         public async Task CalculateFeesAsync_WhenRequestValidationFails_ReturnsBadRequestWithValidationErrorDetails(
-            [Frozen] ProducerRegistrationFeesRequestDto request)
+            [Frozen] ProducerRegistrationFeesRequestV2Dto request)
         {
             // Arrange
             var validationFailures = new List<ValidationFailure>
@@ -119,7 +139,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
                 new ValidationFailure("Regulator", "Regulator is required")
             };
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
+            _validatorV2Mock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
                 .Returns(new ValidationResult(validationFailures));
 
             // Act
@@ -137,15 +157,15 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         [TestMethod]
         [AutoMoqData]
         public async Task CalculateFeesAsync_WhenCalculationThrowsValidationException_ReturnsBadRequestWithValidationExceptionDetails(
-            [Frozen] ProducerRegistrationFeesRequestDto request)
+            [Frozen] ProducerRegistrationFeesRequestV2Dto request)
         {
             // Arrange
             var exceptionMessage = "Validation failed";
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
+            _validatorV2Mock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
                 .Returns(new ValidationResult());
 
-            _producerFeesCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _producerFeesCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestV2Dto>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new ValidationException(exceptionMessage));
 
             // Act
@@ -163,15 +183,15 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         [TestMethod]
         [AutoMoqData]
         public async Task CalculateFeesAsync_WhenCalculationThrowsArgumentException_ReturnsBadRequestWithArgumentExceptionDetails(
-            [Frozen] ProducerRegistrationFeesRequestDto request)
+            [Frozen] ProducerRegistrationFeesRequestV2Dto request)
         {
             // Arrange
             var exceptionMessage = "Invalid argument";
 
-            _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
+            _validatorV2Mock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
                 .Returns(new ValidationResult());
 
-            _producerFeesCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _producerFeesCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestV2Dto>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new ArgumentException(exceptionMessage));
 
             // Act
@@ -189,11 +209,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         [TestMethod]
         [AutoMoqData]
         public async Task CalculateFeesAsync_WhenCalculationThrowsException_ShouldReturnInternalServerError(
-              [Frozen] ProducerRegistrationFeesRequestDto request)
+              [Frozen] ProducerRegistrationFeesRequestV2Dto request)
         {
             // Arrange
             var exceptionMessage = "exception";
-            _producerFeesCalculatorServiceMock.Setup(i => i.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+            _producerFeesCalculatorServiceMock.Setup(i => i.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestV2Dto>(), It.IsAny<CancellationToken>()))
                                .ThrowsAsync(new Exception(exceptionMessage));
 
             // Act
