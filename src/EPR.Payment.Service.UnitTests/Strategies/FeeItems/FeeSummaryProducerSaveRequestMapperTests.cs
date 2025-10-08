@@ -29,19 +29,6 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
                 PayerTypeId = (int)PayerTypeIds.DirectProducer
             };
 
-        private static ComplianceSchemeMembersWithFeesDto Member(
-            decimal reg = 0, decimal late = 0, decimal memberOmp = 0,
-            decimal subsFee = 0, SubsidiariesFeeBreakdown? breakdown = null)
-            => new()
-            {
-                MemberId = Guid.NewGuid().ToString(),
-                MemberRegistrationFee = reg,
-                MemberLateRegistrationFee = late,
-                MemberOnlineMarketPlaceFee = memberOmp,
-                SubsidiariesFee = subsFee,
-                SubsidiariesFeeBreakdown = breakdown
-            };
-
         private static FeeBreakdown Band(int band, int units, decimal unitPrice, decimal total)
             => new() { BandNumber = band, UnitCount = units, UnitPrice = unitPrice, TotalPrice = total };
 
@@ -257,7 +244,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
 
             // Assert
             result.Lines.Should().HaveCount(1);
-            var line = result.Lines.FirstOrDefault();
+            var line = result.Lines.Single();
             line.FeeTypeId.Should().Be((int)FeeTypeIds.ProducerRegistrationFee);
             line.UnitPrice.Should().Be(1380400);
             line.Quantity.Should().Be(1);

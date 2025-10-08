@@ -90,7 +90,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         public void Constructor_WhenValidatorIsNull_ThrowsArgumentNullException()
         {
             // Arrange
-            IValidator<ProducerRegistrationFeesRequestV2Dto>? _validator2 = null;
+            IValidator<ProducerRegistrationFeesRequestV2Dto>? validator = null;
 
             // Act
             Action act = () => new ProducerFeesController(
@@ -98,7 +98,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
                 _validatorMockV1.Object,
                 _feeSummaryWriterMock.Object,
                 _mapperMock.Object,
-                _validator2);
+                validator!);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");

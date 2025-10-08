@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.FeeItems
             IEnumerable<FeeItem> items,
             CancellationToken cancellationToken)
         {
-            if (items is null) throw new ArgumentNullException(nameof(items));
+            ArgumentNullException.ThrowIfNull(items);
 
             foreach (var item in items)
             {

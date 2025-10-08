@@ -104,7 +104,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             int resubmissionFeeTypeId,
             DateTimeOffset invoicePeriod,
             int payerTypeId,
-            DateTimeOffset? invoiceDate)
+            DateTimeOffset? invoiceDate = null)
         {
             return new FeeSummarySaveRequest
             {
