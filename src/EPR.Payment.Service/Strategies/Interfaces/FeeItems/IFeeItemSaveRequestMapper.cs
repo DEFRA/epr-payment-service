@@ -12,7 +12,7 @@ namespace EPR.Payment.Service.Strategies.Interfaces.FeeItems
             ComplianceSchemeFeesRequestDto complianceSchemeFeesRequestDto,
             DateTimeOffset invoicePeriod,
             int payerTypeId,
-            ComplianceSchemeFeesResponseDto resp,
+            ComplianceSchemeFeesResponseDto calculationResponse,
             DateTimeOffset? invoiceDate = null);
 
         FeeSummarySaveRequest BuildComplianceSchemeResubmissionFeeSummaryRecord(
