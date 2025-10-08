@@ -2,11 +2,9 @@
 using EPR.Payment.Service.Common.Data.Helper;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories.FeeSummaries;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Data.Repositories.Fees;
-using EPR.Payment.Service.Common.Data.Repositories.FeeSummaries;
 using EPR.Payment.Service.Common.Data.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
@@ -88,11 +86,11 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IPreviousPaymentsHelper, PreviousPaymentsHelper>();
             services.AddScoped<IAccreditationFeesCalculatorService, AccreditationFeesCalculatorService>();
             services.AddScoped<IReprocessorOrExporterFeesCalculatorService, ReprocessorOrExporterFeesCalculatorService>();
-           
-            services.AddScoped<IFeeSummaryRepository, FeeSummaryRepository>();
-            services.AddScoped<IFeeSummarySaveProducerRequestMapper, FeeSummarySaveProducerRequestMapper>();
-            services.AddScoped<IFeeSummarySaveRequestMapper, FeeSummarySaveRequestMapper>();
-            
+
+            services.AddScoped<IFeeItemRepository, FeeItemRepository>();
+            services.AddScoped<IFeeItemSaveRequestMapper, FeeItemSaveRequestMapper>();
+            services.AddScoped<IFeeItemWriter, FeeItemWriter>();
+
             services.AddScoped<IFeeSummaryWriter, FeeSummaryWriter>();
 
             services.AddScoped<FeesKeyValueStore>();
