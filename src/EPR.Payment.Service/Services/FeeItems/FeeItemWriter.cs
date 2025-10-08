@@ -1,11 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories.FeeItems;
+﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.FeeItems;
 using EPR.Payment.Service.Common.Dtos.FeeItems;
 using EPR.Payment.Service.Services.Interfaces.FeeItems;
-using Microsoft.Extensions.Logging;
 
 namespace EPR.Payment.Service.Services.FeeItems
 {
