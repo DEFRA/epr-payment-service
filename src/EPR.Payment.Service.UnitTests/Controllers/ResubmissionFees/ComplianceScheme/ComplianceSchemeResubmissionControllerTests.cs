@@ -1,18 +1,15 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.MSTest;
-using EPR.Payment.Service.Common.Dtos.FeeSummaries;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Common.Dtos.FeeItems;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
-using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.ResubmissionFees.ComplianceScheme;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Services.Interfaces.FeeItems;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.ComplianceScheme;
-using EPR.Payment.Service.Services.Interfaces.FeeSummaries;
-using EPR.Payment.Service.Strategies.Interfaces.FeeSummary;
+using EPR.Payment.Service.Strategies.Interfaces.FeeItems;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -20,7 +17,6 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Linq;
 
 namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceScheme
 {
@@ -31,8 +27,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
         private ComplianceSchemeResubmissionController _controller = null!;
         private Mock<IComplianceSchemeResubmissionService> _resubmissionFeeServiceMock = null!;
         private Mock<IValidator<ComplianceSchemeResubmissionFeeRequestDto>> _validatorMock = null!;
-        private Mock<IFeeSummaryWriter> _feeSummaryWriterMock = null!;
-        private Mock<IFeeSummarySaveRequestMapper> _mapperMock = null!;
+        private Mock<IFeeItemWriter> _feeItemWriterMock = null!;
+        private Mock<IFeeItemSaveRequestMapper> _feeItemSaveRequestMapper = null!;
         private CancellationToken _cancellationToken;
 
         [TestInitialize]
@@ -41,15 +37,14 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _resubmissionFeeServiceMock = _fixture.Freeze<Mock<IComplianceSchemeResubmissionService>>();
             _validatorMock = _fixture.Freeze<Mock<IValidator<ComplianceSchemeResubmissionFeeRequestDto>>>();
-            _feeSummaryWriterMock = _fixture.Freeze<Mock<IFeeSummaryWriter>>();
-            _mapperMock = _fixture.Freeze<Mock<IFeeSummarySaveRequestMapper>>();
+            _feeItemWriterMock = _fixture.Freeze<Mock<IFeeItemWriter>>();
+            _feeItemSaveRequestMapper = _fixture.Freeze<Mock<IFeeItemSaveRequestMapper>>();
 
             _controller = new ComplianceSchemeResubmissionController(
                 _resubmissionFeeServiceMock.Object,
                 _validatorMock.Object,
-                _feeSummaryWriterMock.Object,
-                _mapperMock.Object);
-
+                _feeItemWriterMock.Object,
+                _feeItemSaveRequestMapper.Object);
             _cancellationToken = new CancellationToken();
         }
 
@@ -60,8 +55,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
             var controller = new ComplianceSchemeResubmissionController(
                 _resubmissionFeeServiceMock.Object,
                 _validatorMock.Object,
-                _feeSummaryWriterMock.Object,
-                _mapperMock.Object);
+                _feeItemWriterMock.Object,
+                _feeItemSaveRequestMapper.Object);
 
             // Assert
             using (new AssertionScope())
@@ -74,31 +69,25 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
         [TestMethod]
         public void Constructor_WithNullResubmissionFeeService_ShouldThrowArgumentNullException()
         {
-            // Act
-            Action act = () => new ComplianceSchemeResubmissionController(
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() => new ComplianceSchemeResubmissionController(
                 null!,
                 _validatorMock.Object,
-                _feeSummaryWriterMock.Object,
-                _mapperMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithParameterName("resubmissionFeeService");
+                _feeItemWriterMock.Object,
+                _feeItemSaveRequestMapper.Object
+            ));
         }
 
         [TestMethod]
         public void Constructor_WithNullValidator_ShouldThrowArgumentNullException()
         {
-            // Act
-            Action act = () => new ComplianceSchemeResubmissionController(
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() => new ComplianceSchemeResubmissionController(
                 _resubmissionFeeServiceMock.Object,
                 null!,
-                _feeSummaryWriterMock.Object,
-                _mapperMock.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>()
-                .WithParameterName("validator");
+                 _feeItemWriterMock.Object,
+                _feeItemSaveRequestMapper.Object
+            ));
         }
 
         [TestMethod, AutoMoqData]
@@ -108,46 +97,13 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
         {
             // Arrange
             request.ResubmissionDate = DateTime.UtcNow;
-            request.FileId = Guid.NewGuid();
-            request.ExternalId = Guid.NewGuid();
-            request.PayerId = 123;
-
             _resubmissionFeeServiceMock
                 .Setup(i => i.CalculateResubmissionFeeAsync(request, _cancellationToken))
                 .ReturnsAsync(expectedResult);
 
             _validatorMock
                 .Setup(v => v.ValidateAsync(request, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ValidationResult());
-
-            // mapper not asserted here; allow default behavior
-            _mapperMock
-                .Setup(m => m.BuildComplianceSchemeResubmissionFeeSummaryRecord(
-                    It.IsAny<ComplianceSchemeResubmissionFeeRequestDto>(),
-                    It.IsAny<ComplianceSchemeResubmissionFeeResult>(),
-                    It.IsAny<int>(),
-                    It.IsAny<DateTimeOffset>(),
-                    It.IsAny<int>(),
-                    It.IsAny<DateTimeOffset?>()))
-                .Returns(new FeeSummarySaveRequest
-                {
-                    ApplicationReferenceNumber = request.ReferenceNumber,
-                    FileId = request.FileId.Value,
-                    ExternalId = request.ExternalId.Value,
-                    PayerId = request.PayerId.Value,
-                    PayerTypeId = (int)PayerTypeIds.ComplianceScheme,
-                    InvoicePeriod = new DateTimeOffset(request.ResubmissionDate, TimeSpan.Zero),
-                    Lines = new[]
-                    {
-                        new FeeSummaryLineRequest
-                        {
-                            FeeTypeId = (int)FeeTypeIds.ComplianceSchemeResubmission,
-                            UnitPrice = expectedResult.TotalResubmissionFee,
-                            Quantity = 1,
-                            Amount = expectedResult.TotalResubmissionFee
-                        }
-                    }
-                });
+                .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
             // Act
             var result = await _controller.CalculateResubmissionFeeAsync(request, _cancellationToken);
@@ -166,14 +122,13 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
         {
             // Arrange
             request.ResubmissionDate = DateTime.UtcNow;
-
             _resubmissionFeeServiceMock
                 .Setup(s => s.CalculateResubmissionFeeAsync(request, _cancellationToken))
                 .ThrowsAsync(new ValidationException("Validation error"));
 
             _validatorMock
                 .Setup(v => v.ValidateAsync(request, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ValidationResult());
+                .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
             // Act
             var result = await _controller.CalculateResubmissionFeeAsync(request, _cancellationToken);
@@ -194,14 +149,13 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
         {
             // Arrange
             request.ResubmissionDate = DateTime.UtcNow;
-
             _resubmissionFeeServiceMock
                 .Setup(s => s.CalculateResubmissionFeeAsync(request, _cancellationToken))
                 .ThrowsAsync(new Exception("Unexpected error"));
 
             _validatorMock
                 .Setup(v => v.ValidateAsync(request, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ValidationResult());
+                .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
             // Act
             var result = await _controller.CalculateResubmissionFeeAsync(request, _cancellationToken);
@@ -224,19 +178,16 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
                 Regulator = "GB-ENG",
                 ReferenceNumber = "12345",
                 ResubmissionDate = DateTime.UtcNow,
-                MemberCount = 1,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                PayerId = 456
+                MemberCount = 1
             };
 
             _controller.ModelState.AddModelError("MemberCount", "Member count is required");
 
             _validatorMock
                 .Setup(v => v.ValidateAsync(request, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ValidationResult(new[]
+                .ReturnsAsync(new FluentValidation.Results.ValidationResult(new[]
                 {
-                    new ValidationFailure("MemberCount", "Member count is required")
+                    new FluentValidation.Results.ValidationFailure("MemberCount", "Member count is required")
                 }));
 
             // Act
@@ -256,16 +207,13 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
             [Frozen] ComplianceSchemeResubmissionFeeRequestDto request)
         {
             // Arrange
-            request.ResubmissionDate = DateTime.UtcNow; // flagged by validator
-            request.FileId = Guid.NewGuid();
-            request.ExternalId = Guid.NewGuid();
-            request.PayerId = 789;
+            request.ResubmissionDate = DateTime.UtcNow; // Non-UTC date
 
             _validatorMock
                 .Setup(v => v.ValidateAsync(request, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ValidationResult(new[]
+                .ReturnsAsync(new FluentValidation.Results.ValidationResult(new[]
                 {
-                    new ValidationFailure("ResubmissionDate", "Resubmission date must be in UTC.")
+                    new FluentValidation.Results.ValidationFailure("ResubmissionDate", "Resubmission date must be in UTC.")
                 }));
 
             // Act
@@ -284,17 +232,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
 
         [TestMethod, AutoMoqData]
         public async Task GetResubmissionAsync_ServiceThrowsArgumentException_ShouldReturnBadRequest(
-            [Frozen] ComplianceSchemeResubmissionFeeRequestDto request)
+        [Frozen] ComplianceSchemeResubmissionFeeRequestDto request)
         {
+
             // Arrange
-            request.FileId = Guid.NewGuid();
-            request.ExternalId = Guid.NewGuid();
-            request.PayerId = 321;
-
-            _validatorMock
-                .Setup(v => v.ValidateAsync(request, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new ValidationResult());
-
+            _validatorMock.Setup(v => v.Validate(request)).Returns(new ValidationResult());
             _resubmissionFeeServiceMock
                 .Setup(s => s.CalculateResubmissionFeeAsync(request, _cancellationToken))
                 .ThrowsAsync(new ArgumentException("Invalid input parameter."));
@@ -336,11 +278,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
                 .Setup(s => s.CalculateResubmissionFeeAsync(request, _cancellationToken))
                 .ReturnsAsync(resultDto);
 
-            _mapperMock
+            _feeItemSaveRequestMapper
                 .Setup(m => m.BuildComplianceSchemeResubmissionFeeSummaryRecord(
                     It.Is<ComplianceSchemeResubmissionFeeRequestDto>(r => r == request),
                     It.Is<ComplianceSchemeResubmissionFeeResult>(r => r == resultDto),
-                    It.Is<int>(t => t == (int)FeeTypeIds.ComplianceSchemeResubmission),
+                    It.Is<int>(t => t == (int)FeeTypeIds.ComplianceSchemeResubmissionFee),
                     It.IsAny<DateTimeOffset>(),
                     It.Is<int>(p => p == (int)PayerTypeIds.ComplianceScheme),
                     It.IsAny<DateTimeOffset?>()))
@@ -358,7 +300,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
                         {
                             new FeeSummaryLineRequest
                             {
-                                FeeTypeId = (int)FeeTypeIds.ComplianceSchemeResubmission,
+                                FeeTypeId = (int)FeeTypeIds.ComplianceSchemeResubmissionFee,
                                 UnitPrice = resultDto.TotalResubmissionFee,
                                 Quantity = 1,
                                 Amount = resultDto.TotalResubmissionFee
@@ -378,7 +320,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
             }
 
             // Assert
-            _feeSummaryWriterMock.Verify(w => w.Save(
+            _feeItemWriterMock.Verify(w => w.Save(
                 It.Is<FeeSummarySaveRequest>(save =>
                     save.ApplicationReferenceNumber == request.ReferenceNumber &&
                     save.FileId == request.FileId &&
@@ -388,11 +330,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
                     save.InvoicePeriod.Date == request.ResubmissionDate.Date &&
                     save.Lines != null &&
                     save.Lines.Count == 1 &&
-                    save.Lines.Single().FeeTypeId == (int)FeeTypeIds.ComplianceSchemeResubmission &&
+                    save.Lines.Single().FeeTypeId == (int)FeeTypeIds.ComplianceSchemeResubmissionFee &&
                     save.Lines.Single().Quantity == 1 &&
                     save.Lines.Single().Amount == resultDto.TotalResubmissionFee &&
                     save.Lines.Single().UnitPrice == resultDto.TotalResubmissionFee
-                ),CancellationToken.None), Times.Once);
+                ), CancellationToken.None), Times.Once);
         }
 
         [TestMethod]
@@ -431,7 +373,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
                 _resubmissionFeeServiceMock.Verify(
                     s => s.CalculateResubmissionFeeAsync(It.IsAny<ComplianceSchemeResubmissionFeeRequestDto>(), It.IsAny<CancellationToken>()),
                     Times.Never);
-                _mapperMock.Verify(m => m.BuildComplianceSchemeResubmissionFeeSummaryRecord(
+                _feeItemSaveRequestMapper.Verify(m => m.BuildComplianceSchemeResubmissionFeeSummaryRecord(
                         It.IsAny<ComplianceSchemeResubmissionFeeRequestDto>(),
                         It.IsAny<ComplianceSchemeResubmissionFeeResult>(),
                         It.IsAny<int>(),
@@ -439,7 +381,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
                         It.IsAny<int>(),
                         It.IsAny<DateTimeOffset?>()),
                     Times.Never);
-                _feeSummaryWriterMock.Verify(w => w.Save(It.IsAny<FeeSummarySaveRequest>(), CancellationToken.None), Times.Never);
+                _feeItemWriterMock.Verify(w => w.Save(It.IsAny<FeeSummarySaveRequest>(), CancellationToken.None), Times.Never);
             }
         }
     }

@@ -1,9 +1,10 @@
-namespace EPR.Payment.Service.Common.Enums;
-
-public enum PayerTypeIds
+namespace EPR.Payment.Service.Common.Enums
 {
-    DirectProducer    = 1,
-    ComplianceScheme  = 2,
-    Reprocessor       = 3,
-    Exporter          = 4
+    public enum PayerTypeIds
+    {
+        DirectProducer = 1,
+        ComplianceScheme = 2,
+        Reprocessor = 3,
+        Exporter = 4
+    }
 }

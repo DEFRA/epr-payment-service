@@ -5,10 +5,11 @@ using EPR.Payment.Service.Common.Dtos.FeeSummaries;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Enums;
-using EPR.Payment.Service.Helper;
-using EPR.Payment.Service.Services.Interfaces.FeeSummaries;
+using EPR.Payment.Service.Services.FeeItems;
+using EPR.Payment.Service.Services.Interfaces.FeeItems;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.ComplianceScheme;
-using EPR.Payment.Service.Strategies.Interfaces.FeeSummary;
+using EPR.Payment.Service.Strategies.FeeItems;
+using EPR.Payment.Service.Strategies.Interfaces.FeeItems;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
@@ -24,18 +25,17 @@ namespace EPR.Payment.Service.Controllers.ResubmissionFees.ComplianceScheme
     {
         private readonly IComplianceSchemeResubmissionService _resubmissionFeeService;
         private readonly IValidator<ComplianceSchemeResubmissionFeeRequestDto> _validator;
-        private IFeeSummaryWriter _feeSummaryWriter;
-        private readonly IFeeSummarySaveRequestMapper _feeSummarySaveRequestMapper;
+        private readonly IFeeItemWriter _feeItemWriter;
+        private readonly IFeeItemSaveRequestMapper _feeItemSaveRequestMapper;
 
         public ComplianceSchemeResubmissionController(
             IComplianceSchemeResubmissionService resubmissionFeeService,
-            IValidator<ComplianceSchemeResubmissionFeeRequestDto> validator,
-            IFeeSummaryWriter feeSummaryWriter, IFeeSummarySaveRequestMapper feeSummarySaveRequestMapper)
+            IValidator<ComplianceSchemeResubmissionFeeRequestDto> validator, IFeeItemWriter feeItemWriter, IFeeItemSaveRequestMapper feeItemSaveRequestMapper)
         {
             _resubmissionFeeService = resubmissionFeeService ?? throw new ArgumentNullException(nameof(resubmissionFeeService));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _feeSummaryWriter = feeSummaryWriter ?? throw new ArgumentNullException(nameof(feeSummaryWriter));
-            _feeSummarySaveRequestMapper = feeSummarySaveRequestMapper ?? throw new ArgumentNullException(nameof(feeSummarySaveRequestMapper));
+            _feeItemWriter = feeItemWriter ?? throw new ArgumentNullException(nameof(feeItemWriter));
+            _feeItemSaveRequestMapper = feeItemSaveRequestMapper ?? throw new ArgumentNullException(nameof(feeItemSaveRequestMapper));
         }
 
         [HttpPost]
@@ -69,15 +69,15 @@ namespace EPR.Payment.Service.Controllers.ResubmissionFees.ComplianceScheme
                     var invoicePeriod = new DateTimeOffset(request.ResubmissionDate, TimeSpan.Zero);
 
 
-                    var saveRequest = _feeSummarySaveRequestMapper.BuildComplianceSchemeResubmissionFeeSummaryRecord(
+                    var saveRequest = _feeItemSaveRequestMapper.BuildComplianceSchemeResubmissionFeeSummaryRecord(
                         request,
                         result,
-                        (int)FeeTypeIds.ComplianceSchemeResubmission,
+                        (int)FeeTypeIds.ComplianceSchemeResubmissionFee,
                         invoicePeriod,
                         (int)PayerTypeIds.ComplianceScheme
                     );
 
-                    await _feeSummaryWriter.Save(saveRequest, cancellationToken);
+                    await _feeItemWriter.Save(saveRequest, cancellationToken);
 
                 }
 
