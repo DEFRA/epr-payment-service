@@ -25,7 +25,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
                 ApplicationReferenceNumber = appRef,
                 PayerId = payerId,
                 ProducerType = "Large",
-                InvoicePeriod = new DateTimeOffset(DateTime.Now, TimeSpan.Zero),
+                InvoicePeriod = new DateTimeOffset(2025, 09, 26, 0, 0, 0, TimeSpan.Zero),
                 PayerTypeId = (int)PayerTypeIds.DirectProducer
             };
 
@@ -57,7 +57,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             };
 
         [TestMethod]
-        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_FullHappyPath_WithBands_NoOMPSubs_SetsHeadersAndLines()
+        public void BuildProducerRegistrationFeeSummaryRecord_FullHappyPath_WithBands_NoOMPSubs_SetsHeadersAndLines()
         {
             // Arrange
             var mapper = new FeeItemProducerSaveRequestMapper();
@@ -77,21 +77,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             {
                 ProducerRegistrationFee = 1_380_400,
                 PreviousPayment = 0,
-                SubsidiariesFeeBreakdown = subsidiariesFeeBreakdown,
-                /* ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>
-                 {
-                     Member(
-                         reg: 168_500,
-                         late: 132_800,
-                         memberOmp: 257_900,
-                         subsFee: 167_400 + 14_000 + 2_000,
-                         breakdown: Subs(new []
-                         {
-                             Band(1, 3, 55_800, 167_400),
-                             Band(2, 1, 14_000, 14_000),
-                             Band(3, 2, 1_000,  2_000)
-                         }))
-                 }*/
+                SubsidiariesFeeBreakdown = Subs(new[]
+                        {
+                            Band(1, 3, 55_800, 167_400),
+                            Band(2, 1, 14_000, 14_000),
+                            Band(3, 2, 1_000,  2_000)
+                        })
             };
 
             var invoicePeriod = new DateTimeOffset(2025, 09, 26, 0, 0, 0, TimeSpan.Zero);
@@ -155,7 +146,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
         }
 
         [TestMethod]
-        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_ZeroRegFee_And_NullMembers_YieldsNoLines()
+        public void BuildProducerRegistrationFeeSummaryRecord_ZeroRegFee_And_NullMembers_YieldsNoLines()
         {
             // Arrange
             var mapper = new FeeItemProducerSaveRequestMapper();
@@ -179,7 +170,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
         }
 
         [TestMethod]
-        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_WithSubsidiaryOMP_AddsUnitOMPLine()
+        public void BuildProducerSchemeRegistrationFeeSummaryRecord_WithSubsidiaryOMP_AddsUnitOMPLine()
         {
             // Arrange
             var mapper = new FeeItemProducerSaveRequestMapper();
@@ -235,7 +226,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
         }
 
         [TestMethod]
-        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_UnknownBand_FallsBackToSubsidiaryFee()
+        public void BuildProducerSchemeRegistrationFeeSummaryRecord_UnknownBand_FallsBackToSubsidiaryFee()
         {
             // Arrange
             var mapper = new FeeItemProducerSaveRequestMapper();
@@ -273,7 +264,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
         }
 
         [TestMethod]
-        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_FallbackIdsWhenMissingInRequest()
+        public void BuildProducerRegistrationFeeSummaryRecord_FallbackIdsWhenMissingInRequest()
         {
             // Arrange
             var mapper = new FeeItemProducerSaveRequestMapper();
@@ -296,10 +287,10 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             // Act
             var result = mapper.BuildRegistrationFeeSummaryRecord(
                 req,
-                invoicePeriod: new DateTimeOffset(2025, 12, 01, 0, 0, 0, TimeSpan.Zero),
+                invoicePeriod: new DateTimeOffset(2025, 10, 01, 0, 0, 0, TimeSpan.Zero),
                 payerTypeId: 1,
                 resp,
-                invoiceDate: new DateTimeOffset(2025, 12, 02, 0, 0, 0, TimeSpan.Zero));
+                invoiceDate: new DateTimeOffset(2025, 10, 02, 0, 0, 0, TimeSpan.Zero));
 
             // Assert
             result.FileId.Should().NotBe(Guid.Empty);
