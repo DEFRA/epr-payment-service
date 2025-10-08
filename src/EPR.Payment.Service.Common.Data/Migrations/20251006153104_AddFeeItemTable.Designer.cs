@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251006153104_AddFeeItemTable")]
+    partial class AddFeeItemTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2501,47 +2504,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         new
                         {
                             Id = 10,
-                            Name = "Compliance Scheme Resubmission"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "FeePreviousPayment"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "OutstandingPayment"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "BandNumber 1"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Name = "BandNumber 2"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Name = "BandNumber 3"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Name = "PreviousPayment(reuse)"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Name = "OutstandingPayment(reuse)"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Name = "Member OnlineMarketPlace Fee"
+                            Name = "Compliance Scheme Resubmission Fee"
                         });
                 });
 

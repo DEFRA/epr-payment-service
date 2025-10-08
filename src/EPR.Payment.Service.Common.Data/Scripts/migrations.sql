@@ -5862,7 +5862,52 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250921121924_AddResubmissionFeeTypes'
+    WHERE [MigrationId] = N'20251006153104_AddFeeItemTable'
+)
+BEGIN
+    DROP TABLE [FileFeeSummaryConnections];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251006153104_AddFeeItemTable'
+)
+BEGIN
+    DROP TABLE [FeeSummaries];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251006153104_AddFeeItemTable'
+)
+BEGIN
+    CREATE TABLE [FeeItem] (
+        [Id] int NOT NULL IDENTITY,
+        [ExternalId] uniqueidentifier NOT NULL,
+        [AppRefNo] nvarchar(50) NOT NULL,
+        [InvoiceDate] datetimeoffset NOT NULL,
+        [InvoicePeriod] datetimeoffset NOT NULL,
+        [PayerTypeId] int NOT NULL,
+        [PayerId] int NOT NULL,
+        [FeeTypeId] int NOT NULL,
+        [UnitPrice] decimal(18,2) NULL,
+        [Quantity] int NOT NULL DEFAULT 0,
+        [Amount] decimal(18,2) NOT NULL,
+        [CreatedDate] datetimeoffset NOT NULL,
+        [UpdatedDate] datetimeoffset NULL,
+        [FileId] uniqueidentifier NOT NULL,
+        CONSTRAINT [PK_FeeItem] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_FeeItem_FeeTypes_FeeTypeId] FOREIGN KEY ([FeeTypeId]) REFERENCES [Lookup].[FeeTypes] ([Id]) ON DELETE CASCADE,
+        CONSTRAINT [FK_FeeItem_PayerTypes_PayerTypeId] FOREIGN KEY ([PayerTypeId]) REFERENCES [Lookup].[PayerTypes] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251006153104_AddFeeItemTable'
 )
 BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
@@ -5877,11 +5922,77 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20250921121924_AddResubmissionFeeTypes'
+    WHERE [MigrationId] = N'20251006153104_AddFeeItemTable'
+)
+BEGIN
+    CREATE INDEX [IX_FeeItem_FeeTypeId] ON [FeeItem] ([FeeTypeId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251006153104_AddFeeItemTable'
+)
+BEGIN
+    CREATE INDEX [IX_FeeItem_PayerTypeId] ON [FeeItem] ([PayerTypeId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251006153104_AddFeeItemTable'
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250921121924_AddResubmissionFeeTypes', N'8.0.4');
+    VALUES (N'20251006153104_AddFeeItemTable', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251007103058_FeeTypeDataSeedData'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[FeeTypes] SET [Name] = N''Compliance Scheme Resubmission''
+    WHERE [Id] = 10;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251007103058_FeeTypeDataSeedData'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
+        SET IDENTITY_INSERT [Lookup].[FeeTypes] ON;
+    EXEC(N'INSERT INTO [Lookup].[FeeTypes] ([Id], [Name])
+    VALUES (11, N''FeePreviousPayment''),
+    (12, N''OutstandingPayment''),
+    (13, N''BandNumber 1''),
+    (14, N''BandNumber 2''),
+    (15, N''BandNumber 3''),
+    (16, N''PreviousPayment(reuse)''),
+    (17, N''OutstandingPayment(reuse)''),
+    (18, N''Member OnlineMarketPlace Fee'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
+        SET IDENTITY_INSERT [Lookup].[FeeTypes] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251007103058_FeeTypeDataSeedData'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20251007103058_FeeTypeDataSeedData', N'8.0.4');
 END;
 GO
 

@@ -5,7 +5,7 @@ using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 namespace EPR.Payment.Service.Common.Data.DataModels
 {
     [ExcludeFromCodeCoverage]
-    public class FeeSummary : BaseEntity
+    public class FeeItem : BaseEntity
     {
         public Guid ExternalId { get; set; }
 
@@ -38,8 +38,6 @@ namespace EPR.Payment.Service.Common.Data.DataModels
         public virtual FeeType FeeType { get; set; } = null!;
 
         public virtual PayerType PayerType { get; set; } = null!;
-
-        public virtual ICollection<FileFeeSummaryConnection> FileFeeSummaryConnections { get; set; } = new List<FileFeeSummaryConnection>();
 
         #endregion Navigation Properties
     }
