@@ -33,7 +33,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
                 MemberLateRegistrationFee = late,
                 MemberOnlineMarketPlaceFee = memberOmp,
                 SubsidiariesFee = subsFee,
-                SubsidiariesFeeBreakdown = breakdown
+                SubsidiariesFeeBreakdown = breakdown ?? new SubsidiariesFeeBreakdown()
             };
 
         private static FeeBreakdown Band(int band, int units, decimal unitPrice, decimal total)

@@ -7,14 +7,10 @@ namespace EPR.Payment.Service.Services.FeeItems
     public class FeeItemWriter : IFeeItemWriter
     {
         private readonly IFeeItemRepository _repository;
-        private readonly ILogger<FeeItemWriter> _logger;
 
-        public FeeItemWriter(
-            IFeeItemRepository repository,
-            ILogger<FeeItemWriter> logger)
+        public FeeItemWriter(IFeeItemRepository repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task Save(FeeSummarySaveRequest request, CancellationToken cancellationToken)

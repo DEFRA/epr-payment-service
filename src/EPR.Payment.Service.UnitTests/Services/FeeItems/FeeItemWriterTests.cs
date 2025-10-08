@@ -4,7 +4,6 @@ using EPR.Payment.Service.Common.Dtos.FeeItems;
 using EPR.Payment.Service.Services.FeeItems;
 using FluentAssertions;
 using Moq;
-using Microsoft.Extensions.Logging;
 
 namespace EPR.Payment.Service.UnitTests.Services.FeeItems
 {
@@ -12,15 +11,13 @@ namespace EPR.Payment.Service.UnitTests.Services.FeeItems
     public class FeeItemWriterTests
     {
         private Mock<IFeeItemRepository> _repo = null!;
-        private Mock<ILogger<FeeItemWriter>> _logger = null!;
         private FeeItemWriter _sut = null!;
 
         [TestInitialize]
         public void Setup()
         {
             _repo = new Mock<IFeeItemRepository>(MockBehavior.Strict);
-            _logger = new Mock<ILogger<FeeItemWriter>>();
-            _sut = new FeeItemWriter(_repo.Object, _logger.Object);
+            _sut = new FeeItemWriter(_repo.Object);
         }
 
         [TestMethod]
