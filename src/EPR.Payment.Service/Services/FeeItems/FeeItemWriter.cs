@@ -15,7 +15,7 @@ namespace EPR.Payment.Service.Services.FeeItems
 
         public async Task Save(FeeSummarySaveRequest request, CancellationToken cancellationToken)
         {
-            if (request is null) throw new ArgumentNullException(nameof(request));
+            ArgumentNullException.ThrowIfNull(request);
 
             var invoiceDate = request.InvoiceDate ?? DateTimeOffset.UtcNow;
 
