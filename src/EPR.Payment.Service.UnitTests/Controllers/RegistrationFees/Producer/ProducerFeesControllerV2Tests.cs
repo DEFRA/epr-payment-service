@@ -8,9 +8,9 @@ using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Controllers.RegistrationFees.Producer;
-using EPR.Payment.Service.Services.Interfaces.FeeSummaries;
+using EPR.Payment.Service.Services.Interfaces.FeeItems;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
-using EPR.Payment.Service.Strategies.Interfaces.FeeSummary;
+using EPR.Payment.Service.Strategies.Interfaces.FeeItems;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -27,8 +27,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         private Mock<IProducerFeesCalculatorService> _producerFeesCalculatorServiceMock = null!;
         private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
         private ProducerFeesController _controller = null!;
-        private Mock<IFeeSummaryWriter> _feeSummaryWriterMock = null!;
-        private Mock<IFeeSummarySaveProducerRequestMapper> _mapperMock = null!;
+        private Mock<IFeeItemWriter> _feeSummaryWriterMock = null!;
+        private Mock<IFeeItemProducerSaveRequestMapper> _mapperMock = null!;
         private Mock<IValidator<ProducerRegistrationFeesRequestV2Dto>> _validatorV2Mock = null!;
         [TestInitialize]
         public void TestInitialize()
@@ -36,8 +36,8 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _producerFeesCalculatorServiceMock = _fixture.Freeze<Mock<IProducerFeesCalculatorService>>();
             _validatorMock = _fixture.Freeze<Mock<IValidator<ProducerRegistrationFeesRequestDto>>>();
-            _feeSummaryWriterMock = _fixture.Freeze<Mock<IFeeSummaryWriter>>();
-            _mapperMock = _fixture.Freeze<Mock<IFeeSummarySaveProducerRequestMapper>>();
+            _feeSummaryWriterMock = _fixture.Freeze<Mock<IFeeItemWriter>>();
+            _mapperMock = _fixture.Freeze<Mock<IFeeItemProducerSaveRequestMapper>>();
             _validatorV2Mock = _fixture.Freeze<Mock<IValidator<ProducerRegistrationFeesRequestV2Dto>>>();
             _controller = new ProducerFeesController(
                     _producerFeesCalculatorServiceMock.Object,

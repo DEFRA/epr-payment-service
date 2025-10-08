@@ -1,14 +1,12 @@
-﻿using EPR.Payment.Service.Common.Dtos.FeeSummaries;
+﻿using EPR.Payment.Service.Common.Dtos.FeeItems;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
-using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
-using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.Producer;
 
-namespace EPR.Payment.Service.Strategies.Interfaces.FeeSummary
+namespace EPR.Payment.Service.Strategies.Interfaces.FeeItems
 {
-    public interface IFeeSummarySaveProducerRequestMapper
+    public interface IFeeItemProducerSaveRequestMapper
     {
         FeeSummarySaveRequest BuildRegistrationFeeSummaryRecord(
             ProducerRegistrationFeesRequestV2Dto dto,
