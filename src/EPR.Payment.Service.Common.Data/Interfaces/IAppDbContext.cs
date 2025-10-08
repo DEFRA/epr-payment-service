@@ -17,8 +17,6 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
         DbSet<AccreditationFee> AccreditationFees { get; }
         DbSet<FeeItem> FeeItems { get; }
         DbSet<FeeType> FeeTypes { get; }
-
-        DbSet<FeeType> FeeTypes { get; }
         DbSet<PayerType> PayerTypes { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
