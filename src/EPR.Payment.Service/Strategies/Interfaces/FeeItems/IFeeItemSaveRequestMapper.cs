@@ -9,7 +9,7 @@ namespace EPR.Payment.Service.Strategies.Interfaces.FeeItems
     public interface IFeeItemSaveRequestMapper
     {
         FeeSummarySaveRequest BuildComplianceSchemeRegistrationFeeSummaryRecord(
-            ComplianceSchemeFeesRequestDto dto,
+            ComplianceSchemeFeesRequestDto complianceSchemeFeesRequestDto,
             DateTimeOffset invoicePeriod,
             int payerTypeId,
             ComplianceSchemeFeesResponseDto resp,
