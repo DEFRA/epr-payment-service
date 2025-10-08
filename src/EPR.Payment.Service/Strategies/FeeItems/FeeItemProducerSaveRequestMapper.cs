@@ -24,14 +24,62 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             subsidiaryFee += resp.SubsidiariesFee;
 
             var lines = new List<FeeSummaryLineRequest>();
+            if (resp?.ProducerRegistrationFee > 0)
+            {
+                lines.Add(new FeeSummaryLineRequest
+                {
+                    FeeTypeId = (int)FeeTypeIds.ProducerRegistrationFee,
+                    UnitPrice = resp.ProducerRegistrationFee,
+                    Quantity = 1,
+                    Amount = resp.ProducerRegistrationFee
+                });
+            }
 
             void Sum(FeeTypeIds type, decimal amount)
             {
-                if (amount >= 0)
+                if (amount > 0)
                 {
                     lines.Add(new FeeSummaryLineRequest { FeeTypeId = (int)type, Amount = amount });
                 }
             }
+
+            var s = resp.SubsidiariesFeeBreakdown;
+            if (s?.FeeBreakdowns != null)
+            {
+                foreach (var b in s.FeeBreakdowns)
+                {
+                    if (b.UnitCount > 0 && b.UnitPrice > 0)
+                    {
+                        var feeTypeForBand = b.BandNumber switch
+                        {
+                            1 => FeeTypeIds.BandNumber1,
+                            2 => FeeTypeIds.BandNumber2,
+                            3 => FeeTypeIds.BandNumber3,
+                            _ => FeeTypeIds.SubsidiaryFee
+                        };
+
+                        lines.Add(new FeeSummaryLineRequest
+                        {
+                            FeeTypeId = (int)feeTypeForBand,
+                            UnitPrice = b.UnitPrice,
+                            Quantity = b.UnitCount,
+                            Amount = b.TotalPrice
+                        });
+                    }
+                }
+
+                if (s.TotalSubsidiariesOMPFees > 0 && s.UnitOMPFees > 0 && s.CountOfOMPSubsidiaries > 0)
+                {
+                    lines.Add(new FeeSummaryLineRequest
+                    {
+                        FeeTypeId = (int)FeeTypeIds.UnitOnlineMarketplaceFee,
+                        UnitPrice = s.UnitOMPFees,
+                        Quantity = s.CountOfOMPSubsidiaries,
+                        Amount = s.TotalSubsidiariesOMPFees
+                    });
+                }
+            }
+
             Sum(FeeTypeIds.MemberRegistrationFee, memberRegistrationFee);
             Sum(FeeTypeIds.MemberLateRegistrationFee, memberLateRegistrationFee);
             Sum(FeeTypeIds.UnitOnlineMarketplaceFee, unitOmpFee);

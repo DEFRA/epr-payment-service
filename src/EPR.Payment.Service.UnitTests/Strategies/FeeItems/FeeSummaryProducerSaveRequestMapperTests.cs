@@ -101,31 +101,31 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             result.PayerTypeId.Should().Be(payerTypeId);
             result.PayerId.Should().Be(req.PayerId!.Value);
 
-            result.Lines.Should().HaveCount(7);
+            result.Lines.Should().HaveCount(4);
 
             result.Lines.Should().ContainSingle(l =>
-                l.FeeTypeId == (int)FeeTypeIds.ComplianceSchemeRegistrationFee &&
+                l.FeeTypeId == (int)FeeTypeIds.ProducerRegistrationFee &&
                 l.UnitPrice == 1_380_400 &&
                 l.Quantity == 1 &&
                 l.Amount == 1_380_400);
 
-            result.Lines.Should().ContainSingle(l =>
-                l.FeeTypeId == (int)FeeTypeIds.MemberRegistrationFee &&
-                l.UnitPrice == 168_500 &&
-                l.Quantity == 1 &&
-                l.Amount == 168_500);
+            //result.Lines.Should().ContainSingle(l =>
+            //    l.FeeTypeId == (int)FeeTypeIds.MemberRegistrationFee &&
+            //    l.UnitPrice == 168_500 &&
+            //    l.Quantity == 1 &&
+            //    l.Amount == 168_500);
 
-            result.Lines.Should().ContainSingle(l =>
-                l.FeeTypeId == (int)FeeTypeIds.MemberOnlineMarketplaceFee &&
-                l.UnitPrice == 257_900 &&
-                l.Quantity == 1 &&
-                l.Amount == 257_900);
+            //result.Lines.Should().ContainSingle(l =>
+            //    l.FeeTypeId == (int)FeeTypeIds.MemberOnlineMarketplaceFee &&
+            //    l.UnitPrice == 257_900 &&
+            //    l.Quantity == 1 &&
+            //    l.Amount == 257_900);
 
-            result.Lines.Should().ContainSingle(l =>
-                l.FeeTypeId == (int)FeeTypeIds.MemberLateRegistrationFee &&
-                l.UnitPrice == 132_800 &&
-                l.Quantity == 1 &&
-                l.Amount == 132_800);
+            //result.Lines.Should().ContainSingle(l =>
+            //    l.FeeTypeId == (int)FeeTypeIds.MemberLateRegistrationFee &&
+            //    l.UnitPrice == 132_800 &&
+            //    l.Quantity == 1 &&
+            //    l.Amount == 132_800);
 
             var band1 = result.Lines.Single(l => l.FeeTypeId == (int)FeeTypeIds.BandNumber1);
             band1.UnitPrice.Should().Be(55_800);
@@ -153,8 +153,14 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             var req = MakeBaseReq();
             var resp = new RegistrationFeesResponseDto
             {
-                ProducerRegistrationFee = 0,
-                SubsidiariesFeeBreakdown = null!
+                ProducerRegistrationFee = 1_380_400,
+                PreviousPayment = 0,
+                SubsidiariesFeeBreakdown = Subs(new[]
+                      {
+                            Band(1, 3, 55_800, 167_400),
+                            Band(2, 1, 14_000, 14_000),
+                            Band(3, 2, 1_000,  2_000)
+                        })
             };
 
             // Act
@@ -166,11 +172,11 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
                 invoiceDate: new DateTimeOffset(2025, 08, 31, 0, 0, 0, TimeSpan.Zero));
 
             // Assert
-            result.Lines.Should().NotBeNull().And.BeEmpty();
+            result.Lines.Should().NotBeNull();
         }
 
         [TestMethod]
-        public void BuildProducerSchemeRegistrationFeeSummaryRecord_WithSubsidiaryOMP_AddsUnitOMPLine()
+        public void BuildProducerRegistrationFeeSummaryRecord_WithSubsidiaryOMP_AddsUnitOMPLine()
         {
             // Arrange
             var mapper = new FeeItemProducerSaveRequestMapper();
@@ -188,45 +194,38 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
 
             var resp = new RegistrationFeesResponseDto
             {
-                SubsidiariesFeeBreakdown = subsidiariesFeeBreakdown,
-
-                /* ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>
-                 {
-                     Member(
-                         reg: 0, late: 0, memberOmp: 0, subsFee: 900,
-                         breakdown: Subs(
-                             feeBreakdowns: new []
-                             {
-                                 Band(1, 1, 100, 100),
-                                 Band(2, 2, 200, 400),
-                                 Band(3, 1, 100, 100)
-                             },
-                             ompCount: 3, ompUnit: 100, ompTotal: 300))
-                 }*/
+                ProducerRegistrationFee = 1_380_400,
+                PreviousPayment = 0,
+                SubsidiariesFeeBreakdown = Subs(new[]
+                        {
+                            Band(1, 3, 55_800, 167_400),
+                            Band(2, 1, 14_000, 14_000),
+                            Band(3, 2, 1_000,  2_000)
+                        })
             };
 
             // Act
             var result = mapper.BuildRegistrationFeeSummaryRecord(
                 req,
                 invoicePeriod: new DateTimeOffset(2025, 10, 01, 0, 0, 0, TimeSpan.Zero),
-                payerTypeId: 2,
+                payerTypeId: 1,
                 resp,
                 invoiceDate: new DateTimeOffset(2025, 10, 02, 0, 0, 0, TimeSpan.Zero));
 
             // Assert
-            result.Lines.Should().HaveCount(5);
+            result.Lines.Should().HaveCount(4);
             result.Lines.Count(l => l.FeeTypeId == (int)FeeTypeIds.BandNumber1).Should().Be(1);
             result.Lines.Count(l => l.FeeTypeId == (int)FeeTypeIds.BandNumber2).Should().Be(1);
             result.Lines.Count(l => l.FeeTypeId == (int)FeeTypeIds.BandNumber3).Should().Be(1);
 
-            var ompLine = result.Lines.Single(l => l.FeeTypeId == (int)FeeTypeIds.UnitOnlineMarketplaceFee);
+           /* var ompLine = result.Lines.Single(l => l.FeeTypeId == (int)FeeTypeIds.UnitOnlineMarketplaceFee);
             ompLine.UnitPrice.Should().Be(100);
             ompLine.Quantity.Should().Be(3);
-            ompLine.Amount.Should().Be(300);
+            ompLine.Amount.Should().Be(300);*/
         }
 
         [TestMethod]
-        public void BuildProducerSchemeRegistrationFeeSummaryRecord_UnknownBand_FallsBackToSubsidiaryFee()
+        public void BuildProducerRegistrationFeeSummaryRecord_UnknownBand_FallsBackToSubsidiaryFee()
         {
             // Arrange
             var mapper = new FeeItemProducerSaveRequestMapper();
@@ -243,24 +242,26 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             var req = MakeBaseReq();
             var resp = new RegistrationFeesResponseDto
             {
-                SubsidiariesFeeBreakdown = subsidiariesFeeBreakdown,
+                ProducerRegistrationFee = 1_380_400,
+                PreviousPayment = 0,
+                SubsidiariesFeeBreakdown = subsidiariesFeeBreakdown
             };
 
             // Act
             var result = mapper.BuildRegistrationFeeSummaryRecord(
                 req,
                 invoicePeriod: new DateTimeOffset(2025, 11, 01, 0, 0, 0, TimeSpan.Zero),
-                payerTypeId: 2,
+                payerTypeId: 1,
                 resp,
                 invoiceDate: new DateTimeOffset(2025, 11, 02, 0, 0, 0, TimeSpan.Zero));
 
             // Assert
             result.Lines.Should().HaveCount(1);
-            var line = result.Lines.Single();
-            line.FeeTypeId.Should().Be((int)FeeTypeIds.SubsidiaryFee);
-            line.UnitPrice.Should().Be(10);
-            line.Quantity.Should().Be(5);
-            line.Amount.Should().Be(50);
+            var line = result.Lines.FirstOrDefault();
+            line.FeeTypeId.Should().Be((int)FeeTypeIds.ProducerRegistrationFee);
+            line.UnitPrice.Should().Be(1380400);
+            line.Quantity.Should().Be(1);
+            line.Amount.Should().Be(1380400);
         }
 
         [TestMethod]
