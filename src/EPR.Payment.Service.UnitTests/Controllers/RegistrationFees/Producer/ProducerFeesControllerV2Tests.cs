@@ -25,26 +25,26 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
     {
         private IFixture _fixture = null!;
         private Mock<IProducerFeesCalculatorService> _producerFeesCalculatorServiceMock = null!;
-        private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
+        private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMockV1 = null!;
         private ProducerFeesController _controller = null!;
         private Mock<IFeeItemWriter> _feeSummaryWriterMock = null!;
         private Mock<IFeeItemProducerSaveRequestMapper> _mapperMock = null!;
-        private Mock<IValidator<ProducerRegistrationFeesRequestV2Dto>> _validatorV2Mock = null!;
+        private Mock<IValidator<ProducerRegistrationFeesRequestV2Dto>> _validatorMockV2 = null!;
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _producerFeesCalculatorServiceMock = _fixture.Freeze<Mock<IProducerFeesCalculatorService>>();
-            _validatorMock = _fixture.Freeze<Mock<IValidator<ProducerRegistrationFeesRequestDto>>>();
+            _validatorMockV1 = _fixture.Freeze<Mock<IValidator<ProducerRegistrationFeesRequestDto>>>();
             _feeSummaryWriterMock = _fixture.Freeze<Mock<IFeeItemWriter>>();
             _mapperMock = _fixture.Freeze<Mock<IFeeItemProducerSaveRequestMapper>>();
-            _validatorV2Mock = _fixture.Freeze<Mock<IValidator<ProducerRegistrationFeesRequestV2Dto>>>();
+            _validatorMockV2 = _fixture.Freeze<Mock<IValidator<ProducerRegistrationFeesRequestV2Dto>>>();
             _controller = new ProducerFeesController(
                     _producerFeesCalculatorServiceMock.Object,
-                    _validatorMock.Object,
+                    _validatorMockV1.Object,
                     _feeSummaryWriterMock.Object,
                     _mapperMock.Object,
-                    _validatorV2Mock.Object);
+                    _validatorMockV2.Object);
         }
 
         [TestMethod]
@@ -53,10 +53,10 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             // Act
             var controller = new ProducerFeesController(
                 _producerFeesCalculatorServiceMock.Object,
-                _validatorMock.Object,
+                _validatorMockV1.Object,
                 _feeSummaryWriterMock.Object,
                 _mapperMock.Object,
-                _validatorV2Mock.Object);
+                _validatorMockV2.Object);
 
             // Assert
             using (new AssertionScope())
@@ -76,10 +76,10 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             // Act
             Action act = () => new ProducerFeesController(
                 producerFeesCalculatorService!,
-                    _validatorMock.Object,
+                    _validatorMockV1.Object,
                     _feeSummaryWriterMock.Object,
                     _mapperMock.Object,
-                    _validatorV2Mock.Object);
+                    _validatorMockV2.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'producerFeesCalculatorService')");
@@ -95,13 +95,13 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             // Act
             Action act = () => new ProducerFeesController(
                 _producerFeesCalculatorServiceMock.Object,
-                _validatorMock.Object,
+                _validatorMockV1.Object,
                 _feeSummaryWriterMock.Object,
                 _mapperMock.Object,
                 _validator2);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter '_validator2')");
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");
         }
 
         [TestMethod]
@@ -111,7 +111,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             [Frozen] RegistrationFeesResponseDto response)
         {
             // Arrange
-            _validatorV2Mock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
+            _validatorMockV2.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
                 .Returns(new ValidationResult());
 
             _producerFeesCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestV2Dto>(), It.IsAny<CancellationToken>()))
@@ -139,7 +139,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
                 new ValidationFailure("Regulator", "Regulator is required")
             };
 
-            _validatorV2Mock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
+            _validatorMockV1.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
                 .Returns(new ValidationResult(validationFailures));
 
             // Act
@@ -154,6 +154,32 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             }
         }
 
+        [TestMethod, AutoMoqData]
+        public async Task CalculateFeesAsync_WhenRequestValidationFails_Regulator_ReturnsBadRequestWithValidationErrorDetails(
+         [Frozen] ProducerRegistrationFeesRequestV2Dto request)
+        {
+            // Arrange
+            var validationFailures = new List<ValidationFailure>
+            {
+                new ValidationFailure("ApplicationReferenceNumber", "ApplicationReferenceNumber is invalid"),
+                new ValidationFailure("Regulator", "Regulator is required")
+            };
+
+            _validatorMockV1.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
+                .Returns(new ValidationResult(validationFailures));
+
+            // Act
+            var result = await _controller.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                var badRequestResult = result.Result.Should().BeOfType<BadRequestObjectResult>().Which;
+                var problemDetails = badRequestResult.Value.Should().BeOfType<ProblemDetails>().Which;
+                problemDetails.Detail.Should().Be("ApplicationReferenceNumber is invalid; Regulator is required");
+            }
+        }
+
         [TestMethod]
         [AutoMoqData]
         public async Task CalculateFeesAsync_WhenCalculationThrowsValidationException_ReturnsBadRequestWithValidationExceptionDetails(
@@ -162,7 +188,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             // Arrange
             var exceptionMessage = "Validation failed";
 
-            _validatorV2Mock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
+            _validatorMockV2.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
                 .Returns(new ValidationResult());
 
             _producerFeesCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestV2Dto>(), It.IsAny<CancellationToken>()))
@@ -188,7 +214,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             // Arrange
             var exceptionMessage = "Invalid argument";
 
-            _validatorV2Mock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
+            _validatorMockV2.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestV2Dto>()))
                 .Returns(new ValidationResult());
 
             _producerFeesCalculatorServiceMock.Setup(s => s.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestV2Dto>(), It.IsAny<CancellationToken>()))
