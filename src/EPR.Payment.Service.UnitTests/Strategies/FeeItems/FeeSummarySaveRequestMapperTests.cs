@@ -1,4 +1,8 @@
-﻿using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using EPR.Payment.Service.Common.Dtos.FeeItems;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ComplianceScheme;
@@ -6,57 +10,21 @@ using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Strategies.FeeItems;
 using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
 {
     [TestClass]
-    public class FeeItemSaveRequestMapperTests
+    public class FeeSummarySaveRequestMapperTests
     {
-        private static ComplianceSchemeFeesRequestDto MakeBaseReq(
-            Guid? fileId = null, Guid? externalId = null, string appRef = "APP-123", int? payerId = 42)
-            => new()
-            {
-                Regulator = "GB-ENG",
-                FileId = fileId,
-                ExternalId = externalId,
-                ApplicationReferenceNumber = appRef,
-                PayerId = payerId
-            };
-
-        private static ComplianceSchemeMembersWithFeesDto Member(
-            decimal reg = 0, decimal late = 0, decimal memberOmp = 0,
-            decimal subsFee = 0, SubsidiariesFeeBreakdown? breakdown = null)
-            => new()
-            {
-                MemberId = Guid.NewGuid().ToString(),
-                MemberRegistrationFee = reg,
-                MemberLateRegistrationFee = late,
-                MemberOnlineMarketPlaceFee = memberOmp,
-                SubsidiariesFee = subsFee,
-                SubsidiariesFeeBreakdown = breakdown ?? new SubsidiariesFeeBreakdown()
-            };
-
-        private static FeeBreakdown Band(int band, int units, decimal unitPrice, decimal total)
-            => new() { BandNumber = band, UnitCount = units, UnitPrice = unitPrice, TotalPrice = total };
-
-        private static SubsidiariesFeeBreakdown Subs(
-            IEnumerable<FeeBreakdown>? feeBreakdowns = null,
-            int ompCount = 0, decimal ompUnit = 0, decimal ompTotal = 0)
-            => new()
-            {
-                FeeBreakdowns = feeBreakdowns?.ToList() ?? new List<FeeBreakdown>(),
-                CountOfOMPSubsidiaries = ompCount,
-                UnitOMPFees = ompUnit,
-                TotalSubsidiariesOMPFees = ompTotal
-            };
-
         [TestMethod]
         public void BuildComplianceSchemeRegistrationFeeSummaryRecord_FullHappyPath_WithBands_NoOMPSubs_SetsHeadersAndLines()
         {
             // Arrange
             var mapper = new FeeItemSaveRequestMapper();
 
-            var req = MakeBaseReq(fileId: Guid.NewGuid(), externalId: Guid.NewGuid(), appRef: "CS-2025-0003", payerId: 10);
+            var submitDate = new DateTime(2025, 09, 26);
+            var req = CreateV2Dto(submissionDate: submitDate, payerId: 10, appRef: "CS-2025-0003");
 
             var resp = new ComplianceSchemeFeesResponseDto
             {
@@ -64,35 +32,33 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
                 PreviousPayment = 0,
                 ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>
                 {
-                    Member(
+                    CreateMemberDto(
                         reg: 168_500,
                         late: 132_800,
                         memberOmp: 257_900,
                         subsFee: 167_400 + 14_000 + 2_000,
-                        breakdown: Subs(new []
+                        breakdown: CreateSubsidiariesFeeBreakdown(new []
                         {
-                            Band(1, 3, 55_800, 167_400),
-                            Band(2, 1, 14_000, 14_000),
-                            Band(3, 2, 1_000,  2_000)
+                            CreateBand(1, 3, 55_800, 167_400),
+                            CreateBand(2, 1, 14_000, 14_000),
+                            CreateBand(3, 2, 1_000,  2_000)
                         }))
                 }
             };
 
-            var invoicePeriod = new DateTimeOffset(2025, 09, 26, 0, 0, 0, TimeSpan.Zero);
-            var invoiceDate = invoicePeriod.AddDays(2);
-            var payerTypeId = 2;
-
             // Act
-            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, invoicePeriod, payerTypeId, resp, invoiceDate);
+            var before = DateTimeOffset.UtcNow;
+            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, resp);
+            var after = DateTimeOffset.UtcNow;
 
-            // Assert
-            result.FileId.Should().Be(req.FileId!.Value);
-            result.ExternalId.Should().Be(req.ExternalId!.Value);
+            // Assert headers
+            result.FileId.Should().Be(req.FileId);
+            result.ExternalId.Should().Be(req.ExternalId);
             result.ApplicationReferenceNumber.Should().Be(req.ApplicationReferenceNumber);
-            result.InvoicePeriod.Should().Be(invoicePeriod);
-            result.InvoiceDate.Should().Be(invoiceDate);
-            result.PayerTypeId.Should().Be(payerTypeId);
-            result.PayerId.Should().Be(req.PayerId!.Value);
+            result.InvoicePeriod.Should().Be(new DateTimeOffset(req.SubmissionDate, TimeSpan.Zero));
+            result.InvoiceDate.Should().BeOnOrAfter(before).And.BeOnOrBefore(after);
+            result.PayerTypeId.Should().Be((int)PayerTypeIds.ComplianceScheme);
+            result.PayerId.Should().Be(req.PayerId);
 
             result.Lines.Should().HaveCount(7);
 
@@ -143,7 +109,8 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
         {
             // Arrange
             var mapper = new FeeItemSaveRequestMapper();
-            var req = MakeBaseReq();
+            var req = CreateV2Dto();
+
             var resp = new ComplianceSchemeFeesResponseDto
             {
                 ComplianceSchemeRegistrationFee = 0,
@@ -151,12 +118,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             };
 
             // Act
-            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(
-                req,
-                invoicePeriod: new DateTimeOffset(2025, 08, 01, 0, 0, 0, TimeSpan.Zero),
-                payerTypeId: 3,
-                calculationResponse: resp,
-                invoiceDate: new DateTimeOffset(2025, 08, 31, 0, 0, 0, TimeSpan.Zero));
+            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, resp);
 
             // Assert
             result.Lines.Should().NotBeNull().And.BeEmpty();
@@ -167,34 +129,28 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
         {
             // Arrange
             var mapper = new FeeItemSaveRequestMapper();
-
-            var req = MakeBaseReq(fileId: Guid.NewGuid(), externalId: Guid.NewGuid(), appRef: "CS-2025-OMP", payerId: 55);
+            var req = CreateV2Dto(appRef: "CS-2025-OMP", payerId: 55);
 
             var resp = new ComplianceSchemeFeesResponseDto
             {
                 ComplianceSchemeRegistrationFee = 100,
                 ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>
                 {
-                    Member(
+                    CreateMemberDto(
                         reg: 0, late: 0, memberOmp: 0, subsFee: 900,
-                        breakdown: Subs(
+                        breakdown: CreateSubsidiariesFeeBreakdown(
                             feeBreakdowns: new []
                             {
-                                Band(1, 1, 100, 100),
-                                Band(2, 2, 200, 400),
-                                Band(3, 1, 100, 100)
+                                CreateBand(1, 1, 100, 100),
+                                CreateBand(2, 2, 200, 400),
+                                CreateBand(3, 1, 100, 100)
                             },
                             ompCount: 3, ompUnit: 100, ompTotal: 300))
                 }
             };
 
             // Act
-            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(
-                req,
-                invoicePeriod: new DateTimeOffset(2025, 10, 01, 0, 0, 0, TimeSpan.Zero),
-                payerTypeId: 2,
-                calculationResponse: resp,
-                invoiceDate: new DateTimeOffset(2025, 10, 02, 0, 0, 0, TimeSpan.Zero));
+            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, resp);
 
             // Assert
             result.Lines.Should().HaveCount(5);
@@ -213,26 +169,21 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
         {
             // Arrange
             var mapper = new FeeItemSaveRequestMapper();
+            var req = CreateV2Dto();
 
-            var req = MakeBaseReq();
             var resp = new ComplianceSchemeFeesResponseDto
             {
                 ComplianceSchemeRegistrationFee = 0,
                 ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>
                 {
-                    Member(
+                    CreateMemberDto(
                         reg: 0, late: 0, memberOmp: 0, subsFee: 50,
-                        breakdown: Subs(new [] { Band(99, 5, 10, 50) }))
+                        breakdown: CreateSubsidiariesFeeBreakdown(new [] { CreateBand(99, 5, 10, 50) } ))
                 }
             };
 
             // Act
-            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(
-                req,
-                invoicePeriod: new DateTimeOffset(2025, 11, 01, 0, 0, 0, TimeSpan.Zero),
-                payerTypeId: 2,
-                calculationResponse: resp,
-                invoiceDate: new DateTimeOffset(2025, 11, 02, 0, 0, 0, TimeSpan.Zero));
+            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, resp);
 
             // Assert
             result.Lines.Should().HaveCount(1);
@@ -244,30 +195,37 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
         }
 
         [TestMethod]
-        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_FallbackIdsWhenMissingInRequest()
+        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_InvalidBreakdowns_AreSkipped()
         {
             // Arrange
             var mapper = new FeeItemSaveRequestMapper();
+            var req = CreateV2Dto();
 
-            var req = MakeBaseReq(fileId: null, externalId: null, payerId: null);
             var resp = new ComplianceSchemeFeesResponseDto
             {
-                ComplianceSchemeRegistrationFee = 250,
-                ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>()
+                ComplianceSchemeRegistrationFee = 0,
+                ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>
+                {
+                    CreateMemberDto(
+                        subsFee: 50,
+                        breakdown: CreateSubsidiariesFeeBreakdown(new []
+                        {
+                            CreateBand(1, 0, 10, 0),
+                            CreateBand(2, 5, 10, 50)
+                        }))
+                }
             };
 
             // Act
-            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(
-                req,
-                invoicePeriod: new DateTimeOffset(2025, 12, 01, 0, 0, 0, TimeSpan.Zero),
-                payerTypeId: 1,
-                calculationResponse: resp,
-                invoiceDate: new DateTimeOffset(2025, 12, 02, 0, 0, 0, TimeSpan.Zero));
+            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, resp);
 
             // Assert
-            result.FileId.Should().NotBe(Guid.Empty);
-            result.ExternalId.Should().NotBe(Guid.Empty);
-            result.PayerId.Should().Be(0);
+            result.Lines.Should().HaveCount(1);
+            var line = result.Lines.Single();
+            line.FeeTypeId.Should().Be((int)FeeTypeIds.BandNumber2);
+            line.UnitPrice.Should().Be(10);
+            line.Quantity.Should().Be(5);
+            line.Amount.Should().Be(50);
         }
 
         [TestMethod]
@@ -276,12 +234,18 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             // Arrange
             var mapper = new FeeItemSaveRequestMapper();
 
-            var req = new ComplianceSchemeResubmissionFeeRequestDto
+            var subDate = new DateTime(2025, 07, 01);
+
+            var req = new ComplianceSchemeResubmissionFeeRequestV2Dto
             {
                 Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "REF-999",
+                SubmissionDate = subDate,
+
                 FileId = Guid.NewGuid(),
                 ExternalId = Guid.NewGuid(),
-                ReferenceNumber = "REF-999",
+                InvoicePeriod = new DateTimeOffset(subDate, TimeSpan.Zero),
+                PayerTypeId = (int)PayerTypeIds.ComplianceScheme,
                 PayerId = 999
             };
 
@@ -290,65 +254,66 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
                 TotalResubmissionFee = 432.10m
             };
 
-            var resubmissionFeeTypeId = (int)FeeTypeIds.ComplianceSchemeResubmissionFee; // use real enum
-            var invoicePeriod = new DateTimeOffset(2025, 07, 01, 0, 0, 0, TimeSpan.Zero);
-            var invoiceDate = new DateTimeOffset(2025, 07, 15, 0, 0, 0, TimeSpan.Zero);
-            var payerTypeId = 5;
+            var before = DateTimeOffset.UtcNow;
 
             // Act
             var result = mapper.BuildComplianceSchemeResubmissionFeeSummaryRecord(
-                req, resultDto, resubmissionFeeTypeId, invoicePeriod, payerTypeId, invoiceDate);
+                req, resultDto, (int)FeeTypeIds.ComplianceSchemeResubmissionFee);
+
+            var after = DateTimeOffset.UtcNow;
 
             // Assert
-            result.FileId.Should().Be(req.FileId!.Value);
-            result.ExternalId.Should().Be(req.ExternalId!.Value);
-            result.ApplicationReferenceNumber.Should().Be(req.ReferenceNumber);
-            result.InvoicePeriod.Should().Be(invoicePeriod);
-            result.InvoiceDate.Should().Be(invoiceDate);
-            result.PayerTypeId.Should().Be(payerTypeId);
-            result.PayerId.Should().Be(req.PayerId!.Value);
+            result.FileId.Should().Be(req.FileId);
+            result.ExternalId.Should().Be(req.ExternalId);
+            result.ApplicationReferenceNumber.Should().Be(req.ApplicationReferenceNumber);
+            result.InvoicePeriod.Should().Be(new DateTimeOffset(req.SubmissionDate, TimeSpan.Zero));
+            result.InvoiceDate.Should().BeOnOrAfter(before).And.BeOnOrBefore(after);
+            result.PayerTypeId.Should().Be((int)PayerTypeIds.ComplianceScheme);
+            result.PayerId.Should().Be(req.PayerId);
 
             result.Lines.Should().HaveCount(1);
             var line = result.Lines.Single();
-            line.FeeTypeId.Should().Be(resubmissionFeeTypeId);
+            line.FeeTypeId.Should().Be((int)FeeTypeIds.ComplianceSchemeResubmissionFee);
             line.UnitPrice.Should().Be(432.10m);
             line.Quantity.Should().Be(1);
             line.Amount.Should().Be(432.10m);
         }
 
         [TestMethod]
-        public void BuildComplianceSchemeResubmissionFeeSummaryRecord_FallbackIds_And_DefaultInvoiceDate()
+        public void BuildComplianceSchemeResubmissionFeeSummaryRecord_SetsInvoiceDateAndPeriod()
         {
             // Arrange
             var mapper = new FeeItemSaveRequestMapper();
 
-            var req = new ComplianceSchemeResubmissionFeeRequestDto
+            var subDate = new DateTime(2026, 01, 02);
+
+            var req = new ComplianceSchemeResubmissionFeeRequestV2Dto
             {
                 Regulator = "GB-ENG",
-                FileId = null,
-                ExternalId = null,
-                ReferenceNumber = "REF-NULLS",
-                PayerId = null
+                ApplicationReferenceNumber = "REF-CHK",
+                SubmissionDate = subDate,
+
+                // required v2 fields
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(subDate, TimeSpan.Zero),
+                PayerTypeId = (int)PayerTypeIds.ComplianceScheme,
+                PayerId = 123
             };
 
             var resultDto = new ComplianceSchemeResubmissionFeeResult { TotalResubmissionFee = 99m };
-            var payerTypeId = 2;
-            var invoicePeriod = new DateTimeOffset(2026, 01, 01, 0, 0, 0, TimeSpan.Zero);
 
             var before = DateTimeOffset.UtcNow;
 
             // Act
             var result = mapper.BuildComplianceSchemeResubmissionFeeSummaryRecord(
-                req, resultDto, (int)FeeTypeIds.ProducerResubmissionFee, invoicePeriod, payerTypeId, invoiceDate: null);
+                req, resultDto, (int)FeeTypeIds.ProducerResubmissionFee);
 
             var after = DateTimeOffset.UtcNow;
 
             // Assert
-            result.FileId.Should().NotBe(Guid.Empty);
-            result.ExternalId.Should().NotBe(Guid.Empty);
-            result.PayerId.Should().Be(0);
-
             result.InvoiceDate.Should().BeOnOrAfter(before).And.BeOnOrBefore(after);
+            result.InvoicePeriod.Should().Be(new DateTimeOffset(req.SubmissionDate, TimeSpan.Zero));
 
             var line = result.Lines.Single();
             line.FeeTypeId.Should().Be((int)FeeTypeIds.ProducerResubmissionFee);
@@ -356,5 +321,66 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             line.Amount.Should().Be(99m);
             line.Quantity.Should().Be(1);
         }
+
+
+        private static ComplianceSchemeFeesRequestV2Dto CreateV2Dto(
+              DateTime? submissionDate = null,
+              Guid? fileId = null,
+              Guid? externalId = null,
+              string appRef = "APP-123",
+              int payerId = 42,
+              int? payerTypeId = null,
+              string regulator = "GB-ENG")
+        {
+            var subDate = submissionDate ?? DateTime.UtcNow.Date;
+            return new ComplianceSchemeFeesRequestV2Dto
+            {
+                Regulator = regulator,
+                ApplicationReferenceNumber = appRef,
+                SubmissionDate = subDate,
+
+                FileId = fileId ?? Guid.NewGuid(),
+                ExternalId = externalId ?? Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(subDate, TimeSpan.Zero),
+                PayerTypeId = payerTypeId ?? (int)PayerTypeIds.ComplianceScheme,
+                PayerId = payerId,
+
+                ComplianceSchemeMembers = new()
+            };
+        }
+
+        private static ComplianceSchemeMembersWithFeesDto CreateMemberDto(
+            decimal reg = 0, decimal late = 0, decimal memberOmp = 0,
+            decimal subsFee = 0, SubsidiariesFeeBreakdown? breakdown = null)
+        {
+            return new ComplianceSchemeMembersWithFeesDto()
+            {
+                MemberId = Guid.NewGuid().ToString(),
+                MemberRegistrationFee = reg,
+                MemberLateRegistrationFee = late,
+                MemberOnlineMarketPlaceFee = memberOmp,
+                SubsidiariesFee = subsFee,
+                SubsidiariesFeeBreakdown = breakdown ?? new SubsidiariesFeeBreakdown()
+            };
+        }
+
+        private static FeeBreakdown CreateBand(int band, int units, decimal unitPrice, decimal total)
+        {
+            return new FeeBreakdown () { BandNumber = band, UnitCount = units, UnitPrice = unitPrice, TotalPrice = total };
+        }
+
+        private static SubsidiariesFeeBreakdown CreateSubsidiariesFeeBreakdown(
+            IEnumerable<FeeBreakdown>? feeBreakdowns = null,
+            int ompCount = 0, decimal ompUnit = 0, decimal ompTotal = 0)
+        {
+            return new SubsidiariesFeeBreakdown()
+            {
+                FeeBreakdowns = feeBreakdowns?.ToList() ?? new List<FeeBreakdown>(),
+                CountOfOMPSubsidiaries = ompCount,
+                UnitOMPFees = ompUnit,
+                TotalSubsidiariesOMPFees = ompTotal
+            };
+        }
+
     }
 }

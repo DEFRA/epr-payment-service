@@ -6,9 +6,7 @@ using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.RegistrationFees.Producer;
-using EPR.Payment.Service.Services.Interfaces.FeeItems;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
-using EPR.Payment.Service.Strategies.Interfaces.FeeItems;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -25,24 +23,14 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         private Mock<IProducerFeesCalculatorService> _producerFeesCalculatorServiceMock = null!;
         private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
         private ProducerFeesController _controller = null!;
-        private Mock<IFeeItemWriter> _feeSummaryWriterMock = null!;
-        private Mock<IFeeItemProducerSaveRequestMapper> _mapperMock = null!;
-        private Mock<IValidator<ProducerRegistrationFeesRequestV2Dto>> _validatorMockV2 = null!;
+
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _producerFeesCalculatorServiceMock = _fixture.Freeze<Mock<IProducerFeesCalculatorService>>();
             _validatorMock = _fixture.Freeze<Mock<IValidator<ProducerRegistrationFeesRequestDto>>>();
-            _validatorMockV2 = _fixture.Freeze<Mock<IValidator<ProducerRegistrationFeesRequestV2Dto>>>();
-            _feeSummaryWriterMock = _fixture.Freeze<Mock<IFeeItemWriter>>();
-            _mapperMock = _fixture.Freeze<Mock<IFeeItemProducerSaveRequestMapper>>();
-            _controller = new ProducerFeesController(
-                    _producerFeesCalculatorServiceMock.Object,
-                    _validatorMock.Object,
-                    _feeSummaryWriterMock.Object,
-                    _mapperMock.Object,
-                    _validatorMockV2.Object);
+            _controller = new ProducerFeesController(_producerFeesCalculatorServiceMock.Object, _validatorMock.Object);
         }
 
         [TestMethod]
@@ -52,16 +40,10 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             // Arrange
             IProducerFeesCalculatorService? producerFeesCalculatorService = null;
 
-            // Act
-            Action act = () => new ProducerFeesController(
-                producerFeesCalculatorService!,
-                    _validatorMock.Object,
-                    _feeSummaryWriterMock.Object,
-                     _mapperMock.Object,
-                    _validatorMockV2.Object);
-
-            // Assert
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'producerFeesCalculatorService')");
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(
+                () => { var unused = new ProducerFeesController(producerFeesCalculatorService!, _validatorMock.Object); },
+                "Value cannot be null. (Parameter 'producerFeesCalculatorService')");
         }
 
         [TestMethod]
@@ -69,15 +51,13 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         public void Constructor_WhenValidatorIsNull_ThrowsArgumentNullException()
         {
             // Arrange
-            IValidator<ProducerRegistrationFeesRequestDto>? _validator = null;
+            IValidator<ProducerRegistrationFeesRequestDto>? validator = null;
 
             // Act
-            Action act = () => new ProducerFeesController(
-                _producerFeesCalculatorServiceMock.Object, 
-                _validator!,
-                _feeSummaryWriterMock.Object,
-                 _mapperMock.Object,
-                _validatorMockV2.Object);
+            Action act = () =>
+            {
+                var unused = new ProducerFeesController(_producerFeesCalculatorServiceMock.Object, validator!);
+            };
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");

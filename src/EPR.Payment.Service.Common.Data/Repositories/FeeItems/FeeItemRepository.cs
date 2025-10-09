@@ -1,4 +1,4 @@
-﻿using EPR.Payment.Service.Common.Data.DataModels;
+﻿using EPR.Payment.Service.Common.Data.Dtos;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.FeeItems;
 using Microsoft.EntityFrameworkCore;
@@ -14,18 +14,24 @@ namespace EPR.Payment.Service.Common.Data.Repositories.FeeItems
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public async Task UpsertAsync(
-            Guid externalId,
-            string appRefNo,
-            DateTimeOffset invoiceDate,
-            DateTimeOffset invoicePeriod,
-            int payerTypeId,
-            int payerId,
-            Guid fileId,
-            IEnumerable<FeeItem> items,
-            CancellationToken cancellationToken)
+        public async Task UpsertAsync(FeeItemMappedRequest request, CancellationToken cancellationToken)
         {
-            ArgumentNullException.ThrowIfNull(items);
+            ArgumentNullException.ThrowIfNull(request);
+            ArgumentNullException.ThrowIfNull(request.Items);
+
+            var items = request.Items.ToList();
+            if (items.Count == 0)
+            {
+                return;
+            }
+
+            var externalId = request.ExternalId;
+            var appRefNo = request.AppRefNo;
+            var invoiceDate = request.InvoiceDate;
+            var invoicePeriod = request.InvoicePeriod;
+            var payerTypeId = request.PayerTypeId;
+            var payerId = request.PayerId;
+            var fileId = request.FileId;
 
             foreach (var item in items)
             {

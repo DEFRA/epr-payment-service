@@ -1,6 +1,7 @@
 ﻿using EPR.Payment.Service.Common.Dtos.FeeItems;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Enums;
@@ -10,150 +11,173 @@ namespace EPR.Payment.Service.Strategies.FeeItems
 {
     public class FeeItemSaveRequestMapper : IFeeItemSaveRequestMapper
     {
-        public FeeSummarySaveRequest BuildComplianceSchemeRegistrationFeeSummaryRecord(
-            ComplianceSchemeFeesRequestDto complianceSchemeFeesRequestDto,
-            DateTimeOffset invoicePeriod,
-            int payerTypeId,
-            ComplianceSchemeFeesResponseDto calculationResponse,
-            DateTimeOffset? invoiceDate = null)
+        public FeeItemSaveRequest BuildComplianceSchemeRegistrationFeeSummaryRecord(
+            ComplianceSchemeFeesRequestV2Dto req,
+            ComplianceSchemeFeesResponseDto calc)
         {
-            var lines = new List<FeeSummaryLineRequest>();
+            var lines = new List<FeeItemLine>();
 
-            if (calculationResponse?.ComplianceSchemeRegistrationFee > 0)
+            AddCsRegistrationLine(lines, calc);
+            AddMemberLines(lines, calc?.ComplianceSchemeMembersWithFees);
+
+            return BuildHeader(
+                applicationReferenceNumber: req.ApplicationReferenceNumber,
+                fileId: req.FileId,
+                externalId: req.ExternalId,
+                payerId: req.PayerId,
+                payerTypeId: (int)PayerTypeIds.ComplianceScheme,
+                invoicePeriod: new(req.SubmissionDate, TimeSpan.Zero),
+                invoiceDate: DateTimeOffset.UtcNow,
+                lines: lines);
+        }
+
+        public FeeItemSaveRequest BuildComplianceSchemeResubmissionFeeSummaryRecord(
+            ComplianceSchemeResubmissionFeeRequestV2Dto req,
+            ComplianceSchemeResubmissionFeeResult result,
+            int resubmissionFeeTypeId)
+        {
+            var amount = result.TotalResubmissionFee;
+
+            var lines = new List<FeeItemLine>
             {
-                lines.Add(new FeeSummaryLineRequest
+                new()
                 {
-                    FeeTypeId = (int)FeeTypeIds.ComplianceSchemeRegistrationFee,
-                    UnitPrice = calculationResponse.ComplianceSchemeRegistrationFee,
-                    Quantity = 1,
-                    Amount = calculationResponse.ComplianceSchemeRegistrationFee
-                });
-            }
+                    FeeTypeId = resubmissionFeeTypeId,
+                    UnitPrice = amount,
+                    Quantity  = 1,
+                    Amount    = amount
+                }
+            };
 
-            foreach (var m in calculationResponse?.ComplianceSchemeMembersWithFees ?? Enumerable.Empty<ComplianceSchemeMembersWithFeesDto>())
+            return BuildHeader(
+                applicationReferenceNumber: req.ApplicationReferenceNumber,
+                fileId: req.FileId,
+                externalId: req.ExternalId,
+                payerId: req.PayerId,
+                payerTypeId: (int)PayerTypeIds.ComplianceScheme,
+                invoicePeriod: new(req.SubmissionDate, TimeSpan.Zero),
+                invoiceDate: DateTimeOffset.UtcNow,
+                lines: lines);
+        }
+
+        private static FeeItemSaveRequest BuildHeader(
+            string applicationReferenceNumber,
+            Guid? fileId,
+            Guid? externalId,
+            int? payerId,
+            int payerTypeId,
+            DateTimeOffset invoicePeriod,
+            DateTimeOffset invoiceDate,
+            List<FeeItemLine> lines)
+        {
+            return new FeeItemSaveRequest
             {
-                if (m.MemberRegistrationFee > 0)
-                {
-                    lines.Add(new FeeSummaryLineRequest
-                    {
-                        FeeTypeId = (int)FeeTypeIds.MemberRegistrationFee,
-                        UnitPrice = m.MemberRegistrationFee,
-                        Quantity = 1,
-                        Amount = m.MemberRegistrationFee
-                    });
-                }
-
-                if (m.MemberOnlineMarketPlaceFee > 0)
-                {
-                    lines.Add(new FeeSummaryLineRequest
-                    {
-                        FeeTypeId = (int)FeeTypeIds.MemberOnlineMarketplaceFee,
-                        UnitPrice = m.MemberOnlineMarketPlaceFee,
-                        Quantity = 1,
-                        Amount = m.MemberOnlineMarketPlaceFee
-                    });
-                }
-
-                if (m.MemberLateRegistrationFee > 0)
-                {
-                    lines.Add(new FeeSummaryLineRequest
-                    {
-                        FeeTypeId = (int)FeeTypeIds.MemberLateRegistrationFee,
-                        UnitPrice = m.MemberLateRegistrationFee,
-                        Quantity = 1,
-                        Amount = m.MemberLateRegistrationFee
-                    });
-                }
-
-                var s = m.SubsidiariesFeeBreakdown;
-                if (s?.FeeBreakdowns != null)
-                {
-                    foreach (var b in s.FeeBreakdowns)
-                    {
-                        if (b.UnitCount > 0 && b.UnitPrice > 0)
-                        {
-                            var feeTypeForBand = b.BandNumber switch
-                            {
-                                1 => FeeTypeIds.BandNumber1,
-                                2 => FeeTypeIds.BandNumber2,
-                                3 => FeeTypeIds.BandNumber3,
-                                _ => FeeTypeIds.SubsidiaryFee
-                            };
-
-                            lines.Add(new FeeSummaryLineRequest
-                            {
-                                FeeTypeId = (int)feeTypeForBand,
-                                UnitPrice = b.UnitPrice,
-                                Quantity = b.UnitCount,
-                                Amount = b.TotalPrice
-                            });
-                        }
-                    }
-
-                    if (s.TotalSubsidiariesOMPFees > 0 && s.UnitOMPFees > 0 && s.CountOfOMPSubsidiaries > 0)
-                    {
-                        lines.Add(new FeeSummaryLineRequest
-                        {
-                            FeeTypeId = (int)FeeTypeIds.UnitOnlineMarketplaceFee,
-                            UnitPrice = s.UnitOMPFees,
-                            Quantity = s.CountOfOMPSubsidiaries,
-                            Amount = s.TotalSubsidiariesOMPFees
-                        });
-                    }
-                }
-            }
-
-            var fileId = complianceSchemeFeesRequestDto.FileId ?? Guid.NewGuid();
-            var externalId = complianceSchemeFeesRequestDto.ExternalId ?? Guid.NewGuid();
-            var payerId = complianceSchemeFeesRequestDto.PayerId ?? 0;
-
-            return new FeeSummarySaveRequest
-            {
-                FileId = fileId,
-                ExternalId = externalId,
-                ApplicationReferenceNumber = complianceSchemeFeesRequestDto.ApplicationReferenceNumber,
-                InvoiceDate = invoiceDate ?? DateTimeOffset.UtcNow,
+                FileId = fileId ?? Guid.NewGuid(),
+                ExternalId = externalId ?? Guid.NewGuid(),
+                ApplicationReferenceNumber = applicationReferenceNumber,
+                InvoiceDate = invoiceDate,
                 InvoicePeriod = invoicePeriod,
                 PayerTypeId = payerTypeId,
-                PayerId = payerId,
+                PayerId = payerId ?? 0,
                 Lines = lines
             };
         }
 
-        public FeeSummarySaveRequest BuildComplianceSchemeResubmissionFeeSummaryRecord(
-            ComplianceSchemeResubmissionFeeRequestDto req,
-            ComplianceSchemeResubmissionFeeResult result,
-            int resubmissionFeeTypeId,
-            DateTimeOffset invoicePeriod,
-            int payerTypeId,
-            DateTimeOffset? invoiceDate = null)
+        private static void AddCsRegistrationLine(
+            IList<FeeItemLine> lines,
+            ComplianceSchemeFeesResponseDto? calc)
         {
-            var lineAmount = result.TotalResubmissionFee;
-
-            var fileId = req.FileId ?? Guid.NewGuid();
-            var externalId = req.ExternalId ?? Guid.NewGuid();
-            var payerId = req.PayerId ?? 0;
-
-            return new FeeSummarySaveRequest
+            if (calc?.ComplianceSchemeRegistrationFee > 0)
             {
-                FileId = fileId,
-                ExternalId = externalId,
-                ApplicationReferenceNumber = req.ReferenceNumber,
-                InvoiceDate = invoiceDate ?? DateTimeOffset.UtcNow,
-                InvoicePeriod = invoicePeriod,
-                PayerTypeId = payerTypeId,
-                PayerId = payerId,
-                Lines = new List<FeeSummaryLineRequest>
+                lines.Add(new FeeItemLine
                 {
-                    new FeeSummaryLineRequest
-                    {
-                        FeeTypeId = resubmissionFeeTypeId,
-                        UnitPrice = lineAmount,
-                        Quantity  = 1,
-                        Amount    = lineAmount
-                    }
-                }
-            };
+                    FeeTypeId = (int)FeeTypeIds.ComplianceSchemeRegistrationFee,
+                    UnitPrice = calc.ComplianceSchemeRegistrationFee,
+                    Quantity = 1,
+                    Amount = calc.ComplianceSchemeRegistrationFee
+                });
+            }
         }
+
+        private static void AddMemberLines(
+            IList<FeeItemLine> lines,
+            IEnumerable<ComplianceSchemeMembersWithFeesDto>? members)
+        {
+            if (members is null) return;
+
+            foreach (var m in members)
+            {
+                AddMemberFixedFee(lines, FeeTypeIds.MemberRegistrationFee, m.MemberRegistrationFee);
+                AddMemberFixedFee(lines, FeeTypeIds.MemberOnlineMarketplaceFee, m.MemberOnlineMarketPlaceFee);
+                AddMemberFixedFee(lines, FeeTypeIds.MemberLateRegistrationFee, m.MemberLateRegistrationFee);
+
+                AddSubsidiaryBands(lines, m.SubsidiariesFeeBreakdown);
+            }
+        }
+
+        private static void AddMemberFixedFee(
+            IList<FeeItemLine> lines,
+            FeeTypeIds feeType,
+            decimal amount)
+        {
+            if (amount <= 0) return;
+
+            lines.Add(new FeeItemLine
+            {
+                FeeTypeId = (int)feeType,
+                UnitPrice = amount,
+                Quantity = 1,
+                Amount = amount
+            });
+        }
+
+        private static void AddSubsidiaryBands(
+            IList<FeeItemLine> lines,
+            SubsidiariesFeeBreakdown? s)
+        {
+            if (s?.FeeBreakdowns is { Count: > 0 })
+            {
+                foreach (var b in s.FeeBreakdowns)
+                {
+                    if (b.UnitCount <= 0 || b.UnitPrice <= 0) continue;
+
+                    lines.Add(new FeeItemLine
+                    {
+                        FeeTypeId = (int)MapBandFeeType(b.BandNumber),
+                        UnitPrice = b.UnitPrice,
+                        Quantity = b.UnitCount,
+                        Amount = b.TotalPrice
+                    });
+                }
+            }
+
+            AddSubsidiaryOmp(lines, s);
+        }
+
+        private static void AddSubsidiaryOmp(
+            IList<FeeItemLine> lines,
+            SubsidiariesFeeBreakdown? s)
+        {
+            if (s is null) return;
+
+            if (s.TotalSubsidiariesOMPFees > 0 && s.UnitOMPFees > 0 && s.CountOfOMPSubsidiaries > 0)
+            {
+                lines.Add(new FeeItemLine
+                {
+                    FeeTypeId = (int)FeeTypeIds.UnitOnlineMarketplaceFee,
+                    UnitPrice = s.UnitOMPFees,
+                    Quantity = s.CountOfOMPSubsidiaries,
+                    Amount = s.TotalSubsidiariesOMPFees
+                });
+            }
+        }
+
+        private static FeeTypeIds MapBandFeeType(int band) => band switch
+        {
+            1 => FeeTypeIds.BandNumber1,
+            2 => FeeTypeIds.BandNumber2,
+            3 => FeeTypeIds.BandNumber3,
+            _ => FeeTypeIds.SubsidiaryFee
+        };
     }
 }

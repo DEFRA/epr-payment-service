@@ -10,7 +10,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
 {
     public class FeeItemProducerSaveRequestMapper : IFeeItemProducerSaveRequestMapper
     {
-        public FeeSummarySaveRequest BuildRegistrationFeeSummaryRecord(
+        public FeeItemSaveRequest BuildRegistrationFeeSummaryRecord(
           ProducerRegistrationFeesRequestV2Dto dto,
           DateTimeOffset invoicePeriod,
           int payerTypeId,
@@ -23,10 +23,10 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             unitOmpFee += resp.MemberOnlineMarketPlaceFee;
             subsidiaryFee += resp.SubsidiariesFee;
 
-            var lines = new List<FeeSummaryLineRequest>();
+            var lines = new List<FeeItemLine>();
             if (resp?.ProducerRegistrationFee > 0)
             {
-                lines.Add(new FeeSummaryLineRequest
+                lines.Add(new FeeItemLine
                 {
                     FeeTypeId = (int)FeeTypeIds.ProducerRegistrationFee,
                     UnitPrice = resp.ProducerRegistrationFee,
@@ -39,7 +39,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             {
                 if (amount > 0)
                 {
-                    lines.Add(new FeeSummaryLineRequest { FeeTypeId = (int)type, Amount = amount });
+                    lines.Add(new FeeItemLine { FeeTypeId = (int)type, Amount = amount });
                 }
             }
 
@@ -58,7 +58,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
                             _ => FeeTypeIds.SubsidiaryFee
                         };
 
-                        lines.Add(new FeeSummaryLineRequest
+                        lines.Add(new FeeItemLine
                         {
                             FeeTypeId = (int)feeTypeForBand,
                             UnitPrice = b.UnitPrice,
@@ -70,7 +70,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
 
                 if (s.TotalSubsidiariesOMPFees > 0 && s.UnitOMPFees > 0 && s.CountOfOMPSubsidiaries > 0)
                 {
-                    lines.Add(new FeeSummaryLineRequest
+                    lines.Add(new FeeItemLine
                     {
                         FeeTypeId = (int)FeeTypeIds.UnitOnlineMarketplaceFee,
                         UnitPrice = s.UnitOMPFees,
@@ -85,7 +85,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             Sum(FeeTypeIds.UnitOnlineMarketplaceFee, unitOmpFee);
             Sum(FeeTypeIds.SubsidiaryFee, subsidiaryFee);
 
-            return new FeeSummarySaveRequest
+            return new FeeItemSaveRequest
             {
                 FileId = dto.FileId ?? Guid.NewGuid(),
                 ExternalId = dto.ExternalId ?? Guid.NewGuid(),
@@ -98,7 +98,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             };
         }
 
-        public FeeSummarySaveRequest BuildRegistrationResubmissionFeeSummaryRecord(
+        public FeeItemSaveRequest BuildRegistrationResubmissionFeeSummaryRecord(
             ProducerResubmissionFeeRequestDto req,
             ProducerResubmissionFeeResponseDto result,
             int resubmissionFeeTypeId,
@@ -106,7 +106,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             int payerTypeId,
             DateTimeOffset? invoiceDate = null)
         {
-            return new FeeSummarySaveRequest
+            return new FeeItemSaveRequest
             {
                 FileId = req.FileId ?? Guid.NewGuid(),
                 ExternalId = req.ExternalId ?? Guid.NewGuid(),
@@ -117,7 +117,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
                 PayerId = req.PayerId ?? 0,
                 Lines = new[]
                 {
-                    new FeeSummaryLineRequest
+                    new FeeItemLine
                     {
                         FeeTypeId = resubmissionFeeTypeId,
                         UnitPrice  = result.TotalResubmissionFee,

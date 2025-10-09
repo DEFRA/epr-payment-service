@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EPR.Payment.Service.Common.Dtos.FeeSummaries
+namespace EPR.Payment.Service.Common.Dtos.FeeItems
 {
-    public sealed class FeeSummarySaveRequest
+
+    public sealed class FeeItemSaveRequest
     {
         [Required] public Guid FileId { get; init; }
         [Required] public Guid ExternalId { get; init; }
@@ -17,7 +18,7 @@ namespace EPR.Payment.Service.Common.Dtos.FeeSummaries
 
         [Required] public int PayerId { get; init; }
 
-        [Required] public IReadOnlyCollection<FeeSummaryLineRequest> Lines { get; init; } = Array.Empty<FeeSummaryLineRequest>();
+        [Required] public IReadOnlyCollection<FeeItemLine> Lines { get; init; } = Array.Empty<FeeItemLine>();
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Data.DataModels;
+using EPR.Payment.Service.Common.Data.Dtos;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.FeeItems;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
@@ -57,11 +58,22 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.FeeItems
                 Amount = 150m
             };
 
-            // Act
-            await repo.UpsertAsync(
-                externalId, appRefNo, invoiceDate, invoicePeriod,
-                payerTypeId, payerId, fileId, new[] { incoming }, CancellationToken.None);
+            var request = new FeeItemMappedRequest
+            {
+                ExternalId = externalId,
+                AppRefNo = appRefNo,
+                InvoiceDate = invoiceDate,
+                InvoicePeriod = invoicePeriod,
+                PayerTypeId = payerTypeId,
+                PayerId = payerId,
+                FileId = fileId,
+                Items = new[] { incoming }
+            };
 
+            // Act
+            await repo.UpsertAsync(request, CancellationToken.None);
+
+            // Assert
             feeItems.Should().HaveCount(1);
             existing.UnitPrice.Should().Be(50m);
             existing.Quantity.Should().Be(3);
@@ -109,18 +121,28 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.FeeItems
 
             var incoming = new FeeItem
             {
-                FeeTypeId = 5,    // same composite key as existing
+                FeeTypeId = 5,    
                 UnitPrice = 75m,
                 Quantity = 2,
                 Amount = 150m
             };
 
-            // Act
-            await repo.UpsertAsync(
-                externalId, appRefNo, invoiceDate, invoicePeriod,
-                payerTypeId, payerId, fileId, new[] { incoming }, CancellationToken.None);
+            var request = new FeeItemMappedRequest
+            {
+                ExternalId = externalId,
+                AppRefNo = appRefNo,
+                InvoiceDate = invoiceDate,
+                InvoicePeriod = invoicePeriod,
+                PayerTypeId = payerTypeId,
+                PayerId = payerId,
+                FileId = fileId,
+                Items = new[] { incoming }
+            };
 
-            // Assert: still a single row, updated
+            // Act
+            await repo.UpsertAsync(request, CancellationToken.None);
+
+            // Assert
             feeItems.Should().HaveCount(1);
             var updated = feeItems.Single();
 
@@ -134,6 +156,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.FeeItems
             updated.UnitPrice.Should().Be(75m);
             updated.Quantity.Should().Be(2);
             updated.Amount.Should().Be(150m);
+            updated.UpdatedDate.Should().NotBeNull();
 
             db.Verify(d => d.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }

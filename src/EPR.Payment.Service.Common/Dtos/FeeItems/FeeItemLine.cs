@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EPR.Payment.Service.Common.Dtos.FeeSummaries
+namespace EPR.Payment.Service.Common.Dtos.FeeItems
 {
-    public sealed class FeeSummaryLineRequest
+    public sealed class FeeItemLine
     {
         [Required] public int FeeTypeId { get; init; }
         public decimal? UnitPrice { get; init; }

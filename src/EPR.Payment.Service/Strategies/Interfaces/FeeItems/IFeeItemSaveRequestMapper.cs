@@ -8,19 +8,13 @@ namespace EPR.Payment.Service.Strategies.Interfaces.FeeItems
 {
     public interface IFeeItemSaveRequestMapper
     {
-        FeeSummarySaveRequest BuildComplianceSchemeRegistrationFeeSummaryRecord(
-            ComplianceSchemeFeesRequestDto complianceSchemeFeesRequestDto,
-            DateTimeOffset invoicePeriod,
-            int payerTypeId,
-            ComplianceSchemeFeesResponseDto calculationResponse,
-            DateTimeOffset? invoiceDate = null);
+        FeeItemSaveRequest BuildComplianceSchemeRegistrationFeeSummaryRecord(
+            ComplianceSchemeFeesRequestV2Dto req,            
+            ComplianceSchemeFeesResponseDto calc);
 
-        FeeSummarySaveRequest BuildComplianceSchemeResubmissionFeeSummaryRecord(
-            ComplianceSchemeResubmissionFeeRequestDto req,
+        FeeItemSaveRequest BuildComplianceSchemeResubmissionFeeSummaryRecord(
+            ComplianceSchemeResubmissionFeeRequestV2Dto req,
             ComplianceSchemeResubmissionFeeResult result,
-            int resubmissionFeeTypeId,
-            DateTimeOffset invoicePeriod,
-            int payerTypeId,
-            DateTimeOffset? invoiceDate = null);
+            int resubmissionFeeTypeId);
     }
 }

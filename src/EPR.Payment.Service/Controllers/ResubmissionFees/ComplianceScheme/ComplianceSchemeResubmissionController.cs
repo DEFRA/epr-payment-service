@@ -2,12 +2,7 @@
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme;
-using EPR.Payment.Service.Common.Enums;
-using EPR.Payment.Service.Services.FeeItems;
-using EPR.Payment.Service.Services.Interfaces.FeeItems;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.ComplianceScheme;
-using EPR.Payment.Service.Strategies.FeeItems;
-using EPR.Payment.Service.Strategies.Interfaces.FeeItems;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
@@ -23,17 +18,13 @@ namespace EPR.Payment.Service.Controllers.ResubmissionFees.ComplianceScheme
     {
         private readonly IComplianceSchemeResubmissionService _resubmissionFeeService;
         private readonly IValidator<ComplianceSchemeResubmissionFeeRequestDto> _validator;
-        private readonly IFeeItemWriter _feeItemWriter;
-        private readonly IFeeItemSaveRequestMapper _feeItemSaveRequestMapper;
 
         public ComplianceSchemeResubmissionController(
             IComplianceSchemeResubmissionService resubmissionFeeService,
-            IValidator<ComplianceSchemeResubmissionFeeRequestDto> validator, IFeeItemWriter feeItemWriter, IFeeItemSaveRequestMapper feeItemSaveRequestMapper)
+            IValidator<ComplianceSchemeResubmissionFeeRequestDto> validator)
         {
             _resubmissionFeeService = resubmissionFeeService ?? throw new ArgumentNullException(nameof(resubmissionFeeService));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _feeItemWriter = feeItemWriter ?? throw new ArgumentNullException(nameof(feeItemWriter));
-            _feeItemSaveRequestMapper = feeItemSaveRequestMapper ?? throw new ArgumentNullException(nameof(feeItemSaveRequestMapper));
         }
 
         [HttpPost]
@@ -61,24 +52,6 @@ namespace EPR.Payment.Service.Controllers.ResubmissionFees.ComplianceScheme
             try
             {
                 var result = await _resubmissionFeeService.CalculateResubmissionFeeAsync(request, cancellationToken);
-
-                if (request.PayerId != null && request.ExternalId != null)
-                {
-                    var invoicePeriod = new DateTimeOffset(request.ResubmissionDate, TimeSpan.Zero);
-
-
-                    var saveRequest = _feeItemSaveRequestMapper.BuildComplianceSchemeResubmissionFeeSummaryRecord(
-                        request,
-                        result,
-                        (int)FeeTypeIds.ComplianceSchemeResubmissionFee,
-                        invoicePeriod,
-                        (int)PayerTypeIds.ComplianceScheme
-                    );
-
-                    await _feeItemWriter.Save(saveRequest, cancellationToken);
-
-                }
-
                 return Ok(result);
             }
             catch (ValidationException ex)

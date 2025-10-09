@@ -4,7 +4,7 @@ namespace EPR.Payment.Service.Services.Interfaces.FeeItems
 {
     public interface IFeeItemWriter
     {
-        Task Save(FeeSummarySaveRequest request, CancellationToken cancellationToken);
+        Task Save(FeeItemSaveRequest request, CancellationToken cancellationToken);
 
     }
 }

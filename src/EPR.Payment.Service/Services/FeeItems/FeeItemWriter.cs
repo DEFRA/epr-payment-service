@@ -1,5 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.FeeItems;
 using EPR.Payment.Service.Common.Dtos.FeeItems;
+using EPR.Payment.Service.Common.Data.DataModels;
 using EPR.Payment.Service.Services.Interfaces.FeeItems;
 
 namespace EPR.Payment.Service.Services.FeeItems
@@ -13,31 +14,31 @@ namespace EPR.Payment.Service.Services.FeeItems
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task Save(FeeSummarySaveRequest request, CancellationToken cancellationToken)
+        public async Task Save(FeeItemSaveRequest request, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(request);
 
             var invoiceDate = request.InvoiceDate ?? DateTimeOffset.UtcNow;
 
-            var items = request.Lines.Select(l => new Common.Data.DataModels.FeeItem
+            var mappedRequest = new Common.Data.Dtos.FeeItemMappedRequest
             {
-                FeeTypeId = l.FeeTypeId,
-                UnitPrice = l.UnitPrice,
-                Quantity = l.Quantity ?? 1, 
-                Amount = l.Amount,
+                ExternalId = request.ExternalId,
+                AppRefNo = request.ApplicationReferenceNumber,
+                InvoiceDate = invoiceDate,
+                InvoicePeriod = request.InvoicePeriod,
+                PayerTypeId = request.PayerTypeId,
+                PayerId = request.PayerId,
+                FileId = request.FileId,
+                Items = request.Lines.Select(l => new FeeItem
+                {
+                    FeeTypeId = l.FeeTypeId,
+                    UnitPrice = l.UnitPrice,
+                    Quantity = l.Quantity ?? 1,
+                    Amount = l.Amount
+                }).ToList()
+            };
 
-            });
-
-            await _repository.UpsertAsync(
-                externalId: request.ExternalId,
-                appRefNo: request.ApplicationReferenceNumber,
-                invoiceDate: invoiceDate,
-                invoicePeriod: request.InvoicePeriod,
-                payerTypeId: request.PayerTypeId,
-                payerId: request.PayerId,
-                fileId: request.FileId,
-                items: items,
-                cancellationToken: cancellationToken);
+            await _repository.UpsertAsync(mappedRequest, cancellationToken);
         }
     }
 }

@@ -8,14 +8,14 @@ namespace EPR.Payment.Service.Strategies.Interfaces.FeeItems
 {
     public interface IFeeItemProducerSaveRequestMapper
     {
-        FeeSummarySaveRequest BuildRegistrationFeeSummaryRecord(
+        FeeItemSaveRequest BuildRegistrationFeeSummaryRecord(
             ProducerRegistrationFeesRequestV2Dto dto,
             DateTimeOffset invoicePeriod,
             int payerTypeId,
             RegistrationFeesResponseDto resp,
             DateTimeOffset? invoiceDate = null);
 
-        FeeSummarySaveRequest BuildRegistrationResubmissionFeeSummaryRecord(
+        FeeItemSaveRequest BuildRegistrationResubmissionFeeSummaryRecord(
             ProducerResubmissionFeeRequestDto req,
             ProducerResubmissionFeeResponseDto result,
             int resubmissionFeeTypeId,

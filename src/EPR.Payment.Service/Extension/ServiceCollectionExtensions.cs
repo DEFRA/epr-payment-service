@@ -92,6 +92,7 @@ namespace EPR.Payment.Service.Extension
 
             services.AddScoped<IFeeItemRepository, FeeItemRepository>();
             services.AddScoped<IFeeItemSaveRequestMapper, FeeItemSaveRequestMapper>();
+            services.AddScoped<IFeeItemProducerSaveRequestMapper, FeeItemProducerSaveRequestMapper>();
             services.AddScoped<IFeeItemWriter, FeeItemWriter>();
 
             services.AddScoped<FeesKeyValueStore>();
