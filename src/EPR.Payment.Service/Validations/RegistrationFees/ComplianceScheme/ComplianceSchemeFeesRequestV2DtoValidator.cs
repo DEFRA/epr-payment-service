@@ -30,10 +30,10 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
                     .NotEmpty().WithMessage(ValidationMessages.InvoicePeriodRequired);
 
             RuleFor(x => x.PayerTypeId)
-                    .LessThan(1).WithMessage(ValidationMessages.PayerTypeIdRequired);
+                    .GreaterThan(0).WithMessage(ValidationMessages.PayerTypeIdRequired);
 
             RuleFor(x => x.PayerId)
-                    .LessThan(1).WithMessage(ValidationMessages.PayerIdRequired);
+                    .GreaterThan(0).WithMessage(ValidationMessages.PayerIdRequired);
 
             RuleForEach(x => x.ComplianceSchemeMembers)
                     .SetValidator(new ComplianceSchemeMemberDtoValidator())
