@@ -406,7 +406,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
         public async Task CalculateResubmissionFeeAsync_WithNonUtcSubmissionDate_ShouldReturnBadRequest()
         {
             // Arrange
-            var nonUtcDate = new DateTime(2025, 10, 3, 12, 0, 0, DateTimeKind.Local);
+            var nonUtcDate = new DateTime(2025, 10, 3, 12, 0, 0, DateTimeKind.Unspecified);
             var req = new ComplianceSchemeResubmissionFeeRequestV2Dto
             {
                 Regulator = "GB-ENG",
@@ -414,7 +414,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.ResubmissionFees.ComplianceS
                 SubmissionDate = nonUtcDate,
                 FileId = Guid.NewGuid(),
                 ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(nonUtcDate, TimeSpan.FromHours(1)),
+                InvoicePeriod = new DateTimeOffset(nonUtcDate, TimeSpan.FromHours(1)), 
                 PayerTypeId = (int)PayerTypeIds.ComplianceScheme,
                 PayerId = 123,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
