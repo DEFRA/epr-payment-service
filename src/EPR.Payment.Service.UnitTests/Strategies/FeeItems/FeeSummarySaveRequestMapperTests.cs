@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EPR.Payment.Service.Common.Dtos.FeeItems;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
+﻿using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ComplianceScheme;
@@ -10,7 +6,6 @@ using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.ComplianceScheme
 using EPR.Payment.Service.Common.Enums;
 using EPR.Payment.Service.Strategies.FeeItems;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
 {
@@ -51,7 +46,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, resp);
             var after = DateTimeOffset.UtcNow;
 
-            // Assert headers
+            // Assert
             result.FileId.Should().Be(req.FileId);
             result.ExternalId.Should().Be(req.ExternalId);
             result.ApplicationReferenceNumber.Should().Be(req.ApplicationReferenceNumber);
@@ -293,7 +288,6 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
                 ApplicationReferenceNumber = "REF-CHK",
                 SubmissionDate = subDate,
 
-                // required v2 fields
                 FileId = Guid.NewGuid(),
                 ExternalId = Guid.NewGuid(),
                 InvoicePeriod = new DateTimeOffset(subDate, TimeSpan.Zero),
@@ -320,6 +314,178 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             line.UnitPrice.Should().Be(99m);
             line.Amount.Should().Be(99m);
             line.Quantity.Should().Be(1);
+        }
+
+
+        [TestMethod]
+        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_NullCalc_ProducesNoLines()
+        {
+            // Arrange
+            var mapper = new FeeItemSaveRequestMapper();
+            var req = CreateV2Dto();
+            ComplianceSchemeFeesResponseDto? resp = null;
+
+            // Act
+            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, resp!);
+
+            // Assert
+            result.Lines.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_ProvidedIds_AreUsed_NoDefaults()
+        {
+            // Arrange
+            var mapper = new FeeItemSaveRequestMapper();
+            var subDate = new DateTime(2025, 09, 26);
+
+            var expectedFileId = Guid.NewGuid();
+            var expectedExternalId = Guid.NewGuid();
+            var expectedPayerId = 777;
+
+            var req = new ComplianceSchemeFeesRequestV2Dto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "APP-IDS",
+                SubmissionDate = subDate,
+                FileId = expectedFileId,          
+                ExternalId = expectedExternalId,  
+                InvoicePeriod = new DateTimeOffset(subDate, TimeSpan.Zero),
+                PayerTypeId = (int)PayerTypeIds.ComplianceScheme,
+                PayerId = expectedPayerId,        
+                ComplianceSchemeMembers = new()
+            };
+
+            var resp = new ComplianceSchemeFeesResponseDto
+            {
+                ComplianceSchemeRegistrationFee = 0,
+                ComplianceSchemeMembersWithFees = null
+            };
+
+            // Act
+            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, resp);
+
+            // Assert
+            result.FileId.Should().Be(expectedFileId);
+            result.ExternalId.Should().Be(expectedExternalId);
+            result.PayerId.Should().Be(expectedPayerId);
+            result.Lines.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void BuildComplianceSchemeResubmissionFeeSummaryRecord_ProvidedIds_AreUsed_NoDefaults()
+        {
+            // Arrange
+            var mapper = new FeeItemSaveRequestMapper();
+            var subDate = new DateTime(2026, 03, 05);
+
+            var expectedFileId = Guid.NewGuid();
+            var expectedExternalId = Guid.NewGuid();
+            var expectedPayerId = 4242;
+
+            var req = new ComplianceSchemeResubmissionFeeRequestV2Dto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "REF-IDS",
+                SubmissionDate = subDate,
+                FileId = expectedFileId,          
+                ExternalId = expectedExternalId,  
+                InvoicePeriod = new DateTimeOffset(subDate, TimeSpan.Zero),
+                PayerTypeId = (int)PayerTypeIds.ComplianceScheme,
+                PayerId = expectedPayerId         
+            };
+
+            var resultDto = new ComplianceSchemeResubmissionFeeResult { TotalResubmissionFee = 10m };
+
+            // Act
+            var result = mapper.BuildComplianceSchemeResubmissionFeeSummaryRecord(
+                req, resultDto, (int)FeeTypeIds.ComplianceSchemeResubmissionFee);
+
+            // Assert
+            result.FileId.Should().Be(expectedFileId);
+            result.ExternalId.Should().Be(expectedExternalId);
+            result.PayerId.Should().Be(expectedPayerId);
+            result.Lines.Should().HaveCount(1);
+        }
+
+        [TestMethod]
+        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_NullSubsidiaryBreakdown_NoSubsidiaryLines()
+        {
+            // Arrange
+            var mapper = new FeeItemSaveRequestMapper();
+            var req = CreateV2Dto();
+
+            var member = CreateMemberDto(reg: 100, late: 50, memberOmp: 25, subsFee: 0, breakdown: null);
+            var resp = new ComplianceSchemeFeesResponseDto
+            {
+                ComplianceSchemeRegistrationFee = 0,
+                ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto> { member }
+            };
+
+            // Act
+            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, resp);
+
+            // Assert
+            result.Lines.Should().HaveCount(3);
+            result.Lines.Should().OnlyContain(l =>
+                l.FeeTypeId == (int)FeeTypeIds.MemberRegistrationFee ||
+                l.FeeTypeId == (int)FeeTypeIds.MemberLateRegistrationFee ||
+                l.FeeTypeId == (int)FeeTypeIds.MemberOnlineMarketplaceFee);
+        }
+
+        [TestMethod]
+        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_ZeroUnitPrice_SkipsBandLine()
+        {
+            // Arrange
+            var mapper = new FeeItemSaveRequestMapper();
+            var req = CreateV2Dto();
+
+            var resp = new ComplianceSchemeFeesResponseDto
+            {
+                ComplianceSchemeRegistrationFee = 0,
+                ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>
+                {
+                    CreateMemberDto(
+                        subsFee: 0,
+                        breakdown: CreateSubsidiariesFeeBreakdown(new []
+                        {
+                            CreateBand(1, units: 3, unitPrice: 0, total: 0) 
+                        }))
+                }
+            };
+
+            // Act
+            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, resp);
+
+            // Assert
+            result.Lines.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void BuildComplianceSchemeRegistrationFeeSummaryRecord_OmpGuard_NotAdded_WhenAnyOperandZero()
+        {
+            // Arrange
+            var mapper = new FeeItemSaveRequestMapper();
+            var req = CreateV2Dto();
+
+            var resp = new ComplianceSchemeFeesResponseDto
+            {
+                ComplianceSchemeRegistrationFee = 0,
+                ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>
+                {
+                    CreateMemberDto(
+                        reg: 0, late: 0, memberOmp: 0, subsFee: 0,
+                        breakdown: CreateSubsidiariesFeeBreakdown(
+                            feeBreakdowns: Enumerable.Empty<FeeBreakdown>(),
+                            ompCount: 0, ompUnit: 100, ompTotal: 0))
+                }
+            };
+
+            // Act
+            var result = mapper.BuildComplianceSchemeRegistrationFeeSummaryRecord(req, resp);
+
+            // Assert
+            result.Lines.Should().BeEmpty();
         }
 
 
@@ -366,7 +532,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
 
         private static FeeBreakdown CreateBand(int band, int units, decimal unitPrice, decimal total)
         {
-            return new FeeBreakdown () { BandNumber = band, UnitCount = units, UnitPrice = unitPrice, TotalPrice = total };
+            return new FeeBreakdown() { BandNumber = band, UnitCount = units, UnitPrice = unitPrice, TotalPrice = total };
         }
 
         private static SubsidiariesFeeBreakdown CreateSubsidiariesFeeBreakdown(
@@ -381,6 +547,5 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
                 TotalSubsidiariesOMPFees = ompTotal
             };
         }
-
     }
 }

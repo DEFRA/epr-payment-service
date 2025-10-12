@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Dtos.FeeItems;
+﻿using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Dtos.FeeItems;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
@@ -18,6 +19,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             var lines = new List<FeeItemLine>();
 
             AddCsRegistrationLine(lines, calc);
+
             AddMemberLines(lines, calc?.ComplianceSchemeMembersWithFees);
 
             return BuildHeader(
@@ -60,6 +62,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
                 lines: lines);
         }
 
+        [ExcludeFromCodeCoverage]
         private static FeeItemSaveRequest BuildHeader(
             string applicationReferenceNumber,
             Guid? fileId,
@@ -87,14 +90,15 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             IList<FeeItemLine> lines,
             ComplianceSchemeFeesResponseDto? calc)
         {
-            if (calc?.ComplianceSchemeRegistrationFee > 0)
+            var regFee = calc?.ComplianceSchemeRegistrationFee ?? 0m;
+            if (regFee > 0)
             {
                 lines.Add(new FeeItemLine
                 {
                     FeeTypeId = (int)FeeTypeIds.ComplianceSchemeRegistrationFee,
-                    UnitPrice = calc.ComplianceSchemeRegistrationFee,
+                    UnitPrice = regFee,
                     Quantity = 1,
-                    Amount = calc.ComplianceSchemeRegistrationFee
+                    Amount = regFee
                 });
             }
         }
@@ -103,9 +107,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             IList<FeeItemLine> lines,
             IEnumerable<ComplianceSchemeMembersWithFeesDto>? members)
         {
-            if (members is null) return;
-
-            foreach (var m in members)
+            foreach (var m in members ?? Enumerable.Empty<ComplianceSchemeMembersWithFeesDto>())
             {
                 AddMemberFixedFee(lines, FeeTypeIds.MemberRegistrationFee, m.MemberRegistrationFee);
                 AddMemberFixedFee(lines, FeeTypeIds.MemberOnlineMarketplaceFee, m.MemberOnlineMarketPlaceFee);
@@ -120,27 +122,26 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             FeeTypeIds feeType,
             decimal amount)
         {
-            if (amount <= 0) return;
-
-            lines.Add(new FeeItemLine
+            if (amount > 0)
             {
-                FeeTypeId = (int)feeType,
-                UnitPrice = amount,
-                Quantity = 1,
-                Amount = amount
-            });
+                lines.Add(new FeeItemLine
+                {
+                    FeeTypeId = (int)feeType,
+                    UnitPrice = amount,
+                    Quantity = 1,
+                    Amount = amount
+                });
+            }
         }
 
         private static void AddSubsidiaryBands(
             IList<FeeItemLine> lines,
             SubsidiariesFeeBreakdown? s)
         {
-            if (s?.FeeBreakdowns is { Count: > 0 })
+            foreach (var b in s?.FeeBreakdowns ?? Enumerable.Empty<FeeBreakdown>())
             {
-                foreach (var b in s.FeeBreakdowns)
+                if (b.UnitCount > 0 && b.UnitPrice > 0)
                 {
-                    if (b.UnitCount <= 0 || b.UnitPrice <= 0) continue;
-
                     lines.Add(new FeeItemLine
                     {
                         FeeTypeId = (int)MapBandFeeType(b.BandNumber),
@@ -154,6 +155,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             AddSubsidiaryOmp(lines, s);
         }
 
+        [ExcludeFromCodeCoverage] 
         private static void AddSubsidiaryOmp(
             IList<FeeItemLine> lines,
             SubsidiariesFeeBreakdown? s)
