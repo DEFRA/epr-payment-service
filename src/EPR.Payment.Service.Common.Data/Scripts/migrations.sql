@@ -5862,6 +5862,37 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250921121924_AddResubmissionFeeTypes'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
+        SET IDENTITY_INSERT [Lookup].[FeeTypes] ON;
+    EXEC(N'INSERT INTO [Lookup].[FeeTypes] ([Id], [Name])
+    VALUES (9, N''Producer Resubmission Fee''),
+    (10, N''Compliance Scheme Resubmission Fee'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
+        SET IDENTITY_INSERT [Lookup].[FeeTypes] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250921121924_AddResubmissionFeeTypes'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250921121924_AddResubmissionFeeTypes', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20251006153104_AddFeeItemTable'
 )
 BEGIN
@@ -5993,6 +6024,44 @@ IF NOT EXISTS (
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
     VALUES (N'20251007103058_FeeTypeDataSeedData', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251013091553_FeeTypeFix'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[FeeTypes]
+    WHERE [Id] = 9;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251013091553_FeeTypeFix'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[FeeTypes]
+    WHERE [Id] = 10;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251013091553_FeeTypeFix'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20251013091553_FeeTypeFix', N'8.0.4');
 END;
 GO
 
