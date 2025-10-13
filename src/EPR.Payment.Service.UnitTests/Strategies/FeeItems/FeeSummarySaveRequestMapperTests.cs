@@ -359,7 +359,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             var resp = new ComplianceSchemeFeesResponseDto
             {
                 ComplianceSchemeRegistrationFee = 0,
-                ComplianceSchemeMembersWithFees = null
+                ComplianceSchemeMembersWithFees = null!
             };
 
             // Act
