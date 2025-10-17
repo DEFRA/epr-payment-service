@@ -36,8 +36,8 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
             _feeSummarySaveRequestMapper = feeSummarySaveRequestMapper ?? throw new ArgumentNullException(nameof(feeSummarySaveRequestMapper));
         }
 
-        [MapToApiVersion(2)]
-        [HttpPost("v2/registration-fee")]
+        [ApiExplorerSettings(GroupName = "v2")]
+        [HttpPost("registration-fee")]
         [SwaggerOperation(
             Summary = "Calculates the registration fees for a producer (v2)",
             Description = "Calculates the total fees including base fee, subsidiaries fee, and any additional fees for an online marketplace producer. Persists fee items if required IDs are provided."
