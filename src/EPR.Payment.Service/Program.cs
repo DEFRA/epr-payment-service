@@ -5,6 +5,7 @@ using EPR.Payment.Service.Extension;
 using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.Validations.Payments;
+using EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Validations.RegistrationFees.Producer;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,8 @@ builder.Services.AddFluentValidation(fv =>
 {
     fv.RegisterValidatorsFromAssemblyContaining<OnlinePaymentInsertRequestDtoValidator>();
     fv.RegisterValidatorsFromAssemblyContaining<ProducerRegistrationFeesRequestDtoValidator>();    
+    fv.RegisterValidatorsFromAssemblyContaining<ProducerRegistrationFeesRequestV2DtoValidator>();    
+    fv.RegisterValidatorsFromAssemblyContaining<ComplianceSchemeFeesRequestV2DtoValidator>();    
     fv.AutomaticValidationEnabled = false;
 });
 

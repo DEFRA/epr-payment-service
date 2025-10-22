@@ -63,6 +63,6 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             {
                 throw new ValidationException(validationResult.Errors);
             }
-        }
+        }      
     }
 }

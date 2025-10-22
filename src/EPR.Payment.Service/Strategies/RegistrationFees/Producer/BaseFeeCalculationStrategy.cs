@@ -28,5 +28,19 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             var regulator = RegulatorType.Create(request.Regulator);
             return await _feesRepository.GetBaseFeeAsync(request.ProducerType, regulator, request.SubmissionDate, cancellationToken);
         }
+
+        public async Task<decimal> CalculateFeeAsync(ProducerRegistrationFeesRequestV2Dto request, CancellationToken cancellationToken)
+        {
+            // If ProducerType is empty, return a base fee of zero
+            if (string.IsNullOrEmpty(request.ProducerType))
+                return 0m;
+
+            // Ensure Regulator is not null or empty
+            if (string.IsNullOrEmpty(request.Regulator))
+                throw new ArgumentException(ProducerFeesCalculationExceptions.RegulatorMissing);
+
+            var regulator = RegulatorType.Create(request.Regulator);
+            return await _feesRepository.GetBaseFeeAsync(request.ProducerType, regulator, request.SubmissionDate, cancellationToken);
+        }
     }
 }

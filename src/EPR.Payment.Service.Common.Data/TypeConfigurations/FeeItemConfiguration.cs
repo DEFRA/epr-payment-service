@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace EPR.Payment.Service.Common.Data.TypeConfigurations
 {
     [ExcludeFromCodeCoverage]
-    public class FeeSummaryConfiguration : IEntityTypeConfiguration<FeeSummary>
+    public class FeeItemConfiguration : IEntityTypeConfiguration<FeeItem>
     {
-        public void Configure(EntityTypeBuilder<FeeSummary> builder)
+        public void Configure(EntityTypeBuilder<FeeItem> builder)
         {
-            builder.ToTable(TableNameConstants.FeeSummaryTableName);
+            builder.ToTable(TableNameConstants.FeeItemTableName);
 
             builder.HasKey(f => f.Id);
 
@@ -27,15 +27,16 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.Property(f => f.FeeTypeId).IsRequired();
             builder.Property(f => f.CreatedDate).HasColumnType("datetimeoffset").IsRequired();
             builder.Property(f => f.UpdatedDate).HasColumnType("datetimeoffset");
+            builder.Property(f => f.FileId).IsRequired();
 
             builder.HasOne(f => f.FeeType)
-                    .WithMany(ft => ft.FeeSummaries)
+                    .WithMany(ft => ft.FeeItems)
                    .HasForeignKey(f => f.FeeTypeId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(f => f.PayerType)
-                    .WithMany(pt => pt.FeeSummaries)
+                    .WithMany(pt => pt.FeeItems)
                    .HasForeignKey(f => f.PayerTypeId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Cascade);

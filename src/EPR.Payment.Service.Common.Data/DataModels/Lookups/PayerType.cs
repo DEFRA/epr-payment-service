@@ -10,7 +10,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Lookups
 
         #region Navigation Properties
 
-        public virtual ICollection<FeeSummary> FeeSummaries { get; set; } = new List<FeeSummary>();
+        public virtual ICollection<FeeItem> FeeItems { get; set; } = new List<FeeItem>();
 
         #endregion Navigation Properties
     }
