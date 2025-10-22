@@ -5857,3 +5857,34 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250921121924_AddResubmissionFeeTypes'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
+        SET IDENTITY_INSERT [Lookup].[FeeTypes] ON;
+    EXEC(N'INSERT INTO [Lookup].[FeeTypes] ([Id], [Name])
+    VALUES (9, N''Producer Resubmission Fee''),
+    (10, N''Compliance Scheme Resubmission Fee'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
+        SET IDENTITY_INSERT [Lookup].[FeeTypes] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20250921121924_AddResubmissionFeeTypes'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20250921121924_AddResubmissionFeeTypes', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
