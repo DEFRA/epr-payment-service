@@ -1,4 +1,6 @@
-﻿namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme
 {
     public class ComplianceSchemeFeesRequestDto
     {
@@ -6,6 +8,7 @@
         public required string ApplicationReferenceNumber { get; set; }
         public DateTime SubmissionDate { get; set; }
         public List<ComplianceSchemeMemberDto> ComplianceSchemeMembers { get; set; } = new();
+
     }
 
     public class ComplianceSchemeMemberDto

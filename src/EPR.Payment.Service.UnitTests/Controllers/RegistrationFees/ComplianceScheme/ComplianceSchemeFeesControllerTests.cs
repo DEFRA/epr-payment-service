@@ -57,9 +57,14 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             // Arrange
             IComplianceSchemeCalculatorService? baseFeeService = null;
 
-            // Act & Assert
-            Assert.ThrowsException<ArgumentNullException>(
-                () => new ComplianceSchemeFeesController(baseFeeService!, _validatorMock.Object));
+            // Act
+            Action act = () => new ComplianceSchemeFeesController(
+                baseFeeService!,
+                _validatorMock.Object);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'complianceSchemeCalculatorService')");
         }
 
         [TestMethod]
@@ -68,9 +73,14 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             // Arrange
             IValidator<ComplianceSchemeFeesRequestDto>? validator = null;
 
-            // Act & Assert
-            Assert.ThrowsException<ArgumentNullException>(
-                () => new ComplianceSchemeFeesController(_complianceSchemeCalculatorServiceMock.Object, validator!));
+            // Act
+            Action act = () => new ComplianceSchemeFeesController(
+                _complianceSchemeCalculatorServiceMock.Object,
+                validator!);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'validator')");
         }
 
         [TestMethod, AutoMoqData]

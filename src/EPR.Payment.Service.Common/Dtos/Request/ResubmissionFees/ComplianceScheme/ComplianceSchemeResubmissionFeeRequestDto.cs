@@ -1,4 +1,6 @@
-﻿namespace EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme
 {
     public class ComplianceSchemeResubmissionFeeRequestDto
     {

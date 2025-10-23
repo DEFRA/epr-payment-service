@@ -20,14 +20,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_InvalidProducerType_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "X",
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -42,14 +47,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_UpperCaseProducerTypeLarge_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -63,14 +73,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_LowerCaseProducerTypeLarge_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "large",  // Lowercase
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -84,14 +99,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_UpperCaseProducerTypeSmall_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "SMALL",
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -105,14 +125,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_LowerCaseProducerTypeSmall_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "small",  // Lowercase
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -126,14 +151,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_NumberOfSubsidiariesLessThanZero_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = -5,
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -148,14 +178,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_EmptyRegulator_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
                 Regulator = string.Empty,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -171,14 +206,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         {
             // Arrange
             var validProducerTypes = new List<string> { "LARGE", "SMALL" };
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = string.Empty,
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -193,7 +233,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_NumberOfOMPSubsidiaries_ShouldBeLessThanOrEqualToNumberOfSubsidiaries()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
@@ -201,7 +241,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -216,14 +261,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_ValidRequestWithProducerType_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -239,14 +289,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_EmptyProducerTypeAndGreaterThanZeroSubsidiaries_ShouldNotHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = string.Empty, // No base fee required
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -265,14 +320,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
 
             foreach (var regulator in validRegulators)
             {
-                var request = new ProducerRegistrationFeesRequestDto
+                var request = new ProducerRegistrationFeesRequestV2Dto
                 {
                     ProducerType = "LARGE",
                     NumberOfSubsidiaries = 10,
                     Regulator = regulator,
                     IsProducerOnlineMarketplace = false,
                     ApplicationReferenceNumber = "A123",
-                    SubmissionDate = DateTime.UtcNow
+                    SubmissionDate = DateTime.UtcNow,
+                    FileId = Guid.NewGuid(),
+                    ExternalId = Guid.NewGuid(),
+                    InvoicePeriod = new DateTimeOffset(),
+                    PayerId = 1,
+                    PayerTypeId = 1
                 };
 
                 // Act
@@ -288,14 +348,19 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_EmptyApplicationReferenceNumber_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
                 Regulator = RegulatorConstants.GBENG,
                 IsProducerOnlineMarketplace = false,
                 ApplicationReferenceNumber = string.Empty,
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -310,7 +375,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_NoOfSubsidiariesOnlineMarketplaceLessThanZero_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 0,
@@ -318,7 +383,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 IsProducerOnlineMarketplace = false,
                 NoOfSubsidiariesOnlineMarketplace = -5,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -333,7 +403,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_InvalidSubmissionDate_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
@@ -341,7 +411,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 IsProducerOnlineMarketplace = false,
                 IsLateFeeApplicable = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = default
+                SubmissionDate = DateTime.Now,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -349,14 +424,14 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
-                  .WithErrorMessage(ValidationMessages.InvalidSubmissionDate);
+                  .WithErrorMessage(ValidationMessages.SubmissionDateMustBeUtc);
         }
 
         [TestMethod]
         public void Validate_FutureSubmissionDate_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
@@ -364,7 +439,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 IsProducerOnlineMarketplace = false,
                 IsLateFeeApplicable = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow.AddDays(10)
+                SubmissionDate = DateTime.UtcNow.AddDays(10),
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -379,7 +459,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         public void Validate_SubmissionDateNotUtc_ShouldHaveError()
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "LARGE",
                 NumberOfSubsidiaries = 10,
@@ -387,7 +467,12 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
                 IsProducerOnlineMarketplace = false,
                 IsLateFeeApplicable = false,
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.Now
+                SubmissionDate = DateTime.Now,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act

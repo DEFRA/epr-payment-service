@@ -22,7 +22,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeSummary", b =>
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,6 +46,9 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Property<int>("FeeTypeId")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("InvoiceDate")
                         .HasColumnType("datetimeoffset");
@@ -76,28 +79,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.HasIndex("PayerTypeId");
 
-                    b.ToTable("FeeSummaries", (string)null);
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FileFeeSummaryConnection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("FeeSummaryId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("FileId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FeeSummaryId");
-
-                    b.ToTable("FileFeeSummaryConnections", (string)null);
+                    b.ToTable("FeeItem", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.AccreditationFee", b =>
@@ -2510,6 +2492,46 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         {
                             Id = 8,
                             Name = "Late Registration Fee"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "FeePreviousPayment"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "OutstandingPayment"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "BandNumber 1"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "BandNumber 2"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "BandNumber 3"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "PreviousPayment(reuse)"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "OutstandingPayment(reuse)"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "Member OnlineMarketPlace Fee"
                         });
                 });
 
@@ -4257,16 +4279,16 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.ToTable("Payment", (string)null);
                 });
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeSummary", b =>
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeItem", b =>
                 {
                     b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.FeeType", "FeeType")
-                        .WithMany("FeeSummaries")
+                        .WithMany("FeeItems")
                         .HasForeignKey("FeeTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.PayerType", "PayerType")
-                        .WithMany("FeeSummaries")
+                        .WithMany("FeeItems")
                         .HasForeignKey("PayerTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -4274,17 +4296,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Navigation("FeeType");
 
                     b.Navigation("PayerType");
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FileFeeSummaryConnection", b =>
-                {
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.FeeSummary", "FeeSummary")
-                        .WithMany("FileFeeSummaryConnections")
-                        .HasForeignKey("FeeSummaryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FeeSummary");
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.AccreditationFee", b =>
@@ -4398,19 +4409,14 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Navigation("PaymentStatus");
                 });
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeSummary", b =>
-                {
-                    b.Navigation("FileFeeSummaryConnections");
-                });
-
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.FeeType", b =>
                 {
-                    b.Navigation("FeeSummaries");
+                    b.Navigation("FeeItems");
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.PayerType", b =>
                 {
-                    b.Navigation("FeeSummaries");
+                    b.Navigation("FeeItems");
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.PaymentStatus", b =>
