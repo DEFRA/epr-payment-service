@@ -75,19 +75,27 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                 member.SubsidiariesFee = member.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees
                                          + member.SubsidiariesFeeBreakdown.FeeBreakdowns.Sum(i => i.TotalPrice);
 
-                if (item.IsLateFeeApplicable)
-                {
-                    var subsidiariesLateFee = item.NumberOfSubsidiaries * memberLateFee;
-                    member.MemberLateRegistrationFee = memberLateFee + subsidiariesLateFee;
-                }
+                var subsidiariesLateFee = item.IsLateFeeApplicable
+                    ? item.NumberOfSubsidiaries * memberLateFee
+                    : await _complianceSchemeLateSubsidiariesFeeStrategy
+                    .CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken)
+                    .ConfigureAwait(false);
 
-                member.SubsidiariesLateRegistrationFee = await _complianceSchemeLateSubsidiariesFeeStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken);
+                var memberOnlyLateFee = item.IsLateFeeApplicable ? memberLateFee : 0m;
+                var memberLateRegistrationFee = item.IsLateFeeApplicable
+                    ? memberLateFee + subsidiariesLateFee
+                    : subsidiariesLateFee;
+
+                member.SubsidiariesOnlyLateFee = subsidiariesLateFee;
+                member.MemberOnlyLateFee = memberOnlyLateFee;
+                member.MemberLateRegistrationFee = memberLateRegistrationFee;
+
+
 
                 member.TotalMemberFee = member.MemberRegistrationFee
                                         + member.MemberOnlineMarketPlaceFee
                                         + member.SubsidiariesFee
-                                        + member.MemberLateRegistrationFee
-                                        + member.SubsidiariesLateRegistrationFee;
+                                        + member.MemberLateRegistrationFee;
 
                 // Add to response collection
                 response.ComplianceSchemeMembersWithFees.Add(member);
