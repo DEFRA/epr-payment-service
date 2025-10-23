@@ -50,5 +50,12 @@
 	  <Folder Include="Strategies\AccrediationFees\" />
 	  <Folder Include="Strategies\AccrediationFees\ReprocessorExporter\" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<SonarQubeSetting Include="sonar.cpd.exclusions">
+			<Value>Validations\RegistrationFees\ComplianceScheme\ComplianceSchemeFeesRequestV2DtoValidator.cs</Value>
+			<Value>Validations\RegistrationFees\Producer\ProducerFeesRequestDtoV2Validator.cs</Value>
+			<Value>Validations\ResubmissionFees\ComplianceScheme\ComplianceSchemeResubmissionFeeRequestV2DtoValidator.cs</Value>
+			<Value>Validations\ResubmissionFees\Producer\ProducerResubmissionFeeRequestV2DtoValidator.cs</Value>
+		</SonarQubeSetting>
+	</ItemGroup>
 </Project>
