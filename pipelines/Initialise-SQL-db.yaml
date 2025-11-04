@@ -1,6 +1,6 @@
 trigger: none
 pr: none
-pool: DEFRA-COMMON-ubuntu2204-SSV3
+appendCommitMessageToRunName: false
 
 parameters:
 - name: teamName
@@ -42,7 +42,7 @@ parameters:
   displayName: 'Enter main branch for corresponding migration script (e.g. main-20230627.1) or Release name (e.g. Release-2.8.2)'
   type: string
   default: ''
-
+pool: DEFRA-COMMON-ubuntu2004-SSV3
 variables:
   - ${{ if eq(parameters.envToDeploy, 'development') }}:
     - template: vars/${{ parameters.teamName }}-${{ parameters.envToDeploy }}.yaml
@@ -85,7 +85,7 @@ jobs:
     steps:
       - template: templates/docker-run-sql-migration.yaml@CommonTemplates
         parameters:
-          azureSubscription: $(acr.Subscription)
+          azureSubscription: $(azureSubscription)
           solutionFolder: $(solutionFolder)
           projectFolder: $(projectFolder)
           azureContainerRegistryName: $(acr.azureContainerRegistryName)
