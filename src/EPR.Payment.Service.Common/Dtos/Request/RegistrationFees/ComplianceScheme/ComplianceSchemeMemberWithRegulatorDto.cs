@@ -11,5 +11,7 @@ namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceSch
         public int NumberOfSubsidiaries { get; set; }
         public int NoOfSubsidiariesOnlineMarketplace { get; set; }
         public required DateTime SubmissionDate { get; set; }
+
+        public int NumberOfLateSubsidiaries { get; set; }
     }
 }
