@@ -41,6 +41,11 @@ namespace EPR.Payment.Service.Common.Constants.RegistrationFees
         public const string InvalidMemberId = "MemberId is required.";
         public const string MemberTypeRequired = "MemberType is required.";
         public const string InvalidMemberType = "Member Type must be one of the following: ";
+        public const string FileIdRequired = "FileId is required";
+        public const string ExternalIdRequired = "ExternalId is required";
+        public const string InvoicePeriodRequired = "InvoicePeriod is required";
+        public const string PayerTypeIdRequired = "PayerTypeId is required";
+        public const string PayerIdRequired = "PayerId is required";
 
         public const string InvalidSubmissionDate = "Submission date is mandatory and must be a valid date.";
         public const string FutureSubmissionDate = "Submission date cannot be a date in the future.";

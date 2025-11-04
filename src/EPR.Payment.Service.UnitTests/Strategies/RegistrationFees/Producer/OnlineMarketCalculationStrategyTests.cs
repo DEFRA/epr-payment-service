@@ -57,13 +57,18 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             OnlineMarketCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 IsProducerOnlineMarketplace = true,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create("GB-ENG");
@@ -84,13 +89,18 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             OnlineMarketCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 IsProducerOnlineMarketplace = false,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act
@@ -105,13 +115,18 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             OnlineMarketCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 IsProducerOnlineMarketplace = true,
                 Regulator = null!, // Regulator is null
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act & Assert
@@ -123,13 +138,18 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             OnlineMarketCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestDto
+            var request = new ProducerRegistrationFeesRequestV2Dto
             {
                 ProducerType = "Large",
                 IsProducerOnlineMarketplace = true,
                 Regulator = string.Empty, // Regulator is empty
                 ApplicationReferenceNumber = "A123",
-                SubmissionDate = DateTime.UtcNow
+                SubmissionDate = DateTime.UtcNow,
+                FileId = Guid.NewGuid(),
+                ExternalId = Guid.NewGuid(),
+                InvoicePeriod = new DateTimeOffset(),
+                PayerId = 1,
+                PayerTypeId = 1
             };
 
             // Act & Assert

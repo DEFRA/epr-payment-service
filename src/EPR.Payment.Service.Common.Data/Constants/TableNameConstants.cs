@@ -30,8 +30,6 @@
 
         public const string PayerTypesTableName = "PayerTypes";
 
-        public const string FeeSummaryTableName = "FeeSummaries";
-
-        public const string FileFeeSummaryConnectionTableName = "FileFeeSummaryConnections";
+        public const string FeeItemTableName = "FeeItem";
     }
 }
