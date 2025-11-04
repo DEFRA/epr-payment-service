@@ -36,6 +36,7 @@ namespace EPR.Payment.Service.Common.Constants.RegistrationFees
         public const string RegulatorRequired = "Regulator is required.";
         public const string ApplicationReferenceNumberRequired = "Application Reference Number is required.";
         public const string NoOfSubsidiariesOnlineMarketplaceRange = "Number of Subsidiaries with Online Marketplace must be greater than or equal to 0";
+        public const string ProducerMemberCountGreaterThanOrEqualToZero = "Member Count must be greater than or equal to zero.";
         public const string InvalidComplianceSchemeMember = "Invalid ComplianceSchemeMember entry.";
         public const string InvalidMemberId = "MemberId is required.";
         public const string MemberTypeRequired = "MemberType is required.";

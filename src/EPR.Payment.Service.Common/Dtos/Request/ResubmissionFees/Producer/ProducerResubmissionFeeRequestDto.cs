@@ -8,5 +8,6 @@
         public Guid? FileId { get; set; }
         public Guid? ExternalId { get; set; }
         public int? PayerId { get; set; }
+        public int MemberCount { get; set; }
     }
 }
