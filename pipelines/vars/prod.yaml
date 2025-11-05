@@ -5,6 +5,6 @@ variables:
   acr.repositoryName: 'eprpaymentbackendrepository'
   serviceName: 'prdrwdwebwa1425'
   kvName: PRDRWDINFKV1401
-  sqlDBserver: 'prerwddbssq1401.database.windows.net'
+  sqlDBserver: 'prdrwddbssq1401.database.windows.net'
   sqlDB: 'prd1_feespayment'
   acr.Subscription: 'AZR-RWD-PRD1'
