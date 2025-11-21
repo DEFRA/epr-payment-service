@@ -2495,6 +2495,16 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         },
                         new
                         {
+                            Id = 9,
+                            Name = "Producer Resubmission Fee"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Compliance Scheme Resubmission"
+                        },
+                        new
+                        {
                             Id = 11,
                             Name = "FeePreviousPayment"
                         },
