@@ -1,6 +1,7 @@
 ﻿using EPR.Payment.Service.Common.Dtos.FeeItems;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.Enums;
@@ -24,24 +25,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             subsidiaryFee += resp.SubsidiariesFee;
 
             var lines = new List<FeeItemLine>();
-            if (resp?.ProducerRegistrationFee > 0)
-            {
-                lines.Add(new FeeItemLine
-                {
-                    FeeTypeId = (int)FeeTypeIds.ProducerRegistrationFee,
-                    UnitPrice = resp.ProducerRegistrationFee,
-                    Quantity = 1,
-                    Amount = resp.ProducerRegistrationFee
-                });
-            }
-
-            void Sum(FeeTypeIds type, decimal amount)
-            {
-                if (amount > 0)
-                {
-                    lines.Add(new FeeItemLine { FeeTypeId = (int)type, Amount = amount });
-                }
-            }
+            AddProducerRegistrationFeeItemLineIfApplicable(resp, lines);
 
             var s = resp.SubsidiariesFeeBreakdown;
             if (s?.FeeBreakdowns != null)
@@ -68,22 +52,13 @@ namespace EPR.Payment.Service.Strategies.FeeItems
                     }
                 }
 
-                if (s.TotalSubsidiariesOMPFees > 0 && s.UnitOMPFees > 0 && s.CountOfOMPSubsidiaries > 0)
-                {
-                    lines.Add(new FeeItemLine
-                    {
-                        FeeTypeId = (int)FeeTypeIds.UnitOnlineMarketplaceFee,
-                        UnitPrice = s.UnitOMPFees,
-                        Quantity = s.CountOfOMPSubsidiaries,
-                        Amount = s.TotalSubsidiariesOMPFees
-                    });
-                }
+                AddSubsidiaryFeeItemLineIfApplicable(s, lines);
             }
 
-            Sum(FeeTypeIds.MemberRegistrationFee, memberRegistrationFee);
-            Sum(FeeTypeIds.MemberLateRegistrationFee, memberLateRegistrationFee);
-            Sum(FeeTypeIds.UnitOnlineMarketplaceFee, unitOmpFee);
-            Sum(FeeTypeIds.SubsidiaryFee, subsidiaryFee);
+            Sum(FeeTypeIds.MemberRegistrationFee, memberRegistrationFee, lines);
+            Sum(FeeTypeIds.MemberLateRegistrationFee, memberLateRegistrationFee, lines);
+            Sum(FeeTypeIds.UnitOnlineMarketplaceFee, unitOmpFee, lines);
+            Sum(FeeTypeIds.SubsidiaryFee, subsidiaryFee, lines);
 
             return new FeeItemSaveRequest
             {
@@ -96,6 +71,42 @@ namespace EPR.Payment.Service.Strategies.FeeItems
                 PayerId = dto.PayerId ?? 0,
                 Lines = lines
             };
+        }
+
+        private static void AddSubsidiaryFeeItemLineIfApplicable(SubsidiariesFeeBreakdown s, List<FeeItemLine> lines)
+        {
+            if (s.TotalSubsidiariesOMPFees > 0 && s.UnitOMPFees > 0 && s.CountOfOMPSubsidiaries > 0)
+            {
+                lines.Add(new FeeItemLine
+                {
+                    FeeTypeId = (int)FeeTypeIds.UnitOnlineMarketplaceFee,
+                    UnitPrice = s.UnitOMPFees,
+                    Quantity = s.CountOfOMPSubsidiaries,
+                    Amount = s.TotalSubsidiariesOMPFees
+                });
+            }
+        }
+
+        private static void Sum(FeeTypeIds type, decimal amount, List<FeeItemLine> lines)
+        {
+            if (amount > 0)
+            {
+                lines.Add(new FeeItemLine { FeeTypeId = (int)type, Amount = amount });
+            }
+        }
+
+        private static void AddProducerRegistrationFeeItemLineIfApplicable(RegistrationFeesResponseDto resp, List<FeeItemLine> lines)
+        {
+            if (resp?.ProducerRegistrationFee > 0)
+            {
+                lines.Add(new FeeItemLine
+                {
+                    FeeTypeId = (int)FeeTypeIds.ProducerRegistrationFee,
+                    UnitPrice = resp.ProducerRegistrationFee,
+                    Quantity = 1,
+                    Amount = resp.ProducerRegistrationFee
+                });
+            }
         }
 
         public FeeItemSaveRequest BuildRegistrationResubmissionFeeSummaryRecord(
