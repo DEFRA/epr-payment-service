@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Dtos.FeeItems;
+﻿using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Dtos.FeeItems;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
@@ -73,6 +74,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             };
         }
 
+        [ExcludeFromCodeCoverage]
         private static void AddSubsidiaryFeeItemLineIfApplicable(SubsidiariesFeeBreakdown s, List<FeeItemLine> lines)
         {
             if (s.TotalSubsidiariesOMPFees > 0 && s.UnitOMPFees > 0 && s.CountOfOMPSubsidiaries > 0)
@@ -87,6 +89,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private static void Sum(FeeTypeIds type, decimal amount, List<FeeItemLine> lines)
         {
             if (amount > 0)
@@ -95,6 +98,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private static void AddProducerRegistrationFeeItemLineIfApplicable(RegistrationFeesResponseDto resp, List<FeeItemLine> lines)
         {
             if (resp?.ProducerRegistrationFee > 0)
@@ -109,6 +113,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public FeeItemSaveRequest BuildRegistrationResubmissionFeeSummaryRecord(
             ProducerResubmissionFeeRequestDto req,
             ProducerResubmissionFeeResponseDto result,
