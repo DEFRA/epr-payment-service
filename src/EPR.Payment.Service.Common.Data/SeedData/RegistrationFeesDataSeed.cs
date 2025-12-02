@@ -20,25 +20,6 @@ namespace EPR.Payment.Service.Common.Data.SeedData
 
         private static readonly List<Regulator> Regulators = [Regulator.England, Regulator.Scotland, Regulator.Wales, Regulator.NorthernIreland];
 
-        private static readonly (int GroupId, int SubGroupId, int Amount)[] Fees2025 =
-        {
-            ((int)Group.ComplianceScheme, (int)SubGroup.Large, 168500),
-            ((int)Group.ComplianceScheme, (int)SubGroup.Small, 63100),
-            ((int)Group.ComplianceScheme, (int)SubGroup.Registration, 1380400),
-            ((int)Group.ComplianceScheme, (int)SubGroup.Online, 257900),
-            ((int)Group.ComplianceScheme, (int)SubGroup.LateFee, 33200),
-            ((int)Group.ComplianceSchemeSubsidiaries, (int)SubGroup.UpTo20, 55800),
-            ((int)Group.ComplianceSchemeSubsidiaries, (int)SubGroup.MoreThan20, 14000),
-            ((int)Group.ComplianceSchemeResubmission, (int)SubGroup.ReSubmitting, 43000),
-            ((int)Group.ProducerType, (int)SubGroup.Large, 262000),
-            ((int)Group.ProducerType, (int)SubGroup.Small, 121600),
-            ((int)Group.ProducerType, (int)SubGroup.Online, 257900),
-            ((int)Group.ProducerType, (int)SubGroup.LateFee, 33200),
-            ((int)Group.ProducerSubsidiaries, (int)SubGroup.UpTo20, 55800),
-            ((int)Group.ProducerSubsidiaries, (int)SubGroup.MoreThan20, 14000),
-            ((int)Group.ProducerResubmission, (int)SubGroup.ReSubmitting, 71400)
-        };
-
         private static readonly (int GroupId, int SubGroupId, int Amount)[] Fees2026 =
         {
             ((int)Group.ComplianceScheme, (int)SubGroup.Large, 180300),
@@ -136,13 +117,13 @@ namespace EPR.Payment.Service.Common.Data.SeedData
 
         public static void SeedRegistrationFees(EntityTypeBuilder<RegistrationFees> builder)
         {
-            var seedIndex = 0;
-            var newRegistrationFees = new List<RegistrationFees>();
-
             // Historical data for 2024 and 2025
-            SeedSeedRegistrationFeesExistingData(builder);
+            SeedRegistrationFeesExistingData(builder);
             SeedExporterRegistrationFeesData(builder);
             SeedReprocessorRegistrationFeesData(builder);
+
+            var seedIndex = 0;
+            var newRegistrationFees = new List<RegistrationFees>();
 
             // 2026 fees
             seedIndex = 26000000;
@@ -297,7 +278,7 @@ namespace EPR.Payment.Service.Common.Data.SeedData
             }
         }
 
-        private static void SeedSeedRegistrationFeesExistingData(EntityTypeBuilder<RegistrationFees> builder)
+        private static void SeedRegistrationFeesExistingData(EntityTypeBuilder<RegistrationFees> builder)
         {
             builder.HasData(
                 new RegistrationFees { Id = 1, GroupId = 1, SubGroupId = 1, RegulatorId = 1, Amount = 262000, EffectiveFrom = effectiveFromDate, EffectiveTo = effectiveToDate },
