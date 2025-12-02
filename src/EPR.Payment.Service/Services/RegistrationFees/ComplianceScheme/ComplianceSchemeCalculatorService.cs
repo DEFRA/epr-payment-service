@@ -42,7 +42,9 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
 
             var response = new ComplianceSchemeFeesResponseDto
             {
-                ComplianceSchemeRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
+                ComplianceSchemeRegistrationFee = request.IncludeRegistrationFee
+                    ? await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken)
+                    : 0m,
                 ComplianceSchemeMembersWithFees = new List<ComplianceSchemeMembersWithFeesDto>()
             };
 
