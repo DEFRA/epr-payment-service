@@ -7732,3 +7732,11899 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000000;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000001;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000002;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000003;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000004;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000005;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000006;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000007;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000008;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000009;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000010;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000011;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000012;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000013;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000014;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000015;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000016;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000017;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000018;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000019;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000020;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000021;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000022;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000023;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000024;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000025;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000026;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000027;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000028;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000029;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000030;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000031;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000032;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000033;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000034;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000035;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000036;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000037;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000038;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000039;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000040;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000041;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000042;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000043;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000044;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000045;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000046;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000047;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000048;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000049;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000050;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000051;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000052;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000053;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000054;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000055;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000056;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000057;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000058;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 26000059;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000000;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000001;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000002;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000003;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000004;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000005;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000006;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000007;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000008;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000009;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000010;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000011;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000012;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000013;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000014;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000015;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000016;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000017;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000018;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000019;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000020;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000021;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000022;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000023;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000024;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000025;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000026;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000027;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000028;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000029;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000030;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000031;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000032;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000033;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000034;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000035;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000036;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000037;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000038;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000039;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000040;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000041;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000042;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000043;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000044;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000045;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000046;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000047;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000048;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000049;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000050;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000051;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000052;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000053;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000054;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000055;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000056;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000057;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000058;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000059;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000060;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000061;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000062;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000063;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000064;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000065;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000066;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000067;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000068;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000069;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000070;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000071;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000072;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000073;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000074;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000075;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000076;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000077;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000078;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000079;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000080;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000081;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000082;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000083;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000084;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000085;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000086;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000087;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000088;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000089;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000090;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000091;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000092;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000093;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000094;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000095;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000096;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000097;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000098;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000099;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000100;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000101;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000102;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000103;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000104;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000105;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000106;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000107;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000108;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000109;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000110;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000111;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000112;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000113;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000114;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000115;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000116;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000117;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000118;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000119;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000120;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000121;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000122;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000123;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000124;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000125;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000126;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000127;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000128;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000129;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000130;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000131;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000132;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000133;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000134;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000135;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000136;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000137;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000138;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000139;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000140;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000141;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000142;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000143;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000144;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000145;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000146;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000147;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000148;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000149;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000150;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000151;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000152;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000153;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000154;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000155;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000156;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000157;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000158;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000159;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000160;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000161;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000162;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000163;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000164;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000165;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000166;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000167;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000168;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000169;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000170;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000171;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000172;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000173;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000174;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000175;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000176;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000177;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000178;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000179;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000180;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000181;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000182;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000183;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000184;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000185;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000186;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000187;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000188;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000189;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000190;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000191;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000192;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000193;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000194;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000195;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000196;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000197;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000198;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000199;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000200;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000201;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000202;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000203;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000204;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000205;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000206;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000207;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000208;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000209;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000210;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000211;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000212;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000213;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000214;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000215;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000216;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000217;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000218;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000219;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000220;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000221;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000222;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000223;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000224;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000225;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000226;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000227;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000228;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000229;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000230;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000231;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000232;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000233;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000234;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000235;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000236;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000237;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000238;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000239;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000240;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000241;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000242;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000243;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000244;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000245;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000246;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000247;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000248;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000249;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000250;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000251;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000252;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000253;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000254;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000255;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000256;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000257;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000258;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000259;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000260;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000261;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000262;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000263;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000264;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000265;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000266;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000267;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000268;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000269;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000270;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000271;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000272;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000273;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000274;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000275;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000276;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000277;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000278;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000279;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000280;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000281;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000282;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000283;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000284;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000285;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000286;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000287;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000288;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000289;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000290;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000291;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000292;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000293;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000294;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000295;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000296;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000297;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000298;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000299;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000300;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000301;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000302;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000303;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000304;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000305;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000306;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000307;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000308;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000309;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000310;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000311;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000312;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000313;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000314;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000315;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000316;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000317;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000318;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000319;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000320;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000321;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000322;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000323;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000324;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000325;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000326;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000327;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000328;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000329;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000330;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000331;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000332;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000333;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000334;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000335;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000336;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000337;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000338;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000339;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000340;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000341;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000342;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000343;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000344;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000345;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000346;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000347;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000348;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000349;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000350;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000351;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000352;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000353;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000354;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000355;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000356;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000357;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000358;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000359;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000360;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000361;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000362;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000363;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000364;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000365;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000366;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000367;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000368;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000369;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000370;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000371;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000372;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000373;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000374;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000375;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000376;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000377;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000378;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000379;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000380;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000381;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000382;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000383;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000384;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000385;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000386;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000387;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000388;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000389;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000390;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000391;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000392;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000393;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000394;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000395;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000396;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000397;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000398;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000399;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000400;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000401;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000402;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000403;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000404;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000405;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000406;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000407;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000408;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000409;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000410;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000411;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000412;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000413;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000414;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000415;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000416;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000417;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000418;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000419;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000420;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000421;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000422;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000423;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000424;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000425;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000426;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000427;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000428;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000429;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000430;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000431;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000432;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000433;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000434;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000435;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000436;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000437;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000438;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000439;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000440;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000441;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000442;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000443;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000444;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000445;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000446;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000447;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000448;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000449;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000450;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000451;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000452;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000453;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000454;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000455;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000456;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000457;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000458;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000459;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000460;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000461;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000462;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000463;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000464;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000465;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000466;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000467;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000468;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000469;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000470;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000471;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000472;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000473;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000474;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000475;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000476;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000477;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000478;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000479;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000480;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000481;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000482;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000483;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000484;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000485;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000486;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000487;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000488;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000489;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000490;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000491;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000492;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000493;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000494;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000495;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000496;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000497;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000498;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000499;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000500;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000501;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000502;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000503;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000504;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000505;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000506;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000507;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000508;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000509;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000510;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000511;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000512;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000513;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000514;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000515;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000516;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000517;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000518;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000519;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000520;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000521;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000522;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000523;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000524;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000525;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000526;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000527;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000528;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000529;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000530;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000531;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000532;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000533;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000534;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000535;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000536;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000537;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000538;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000539;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000540;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000541;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000542;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000543;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000544;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000545;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000546;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000547;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000548;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000549;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000550;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000551;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000552;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000553;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000554;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000555;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000556;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000557;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000558;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000559;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000560;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000561;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000562;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000563;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000564;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000565;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000566;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000567;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000568;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000569;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000570;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000571;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000572;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000573;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000574;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000575;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000576;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000577;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000578;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000579;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000580;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000581;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000582;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000583;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000584;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000585;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000586;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000587;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000588;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000589;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000590;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000591;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000592;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000593;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000594;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000595;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000596;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000597;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000598;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000599;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000600;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000601;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000602;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000603;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000604;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000605;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000606;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000607;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000608;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000609;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000610;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000611;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000612;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000613;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000614;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000615;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000616;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000617;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000618;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000619;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000620;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000621;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000622;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000623;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000624;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000625;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000626;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000627;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000628;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000629;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000630;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000631;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000632;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000633;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000634;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000635;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000636;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000637;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000638;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000639;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000640;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000641;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000642;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000643;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000644;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000645;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000646;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000647;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000648;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000649;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000650;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000651;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000652;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000653;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000654;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000655;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000656;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000657;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000658;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000659;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000660;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000661;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000662;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000663;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000664;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000665;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000666;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000667;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000668;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000669;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000670;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000671;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000672;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000673;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000674;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000675;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000676;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000677;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000678;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000679;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000680;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000681;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000682;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000683;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000684;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000685;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000686;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000687;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000688;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000689;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000690;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000691;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000692;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000693;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000694;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000695;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000696;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000697;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000698;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000699;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000700;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000701;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000702;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000703;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000704;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000705;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000706;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000707;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000708;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000709;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000710;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000711;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000712;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000713;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000714;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000715;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000716;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000717;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000718;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000719;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000720;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000721;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000722;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000723;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000724;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000725;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000726;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000727;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000728;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000729;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000730;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000731;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000732;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000733;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000734;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000735;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000736;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000737;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000738;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000739;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000740;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000741;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000742;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000743;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000744;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000745;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000746;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000747;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000748;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000749;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000750;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000751;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000752;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000753;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000754;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000755;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000756;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000757;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000758;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000759;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000760;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000761;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000762;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000763;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000764;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000765;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000766;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000767;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000768;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000769;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000770;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000771;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000772;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000773;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000774;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000775;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000776;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000777;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000778;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000779;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000780;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000781;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000782;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000783;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000784;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000785;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000786;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000787;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000788;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000789;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000790;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000791;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000792;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000793;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000794;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000795;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000796;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000797;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000798;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000799;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000800;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000801;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000802;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000803;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000804;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000805;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000806;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000807;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000808;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000809;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000810;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000811;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000812;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000813;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000814;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000815;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000816;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000817;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000818;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000819;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000820;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000821;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000822;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000823;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000824;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000825;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000826;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000827;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000828;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000829;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000830;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000831;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000832;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000833;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000834;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000835;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000836;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000837;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000838;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000839;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000840;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000841;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000842;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000843;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000844;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000845;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000846;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000847;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000848;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000849;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000850;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000851;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000852;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000853;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000854;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000855;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000856;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000857;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000858;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000859;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000860;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000861;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000862;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000863;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000864;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000865;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000866;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000867;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000868;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000869;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000870;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000871;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000872;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000873;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000874;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000875;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000876;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000877;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000878;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000879;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000880;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000881;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000882;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000883;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000884;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000885;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000886;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000887;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000888;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000889;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000890;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000891;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000892;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000893;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000894;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000895;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000896;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000897;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000898;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000899;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000900;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000901;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000902;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000903;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000904;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000905;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000906;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000907;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000908;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000909;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000910;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000911;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000912;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000913;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000914;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000915;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000916;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000917;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000918;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000919;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000920;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000921;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000922;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000923;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000924;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000925;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000926;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000927;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000928;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000929;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000930;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000931;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000932;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000933;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000934;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000935;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000936;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000937;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000938;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000939;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000940;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000941;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000942;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000943;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000944;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000945;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000946;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000947;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000948;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000949;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000950;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000951;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000952;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000953;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000954;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000955;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000956;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000957;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000958;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'DELETE FROM [Lookup].[RegistrationFees]
+    WHERE [Id] = 99000959;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 1;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 2;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 3;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 4;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 5;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 6;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 7;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 8;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 9;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 10;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 11;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 12;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 13;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 14;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 15;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 16;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 17;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 18;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 19;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 20;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 21;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 22;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 23;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 24;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 25;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 26;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 27;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 28;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 29;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 30;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 31;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 32;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 33;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 34;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 35;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 36;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 37;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 38;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 39;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 40;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 41;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 42;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 43;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 44;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 45;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 46;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 47;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 48;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 49;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 50;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 51;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 52;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 53;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 54;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 55;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 56;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 57;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 58;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 59;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    EXEC(N'UPDATE [Lookup].[RegistrationFees] SET [EffectiveTo] = ''2025-12-31T23:59:59.0000000Z''
+    WHERE [Id] = 60;
+    SELECT @@ROWCOUNT');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20251203151859_reinstate-2025-fees'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20251203151859_reinstate-2025-fees', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
