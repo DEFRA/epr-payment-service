@@ -54,8 +54,8 @@ namespace EPR.Payment.Service.Common.Data.SeedData
             AddProducerFeesForPeriod(
                 newRegistrationFees,
                 Fees2026,
-                DateTime.SpecifyKind(new DateTime(2026, 1, 1, 0, 0, 0), DateTimeKind.Utc),
-                DateTime.SpecifyKind(new DateTime(2026, 12, 31, 23, 59, 59), DateTimeKind.Utc),
+                new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                new DateTime(2026, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 ref seedIndex);
 
             builder.HasData(newRegistrationFees);
