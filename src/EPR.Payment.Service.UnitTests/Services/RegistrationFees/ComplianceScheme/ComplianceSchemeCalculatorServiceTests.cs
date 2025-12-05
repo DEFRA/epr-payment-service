@@ -651,7 +651,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     TotalSubsidiariesOMPFees = 0,
                     FeeBreakdowns = new List<FeeBreakdown>
                     {
-                new FeeBreakdown { TotalPrice = 279000 }
+                        new FeeBreakdown { TotalPrice = 279000 }
                     }
                 });
 
@@ -661,7 +661,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             // Act
             var result = await _service.CalculateFeesAsync(request, CancellationToken.None);
 
-            // Assert (behavioral)
+            // Assert
             using (new AssertionScope())
             {
                 result.ComplianceSchemeRegistrationFee.Should().Be(0M);
