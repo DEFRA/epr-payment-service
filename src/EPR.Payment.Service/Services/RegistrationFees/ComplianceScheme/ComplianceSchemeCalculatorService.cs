@@ -85,7 +85,6 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                                         + member.SubsidiariesFee
                                         + member.MemberLateRegistrationFee;
 
-                // Add to response collection
                 response.ComplianceSchemeMembersWithFees.Add(member);
             }
 

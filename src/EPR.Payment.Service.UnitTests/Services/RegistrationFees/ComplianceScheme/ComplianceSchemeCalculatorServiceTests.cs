@@ -609,7 +609,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         }
 
         [TestMethod]
-        public async Task CalculateFeesAsync_WhenIncludeRegistrationFeeIsFalse_DoesNotChargeRegistrationFeeAndCalculatesMemberFees()
+        public async Task CalculateFeesAsync_WhenIncludeRegistrationFeeIsFalse_DoesNotChargeRegistrationFee()
         {
             // Arrange
             var request = new ComplianceSchemeFeesRequestDto
