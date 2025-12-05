@@ -609,6 +609,79 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         }
 
         [TestMethod]
+        public async Task CalculateFeesAsync_WhenIncludeRegistrationFeeIsFalse_DoesNotChargeRegistrationFeeAndCalculatesMemberFees()
+        {
+            // Arrange
+            var request = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "REF123",
+                SubmissionDate = DateTime.UtcNow,
+                IncludeRegistrationFee = false,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
+                {
+                    new ComplianceSchemeMemberDto
+                    {
+                        MemberId = "M1",
+                        MemberType = "Small",
+                        IsOnlineMarketplace = false,
+                        IsLateFeeApplicable = false,
+                        NumberOfSubsidiaries = 5,
+                        NoOfSubsidiariesOnlineMarketplace = 0
+                    }
+                }
+            };
+
+            _baseFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new InvalidOperationException("Base fee should not be called when IncludeRegistrationFee is false"));
+
+            _complianceSchemeMemberStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(63100);
+
+            _complianceSchemeOnlineMarketStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(0);
+
+            _subsidiariesFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeMemberWithRegulatorDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new SubsidiariesFeeBreakdown
+                {
+                    TotalSubsidiariesOMPFees = 0,
+                    FeeBreakdowns = new List<FeeBreakdown>
+                    {
+                new FeeBreakdown { TotalPrice = 279000 }
+                    }
+                });
+
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(50M);
+
+            // Act
+            var result = await _service.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert (behavioral)
+            using (new AssertionScope())
+            {
+                result.ComplianceSchemeRegistrationFee.Should().Be(0M);
+
+                result.ComplianceSchemeMembersWithFees.Should().HaveCount(1);
+                var member = result.ComplianceSchemeMembersWithFees.First();
+                member.MemberId.Should().Be("M1");
+                member.MemberRegistrationFee.Should().Be(63100M);
+                member.MemberOnlineMarketPlaceFee.Should().Be(0M);
+                member.MemberLateRegistrationFee.Should().Be(0M);
+                member.SubsidiariesFee.Should().Be(279000M);
+                member.TotalMemberFee.Should().Be(63100M + 0M + 279000M + 0M);
+
+                result.TotalFee.Should().Be(member.TotalMemberFee);
+                result.PreviousPayment.Should().Be(50M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - 50M);
+            }
+        }
+
+        [TestMethod]
         public async Task CalculateFeesAsync_CSWith1MemberWithLateFee_ReturnsCorrectFees()
         {
             // Arrange
