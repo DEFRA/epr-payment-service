@@ -30,6 +30,19 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
             RuleFor(x => x.NoOfSubsidiariesOnlineMarketplace)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage(ValidationMessages.NoOfSubsidiariesOnlineMarketplaceRange);
+
+            When(x => x.IsLateFeeApplicable, () =>
+            {
+                RuleFor(x => x.NumberOfLateSubsidiaries)
+                    .Equal(0)
+                    .WithMessage(ValidationMessages.LateFeeMutualExclusion);
+            })
+            .Otherwise(() =>
+            {
+                RuleFor(x => x.NumberOfLateSubsidiaries)
+                    .GreaterThanOrEqualTo(0)
+                    .WithMessage(ValidationMessages.NumberOfLateSubsidiariesRange);
+            });
         }
     }
 }
