@@ -8,6 +8,7 @@ namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceSch
         public required string ApplicationReferenceNumber { get; set; }
         public DateTime SubmissionDate { get; set; }
         public List<ComplianceSchemeMemberDto> ComplianceSchemeMembers { get; set; } = new();
+        public bool IncludeRegistrationFee { get; set; } = true;
 
     }
 
