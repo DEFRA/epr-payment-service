@@ -1,4 +1,5 @@
-﻿using Microsoft.FeatureManagement.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.FeatureManagement.Mvc;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -25,38 +26,18 @@ namespace EPR.Payment.Service.Helper
                 foreach (var operation in path.Value.Operations)
                 {
                     var apiDescription = context.ApiDescriptions.FirstOrDefault(desc => desc.RelativePath!.Equals(path.Key.Trim('/'), StringComparison.InvariantCultureIgnoreCase));
-                    if (apiDescription != null)
-                    {
-                        var controllerActionDescriptor = apiDescription.ActionDescriptor as Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor;
-                        if (controllerActionDescriptor != null)
-                        {
-                            var controllerTypeInfo = controllerActionDescriptor.ControllerTypeInfo;
-                            var controllerFeatureGate = controllerTypeInfo.GetCustomAttributes(typeof(FeatureGateAttribute), true).Cast<FeatureGateAttribute>().FirstOrDefault();
-                            if (controllerFeatureGate != null)
-                            {
-                                var controllerFeatures = controllerFeatureGate.Features;
-                                var isControllerEnabled = await AreAllFeaturesEnabled(controllerFeatures);
-                                if (!isControllerEnabled)
-                                {
-                                    Console.WriteLine($"Controller feature '{string.Join(", ", controllerFeatures)}' is disabled, removing path: {path.Key}");
-                                    pathsToRemove.Add(path.Key);
-                                    break;
-                                }
-                            }
+                    var controllerActionDescriptor = apiDescription?.ActionDescriptor as ControllerActionDescriptor;
 
-                            var actionFeatureGate = apiDescription.ActionDescriptor.EndpointMetadata.OfType<FeatureGateAttribute>().FirstOrDefault();
-                            if (actionFeatureGate != null)
-                            {
-                                var actionFeatures = actionFeatureGate.Features;
-                                var isActionEnabled = await AreAllFeaturesEnabled(actionFeatures);
-                                if (!isActionEnabled)
-                                {
-                                    Console.WriteLine($"Action feature '{string.Join(", ", actionFeatures)}' is disabled, removing path: {path.Key}");
-                                    pathsToRemove.Add(path.Key);
-                                    break;
-                                }
-                            }
-                        }
+                    if (await ProcessControllerFeatureGate(controllerActionDescriptor, path, pathsToRemove))
+                    {
+                        break;
+                    }
+
+                    var actionFeatureGate = apiDescription?.ActionDescriptor.EndpointMetadata.OfType<FeatureGateAttribute>().FirstOrDefault();
+                   
+                    if (await ProcessActionFeatureGate(actionFeatureGate, path, pathsToRemove))
+                    {
+                        break;
                     }
                 }
             }
@@ -66,6 +47,49 @@ namespace EPR.Payment.Service.Helper
                 Console.WriteLine($"Removing path '{path}' from Swagger documentation because the feature gate is disabled.");
                 swaggerDoc.Paths.Remove(path);
             }
+        }
+
+        private async Task<bool> ProcessActionFeatureGate(FeatureGateAttribute? actionFeatureGate, KeyValuePair<string, OpenApiPathItem> path,
+            List<string> pathsToRemove)
+        {
+            if (actionFeatureGate is not null)
+            {
+                var actionFeatures = actionFeatureGate.Features;
+                var isActionEnabled = await AreAllFeaturesEnabled(actionFeatures);
+                if (!isActionEnabled)
+                {
+                    Console.WriteLine($"Action feature '{string.Join(", ", actionFeatures)}' is disabled, removing path: {path.Key}");
+                    pathsToRemove.Add(path.Key);
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+
+        private async Task<bool> ProcessControllerFeatureGate(ControllerActionDescriptor? controllerActionDescriptor,
+            KeyValuePair<string, OpenApiPathItem> path, List<string> pathsToRemove)
+        {
+            if (controllerActionDescriptor is not null)
+            {
+                var controllerTypeInfo = controllerActionDescriptor.ControllerTypeInfo;
+                var controllerFeatureGate = controllerTypeInfo.GetCustomAttributes(typeof(FeatureGateAttribute), true)
+                    .Cast<FeatureGateAttribute>().FirstOrDefault();
+                if (controllerFeatureGate != null)
+                {
+                    var controllerFeatures = controllerFeatureGate.Features;
+                    var isControllerEnabled = await AreAllFeaturesEnabled(controllerFeatures);
+                    if (!isControllerEnabled)
+                    {
+                        Console.WriteLine(
+                            $"Controller feature '{string.Join(", ", controllerFeatures)}' is disabled, removing path: {path.Key}");
+                        pathsToRemove.Add(path.Key);
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
         }
 
         private async Task<bool> AreAllFeaturesEnabled(IEnumerable<string> features)
