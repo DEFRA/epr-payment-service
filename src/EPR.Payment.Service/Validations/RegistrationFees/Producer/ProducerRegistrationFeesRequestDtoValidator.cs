@@ -33,6 +33,20 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.Producer
             RuleFor(x => x.SubmissionDate)
                  .Cascade(CascadeMode.Stop)
                  .MustBeValidSubmissionDate();
+
+            When(x => x.IsLateFeeApplicable, () =>
+            {
+                RuleFor(x => x.NumberOfLateSubsidiaries)
+                    .Equal(0)
+                    .WithMessage(ValidationMessages.LateFeeMutualExclusion);
+            })
+            .Otherwise(() =>
+            {
+            RuleFor(x => x.NumberOfLateSubsidiaries)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage(ValidationMessages.NumberOfLateSubsidiariesRange);
+            });
+            
         }
     }
 }

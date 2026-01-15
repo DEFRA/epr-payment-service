@@ -22,6 +22,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         private Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeMemberStrategyMock = null!;
         private Mock<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>> _subsidiariesFeeCalculationStrategyMock = null!;
         private Mock<IPaymentsService> _paymentsServiceMock = null!;
+        private Mock<ICSLateSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeLateSubsidiariesFeeStrategyMock = null!;
         private ComplianceSchemeCalculatorService _service = null!;
 
         [TestInitialize]
@@ -33,13 +34,15 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             _complianceSchemeMemberStrategyMock = new Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>>();
             _paymentsServiceMock = new Mock<IPaymentsService>();
+            _complianceSchemeLateSubsidiariesFeeStrategyMock = new Mock<ICSLateSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _service = new ComplianceSchemeCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
                 _complianceSchemeOnlineMarketStrategyMock.Object, 
                 _complianceSchemeLateFeeStrategyMock.Object, 
                 _complianceSchemeMemberStrategyMock.Object, 
                 _subsidiariesFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
+                _paymentsServiceMock.Object,
+                _complianceSchemeLateSubsidiariesFeeStrategyMock.Object);
         }
 
         [TestMethod]
@@ -55,7 +58,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 _complianceSchemeLateFeeStrategyMock.Object,
                 _complianceSchemeMemberStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
+                _paymentsServiceMock.Object,
+                _complianceSchemeLateSubsidiariesFeeStrategyMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -77,7 +81,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     _complianceSchemeLateFeeStrategyMock.Object,
                     _complianceSchemeMemberStrategyMock.Object,
                     _subsidiariesFeeCalculationStrategyMock.Object,
-                    _paymentsServiceMock.Object);
+                    _paymentsServiceMock.Object,
+                    _complianceSchemeLateSubsidiariesFeeStrategyMock.Object);
             };
 
             // Assert
@@ -100,12 +105,37 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     complianceSchemeLateFeeStrategy!,
                     _complianceSchemeMemberStrategyMock.Object,
                     _subsidiariesFeeCalculationStrategyMock.Object,
-                    _paymentsServiceMock.Object);
+                    _paymentsServiceMock.Object,
+                    _complianceSchemeLateSubsidiariesFeeStrategyMock.Object);
             };
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
                 .WithMessage("Value cannot be null. (Parameter 'complianceSchemeLateFeeStrategy')");
+        }
+
+        [TestMethod]
+        public void Constructor_WhenComplianceSchemeLateSubsidiariesFeeStrategyIsNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            ICSLateSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>? complianceSchemeLateSubsidiariesFeeStrategy = null;
+
+            // Act
+            Action act = () =>
+            {
+                var unused = new ComplianceSchemeCalculatorService(
+                    _baseFeeCalculationStrategyMock.Object,
+                    _complianceSchemeOnlineMarketStrategyMock.Object,
+                    _complianceSchemeLateFeeStrategyMock.Object!,
+                    _complianceSchemeMemberStrategyMock.Object,
+                    _subsidiariesFeeCalculationStrategyMock.Object,
+                    _paymentsServiceMock.Object,
+                    complianceSchemeLateSubsidiariesFeeStrategy!);
+            };
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'complianceSchemeLateSubsidiariesFeeStrategy')");
         }
 
         [TestMethod]
@@ -123,7 +153,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     _complianceSchemeLateFeeStrategyMock.Object,
                     complianceSchemeMemberStrategy!,
                     _subsidiariesFeeCalculationStrategyMock.Object,
-                    _paymentsServiceMock.Object);
+                    _paymentsServiceMock.Object,
+                    _complianceSchemeLateSubsidiariesFeeStrategyMock.Object);
             };
 
             // Assert
@@ -146,7 +177,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     _complianceSchemeLateFeeStrategyMock.Object,
                     _complianceSchemeMemberStrategyMock.Object,
                     subsidiariesFeeCalculationStrategy!,
-                    _paymentsServiceMock.Object);
+                    _paymentsServiceMock.Object,
+                    _complianceSchemeLateSubsidiariesFeeStrategyMock.Object);
             };
 
             // Assert
@@ -170,7 +202,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     _complianceSchemeLateFeeStrategyMock.Object,
                     _complianceSchemeMemberStrategyMock.Object,
                     _subsidiariesFeeCalculationStrategyMock.Object,
-                    paymentsService!);
+                    paymentsService!,
+                    _complianceSchemeLateSubsidiariesFeeStrategyMock.Object);
             };
 
             // Assert
@@ -188,7 +221,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 _complianceSchemeLateFeeStrategyMock.Object, 
                 _complianceSchemeMemberStrategyMock.Object, 
                 _subsidiariesFeeCalculationStrategyMock.Object,
-                _paymentsServiceMock.Object);
+                _paymentsServiceMock.Object,
+                _complianceSchemeLateSubsidiariesFeeStrategyMock.Object);
 
             // Assert
             using (new AssertionScope())
