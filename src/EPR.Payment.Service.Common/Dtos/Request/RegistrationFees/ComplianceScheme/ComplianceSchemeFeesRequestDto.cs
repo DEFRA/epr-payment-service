@@ -20,5 +20,6 @@ namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceSch
         public bool IsLateFeeApplicable { get; set; }
         public int NumberOfSubsidiaries { get; set; }
         public int NoOfSubsidiariesOnlineMarketplace { get; set; }
+        public int NumberOfLateSubsidiaries { get; set; }
     }
 }

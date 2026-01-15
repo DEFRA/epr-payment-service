@@ -17,5 +17,7 @@
         public required string ApplicationReferenceNumber { get; set; }
 
         public DateTime SubmissionDate { get; set; }
+
+        public int NumberOfLateSubsidiaries { get; set; } 
     }
 }
