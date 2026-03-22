@@ -16,6 +16,8 @@
 
         public required string ApplicationReferenceNumber { get; set; }
 
+        public Guid? FileId { get; set; }
+
         public DateTime SubmissionDate { get; set; }
     }
 }
