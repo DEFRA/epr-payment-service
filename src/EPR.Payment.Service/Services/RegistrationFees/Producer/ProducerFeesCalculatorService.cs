@@ -50,7 +50,9 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
 
             response.SubsidiariesFee = response.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + response.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
             response.TotalFee = response.ProducerRegistrationFee + response.ProducerOnlineMarketPlaceFee + response.SubsidiariesFee + response.ProducerLateRegistrationFee;
-            response.PreviousPayment = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
+            response.PreviousPayment = request.FileId.HasValue
+                ? await _paymentsService.GetPreviousPaymentsByFileIdAsync(request.FileId.Value, cancellationToken)
+                : await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
             response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
 
             return response;

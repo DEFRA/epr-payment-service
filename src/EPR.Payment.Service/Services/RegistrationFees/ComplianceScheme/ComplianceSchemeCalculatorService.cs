@@ -90,7 +90,9 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
 
             response.TotalFee = response.ComplianceSchemeRegistrationFee
                                 + response.ComplianceSchemeMembersWithFees.Sum(m => m.TotalMemberFee);
-            response.PreviousPayment = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
+            response.PreviousPayment = request.FileId.HasValue
+                ? await _paymentsService.GetPreviousPaymentsByFileIdAsync(request.FileId.Value, cancellationToken)
+                : await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
             response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
 
             return response;
