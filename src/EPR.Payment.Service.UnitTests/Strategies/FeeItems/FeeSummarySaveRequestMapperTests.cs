@@ -47,7 +47,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.FeeItems
             var after = DateTimeOffset.UtcNow;
 
             // Assert
-            result.FileId.Should().Be(req.FileId);
+            result.FileId.Should().Be(req.FileId.ToString());
             result.ExternalId.Should().Be(req.ExternalId);
             result.ApplicationReferenceNumber.Should().Be(req.ApplicationReferenceNumber);
             result.InvoicePeriod.Should().Be(new DateTimeOffset(req.SubmissionDate, TimeSpan.Zero));
