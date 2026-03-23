@@ -15,5 +15,7 @@
         public string? ReasonForPayment { get; set; }
 
         public Enums.Status Status { get; set; }
+
+        public Guid? FileId { get; set; }
     }
 }

@@ -17,6 +17,8 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public Guid? OrganisationId { get; set; }
 
+        public Guid? FileId { get; set; }
+
         #region Navigation properties
 
         public virtual Payment Payment { get; set; } = null!;
