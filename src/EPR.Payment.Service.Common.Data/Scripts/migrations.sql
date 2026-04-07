@@ -6089,3 +6089,37 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260322000000_AddFileIdToOfflinePayment'
+)
+BEGIN
+    ALTER TABLE [Payment] ADD [FileId] uniqueidentifier NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260322000000_AddFileIdToOfflinePayment'
+)
+BEGIN
+    ALTER TABLE [OfflinePayment] ADD [FileId] uniqueidentifier NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260322000000_AddFileIdToOfflinePayment'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260322000000_AddFileIdToOfflinePayment', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
