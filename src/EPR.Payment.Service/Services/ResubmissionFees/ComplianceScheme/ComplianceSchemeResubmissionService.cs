@@ -30,7 +30,11 @@ namespace EPR.Payment.Service.Services.ResubmissionFees.ComplianceScheme
 
             var baseFee = await _resubmissionFeeStrategy.CalculateFeeAsync(request, cancellationToken);
 
-            decimal previousPayments = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, cancellationToken);
+            decimal previousPayments = request.FileId.HasValue
+                ? await _paymentsService.GetPreviousPaymentsByFileIdAsync(request.FileId.Value, cancellationToken)
+                : await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, cancellationToken);
+            if (request.FileId.HasValue && previousPayments == 0)
+                previousPayments = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, cancellationToken);
 
             var totalFee = baseFee * request.MemberCount;
             var outstandingPayment = totalFee - previousPayments;
