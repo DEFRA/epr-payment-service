@@ -1002,5 +1002,113 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 result.OutstandingPayment.Should().Be(expectedTotalFee - 100M);
             }
         }
+
+        [TestMethod]
+        public async Task CalculateFeesAsync_WhenFileIdIsPresent_UseGetPreviousPaymentsByFileId()
+        {
+            // Arrange
+            var fileId = Guid.NewGuid();
+            var request = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.UtcNow,
+                FileId = fileId,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
+            };
+
+            _baseFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1380400);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(200M);
+
+            // Act
+            var result = await _service.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.PreviousPayment.Should().Be(200M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - 200M);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+            }
+        }
+
+        [TestMethod]
+        public async Task CalculateFeesAsync_WhenFileIdIsNull_UseGetPreviousPaymentsByReference()
+        {
+            // Arrange
+            var request = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.UtcNow,
+                FileId = null,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
+            };
+
+            _baseFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1380400);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(150M);
+
+            // Act
+            var result = await _service.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.PreviousPayment.Should().Be(150M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - 150M);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+            }
+        }
+
+        [TestMethod]
+        public async Task CalculateFeesAsync_WhenFileIdIsPresentButReturnsZero_FallsBackToGetPreviousPaymentsByReference()
+        {
+            // Arrange
+            var fileId = Guid.NewGuid();
+            var request = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.UtcNow,
+                FileId = fileId,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
+            };
+
+            _baseFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1380400);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(0M);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(150M);
+
+            // Act
+            var result = await _service.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.PreviousPayment.Should().Be(150M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - 150M);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()), Times.Once);
+            }
+        }
     }
 }

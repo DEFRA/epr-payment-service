@@ -27,6 +27,8 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public DateTime UpdatedDate { get; set; }
 
+        public Guid? FileId { get; set; }
+
         #region Navigation properties
 
         public virtual PaymentStatus PaymentStatus { get; set; } = null!;

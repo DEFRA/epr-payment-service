@@ -21,7 +21,9 @@ namespace EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme
                     .MustBeValidSubmissionDate();
 
             RuleFor(x => x.FileId)
-                    .NotEmpty().WithMessage(ValidationMessages.FileIdRequired);
+                    .NotNull()
+                    .NotEqual(Guid.Empty)
+                    .WithMessage(ValidationMessages.FileIdRequired);
 
             RuleFor(x => x.ExternalId)
                     .NotEmpty().WithMessage(ValidationMessages.ExternalIdRequired);

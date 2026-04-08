@@ -30,6 +30,9 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.Property(p => p.PaymentMethodId)
                    .HasDefaultValue(DefaultDataConstants.NotApplicableIdValue);
 
+            builder.Property(p => p.FileId)
+                   .IsRequired(false);
+
             builder.HasOne(p => p.Payment)
                    .WithOne(op => op.OfflinePayment)
                    .HasForeignKey<OfflinePayment>(p => p.PaymentId);

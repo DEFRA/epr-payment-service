@@ -3,5 +3,7 @@
     public interface IPaymentsService
     {
         Task<decimal> GetPreviousPaymentsByReferenceAsync(string reference, CancellationToken cancellationToken);
+
+        Task<decimal> GetPreviousPaymentsByFileIdAsync(Guid fileId, CancellationToken cancellationToken);
     }
 }
