@@ -96,6 +96,16 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
             },
+            // Closed Loop Recycling Producer
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerType, Description = "Producer Type" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.ClosedLoopRecycling, Description = "Closed Loop Recycling" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 254800m, // £2,548 represented in pence (254800 pence)
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10),
+                EffectiveTo = DateTime.UtcNow.AddDays(10)
+            },
             // Online Market Producer
             new Common.Data.DataModels.Lookups.RegistrationFees
             {
@@ -207,6 +217,16 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                 Amount = 33200m, // £332 represented in pence (33200 pence)
                 EffectiveFrom = DateTime.UtcNow.AddDays(-10), // Effective 10 days ago
                 EffectiveTo = DateTime.UtcNow.AddDays(10) // Expires in 10 days
+            },
+            // Closed Loop Recycling Compliance Scheme
+            new Common.Data.DataModels.Lookups.RegistrationFees
+            {
+                Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ComplianceScheme, Description = "Compliance Scheme" },
+                SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.ClosedLoopRecycling, Description = "Closed Loop Recycling" },
+                Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG", Description = "England" },
+                Amount = 254800m,
+                EffectiveFrom = DateTime.UtcNow.AddDays(-10),
+                EffectiveTo = DateTime.UtcNow.AddDays(10)
             },
             // First 20 Subsidiaries - Fee (Currently Active)
             new Common.Data.DataModels.Lookups.RegistrationFees

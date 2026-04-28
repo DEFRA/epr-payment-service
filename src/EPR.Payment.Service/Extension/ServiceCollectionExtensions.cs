@@ -57,6 +57,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, BaseFeeCalculationStrategy>();
             services.AddScoped<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>, SubsidiariesFeeCalculationStrategy>();
             services.AddScoped<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, OnlineMarketCalculationStrategy>();
+            services.AddScoped<IClosedLoopRecyclingCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, ClosedLoopRecyclingCalculationStrategy>();
             services.AddScoped<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, LateFeeCalculationStrategy>();
             services.AddScoped<IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal>, ProducerResubmissionAmountStrategy>();
 
@@ -64,6 +65,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>, CSBaseFeeCalculationStrategy>();
             services.AddScoped<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSMemberFeeCalculationStrategy>();
             services.AddScoped<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSOnlineMarketCalculationStrategy>();
+            services.AddScoped<ICSClosedLoopRecyclingCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSClosedLoopRecyclingCalculationStrategy>();
             services.AddScoped<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>, CSLateFeeCalculationStrategy>();
             services.AddScoped<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>, CSSubsidiariesFeeCalculationStrategy>();
             services.AddScoped<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>, ComplianceSchemeResubmissionStrategy>();

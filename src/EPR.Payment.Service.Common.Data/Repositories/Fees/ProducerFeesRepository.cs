@@ -44,6 +44,13 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             return fee;
         }
 
+        public async Task<decimal> GetClosedLoopRecyclingFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
+        {
+            var fee = await GetFeeAsync(GroupTypeConstants.ProducerType, SubGroupTypeConstants.ClosedLoopRecycling, regulator, submissionDate, cancellationToken);
+            ValidateFee(fee, string.Format(ProducerFeesRepositoryConstants.InvalidClosedLoopRecyclingRegulatorError, regulator.Value));
+            return fee;
+        }
+
         public async Task<decimal> GetLateFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
         {
             var fee = await GetFeeAsync(GroupTypeConstants.ProducerType, SubGroupTypeConstants.LateFee, regulator, submissionDate, cancellationToken);
