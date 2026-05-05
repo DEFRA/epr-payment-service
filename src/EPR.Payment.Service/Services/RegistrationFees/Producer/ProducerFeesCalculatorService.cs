@@ -18,6 +18,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
         private readonly IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _onlineMarketCalculationStrategy;
         private readonly ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _lateFeeCalculationStrategy;
         private readonly IPaymentsService _paymentsService;
+        private readonly IClosedLoopRecyclingCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _closedLoopRecyclingCalculationStrategy;
 
         public ProducerFeesCalculatorService(
             IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> baseFeeCalculationStrategy,
@@ -25,7 +26,8 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             IValidator<ProducerRegistrationFeesRequestDto> validator,
             IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> onlineMarketCalculationStrategy,
             ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> lateFeeCalculationStrategy,
-            IPaymentsService paymentsService)
+            IPaymentsService paymentsService,
+            IClosedLoopRecyclingCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> closedLoopRecyclingCalculationStrategy)
         {
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
@@ -33,6 +35,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             _onlineMarketCalculationStrategy = onlineMarketCalculationStrategy ?? throw new ArgumentNullException(nameof(onlineMarketCalculationStrategy));
             _lateFeeCalculationStrategy = lateFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(lateFeeCalculationStrategy));
             _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
+            _closedLoopRecyclingCalculationStrategy = closedLoopRecyclingCalculationStrategy ?? throw new ArgumentNullException(nameof(closedLoopRecyclingCalculationStrategy));
         }
 
         public async Task<RegistrationFeesResponseDto> CalculateFeesAsync(ProducerRegistrationFeesRequestDto request, CancellationToken cancellationToken)
@@ -44,12 +47,13 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             {
                 ProducerRegistrationFee = await _baseFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
                 ProducerOnlineMarketPlaceFee = await _onlineMarketCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
+                ProducerClosedLoopRecyclingFee = await _closedLoopRecyclingCalculationStrategy.CalculateFeeAsync(request, cancellationToken),
                 ProducerLateRegistrationFee = lateFee + subsidiariesLateFee,
                 SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(request, cancellationToken)
             };
 
-            response.SubsidiariesFee = response.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + response.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
-            response.TotalFee = response.ProducerRegistrationFee + response.ProducerOnlineMarketPlaceFee + response.SubsidiariesFee + response.ProducerLateRegistrationFee;
+            response.SubsidiariesFee = response.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + response.SubsidiariesFeeBreakdown.TotalSubsidiariesClosedLoopRecyclingFees + response.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
+            response.TotalFee = response.ProducerRegistrationFee + response.ProducerOnlineMarketPlaceFee + response.ProducerClosedLoopRecyclingFee + response.SubsidiariesFee + response.ProducerLateRegistrationFee;
             response.PreviousPayment = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
             response.OutstandingPayment = response.TotalFee - response.PreviousPayment;
 

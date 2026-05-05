@@ -19,6 +19,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
         private readonly ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeMemberStrategy;
         private readonly IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown> _subsidiariesFeeCalculationStrategy;
         private readonly IPaymentsService _paymentsService;
+        private readonly ICSClosedLoopRecyclingCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeClosedLoopRecyclingStrategy;
 
         public ComplianceSchemeCalculatorService(
             ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal> baseFeeCalculationStrategy,
@@ -26,7 +27,8 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
             ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal> complianceSchemeLateFeeStrategy,
             ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeMemberStrategy,
             IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown> subsidiariesFeeCalculationStrategy,
-            IPaymentsService paymentsService)
+            IPaymentsService paymentsService,
+            ICSClosedLoopRecyclingCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeClosedLoopRecyclingStrategy)
         {
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
             _complianceSchemeOnlineMarketStrategy = complianceSchemeOnlineMarketStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeOnlineMarketStrategy));
@@ -34,6 +36,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
             _complianceSchemeMemberStrategy = complianceSchemeMemberStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeMemberStrategy));
             _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
+            _complianceSchemeClosedLoopRecyclingStrategy = complianceSchemeClosedLoopRecyclingStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeClosedLoopRecyclingStrategy));
         }
 
         public async Task<ComplianceSchemeFeesResponseDto> CalculateFeesAsync(ComplianceSchemeFeesRequestDto request, CancellationToken cancellationToken)
@@ -57,9 +60,11 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                     Regulator = regulatorType,
                     MemberType = item.MemberType,
                     IsOnlineMarketplace = item.IsOnlineMarketplace,
+                    IsClosedLoopRecycling = item.IsClosedLoopRecycling,
                     IsLateFeeApplicable = item.IsLateFeeApplicable,
                     NumberOfSubsidiaries = item.NumberOfSubsidiaries,
                     NoOfSubsidiariesOnlineMarketplace = item.NoOfSubsidiariesOnlineMarketplace,
+                    NoOfSubsidiariesClosedLoopRecycling = item.NoOfSubsidiariesClosedLoopRecycling,
                     SubmissionDate = request.SubmissionDate
                 };
 
@@ -68,10 +73,12 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                     MemberId = item.MemberId,
                     MemberRegistrationFee = await _complianceSchemeMemberStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
                     MemberOnlineMarketPlaceFee = await _complianceSchemeOnlineMarketStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
+                    MemberClosedLoopRecyclingFee = await _complianceSchemeClosedLoopRecyclingStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken),
                     SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken)
                 };
 
                 member.SubsidiariesFee = member.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees
+                                         + member.SubsidiariesFeeBreakdown.TotalSubsidiariesClosedLoopRecyclingFees
                                          + member.SubsidiariesFeeBreakdown.FeeBreakdowns.Sum(i => i.TotalPrice);
 
                 if (item.IsLateFeeApplicable)
@@ -82,6 +89,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
 
                 member.TotalMemberFee = member.MemberRegistrationFee
                                         + member.MemberOnlineMarketPlaceFee
+                                        + member.MemberClosedLoopRecyclingFee
                                         + member.SubsidiariesFee
                                         + member.MemberLateRegistrationFee;
 

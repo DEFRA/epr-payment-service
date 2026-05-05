@@ -44,6 +44,9 @@ namespace EPR.Payment.Service.Common.Enums
         Steel = 13,
 
         [Description("Wood")]
-        Wood = 14
+        Wood = 14,
+
+        [Description("Closed Loop Recycling")]
+        ClosedLoop = 15
     }
 }
