@@ -7,5 +7,6 @@
         public const string InvalidSubsidiariesFeeOrRegulatorError = "Subsidiaries fee for '{0}' and regulator '{1}' not found.";
         public const string InvalidLateFeeError = "Producer Late Fee record not found for regulator: '{0}'";
         public const string InvalidOnlineMarketRegulatorError = "Producer Online Market Fee record not found for regulator: '{0}'";
+        public const string InvalidClosedLoopRecyclingRegulatorError = "Producer Closed Loop Recycling Fee record not found for regulator: '{0}'";
     }
 }

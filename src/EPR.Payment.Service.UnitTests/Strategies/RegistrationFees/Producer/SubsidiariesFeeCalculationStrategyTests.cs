@@ -347,5 +347,71 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 result.FeeBreakdowns.Select(i => i.TotalPrice).Sum().Should().Be(558000m); // 10 subsidiaries at £558 each
             }
         }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task CalculateFeeAsync_WhenLargeProducerWithClosedLoopRecyclingSubsidiaries_PopulatesClosedLoopBreakdown(
+            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
+            SubsidiariesFeeCalculationStrategy strategy)
+        {
+            var request = new ProducerRegistrationFeesRequestDto
+            {
+                ProducerType = "Large",
+                NumberOfSubsidiaries = 5,
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "A123",
+                NoOfSubsidiariesOnlineMarketplace = 0,
+                NoOfSubsidiariesClosedLoopRecycling = 3,
+                SubmissionDate = DateTime.UtcNow
+            };
+            var regulator = RegulatorType.Create(request.Regulator);
+
+            feesRepositoryMock.Setup(r => r.GetOnlineMarketFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>())).ReturnsAsync(0m);
+            feesRepositoryMock.Setup(r => r.GetClosedLoopRecyclingFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>())).ReturnsAsync(254800m);
+            feesRepositoryMock.Setup(r => r.GetFirstBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>())).ReturnsAsync(55800m);
+            feesRepositoryMock.Setup(r => r.GetSecondBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>())).ReturnsAsync(14000m);
+
+            var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                result.CountOfClosedLoopRecyclingSubsidiaries.Should().Be(3);
+                result.UnitClosedLoopRecyclingFees.Should().Be(254800m);
+                result.TotalSubsidiariesClosedLoopRecyclingFees.Should().Be(764400m); // 3 * £2,548
+            }
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task CalculateFeeAsync_WhenNoClosedLoopRecyclingSubsidiaries_DoesNotCallClosedLoopRepoAndReturnsZero(
+            [Frozen] Mock<IProducerFeesRepository> feesRepositoryMock,
+            SubsidiariesFeeCalculationStrategy strategy)
+        {
+            var request = new ProducerRegistrationFeesRequestDto
+            {
+                ProducerType = "Large",
+                NumberOfSubsidiaries = 5,
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "A123",
+                NoOfSubsidiariesOnlineMarketplace = 0,
+                NoOfSubsidiariesClosedLoopRecycling = 0,
+                SubmissionDate = DateTime.UtcNow
+            };
+            var regulator = RegulatorType.Create(request.Regulator);
+
+            feesRepositoryMock.Setup(r => r.GetOnlineMarketFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>())).ReturnsAsync(0m);
+            feesRepositoryMock.Setup(r => r.GetFirstBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>())).ReturnsAsync(55800m);
+            feesRepositoryMock.Setup(r => r.GetSecondBandFeeAsync(regulator, request.SubmissionDate, It.IsAny<CancellationToken>())).ReturnsAsync(14000m);
+
+            var result = await strategy.CalculateFeeAsync(request, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                result.CountOfClosedLoopRecyclingSubsidiaries.Should().Be(0);
+                result.UnitClosedLoopRecyclingFees.Should().Be(0m);
+                result.TotalSubsidiariesClosedLoopRecyclingFees.Should().Be(0m);
+            }
+            feesRepositoryMock.Verify(r => r.GetClosedLoopRecyclingFeeAsync(It.IsAny<RegulatorType>(), It.IsAny<DateTime>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
     }
 }

@@ -424,6 +424,32 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
         }
 
         [TestMethod, AutoMoqData]
+        public async Task GetClosedLoopRecyclingFeeAsync_ValidInput_ShouldReturnClosedLoopRecyclingFee(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
+        {
+            var feesMock = MockIRegistrationFeesRepository.GetRegistrationFeesMock();
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(feesMock.Object);
+
+            var result = await _complianceSchemeFeesRepository.GetClosedLoopRecyclingFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow, _cancellationToken);
+
+            result.Should().Be(254800m);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetClosedLoopRecyclingFeeAsync_EmptyDatabase_ShouldThrowKeyNotFoundException(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
+        {
+            _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(MockIRegistrationFeesRepository.GetEmptyRegistrationFeesMock().Object);
+
+            Func<Task> act = async () => await _complianceSchemeFeesRepository.GetClosedLoopRecyclingFeeAsync(RegulatorType.Create("GB-ENG"), DateTime.UtcNow, _cancellationToken);
+
+            await act.Should().ThrowAsync<KeyNotFoundException>()
+                .WithMessage(string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidClosedLoopRecyclingError, "GB-ENG"));
+        }
+
+        [TestMethod, AutoMoqData]
         public async Task GetOnlineMarketFeeAsync_EmptyDatabase_ShouldThrowKeyNotFoundException(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ComplianceSchemeFeesRepository _complianceSchemeFeesRepository)
