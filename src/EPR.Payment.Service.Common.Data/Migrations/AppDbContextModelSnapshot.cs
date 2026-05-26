@@ -4975,6 +4975,28 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.ToTable("Payment", (string)null);
                 });
 
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("SubmissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RegistrationSubmissionData");
+                });
+
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeItem", b =>
                 {
                     b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.FeeType", "FeeType")

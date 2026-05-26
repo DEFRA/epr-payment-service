@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260522114022_AddRegistrationSubmissionData")]
+    [Migration("20260526140817_AddRegistrationSubmissionData")]
     partial class AddRegistrationSubmissionData
     {
         /// <inheritdoc />
@@ -4986,8 +4986,14 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<Guid>("SubmissionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 

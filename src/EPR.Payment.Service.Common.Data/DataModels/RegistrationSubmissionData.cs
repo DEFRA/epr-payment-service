@@ -7,5 +7,9 @@ namespace EPR.Payment.Service.Common.Data.DataModels
     public class RegistrationSubmissionData : BaseEntity
     {
         public Guid SubmissionId { get; set; }
+
+        public DateTimeOffset CreatedDate { get; set; }
+
+        public DateTimeOffset? UpdatedDate { get; set; }
     }
 }
