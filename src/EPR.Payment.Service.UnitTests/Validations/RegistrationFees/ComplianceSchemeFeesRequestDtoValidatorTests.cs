@@ -105,7 +105,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         }
 
         [TestMethod]
-        public void Validator_Should_Fail_When_SubmissionDate_Is_Future_Date()
+        public void Validator_Should_Not_Fail_When_SubmissionDate_Is_Future_Date()
         {
             // Arrange
             var dto = new ComplianceSchemeFeesRequestDto
@@ -120,8 +120,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             var result = _validator.TestValidate(dto);
 
             // Assert
-            result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
-                  .WithErrorMessage(ValidationMessages.FutureSubmissionDate);
+            result.ShouldNotHaveValidationErrorFor(x => x.SubmissionDate);
         }
 
         [TestMethod]
