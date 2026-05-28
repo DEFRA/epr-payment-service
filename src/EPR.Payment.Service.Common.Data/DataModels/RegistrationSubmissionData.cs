@@ -1,12 +1,23 @@
 using System.Diagnostics.CodeAnalysis;
-using EPR.Payment.Service.Common.Data.DataModels.BaseClasses;
 
 namespace EPR.Payment.Service.Common.Data.DataModels
 {
     [ExcludeFromCodeCoverage]
-    public class RegistrationSubmissionData : BaseEntity
+    public class RegistrationSubmissionData
     {
+        public Guid Id { get; set; }
+
         public Guid SubmissionId { get; set; }
+
+        public Guid FileId { get; set; }
+
+        public string FileName { get; set; } = null!;
+
+        public Guid? ComplianceSchemeId { get; set; }
+
+        public string SubmissionPeriod { get; set; } = null!;
+
+        public DateTime SubmissionDate { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }
 
