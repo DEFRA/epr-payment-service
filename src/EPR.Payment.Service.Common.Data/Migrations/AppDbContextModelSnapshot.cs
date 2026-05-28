@@ -4977,24 +4977,40 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionData", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid?>("ComplianceSchemeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("SubmissionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SubmissionPeriod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
-                    b.ToTable("RegistrationSubmissionData");
+                    b.ToTable("RegistrationSubmissionData", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeItem", b =>
