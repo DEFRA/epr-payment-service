@@ -1,0 +1,12 @@
+services:
+  sql:
+    container_name: sql
+    image: mcr.microsoft.com/azure-sql-edge
+    restart: always
+    cap_add:
+      - SYS_PTRACE
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=1
+      - SA_PASSWORD=${SQL_PASSWORD}
