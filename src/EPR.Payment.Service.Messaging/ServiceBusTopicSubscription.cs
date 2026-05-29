@@ -49,21 +49,28 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
 
             _logger.LogInformation("Setting up service bus subscription for topic {TopicName}", _topicName);
 
-            var topicExists = await _adminClient.TopicExistsAsync(_topicName);
-            if (!topicExists.Value)
+            try
             {
-                _logger.LogInformation("Creating topic {TopicName}", _topicName);
-                await _adminClient.CreateTopicAsync(_topicName);
-            }
+                var topicExists = await _adminClient.TopicExistsAsync(_topicName);
+                if (!topicExists.Value)
+                {
+                    _logger.LogInformation("Creating topic {TopicName}", _topicName);
+                    await _adminClient.CreateTopicAsync(_topicName);
+                }
 
-            var subscriptionExists = await _adminClient.SubscriptionExistsAsync(_topicName, _subscriptionName);
-            if (!subscriptionExists.Value)
+                var subscriptionExists = await _adminClient.SubscriptionExistsAsync(_topicName, _subscriptionName);
+                if (!subscriptionExists.Value)
+                {
+                    _logger.LogInformation("Creating subscription {SubscriptionName} on topic {TopicName}", _subscriptionName, _topicName);
+                    await _adminClient.CreateSubscriptionAsync(_topicName, _subscriptionName);
+                }
+
+                _logger.LogInformation("Service bus subscription {SubscriptionName} on topic {TopicName} is ready", _subscriptionName, _topicName);
+            }
+            catch (Exception ex)
             {
-                _logger.LogInformation("Creating subscription {SubscriptionName} on topic {TopicName}", _subscriptionName, _topicName);
-                await _adminClient.CreateSubscriptionAsync(_topicName, _subscriptionName);
+                _logger.LogWarning(ex, "Unable to verify or create topic/subscription via admin client — assuming they already exist and proceeding");
             }
-
-            _logger.LogInformation("Service bus subscription {SubscriptionName} on topic {TopicName} is ready", _subscriptionName, _topicName);
 
             _processor = _client.CreateProcessor(_topicName, _subscriptionName, new ServiceBusProcessorOptions
             {
