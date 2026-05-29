@@ -31,6 +31,8 @@ namespace EPR.Payment.Service.Common.Data
         public DbSet<FeeType> FeeTypes => Set<FeeType>();
         public DbSet<PayerType> PayerTypes => Set<PayerType>();
         public DbSet<RegistrationSubmissionData> RegistrationSubmissionData => Set<RegistrationSubmissionData>();
+        public DbSet<RegistrationSubmissionProducer> RegistrationSubmissionProducer => Set<RegistrationSubmissionProducer>();
+        public DbSet<RegistrationSubmissionSubsidiary> RegistrationSubmissionSubsidiary => Set<RegistrationSubmissionSubsidiary>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

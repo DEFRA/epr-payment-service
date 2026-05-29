@@ -11,8 +11,6 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public Guid FileId { get; set; }
 
-        public string FileName { get; set; } = null!;
-
         public Guid? ComplianceSchemeId { get; set; }
 
         public string SubmissionPeriod { get; set; } = null!;
@@ -22,5 +20,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels
         public DateTimeOffset CreatedDate { get; set; }
 
         public DateTimeOffset? UpdatedDate { get; set; }
+
+        public ICollection<RegistrationSubmissionProducer> Producers { get; set; } = new List<RegistrationSubmissionProducer>();
     }
 }

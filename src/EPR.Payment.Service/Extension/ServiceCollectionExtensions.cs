@@ -5,10 +5,12 @@ using EPR.Payment.Service.Common.Data.Interfaces.Repositories.FeeItems;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmission;
 using EPR.Payment.Service.Common.Data.Repositories.FeeItems;
 using EPR.Payment.Service.Common.Data.Repositories.Fees;
 using EPR.Payment.Service.Common.Data.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
+using EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
@@ -22,12 +24,16 @@ using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ReprocessorOrExporter;
+using EPR.Payment.Service.Services.Interfaces.RegistrationSubmission;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.Producer;
 using EPR.Payment.Service.Services.Payments;
 using EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter;
+using EPR.Payment.Service.Services.RegistrationSubmission;
+using EPR.Payment.Service.Services.RegistrationSubmission.Csv;
+using EPR.Payment.Service.Services.RegistrationSubmission.Storage;
 using EPR.Payment.Service.Services.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Services.ResubmissionFees.Producer;
 using EPR.Payment.Service.Strategies.FeeItems;
@@ -98,6 +104,13 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IFeeItemWriter, FeeItemWriter>();
 
             services.AddScoped<FeesKeyValueStore>();
+
+            // Registration submission snapshot
+            services.AddScoped<IRegistrationSubmissionDataRepository, RegistrationSubmissionDataRepository>();
+            services.AddScoped<IBlobReader, BlobReader>();
+            services.AddSingleton<ICsvStreamParser, CsvStreamParser>();
+            services.AddScoped<IRegistrationSubmissionDataHandler, RegistrationSubmissionDataHandler>();
+            services.AddSingleton(TimeProvider.System);
 
             return services;
         }

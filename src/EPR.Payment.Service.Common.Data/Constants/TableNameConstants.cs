@@ -33,5 +33,9 @@
         public const string FeeItemTableName = "FeeItem";
 
         public const string RegistrationSubmissionDataTableName = "RegistrationSubmissionData";
+
+        public const string RegistrationSubmissionProducerTableName = "RegistrationSubmissionProducer";
+
+        public const string RegistrationSubmissionSubsidiaryTableName = "RegistrationSubmissionSubsidiary";
     }
 }

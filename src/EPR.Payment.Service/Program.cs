@@ -1,14 +1,17 @@
 using System.Text.Json.Serialization;
 using Asp.Versioning;
+using Azure.Storage.Blobs;
 using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Extension;
 using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;
+using EPR.Payment.Service.Options;
 using EPR.Payment.Service.Validations.Payments;
 using EPR.Payment.Service.Validations.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Validations.RegistrationFees.Producer;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
 
@@ -46,6 +49,11 @@ builder.Services.AddSwaggerGen(setupAction =>
 });
 builder.Services.AddDependencies();
 builder.Services.AddDataContext(builder.Configuration["ConnectionStrings:PaymentConnectionString"]!);
+
+builder.Services.Configure<StorageAccountOptions>(
+    builder.Configuration.GetSection(StorageAccountOptions.SectionName));
+builder.Services.AddSingleton(sp =>
+    new BlobServiceClient(sp.GetRequiredService<IOptions<StorageAccountOptions>>().Value.ConnectionString));
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddApplicationInsightsTelemetry().AddHealthChecks();
 
