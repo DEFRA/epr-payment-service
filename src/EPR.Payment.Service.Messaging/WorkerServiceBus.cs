@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace EPR.Payment.Service.Messaging;
 
 [ExcludeFromCodeCoverage]
-public class WorkerServiceBus : IHostedService, IDisposable
+public class WorkerServiceBus : IHostedService
 {
     private readonly ILogger<WorkerServiceBus> _logger;
     private readonly IServiceBusTopicSubscription _serviceBusTopicSubscription;
@@ -30,10 +30,5 @@ public class WorkerServiceBus : IHostedService, IDisposable
         _logger.LogInformation("Stopping service bus subscription");
         await _serviceBusTopicSubscription.CloseSubscriptionAsync();
         _logger.LogInformation("Service bus subscription stopped");
-    }
-
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
     }
 }
