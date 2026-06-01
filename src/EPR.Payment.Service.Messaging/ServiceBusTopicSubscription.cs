@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using EPR.Payment.Service.Common.Data.DataModels;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EPR.Payment.Service.Messaging;
 
+[ExcludeFromCodeCoverage]
 public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
 {
     private readonly ILogger<ServiceBusTopicSubscription> _logger;

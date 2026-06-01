@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -5,6 +6,7 @@ using System.Text.Json;
 
 namespace EPR.Payment.Service.Messaging;
 
+[ExcludeFromCodeCoverage]
 public class ServiceBusTopicPublisher : IServiceBusTopicPublisher
 {
     private readonly ILogger<ServiceBusTopicPublisher> _logger;

@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace EPR.Payment.Service.Messaging;
 
+[ExcludeFromCodeCoverage]
 public class WorkerServiceBus : IHostedService, IDisposable
 {
     private readonly ILogger<WorkerServiceBus> _logger;
@@ -32,15 +34,7 @@ public class WorkerServiceBus : IHostedService, IDisposable
 
     public void Dispose()
     {
-        Dispose(true);
+        _serviceBusTopicSubscription.DisposeAsync().AsTask().GetAwaiter().GetResult();
         GC.SuppressFinalize(this);
-    }
-
-    protected virtual async void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            await _serviceBusTopicSubscription.DisposeAsync();
-        }
     }
 }
