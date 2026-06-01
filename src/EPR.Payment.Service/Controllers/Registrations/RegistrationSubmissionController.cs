@@ -11,14 +11,10 @@ namespace EPR.Payment.Service.Controllers.Registrations
     public class RegistrationSubmissionController : ControllerBase
     {
         private readonly IRegistrationSubmissionService _registrationSubmissionService;
-        private readonly ILogger<RegistrationSubmissionController> _logger;
 
-        public RegistrationSubmissionController(
-            IRegistrationSubmissionService registrationSubmissionService,
-            ILogger<RegistrationSubmissionController> logger)
+        public RegistrationSubmissionController(IRegistrationSubmissionService registrationSubmissionService)
         {
             _registrationSubmissionService = registrationSubmissionService ?? throw new ArgumentNullException(nameof(registrationSubmissionService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [ApiExplorerSettings(GroupName = "v1")]
@@ -29,22 +25,12 @@ namespace EPR.Payment.Service.Controllers.Registrations
         )]
         [SwaggerResponse(204, "Submission exists")]
         [SwaggerResponse(404, "Submission not found")]
-        [SwaggerResponse(500, "Internal server error")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SubmissionExistsAsync(Guid submissionId, CancellationToken cancellationToken)
         {
-            try
-            {
-                var exists = await _registrationSubmissionService.SubmissionExistsAsync(submissionId, cancellationToken);
-                return exists ? NoContent() : NotFound();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred checking submission existence for {SubmissionId}", submissionId);
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            var exists = await _registrationSubmissionService.SubmissionExistsAsync(submissionId, cancellationToken);
+            return exists ? NoContent() : NotFound();
         }
     }
 }
