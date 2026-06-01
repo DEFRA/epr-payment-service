@@ -21,11 +21,13 @@ WORKDIR /src
 COPY ["EPR.Payment.Service/EPR.Payment.Service.csproj", "EPR.Payment.Service/"]
 COPY ["EPR.Payment.Service.Common/EPR.Payment.Service.Common.csproj", "EPR.Payment.Service.Common/"]
 COPY ["EPR.Payment.Service.Common.Data/EPR.Payment.Service.Common.Data.csproj", "EPR.Payment.Service.Common.Data/"]
+COPY ["EPR.Payment.Service.Messaging/EPR.Payment.Service.Messaging.csproj", "EPR.Payment.Service.Messaging/"]
 RUN dotnet restore "EPR.Payment.Service/EPR.Payment.Service.csproj"
 
 COPY EPR.Payment.Service/. ./EPR.Payment.Service/.
 COPY EPR.Payment.Service.Common/. ./EPR.Payment.Service.Common/.
 COPY EPR.Payment.Service.Common.Data/. ./EPR.Payment.Service.Common.Data/.
+COPY EPR.Payment.Service.Messaging/. ./EPR.Payment.Service.Messaging/.
 
 WORKDIR "/src/EPR.Payment.Service"
 RUN dotnet build "EPR.Payment.Service.csproj" -c Release /p:AzureBuild=true -o /app/build
