@@ -18,6 +18,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
 
             builder.Property(r => r.SubmissionId).IsRequired();
             builder.Property(r => r.FileId).IsRequired();
+            builder.Property(r => r.RegistrationBlobName).IsRequired().HasMaxLength(100);
             builder.Property(r => r.ComplianceSchemeId);
             builder.Property(r => r.SubmissionPeriod).IsRequired();
             builder.Property(r => r.SubmissionDate).HasColumnType("datetime2").IsRequired();

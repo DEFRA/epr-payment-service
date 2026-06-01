@@ -11,6 +11,8 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public Guid FileId { get; set; }
 
+        public string RegistrationBlobName { get; set; } = null!;
+
         public Guid? ComplianceSchemeId { get; set; }
 
         public string SubmissionPeriod { get; set; } = null!;

@@ -91,7 +91,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 RegistrationCsvFixtureFactory.Subsidiary("ORG-1", "SUB-1", packagingActivityOm: "Secondary", closedLoopRegistration: "yes"),
                 RegistrationCsvFixtureFactory.Subsidiary("ORG-1", "SUB-2"),
             };
-            ArrangeCsvRows(request.FileId, rows);
+            ArrangeCsvRows(request.RegistrationBlobName, rows);
 
             RegistrationSubmissionData? captured = null;
             _repositoryMock
@@ -150,7 +150,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 RegistrationCsvFixtureFactory.Subsidiary("ORG-B", "B-2"),
                 RegistrationCsvFixtureFactory.Producer("ORG-C", homeNationCode: "WS", organisationSize: "Large"),
             };
-            ArrangeCsvRows(request.FileId, rows);
+            ArrangeCsvRows(request.RegistrationBlobName, rows);
 
             RegistrationSubmissionData? captured = null;
             _repositoryMock
@@ -182,7 +182,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             {
                 RegistrationCsvFixtureFactory.Subsidiary("ORG-ORPHAN", "SUB-1"),
             };
-            ArrangeCsvRows(request.FileId, rows);
+            ArrangeCsvRows(request.RegistrationBlobName, rows);
 
             Func<Task> act = () => _sut.HandleAsync(request, _ct);
 
@@ -202,7 +202,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         {
             var request = NewRequest();
             ArrangeNoExistingSnapshot(request);
-            ArrangeCsvRows(request.FileId, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", homeNationCode: code) });
+            ArrangeCsvRows(request.RegistrationBlobName, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", homeNationCode: code) });
 
             RegistrationSubmissionData? captured = null;
             _repositoryMock
@@ -226,7 +226,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         {
             var request = NewRequest();
             ArrangeNoExistingSnapshot(request);
-            ArrangeCsvRows(request.FileId, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", packagingActivityOm: value) });
+            ArrangeCsvRows(request.RegistrationBlobName, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", packagingActivityOm: value) });
 
             RegistrationSubmissionData? captured = null;
             _repositoryMock
@@ -249,7 +249,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         {
             var request = NewRequest();
             ArrangeNoExistingSnapshot(request);
-            ArrangeCsvRows(request.FileId, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", closedLoopRegistration: value) });
+            ArrangeCsvRows(request.RegistrationBlobName, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", closedLoopRegistration: value) });
 
             RegistrationSubmissionData? captured = null;
             _repositoryMock
@@ -271,7 +271,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         {
             var request = NewRequest();
             ArrangeNoExistingSnapshot(request);
-            ArrangeCsvRows(request.FileId, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", joinerDate: value) });
+            ArrangeCsvRows(request.RegistrationBlobName, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", joinerDate: value) });
 
             RegistrationSubmissionData? captured = null;
             _repositoryMock
@@ -285,23 +285,24 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         }
 
         [TestMethod]
-        public async Task HandleAsync_DownloadsBlobByFileId()
+        public async Task HandleAsync_DownloadsBlobByRegistrationBlobName()
         {
             var request = NewRequest();
             ArrangeNoExistingSnapshot(request);
-            ArrangeCsvRows(request.FileId, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1") });
+            ArrangeCsvRows(request.RegistrationBlobName, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1") });
 
             _repositoryMock.Setup(r => r.CreateAsync(It.IsAny<RegistrationSubmissionData>(), _ct)).ReturnsAsync(Guid.NewGuid());
 
             await _sut.HandleAsync(request, _ct);
 
-            _blobReaderMock.Verify(b => b.DownloadAsync(request.FileId.ToString(), _ct), Times.Once);
+            _blobReaderMock.Verify(b => b.DownloadAsync(request.RegistrationBlobName, _ct), Times.Once);
         }
 
         private CreateRegistrationSubmissionDataRequest NewRequest() => new()
         {
             SubmissionId = Guid.NewGuid(),
             FileId = Guid.NewGuid(),
+            RegistrationBlobName = $"av-blob-{Guid.NewGuid()}",
             ComplianceSchemeId = Guid.NewGuid(),
             SubmissionPeriod = "Jan to Jun 2026",
             SubmissionDate = new DateTime(2026, 5, 28, 12, 0, 0, DateTimeKind.Utc),
@@ -314,11 +315,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .ReturnsAsync((RegistrationSubmissionData?)null);
         }
 
-        private void ArrangeCsvRows(Guid fileId, IEnumerable<RegistrationCsvRow> rows)
+        private void ArrangeCsvRows(string blobName, IEnumerable<RegistrationCsvRow> rows)
         {
             var stream = new MemoryStream();
             _blobReaderMock
-                .Setup(b => b.DownloadAsync(fileId.ToString(), _ct))
+                .Setup(b => b.DownloadAsync(blobName, _ct))
                 .ReturnsAsync(stream);
             _csvStreamParserMock
                 .Setup(c => c.ParseAsync(stream, It.IsAny<CsvHelper.Configuration.ClassMap<RegistrationCsvRow>>(), _ct))

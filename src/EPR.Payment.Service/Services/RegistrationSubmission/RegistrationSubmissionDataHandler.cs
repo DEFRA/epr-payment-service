@@ -38,7 +38,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 return existing.Id;
             }
 
-            var rows = await ReadCsvAsync(request.FileId, cancellationToken);
+            var rows = await ReadCsvAsync(request.RegistrationBlobName, cancellationToken);
 
             var now = _timeProvider.GetUtcNow();
             var entity = BuildEntity(request, rows, now);
@@ -46,9 +46,9 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             return await _repository.CreateAsync(entity, cancellationToken);
         }
 
-        private async Task<List<RegistrationCsvRow>> ReadCsvAsync(Guid fileId, CancellationToken cancellationToken)
+        private async Task<List<RegistrationCsvRow>> ReadCsvAsync(string registrationBlobName, CancellationToken cancellationToken)
         {
-            await using var stream = await _blobReader.DownloadAsync(fileId.ToString(), cancellationToken);
+            await using var stream = await _blobReader.DownloadAsync(registrationBlobName, cancellationToken);
 
             var rows = new List<RegistrationCsvRow>();
             await foreach (var row in _csvStreamParser.ParseAsync(stream, new RegistrationCsvRowMap(), cancellationToken))
@@ -68,6 +68,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             {
                 SubmissionId = request.SubmissionId,
                 FileId = request.FileId,
+                RegistrationBlobName = request.RegistrationBlobName,
                 ComplianceSchemeId = request.ComplianceSchemeId,
                 SubmissionPeriod = request.SubmissionPeriod,
                 SubmissionDate = request.SubmissionDate,
