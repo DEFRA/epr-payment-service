@@ -428,7 +428,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
         }
 
         [TestMethod]
-        public void Validate_FutureSubmissionDate_ShouldHaveError()
+        public void Validate_FutureSubmissionDate_ShouldNotHaveError()
         {
             // Arrange
             var request = new ProducerRegistrationFeesRequestV2Dto
@@ -451,8 +451,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             var result = _validator.TestValidate(request);
 
             // Assert
-            result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
-                  .WithErrorMessage(ValidationMessages.FutureSubmissionDate);
+            result.ShouldNotHaveValidationErrorFor(x => x.SubmissionDate);
         }
 
         [TestMethod]

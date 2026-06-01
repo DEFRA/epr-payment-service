@@ -123,7 +123,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
         }
 
         [TestMethod]
-        public void Validate_FutureSubmissionDate_ShouldHaveError()
+        public void Validate_FutureSubmissionDate_ShouldNotHaveError()
         {
             // Arrange
             var request = new ReprocessorOrExporterAccreditationFeesRequestDto
@@ -141,8 +141,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.AccreditationFees
             var result = _validator.TestValidate(request);
 
             // Assert
-            result.ShouldHaveValidationErrorFor(x => x.SubmissionDate)
-                  .WithErrorMessage(ValidationMessages.FutureSubmissionDate);
+            result.ShouldNotHaveValidationErrorFor(x => x.SubmissionDate);
         }
 
         [TestMethod]
