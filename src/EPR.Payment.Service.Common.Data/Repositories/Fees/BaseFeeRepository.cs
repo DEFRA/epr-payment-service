@@ -5,6 +5,7 @@ using EPR.Payment.Service.Common.Data.Helper;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.ValueObjects.RegistrationFees;
 using Microsoft.EntityFrameworkCore;
+using RegistrationFeesEntity = EPR.Payment.Service.Common.Data.DataModels.Lookups.RegistrationFees;
 
 namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
 {
@@ -26,28 +27,31 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             DateTime submissionDate,
             CancellationToken cancellationToken)
         {
-            decimal fee = 0;
             string inMemoryKey = GetInMemoryKey(groupType, subGroupType, regulator);
-            var cachedFee = _keyValueStore.Get(inMemoryKey);
-            if (cachedFee != null)
-            {
-                return (decimal)cachedFee;
-            }
-       
-            var registrationFees = await _dataContext.RegistrationFees
-                .Where(r => r.Group.Type.ToLower().Equals(groupType.ToLower())  &&
-                r.SubGroup.Type.ToLower().Equals(subGroupType.ToLower()) &&
-                r.Regulator.Type.ToLower().Equals(regulator.Value.ToLower())) 
-               .ToListAsync(cancellationToken);
 
-            if (registrationFees.Count==0)
+            List<RegistrationFeesEntity> registrationFees;
+            if (_keyValueStore.Get(inMemoryKey) is List<RegistrationFeesEntity> cachedRows)
             {
-                _keyValueStore.Add(inMemoryKey, fee);
-                return fee;
+                registrationFees = cachedRows;
+            }
+            else
+            {
+                registrationFees = await _dataContext.RegistrationFees
+                    .Where(r => r.Group.Type.ToLower().Equals(groupType.ToLower()) &&
+                                r.SubGroup.Type.ToLower().Equals(subGroupType.ToLower()) &&
+                                r.Regulator.Type.ToLower().Equals(regulator.Value.ToLower()))
+                    .ToListAsync(cancellationToken);
+                _keyValueStore.Add(inMemoryKey, registrationFees);
             }
 
-            fee = registrationFees
-                .Where(r => submissionDate >= r.EffectiveFrom && submissionDate <= r.EffectiveTo)
+            if (registrationFees.Count == 0)
+            {
+                return 0;
+            }
+
+            var submissionDateOnly = submissionDate.Date;
+            var fee = registrationFees
+                .Where(r => submissionDateOnly >= r.EffectiveFrom.Date && submissionDateOnly <= r.EffectiveTo.Date)
                 .OrderByDescending(r => r.EffectiveFrom)
                 .Select(r => r.Amount)
                 .FirstOrDefault();
@@ -56,8 +60,6 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             {
                 throw new ArgumentException(subGroupType == SubGroupTypeConstants.ReSubmitting ? ValidationMessages.ResubmissionDateIsNotInRange : ValidationMessages.SubmissionDateIsNotInRange);
             }
-
-            _keyValueStore.Add(inMemoryKey, fee);
 
             return fee;
         }

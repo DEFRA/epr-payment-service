@@ -51,11 +51,9 @@ namespace EPR.Payment.Service.Common.Constants.RegistrationFees
         public const string PayerIdRequired = "PayerId is required";
 
         public const string InvalidSubmissionDate = "Submission date is mandatory and must be a valid date.";
-        public const string FutureSubmissionDate = "Submission date cannot be a date in the future.";
         public const string SubmissionDateMustBeUtc = "Submission date must be in the UTC format which is YYYY-MM-DDTHH:MM:SSZ.";
         public const string SubmissionDateIsNotInRange = "Fee data is not available for given submission date.";
         public const string ResubmissionDateRequired = "Resubmission date is mandatory and must be a valid date.";
-        public const string FutureResubmissionDate = "Resubmission date cannot be a date in the future.";
         public const string ResubmissionDateMustBeUtc = "Resubmission date must be in the UTC format which is YYYY-MM-DDTHH:MM:SSZ.";
         public const string ResubmissionDateIsNotInRange = "Fee data is not available for given resubmission date.";
         public const string ReferenceNumberRequired = "Reference Number is required.";        
