@@ -95,6 +95,13 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
     {
         var message = args.Message.Body.ToObjectFromJson<RegistrationSubmittedMessage>();
 
+        if (message is null)
+        {
+            _logger.LogWarning("Received a null or undeserializable message, skipping");
+            await args.CompleteMessageAsync(args.Message);
+            return;
+        }
+
         _logger.LogInformation("Received registration submitted message for SubmissionId {SubmissionId}", message.SubmissionId);
 
         try
