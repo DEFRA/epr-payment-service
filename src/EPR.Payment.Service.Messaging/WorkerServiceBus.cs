@@ -34,7 +34,6 @@ public class WorkerServiceBus : IHostedService, IDisposable
 
     public void Dispose()
     {
-        _serviceBusTopicSubscription.DisposeAsync().AsTask().GetAwaiter().GetResult();
         GC.SuppressFinalize(this);
     }
 }

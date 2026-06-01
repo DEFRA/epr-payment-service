@@ -6,6 +6,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace EPR.Payment.Service.UnitTests.Controllers.Registrations
@@ -14,24 +15,37 @@ namespace EPR.Payment.Service.UnitTests.Controllers.Registrations
     public class RegistrationSubmissionControllerTests
     {
         private Mock<IRegistrationSubmissionService> _serviceMock = null!;
+        private Mock<ILogger<RegistrationSubmissionController>> _loggerMock = null!;
         private RegistrationSubmissionController _controller = null!;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _serviceMock = new Mock<IRegistrationSubmissionService>();
-            _controller = new RegistrationSubmissionController(_serviceMock.Object);
+            _loggerMock = new Mock<ILogger<RegistrationSubmissionController>>();
+            _controller = new RegistrationSubmissionController(_serviceMock.Object, _loggerMock.Object);
         }
 
         [TestMethod]
         public void Constructor_WhenServiceIsNull_ShouldThrowArgumentNullException()
         {
             // Act
-            Action act = () => new RegistrationSubmissionController(null!);
+            Action act = () => new RegistrationSubmissionController(null!, _loggerMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
                 .WithMessage("Value cannot be null. (Parameter 'registrationSubmissionService')");
+        }
+
+        [TestMethod]
+        public void Constructor_WhenLoggerIsNull_ShouldThrowArgumentNullException()
+        {
+            // Act
+            Action act = () => new RegistrationSubmissionController(_serviceMock.Object, null!);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'logger')");
         }
 
         [TestMethod, AutoMoqData]

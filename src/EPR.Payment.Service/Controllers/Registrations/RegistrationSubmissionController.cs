@@ -11,10 +11,14 @@ namespace EPR.Payment.Service.Controllers.Registrations
     public class RegistrationSubmissionController : ControllerBase
     {
         private readonly IRegistrationSubmissionService _registrationSubmissionService;
+        private readonly ILogger<RegistrationSubmissionController> _logger;
 
-        public RegistrationSubmissionController(IRegistrationSubmissionService registrationSubmissionService)
+        public RegistrationSubmissionController(
+            IRegistrationSubmissionService registrationSubmissionService,
+            ILogger<RegistrationSubmissionController> logger)
         {
             _registrationSubmissionService = registrationSubmissionService ?? throw new ArgumentNullException(nameof(registrationSubmissionService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [ApiExplorerSettings(GroupName = "v1")]
@@ -38,6 +42,7 @@ namespace EPR.Payment.Service.Controllers.Registrations
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred checking submission existence for {SubmissionId}", submissionId);
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
