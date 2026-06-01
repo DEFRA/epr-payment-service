@@ -37,6 +37,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EPR.Payment.Service.Common.Data\EPR.Payment.Service.Common.Data.csproj" />
     <ProjectReference Include="..\EPR.Payment.Service.Common\EPR.Payment.Service.Common.csproj" />
+    <ProjectReference Include="..\EPR.Payment.Service.Messaging\EPR.Payment.Service.Messaging.csproj" />
   </ItemGroup>
 
 	<ItemGroup>

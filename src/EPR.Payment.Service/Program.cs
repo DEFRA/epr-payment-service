@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using Asp.Versioning;
 using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Extension;
+using EPR.Payment.Service.Messaging;
 using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.Validations.Payments;
@@ -45,6 +46,7 @@ builder.Services.AddSwaggerGen(setupAction =>
     setupAction.OperationFilter<FeatureGateOperationFilter>();
 });
 builder.Services.AddDependencies();
+builder.Services.AddMessaging();
 builder.Services.AddDataContext(builder.Configuration["ConnectionStrings:PaymentConnectionString"]!);
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddApplicationInsightsTelemetry().AddHealthChecks();

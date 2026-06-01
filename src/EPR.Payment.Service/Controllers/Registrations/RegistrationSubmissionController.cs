@@ -25,12 +25,21 @@ namespace EPR.Payment.Service.Controllers.Registrations
         )]
         [SwaggerResponse(204, "Submission exists")]
         [SwaggerResponse(404, "Submission not found")]
+        [SwaggerResponse(500, "Internal server error")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SubmissionExistsAsync(Guid submissionId, CancellationToken cancellationToken)
         {
-            var exists = await _registrationSubmissionService.SubmissionExistsAsync(submissionId, cancellationToken);
-            return exists ? NoContent() : NotFound();
+            try
+            {
+                var exists = await _registrationSubmissionService.SubmissionExistsAsync(submissionId, cancellationToken);
+                return exists ? NoContent() : NotFound();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }
