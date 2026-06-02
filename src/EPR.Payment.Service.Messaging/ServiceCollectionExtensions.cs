@@ -11,15 +11,20 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddMessaging(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration["ServiceBus:ConnectionString"];
+        var adminConnectionString = configuration["ServiceBus:AdminConnectionString"];
 
-        if (!string.IsNullOrEmpty(connectionString))
+        services.AddAzureClients(clientBuilder =>
         {
-            services.AddAzureClients(clientBuilder =>
+            if (!string.IsNullOrEmpty(connectionString))
             {
                 clientBuilder.AddServiceBusClient(connectionString);
-                clientBuilder.AddServiceBusAdministrationClient(connectionString);
-            });
-        }
+            }
+
+            if (!string.IsNullOrEmpty(adminConnectionString))
+            {
+                clientBuilder.AddServiceBusAdministrationClient(adminConnectionString);
+            }
+        });
 
         services.AddSingleton<IServiceBusTopicSubscription, ServiceBusTopicSubscription>();
         services.AddHostedService<WorkerServiceBus>();
