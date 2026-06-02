@@ -190,6 +190,34 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         }
 
         [DataTestMethod]
+        [DataRow("L", "Large")]
+        [DataRow("l", "Large")]
+        [DataRow("Large", "Large")]
+        [DataRow("LARGE", "Large")]
+        [DataRow("S", "Small")]
+        [DataRow("s", "Small")]
+        [DataRow("Small", "Small")]
+        [DataRow("SMALL", "Small")]
+        [DataRow("Unknown", "Unknown")]
+        [DataRow("", "")]
+        public async Task HandleAsync_OrganisationSizeMapping_NormalisesCsvCode(string value, string expected)
+        {
+            var request = NewRequest();
+            ArrangeNoExistingSnapshot(request);
+            ArrangeCsvRows(request.RegistrationBlobName, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", organisationSize: value) });
+
+            RegistrationSubmissionData? captured = null;
+            _repositoryMock
+                .Setup(r => r.CreateAsync(It.IsAny<RegistrationSubmissionData>(), _ct))
+                .Callback<RegistrationSubmissionData, CancellationToken>((e, _) => captured = e)
+                .ReturnsAsync(Guid.NewGuid());
+
+            await _sut.HandleAsync(request, _ct);
+
+            captured!.Producers.Single().OrganisationSize.Should().Be(expected);
+        }
+
+        [DataTestMethod]
         [DataRow("EN", 1)]
         [DataRow("en", 1)]
         [DataRow("NI", 2)]

@@ -104,7 +104,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
         private static RegistrationSubmissionProducer MapProducer(RegistrationCsvRow row, DateTimeOffset now) => new()
         {
             OrganisationId = row.OrganisationId.Trim(),
-            OrganisationSize = row.OrganisationSize?.Trim() ?? string.Empty,
+            OrganisationSize = MapOrganisationSize(row.OrganisationSize),
             NationId = MapNationId(row.HomeNationCode),
             IsOnlineMarketplace = IsOnlineMarketplace(row.PackagingActivityOm),
             IsClosedLoopRecycling = IsClosedLoopRecycling(row.ClosedLoopRegistration),
@@ -128,6 +128,16 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             "SC" => 3,
             "WS" or "WA" => 4,
             _ => 0,
+        };
+
+        // CSV ships single-letter codes (`L` / `S`) per OrganisationSizeCodes; downstream consumers
+        // (facade fee validator, regulator service, etc.) expect the domain values "Large" / "Small".
+        // Also tolerates the long-form so future CSV format changes don't break the pipeline.
+        private static string MapOrganisationSize(string? organisationSize) => organisationSize?.Trim().ToUpperInvariant() switch
+        {
+            "L" or "LARGE" => "Large",
+            "S" or "SMALL" => "Small",
+            _ => organisationSize?.Trim() ?? string.Empty,
         };
 
         private static bool IsOnlineMarketplace(string? packagingActivityOm)

@@ -67,7 +67,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationSubmission
         [ApiExplorerSettings(GroupName = "v1")]
         [HttpGet("v1/registration-submission-data/{submissionId:guid}/fee-calculation-details")]
         [ProducesResponseType(typeof(IReadOnlyList<RegistrationFeeCalculationDetailsDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetFeeCalculationDetails(Guid submissionId, CancellationToken cancellationToken)
@@ -87,7 +87,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationSubmission
                 var details = await feeCalculationDetailsService.GetAsync(submissionId, cancellationToken);
                 if (details.Count == 0)
                 {
-                    return NoContent();
+                    return NotFound();
                 }
 
                 return Ok(details);

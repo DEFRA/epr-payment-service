@@ -116,7 +116,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationSubmission
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetFeeCalculationDetails_EmptyList_ReturnsNoContent(
+        public async Task GetFeeCalculationDetails_EmptyList_ReturnsNotFound(
             [Frozen] Mock<IRegistrationFeeCalculationDetailsService> serviceMock,
             [Greedy] RegistrationSubmissionDataController sut,
             Guid submissionId,
@@ -127,7 +127,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationSubmission
 
             var result = await sut.GetFeeCalculationDetails(submissionId, cts.Token);
 
-            result.Should().BeOfType<NoContentResult>();
+            result.Should().BeOfType<NotFoundResult>();
         }
 
         [TestMethod, AutoMoqData]
