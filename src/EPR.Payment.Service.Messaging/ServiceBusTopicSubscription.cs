@@ -113,8 +113,7 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
             {
                 Id = Guid.NewGuid(),
                 SubmissionId = message.SubmissionId,
-                FileId = message.FileId,
-                FileName = message.FileName,
+                RegistrationBlobName = message.RegistrationBlobName,
                 ComplianceSchemeId = message.ComplianceSchemeId,
                 SubmissionPeriod = message.SubmissionPeriod,
                 SubmissionDate = message.SubmissionDate,

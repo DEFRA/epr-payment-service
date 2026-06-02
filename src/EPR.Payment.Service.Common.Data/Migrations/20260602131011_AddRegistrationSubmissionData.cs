@@ -17,8 +17,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     SubmissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RegistrationBlobName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ComplianceSchemeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     SubmissionPeriod = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),

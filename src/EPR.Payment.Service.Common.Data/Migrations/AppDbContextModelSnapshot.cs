@@ -4988,10 +4988,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("FileId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FileName")
+                    b.Property<string>("RegistrationBlobName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

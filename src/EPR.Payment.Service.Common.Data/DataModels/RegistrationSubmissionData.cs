@@ -9,9 +9,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public Guid SubmissionId { get; set; }
 
-        public Guid FileId { get; set; }
-
-        public string FileName { get; set; } = null!;
+        public string RegistrationBlobName { get; set; } = null!;
 
         public Guid? ComplianceSchemeId { get; set; }
 

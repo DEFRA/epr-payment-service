@@ -33,8 +33,7 @@ public class TestMessagingController : ControllerBase
     {
         var message = new RegistrationSubmittedMessage(
             request.SubmissionId,
-            request.FileId,
-            request.FileName,
+            request.RegistrationBlobName,
             request.ComplianceSchemeId,
             request.SubmissionPeriod,
             request.SubmissionDate
@@ -48,8 +47,7 @@ public class TestMessagingController : ControllerBase
 [ExcludeFromCodeCoverage]
 public record TestPublishRequest(
     Guid SubmissionId,
-    Guid FileId,
-    string FileName,
+    string RegistrationBlobName,
     Guid? ComplianceSchemeId,
     string SubmissionPeriod,
     DateTime SubmissionDate

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260528131356_AddRegistrationSubmissionData")]
+    [Migration("20260602131011_AddRegistrationSubmissionData")]
     partial class AddRegistrationSubmissionData
     {
         /// <inheritdoc />
@@ -4991,10 +4991,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("FileId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FileName")
+                    b.Property<string>("RegistrationBlobName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

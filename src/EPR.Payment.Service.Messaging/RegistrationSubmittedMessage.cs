@@ -5,8 +5,7 @@ namespace EPR.Payment.Service.Messaging;
 [ExcludeFromCodeCoverage]
 public record RegistrationSubmittedMessage(
     Guid SubmissionId,
-    Guid FileId,
-    string FileName,
+    string RegistrationBlobName,
     Guid? ComplianceSchemeId,
     string SubmissionPeriod,
     DateTime SubmissionDate
