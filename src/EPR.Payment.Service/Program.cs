@@ -46,7 +46,7 @@ builder.Services.AddSwaggerGen(setupAction =>
     setupAction.OperationFilter<FeatureGateOperationFilter>();
 });
 builder.Services.AddDependencies();
-builder.Services.AddMessaging();
+builder.Services.AddMessaging(builder.Configuration);
 builder.Services.AddDataContext(builder.Configuration["ConnectionStrings:PaymentConnectionString"]!);
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddApplicationInsightsTelemetry().AddHealthChecks();

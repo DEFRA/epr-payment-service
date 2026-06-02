@@ -23,20 +23,15 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
     public ServiceBusTopicSubscription(
         ILogger<ServiceBusTopicSubscription> logger,
         IConfiguration configuration,
-        IServiceScopeFactory scopeFactory)
+        IServiceScopeFactory scopeFactory,
+        IServiceProvider serviceProvider)
     {
         _logger = logger;
         _scopeFactory = scopeFactory;
         _topicName = configuration.GetValue<string>("ServiceBus:TopicName")!;
         _subscriptionName = configuration.GetValue<string>("ServiceBus:SubscriptionName")!;
-
-        var connectionString = configuration.GetValue<string>("ServiceBus:ConnectionString");
-
-        if (!string.IsNullOrEmpty(connectionString))
-        {
-            _client = new ServiceBusClient(connectionString);
-            _adminClient = new ServiceBusAdministrationClient(connectionString);
-        }
+        _client = serviceProvider.GetService<ServiceBusClient>();
+        _adminClient = serviceProvider.GetService<ServiceBusAdministrationClient>();
     }
 
     public async Task PrepareServiceBusSubscriptionAsync()
