@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
 
 namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission
 {
@@ -10,7 +9,6 @@ namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission
 
         public Guid FileId { get; set; }
 
-        [JsonPropertyName("blobName")]
         public string RegistrationBlobName { get; set; } = string.Empty;
 
         public Guid? ComplianceSchemeId { get; set; }

@@ -110,6 +110,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IBlobReader, BlobReader>();
             services.AddSingleton<ICsvStreamParser, CsvStreamParser>();
             services.AddScoped<IRegistrationSubmissionDataHandler, RegistrationSubmissionDataHandler>();
+            services.AddScoped<IRegistrationFeeCalculationDetailsService, RegistrationFeeCalculationDetailsService>();
             services.AddSingleton(TimeProvider.System);
 
             return services;

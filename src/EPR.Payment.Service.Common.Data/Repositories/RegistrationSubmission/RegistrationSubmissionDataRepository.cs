@@ -21,6 +21,17 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission
                 .FirstOrDefaultAsync(r => r.SubmissionId == submissionId && r.FileId == fileId, cancellationToken);
         }
 
+        public Task<RegistrationSubmissionData?> GetLatestWithProducersAndSubsidiariesAsync(Guid submissionId, CancellationToken cancellationToken)
+        {
+            return _dataContext.RegistrationSubmissionData
+                .AsNoTracking()
+                .Include(r => r.Producers)
+                    .ThenInclude(p => p.Subsidiaries)
+                .Where(r => r.SubmissionId == submissionId)
+                .OrderByDescending(r => r.CreatedDate)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
         public async Task<Guid> CreateAsync(RegistrationSubmissionData entity, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(entity);
