@@ -24,6 +24,8 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.Property(r => r.SubmissionDate).HasColumnType("datetime2").IsRequired();
             builder.Property(r => r.CreatedDate).HasColumnType("datetimeoffset").IsRequired();
             builder.Property(r => r.UpdatedDate).HasColumnType("datetimeoffset");
+
+            builder.HasIndex(r => new { r.SubmissionId, r.FileId }).IsUnique();
         }
     }
 }

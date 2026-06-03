@@ -8,6 +8,7 @@ using EPR.Payment.Service.Services.RegistrationSubmission.Storage;
 using EPR.Payment.Service.UnitTests.Services.RegistrationSubmission.TestHelpers;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
@@ -19,6 +20,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         private Mock<IBlobReader> _blobReaderMock = null!;
         private Mock<ICsvStreamParser> _csvStreamParserMock = null!;
         private Mock<TimeProvider> _timeProviderMock = null!;
+        private Mock<ILogger<RegistrationSubmissionDataHandler>> _loggerMock = null!;
         private RegistrationSubmissionDataHandler _sut = null!;
         private CancellationToken _ct;
         private DateTimeOffset _now;
@@ -32,7 +34,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             _now = new DateTimeOffset(2026, 5, 29, 9, 0, 0, TimeSpan.Zero);
             _timeProviderMock = new Mock<TimeProvider>();
             _timeProviderMock.Setup(t => t.GetUtcNow()).Returns(_now);
-            _sut = new RegistrationSubmissionDataHandler(_repositoryMock.Object, _blobReaderMock.Object, _csvStreamParserMock.Object, _timeProviderMock.Object);
+            _loggerMock = new Mock<ILogger<RegistrationSubmissionDataHandler>>();
+            _sut = new RegistrationSubmissionDataHandler(_repositoryMock.Object, _blobReaderMock.Object, _csvStreamParserMock.Object, _timeProviderMock.Object, _loggerMock.Object);
             _ct = CancellationToken.None;
         }
 
@@ -41,14 +44,50 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         {
             using (new AssertionScope())
             {
-                Action a1 = () => new RegistrationSubmissionDataHandler(null!, _blobReaderMock.Object, _csvStreamParserMock.Object, _timeProviderMock.Object);
-                Action a2 = () => new RegistrationSubmissionDataHandler(_repositoryMock.Object, null!, _csvStreamParserMock.Object, _timeProviderMock.Object);
-                Action a3 = () => new RegistrationSubmissionDataHandler(_repositoryMock.Object, _blobReaderMock.Object, null!, _timeProviderMock.Object);
-                Action a4 = () => new RegistrationSubmissionDataHandler(_repositoryMock.Object, _blobReaderMock.Object, _csvStreamParserMock.Object, null!);
+                Action a1 = () => new RegistrationSubmissionDataHandler(null!, _blobReaderMock.Object, _csvStreamParserMock.Object, _timeProviderMock.Object, _loggerMock.Object);
+                Action a2 = () => new RegistrationSubmissionDataHandler(_repositoryMock.Object, null!, _csvStreamParserMock.Object, _timeProviderMock.Object, _loggerMock.Object);
+                Action a3 = () => new RegistrationSubmissionDataHandler(_repositoryMock.Object, _blobReaderMock.Object, null!, _timeProviderMock.Object, _loggerMock.Object);
+                Action a4 = () => new RegistrationSubmissionDataHandler(_repositoryMock.Object, _blobReaderMock.Object, _csvStreamParserMock.Object, null!, _loggerMock.Object);
+                Action a5 = () => new RegistrationSubmissionDataHandler(_repositoryMock.Object, _blobReaderMock.Object, _csvStreamParserMock.Object, _timeProviderMock.Object, null!);
                 a1.Should().Throw<ArgumentNullException>();
                 a2.Should().Throw<ArgumentNullException>();
                 a3.Should().Throw<ArgumentNullException>();
                 a4.Should().Throw<ArgumentNullException>();
+                a5.Should().Throw<ArgumentNullException>();
+            }
+        }
+
+        [TestMethod]
+        public async Task HandleAsync_LogsInformationOnStart_AndErrorOnException()
+        {
+            var request = NewRequest();
+            _repositoryMock
+                .Setup(r => r.GetBySubmissionAndFileAsync(request.SubmissionId, request.FileId, _ct))
+                .ThrowsAsync(new InvalidOperationException("boom"));
+
+            Func<Task> act = () => _sut.HandleAsync(request, _ct);
+
+            await act.Should().ThrowAsync<InvalidOperationException>();
+
+            using (new AssertionScope())
+            {
+                _loggerMock.Verify(
+                    x => x.Log(
+                        LogLevel.Information,
+                        It.IsAny<EventId>(),
+                        It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Processing registration submission data")),
+                        It.IsAny<Exception?>(),
+                        It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+                    Times.Once);
+
+                _loggerMock.Verify(
+                    x => x.Log(
+                        LogLevel.Error,
+                        It.IsAny<EventId>(),
+                        It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Failed to process registration submission data")),
+                        It.IsAny<Exception?>(),
+                        It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+                    Times.Once);
             }
         }
 

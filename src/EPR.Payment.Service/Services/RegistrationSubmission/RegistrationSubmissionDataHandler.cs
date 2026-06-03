@@ -6,6 +6,7 @@ using EPR.Payment.Service.Services.RegistrationSubmission.Csv;
 using EPR.Payment.Service.Services.RegistrationSubmission.Csv.Maps;
 using EPR.Payment.Service.Services.RegistrationSubmission.Csv.Models;
 using EPR.Payment.Service.Services.RegistrationSubmission.Storage;
+using Microsoft.Extensions.Logging;
 
 namespace EPR.Payment.Service.Services.RegistrationSubmission
 {
@@ -15,35 +16,58 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
         private readonly IBlobReader _blobReader;
         private readonly ICsvStreamParser _csvStreamParser;
         private readonly TimeProvider _timeProvider;
+        private readonly ILogger<RegistrationSubmissionDataHandler> _logger;
 
         public RegistrationSubmissionDataHandler(
             IRegistrationSubmissionDataRepository repository,
             IBlobReader blobReader,
             ICsvStreamParser csvStreamParser,
-            TimeProvider timeProvider)
+            TimeProvider timeProvider,
+            ILogger<RegistrationSubmissionDataHandler> logger)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _blobReader = blobReader ?? throw new ArgumentNullException(nameof(blobReader));
             _csvStreamParser = csvStreamParser ?? throw new ArgumentNullException(nameof(csvStreamParser));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<Guid> HandleAsync(CreateRegistrationSubmissionDataRequest request, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(request);
 
-            var existing = await _repository.GetBySubmissionAndFileAsync(request.SubmissionId, request.FileId, cancellationToken);
-            if (existing is not null)
+            _logger.LogInformation(
+                "Processing registration submission data for SubmissionId {SubmissionId} FileId {FileId} RegistrationBlobName {RegistrationBlobName} ComplianceSchemeId {ComplianceSchemeId}.",
+                request.SubmissionId,
+                request.FileId,
+                request.RegistrationBlobName,
+                request.ComplianceSchemeId);
+
+            try
             {
-                return existing.Id;
+                var existing = await _repository.GetBySubmissionAndFileAsync(request.SubmissionId, request.FileId, cancellationToken);
+                if (existing is not null)
+                {
+                    return existing.Id;
+                }
+
+                var rows = await ReadCsvAsync(request.RegistrationBlobName, cancellationToken);
+
+                var now = _timeProvider.GetUtcNow();
+                var entity = BuildEntity(request, rows, now);
+
+                return await _repository.CreateAsync(entity, cancellationToken);
             }
-
-            var rows = await ReadCsvAsync(request.RegistrationBlobName, cancellationToken);
-
-            var now = _timeProvider.GetUtcNow();
-            var entity = BuildEntity(request, rows, now);
-
-            return await _repository.CreateAsync(entity, cancellationToken);
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Failed to process registration submission data for SubmissionId {SubmissionId} FileId {FileId} RegistrationBlobName {RegistrationBlobName}.",
+                    request.SubmissionId,
+                    request.FileId,
+                    request.RegistrationBlobName);
+                throw;
+            }
         }
 
         private async Task<List<RegistrationCsvRow>> ReadCsvAsync(string registrationBlobName, CancellationToken cancellationToken)
@@ -132,7 +156,6 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
 
         // CSV ships single-letter codes (`L` / `S`) per OrganisationSizeCodes; downstream consumers
         // (facade fee validator, regulator service, etc.) expect the domain values "Large" / "Small".
-        // Also tolerates the long-form so future CSV format changes don't break the pipeline.
         private static string MapOrganisationSize(string? organisationSize) => organisationSize?.Trim().ToUpperInvariant() switch
         {
             "L" or "LARGE" => "Large",

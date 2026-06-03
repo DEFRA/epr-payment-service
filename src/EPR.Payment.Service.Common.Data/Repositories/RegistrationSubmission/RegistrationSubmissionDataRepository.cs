@@ -1,17 +1,26 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmission;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission
 {
     public class RegistrationSubmissionDataRepository : IRegistrationSubmissionDataRepository
     {
-        private readonly IAppDbContext _dataContext;
+        private const int SqlDuplicateKeyOnUniqueIndex = 2601;
+        private const int SqlUniqueConstraintViolation = 2627;
 
-        public RegistrationSubmissionDataRepository(IAppDbContext dataContext)
+        private readonly IAppDbContext _dataContext;
+        private readonly ILogger<RegistrationSubmissionDataRepository> _logger;
+
+        public RegistrationSubmissionDataRepository(
+            IAppDbContext dataContext,
+            ILogger<RegistrationSubmissionDataRepository> logger)
         {
             _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public Task<RegistrationSubmissionData?> GetBySubmissionAndFileAsync(Guid submissionId, Guid fileId, CancellationToken cancellationToken)
@@ -37,8 +46,33 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission
             ArgumentNullException.ThrowIfNull(entity);
 
             _dataContext.RegistrationSubmissionData.Add(entity);
-            await _dataContext.SaveChangesAsync(cancellationToken);
-            return entity.Id;
+
+            try
+            {
+                await _dataContext.SaveChangesAsync(cancellationToken);
+                return entity.Id;
+            }
+            catch (DbUpdateException ex) when (IsUniqueConstraintViolation(ex))
+            {
+                var existing = await GetBySubmissionAndFileAsync(entity.SubmissionId, entity.FileId, cancellationToken);
+                if (existing is null)
+                {
+                    throw;
+                }
+
+                _logger.LogInformation(
+                    "Concurrent write detected for SubmissionId {SubmissionId} FileId {FileId}; using winning snapshot {ExistingId}.",
+                    entity.SubmissionId,
+                    entity.FileId,
+                    existing.Id);
+
+                return existing.Id;
+            }
         }
+
+        private static bool IsUniqueConstraintViolation(DbUpdateException ex) =>
+            ex.InnerException is SqlException sqlEx
+                && (sqlEx.Number == SqlDuplicateKeyOnUniqueIndex
+                    || sqlEx.Number == SqlUniqueConstraintViolation);
     }
 }
