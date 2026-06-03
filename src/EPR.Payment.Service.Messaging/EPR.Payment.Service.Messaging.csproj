@@ -13,8 +13,5 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\EPR.Payment.Service.Common.Data\EPR.Payment.Service.Common.Data.csproj" />
-    </ItemGroup>
 
 </Project>

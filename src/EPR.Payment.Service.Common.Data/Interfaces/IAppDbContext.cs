@@ -19,7 +19,6 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
         DbSet<FeeType> FeeTypes { get; }
         DbSet<PayerType> PayerTypes { get; }
         DbSet<FeeItem> FeeItems { get; }
-        DbSet<RegistrationSubmissionData> RegistrationSubmissionData { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

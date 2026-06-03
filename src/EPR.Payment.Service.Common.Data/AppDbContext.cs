@@ -30,7 +30,6 @@ namespace EPR.Payment.Service.Common.Data
         public DbSet<FeeItem> FeeItems => Set<FeeItem>();
         public DbSet<FeeType> FeeTypes => Set<FeeType>();
         public DbSet<PayerType> PayerTypes => Set<PayerType>();
-        public DbSet<RegistrationSubmissionData> RegistrationSubmissionData => Set<RegistrationSubmissionData>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

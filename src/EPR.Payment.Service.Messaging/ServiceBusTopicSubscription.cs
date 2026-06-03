@@ -1,10 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
-using EPR.Payment.Service.Common.Data.DataModels;
-using EPR.Payment.Service.Common.Data.Interfaces;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace EPR.Payment.Service.Messaging;
@@ -13,7 +10,6 @@ namespace EPR.Payment.Service.Messaging;
 public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
 {
     private readonly ILogger<ServiceBusTopicSubscription> _logger;
-    private readonly IServiceScopeFactory _scopeFactory;
     private readonly ServiceBusClient? _client;
     private readonly ServiceBusAdministrationClient? _adminClient;
     private readonly string _topicName;
@@ -23,15 +19,13 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
     public ServiceBusTopicSubscription(
         ILogger<ServiceBusTopicSubscription> logger,
         IConfiguration configuration,
-        IServiceScopeFactory scopeFactory,
         IServiceProvider serviceProvider)
     {
         _logger = logger;
-        _scopeFactory = scopeFactory;
         _topicName = configuration.GetValue<string>("ServiceBus:TopicName")!;
         _subscriptionName = configuration.GetValue<string>("ServiceBus:SubscriptionName")!;
-        _client = serviceProvider.GetService<ServiceBusClient>();
-        _adminClient = serviceProvider.GetService<ServiceBusAdministrationClient>();
+        _client = serviceProvider.GetService(typeof(ServiceBusClient)) as ServiceBusClient;
+        _adminClient = serviceProvider.GetService(typeof(ServiceBusAdministrationClient)) as ServiceBusAdministrationClient;
     }
 
     public async Task PrepareServiceBusSubscriptionAsync()
@@ -97,36 +91,12 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
             return;
         }
 
-        _logger.LogInformation("Received registration submitted message for SubmissionId {SubmissionId}", message.SubmissionId);
+        _logger.LogInformation(
+            "Registration submitted message received: SubmissionId={SubmissionId}, RegistrationBlobName={RegistrationBlobName}",
+            message.SubmissionId,
+            message.RegistrationBlobName);
 
-        try
-        {
-            using var scope = _scopeFactory.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
-
-            var entity = new RegistrationSubmissionData
-            {
-                Id = Guid.NewGuid(),
-                SubmissionId = message.SubmissionId,
-                RegistrationBlobName = message.RegistrationBlobName,
-                ComplianceSchemeId = message.ComplianceSchemeId,
-                SubmissionPeriod = message.SubmissionPeriod,
-                SubmissionDate = message.SubmissionDate,
-                CreatedDate = DateTimeOffset.UtcNow
-            };
-
-            dbContext.RegistrationSubmissionData.Add(entity);
-            await dbContext.SaveChangesAsync(CancellationToken.None);
-
-            await args.CompleteMessageAsync(args.Message);
-
-            _logger.LogInformation("Saved RegistrationSubmissionData for SubmissionId {SubmissionId}", message.SubmissionId);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to process registration submitted message for SubmissionId {SubmissionId}", message.SubmissionId);
-            await args.AbandonMessageAsync(args.Message);
-        }
+        await args.CompleteMessageAsync(args.Message);
     }
 
     private Task ProcessErrorAsync(ProcessErrorEventArgs args)

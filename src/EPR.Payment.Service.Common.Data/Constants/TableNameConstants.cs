@@ -31,7 +31,5 @@
         public const string PayerTypesTableName = "PayerTypes";
 
         public const string FeeItemTableName = "FeeItem";
-
-        public const string RegistrationSubmissionDataTableName = "RegistrationSubmissionData";
     }
 }

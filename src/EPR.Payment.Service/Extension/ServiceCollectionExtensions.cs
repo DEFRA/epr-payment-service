@@ -4,11 +4,9 @@ using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.FeeItems;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Fees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
-using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Registrations;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Data.Repositories.FeeItems;
 using EPR.Payment.Service.Common.Data.Repositories.Fees;
-using EPR.Payment.Service.Common.Data.Repositories.Registrations;
 using EPR.Payment.Service.Common.Data.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
@@ -21,8 +19,6 @@ using EPR.Payment.Service.Services.FeeItems;
 using EPR.Payment.Service.Services.Interfaces.AccreditationFees;
 using EPR.Payment.Service.Services.Interfaces.FeeItems;
 using EPR.Payment.Service.Services.Interfaces.Payments;
-using EPR.Payment.Service.Services.Interfaces.Registrations;
-using EPR.Payment.Service.Services.Registrations;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ReprocessorOrExporter;
@@ -75,7 +71,6 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>, ComplianceSchemeResubmissionStrategy>();
 
             // Register repositories
-            services.AddScoped<IRegistrationSubmissionRepository, RegistrationSubmissionRepository>();
             services.AddScoped<IProducerFeesRepository, ProducerFeesRepository>();
             services.AddScoped<IComplianceSchemeFeesRepository, ComplianceSchemeFeesRepository>();
             services.AddTransient<IOnlinePaymentsRepository, OnlinePaymentsRepository>();
@@ -85,7 +80,6 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IReprocessorOrExporterFeeRepository, ReprocessorOrExporterFeeRepository>();
 
             // Register the main services
-            services.AddScoped<IRegistrationSubmissionService, RegistrationSubmissionService>();
             services.AddScoped<IProducerFeesCalculatorService, ProducerFeesCalculatorService>();
             services.AddScoped<IComplianceSchemeCalculatorService, ComplianceSchemeCalculatorService>();
             services.AddScoped<IProducerResubmissionService, ProducerResubmissionService>();
