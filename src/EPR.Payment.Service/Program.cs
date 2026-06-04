@@ -12,8 +12,20 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var buildNumber = builder.Configuration.GetValue<string>("BUILD_NUMBER");
+var gitSha = builder.Configuration.GetValue<string>("GIT_SHA");
+
+builder.Host.UseSerilog((context, _, config) =>
+{
+    config.ReadFrom.Configuration(context.Configuration);
+    config.Enrich.WithProperty("Application", context.HostingEnvironment.ApplicationName);
+    config.Enrich.WithProperty("BuildNumber", buildNumber ?? "NOT_SET");
+    config.Enrich.WithProperty("GitSha", gitSha ?? "NOT_SET");
+});
 
 // Add User Secrets in Development
 if (builder.Environment.IsDevelopment())
@@ -138,6 +150,7 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpsRedirection();
+app.UseSerilogRequestLogging();
 app.UseRouting();
 
 app.UseAuthorization();
