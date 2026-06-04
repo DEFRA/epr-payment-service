@@ -11,7 +11,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
     {
         public void Configure(EntityTypeBuilder<RegistrationSubmissionSubsidiary> builder)
         {
-            builder.ToTable(TableNameConstants.RegistrationSubmissionSubsidiaryTableName);
+            builder.ToTable(TableNameConstants.RegistrationSubmissionSubsidiaryTableName, TableNameConstants.RegistrationSchemaName);
 
             builder.HasKey(s => s.Id);
             builder.Property(s => s.Id).HasDefaultValueSql("NEWID()");

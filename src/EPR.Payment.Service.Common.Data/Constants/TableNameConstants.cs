@@ -37,5 +37,7 @@
         public const string RegistrationSubmissionProducerTableName = "RegistrationSubmissionProducer";
 
         public const string RegistrationSubmissionSubsidiaryTableName = "RegistrationSubmissionSubsidiary";
+
+        public const string RegistrationSchemaName = "registration";
     }
 }
