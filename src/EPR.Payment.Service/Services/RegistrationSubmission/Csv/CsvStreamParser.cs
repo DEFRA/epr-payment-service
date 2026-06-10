@@ -15,14 +15,23 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission.Csv
             TrimOptions = TrimOptions.Trim,
         };
 
-        public async IAsyncEnumerable<T> ParseAsync<T>(
+        public IAsyncEnumerable<T> ParseAsync<T>(
+            Stream stream,
+            ClassMap<T>? classMap,
+            CancellationToken cancellationToken)
+            where T : class
+        {
+            ArgumentNullException.ThrowIfNull(stream);
+
+            return ParseIteratorAsync(stream, classMap, cancellationToken);
+        }
+
+        private static async IAsyncEnumerable<T> ParseIteratorAsync<T>(
             Stream stream,
             ClassMap<T>? classMap,
             [EnumeratorCancellation] CancellationToken cancellationToken)
             where T : class
         {
-            ArgumentNullException.ThrowIfNull(stream);
-
             using var reader = new StreamReader(stream);
             using var csv = new CsvReader(reader, Configuration);
 
