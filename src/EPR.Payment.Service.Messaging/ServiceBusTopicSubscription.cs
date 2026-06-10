@@ -1,7 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
+using EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission;
+using EPR.Payment.Service.Common.Services.Interfaces.RegistrationSubmission;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace EPR.Payment.Service.Messaging;
@@ -10,6 +13,7 @@ namespace EPR.Payment.Service.Messaging;
 public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
 {
     private readonly ILogger<ServiceBusTopicSubscription> _logger;
+    private readonly IServiceProvider _serviceProvider;
     private readonly ServiceBusClient? _client;
     private readonly ServiceBusAdministrationClient? _adminClient;
     private readonly string _topicName;
@@ -22,6 +26,7 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
         IServiceProvider serviceProvider)
     {
         _logger = logger;
+        _serviceProvider = serviceProvider;
         _topicName = configuration.GetValue<string>("ServiceBus:TopicName")!;
         _subscriptionName = configuration.GetValue<string>("ServiceBus:SubscriptionName")!;
         _client = serviceProvider.GetService(typeof(ServiceBusClient)) as ServiceBusClient;
@@ -96,7 +101,36 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
             message.SubmissionId,
             message.RegistrationBlobName);
 
-        await args.CompleteMessageAsync(args.Message);
+        try
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var handler = scope.ServiceProvider.GetRequiredService<IRegistrationSubmissionDataHandler>();
+
+            var request = new CreateRegistrationSubmissionDataRequest
+            {
+                SubmissionId = message.SubmissionId,
+                RegistrationBlobName = message.RegistrationBlobName,
+                ComplianceSchemeId = message.ComplianceSchemeId,
+                SubmissionPeriod = message.SubmissionPeriod,
+                SubmissionDate = message.SubmissionDate,
+            };
+
+            await handler.HandleAsync(request, args.CancellationToken);
+
+            await args.CompleteMessageAsync(args.Message);
+
+            _logger.LogInformation(
+                "Processed registration submitted message for SubmissionId {SubmissionId}",
+                message.SubmissionId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Failed to process registration submitted message for SubmissionId {SubmissionId}",
+                message.SubmissionId);
+            await args.AbandonMessageAsync(args.Message);
+        }
     }
 
     private Task ProcessErrorAsync(ProcessErrorEventArgs args)

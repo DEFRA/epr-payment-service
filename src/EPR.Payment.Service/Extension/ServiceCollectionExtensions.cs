@@ -16,6 +16,7 @@ using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
+using EPR.Payment.Service.Common.Services.Interfaces.RegistrationSubmission;
 using EPR.Payment.Service.Services.AccreditationFees;
 using EPR.Payment.Service.Services.FeeItems;
 using EPR.Payment.Service.Services.Interfaces.AccreditationFees;

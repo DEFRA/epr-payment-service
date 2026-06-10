@@ -1,5 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationSubmission;
+using EPR.Payment.Service.Common.Services.Interfaces.RegistrationSubmission;
 using EPR.Payment.Service.Services.Interfaces.RegistrationSubmission;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;

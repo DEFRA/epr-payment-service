@@ -1,7 +1,7 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmission;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission;
-using EPR.Payment.Service.Services.Interfaces.RegistrationSubmission;
+using EPR.Payment.Service.Common.Services.Interfaces.RegistrationSubmission;
 using EPR.Payment.Service.Services.RegistrationSubmission.Csv;
 using EPR.Payment.Service.Services.RegistrationSubmission.Csv.Maps;
 using EPR.Payment.Service.Services.RegistrationSubmission.Csv.Models;

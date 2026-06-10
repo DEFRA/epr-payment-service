@@ -1,6 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission;
 
-namespace EPR.Payment.Service.Services.Interfaces.RegistrationSubmission
+namespace EPR.Payment.Service.Common.Services.Interfaces.RegistrationSubmission
 {
     public interface IRegistrationSubmissionDataHandler
     {
