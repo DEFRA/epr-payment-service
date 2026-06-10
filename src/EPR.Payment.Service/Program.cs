@@ -3,6 +3,7 @@ using Asp.Versioning;
 using Azure.Storage.Blobs;
 using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Extension;
+using EPR.Payment.Service.Messaging;
 using EPR.Payment.Service.HealthCheck;
 using EPR.Payment.Service.Helper;
 using EPR.Payment.Service.Options;
@@ -14,8 +15,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var buildNumber = builder.Configuration.GetValue<string>("BUILD_NUMBER");
+var gitSha = builder.Configuration.GetValue<string>("GIT_SHA");
+
+builder.Host.UseSerilog((context, _, config) =>
+{
+    config.ReadFrom.Configuration(context.Configuration);
+    config.Enrich.WithProperty("Application", context.HostingEnvironment.ApplicationName);
+    config.Enrich.WithProperty("BuildNumber", buildNumber ?? "NOT_SET");
+    config.Enrich.WithProperty("GitSha", gitSha ?? "NOT_SET");
+});
 
 // Add User Secrets in Development
 if (builder.Environment.IsDevelopment())
@@ -48,6 +61,7 @@ builder.Services.AddSwaggerGen(setupAction =>
     setupAction.OperationFilter<FeatureGateOperationFilter>();
 });
 builder.Services.AddDependencies();
+builder.Services.AddMessaging(builder.Configuration);
 builder.Services.AddDataContext(builder.Configuration["ConnectionStrings:PaymentConnectionString"]!);
 
 builder.Services.Configure<StorageAccountOptions>(
@@ -144,6 +158,7 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpsRedirection();
+app.UseSerilogRequestLogging();
 app.UseRouting();
 
 app.UseAuthorization();

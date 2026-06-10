@@ -1,0 +1,35 @@
+services:
+  sql:
+    container_name: sql
+    image: mcr.microsoft.com/azure-sql-edge
+    restart: always
+    cap_add:
+      - SYS_PTRACE
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=1
+      - SA_PASSWORD=${SQL_PASSWORD}
+    networks:
+      - sb-emulator
+
+  servicebus-emulator:
+    container_name: payments-service-servicebus-emulator
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
+    pull_policy: always
+    volumes:
+      - "./docker-compose-servicebus-config.json:/ServiceBus_Emulator/ConfigFiles/Config.json"
+    ports:
+      - "5672:5672"
+      - "5300:5300"
+    environment:
+      SQL_SERVER: sql
+      MSSQL_SA_PASSWORD: ${SQL_PASSWORD}
+      ACCEPT_EULA: "Y"
+    depends_on:
+      - sql
+    networks:
+      - sb-emulator
+
+networks:
+  sb-emulator:

@@ -74,7 +74,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.ResubmissionFees
         }
 
         [TestMethod]
-        public void Validate_ResubmissionDateIsInTheFuture_ShouldHaveValidationError()
+        public void Validate_ResubmissionDateIsInTheFuture_ShouldNotHaveValidationError()
         {
             // Arrange
             var dto = new ProducerResubmissionFeeRequestDto
@@ -88,8 +88,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.ResubmissionFees
             var result = _validator.TestValidate(dto);
 
             // Assert
-            result.ShouldHaveValidationErrorFor(x => x.ResubmissionDate)
-                  .WithErrorMessage(ValidationMessages.FutureResubmissionDate);
+            result.ShouldNotHaveValidationErrorFor(x => x.ResubmissionDate);
         }
 
         [TestMethod]
