@@ -154,7 +154,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             _ => 0,
         };
 
-        // CSV ships single-letter codes (`L` / `S`) per OrganisationSizeCodes; downstream consumers
+        // CSV contains single-letter codes (`L` / `S`) per OrganisationSizeCodes; downstream consumers
         // (facade fee validator, regulator service, etc.) expect the domain values "Large" / "Small".
         private static string MapOrganisationSize(string? organisationSize) => organisationSize?.Trim().ToUpperInvariant() switch
         {
