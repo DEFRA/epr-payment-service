@@ -15,7 +15,6 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationSubmission
             var request = new CreateRegistrationSubmissionDataRequest
             {
                 SubmissionId = Guid.NewGuid(),
-                FileId = Guid.NewGuid(),
                 RegistrationBlobName = "av-blob-name",
                 ComplianceSchemeId = Guid.NewGuid(),
                 SubmissionPeriod = "Jan to Jun 2026",
@@ -33,7 +32,6 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationSubmission
             var request = new CreateRegistrationSubmissionDataRequest
             {
                 SubmissionId = Guid.Empty,
-                FileId = Guid.Empty,
                 RegistrationBlobName = string.Empty,
                 SubmissionPeriod = string.Empty,
                 SubmissionDate = default,
@@ -42,7 +40,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationSubmission
             var result = _sut.Validate(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.PropertyName).Should().Contain(new[] { "SubmissionId", "FileId", "RegistrationBlobName", "SubmissionPeriod", "SubmissionDate" });
+            result.Errors.Select(e => e.PropertyName).Should().Contain(new[] { "SubmissionId", "RegistrationBlobName", "SubmissionPeriod", "SubmissionDate" });
         }
 
         [TestMethod]
@@ -51,7 +49,6 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationSubmission
             var request = new CreateRegistrationSubmissionDataRequest
             {
                 SubmissionId = Guid.NewGuid(),
-                FileId = Guid.NewGuid(),
                 RegistrationBlobName = "av-blob-name",
                 ComplianceSchemeId = null,
                 SubmissionPeriod = "Jan to Jun 2026",

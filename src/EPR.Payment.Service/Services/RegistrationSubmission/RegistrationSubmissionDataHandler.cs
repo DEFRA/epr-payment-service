@@ -37,15 +37,14 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             ArgumentNullException.ThrowIfNull(request);
 
             _logger.LogInformation(
-                "Processing registration submission data for SubmissionId {SubmissionId} FileId {FileId} RegistrationBlobName {RegistrationBlobName} ComplianceSchemeId {ComplianceSchemeId}.",
+                "Processing registration submission data for SubmissionId {SubmissionId} RegistrationBlobName {RegistrationBlobName} ComplianceSchemeId {ComplianceSchemeId}.",
                 request.SubmissionId,
-                request.FileId,
                 request.RegistrationBlobName,
                 request.ComplianceSchemeId);
 
             try
             {
-                var existing = await _repository.GetBySubmissionAndFileAsync(request.SubmissionId, request.FileId, cancellationToken);
+                var existing = await _repository.GetByRegistrationBlobNameAsync(request.RegistrationBlobName, cancellationToken);
                 if (existing is not null)
                 {
                     return existing.Id;
@@ -62,9 +61,8 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             {
                 _logger.LogError(
                     ex,
-                    "Failed to process registration submission data for SubmissionId {SubmissionId} FileId {FileId} RegistrationBlobName {RegistrationBlobName}.",
+                    "Failed to process registration submission data for SubmissionId {SubmissionId} RegistrationBlobName {RegistrationBlobName}.",
                     request.SubmissionId,
-                    request.FileId,
                     request.RegistrationBlobName);
                 throw;
             }
@@ -91,7 +89,6 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             var entity = new RegistrationSubmissionData
             {
                 SubmissionId = request.SubmissionId,
-                FileId = request.FileId,
                 RegistrationBlobName = request.RegistrationBlobName,
                 ComplianceSchemeId = request.ComplianceSchemeId,
                 SubmissionPeriod = request.SubmissionPeriod,

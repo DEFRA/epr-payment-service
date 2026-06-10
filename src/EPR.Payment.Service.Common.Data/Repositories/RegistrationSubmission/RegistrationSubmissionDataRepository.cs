@@ -23,11 +23,11 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<RegistrationSubmissionData?> GetBySubmissionAndFileAsync(Guid submissionId, Guid fileId, CancellationToken cancellationToken)
+        public Task<RegistrationSubmissionData?> GetByRegistrationBlobNameAsync(string registrationBlobName, CancellationToken cancellationToken)
         {
             return _dataContext.RegistrationSubmissionData
                 .AsNoTracking()
-                .FirstOrDefaultAsync(r => r.SubmissionId == submissionId && r.FileId == fileId, cancellationToken);
+                .FirstOrDefaultAsync(r => r.RegistrationBlobName == registrationBlobName, cancellationToken);
         }
 
         public Task<RegistrationSubmissionData?> GetLatestWithProducersAndSubsidiariesAsync(Guid submissionId, CancellationToken cancellationToken)
@@ -54,16 +54,15 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission
             }
             catch (DbUpdateException ex) when (IsUniqueConstraintViolation(ex))
             {
-                var existing = await GetBySubmissionAndFileAsync(entity.SubmissionId, entity.FileId, cancellationToken);
+                var existing = await GetByRegistrationBlobNameAsync(entity.RegistrationBlobName, cancellationToken);
                 if (existing is null)
                 {
                     throw;
                 }
 
                 _logger.LogInformation(
-                    "Concurrent write detected for SubmissionId {SubmissionId} FileId {FileId}; using winning snapshot {ExistingId}.",
-                    entity.SubmissionId,
-                    entity.FileId,
+                    "Concurrent write detected for RegistrationBlobName {RegistrationBlobName}; using winning snapshot {ExistingId}.",
+                    entity.RegistrationBlobName,
                     existing.Id);
 
                 return existing.Id;

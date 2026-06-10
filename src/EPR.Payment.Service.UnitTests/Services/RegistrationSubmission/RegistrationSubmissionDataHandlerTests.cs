@@ -62,7 +62,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         {
             var request = NewRequest();
             _repositoryMock
-                .Setup(r => r.GetBySubmissionAndFileAsync(request.SubmissionId, request.FileId, _ct))
+                .Setup(r => r.GetByRegistrationBlobNameAsync(request.RegistrationBlobName, _ct))
                 .ThrowsAsync(new InvalidOperationException("boom"));
 
             Func<Task> act = () => _sut.HandleAsync(request, _ct);
@@ -102,9 +102,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         public async Task HandleAsync_ExistingSnapshot_ReturnsExistingIdAndSkipsProcessing()
         {
             var request = NewRequest();
-            var existing = new RegistrationSubmissionData { Id = Guid.NewGuid(), SubmissionId = request.SubmissionId, FileId = request.FileId };
+            var existing = new RegistrationSubmissionData { Id = Guid.NewGuid(), SubmissionId = request.SubmissionId, RegistrationBlobName = request.RegistrationBlobName };
             _repositoryMock
-                .Setup(r => r.GetBySubmissionAndFileAsync(request.SubmissionId, request.FileId, _ct))
+                .Setup(r => r.GetByRegistrationBlobNameAsync(request.RegistrationBlobName, _ct))
                 .ReturnsAsync(existing);
 
             var result = await _sut.HandleAsync(request, _ct);
@@ -144,7 +144,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             {
                 captured.Should().NotBeNull();
                 captured!.SubmissionId.Should().Be(request.SubmissionId);
-                captured.FileId.Should().Be(request.FileId);
+                captured.RegistrationBlobName.Should().Be(request.RegistrationBlobName);
                 captured.ComplianceSchemeId.Should().Be(request.ComplianceSchemeId);
                 captured.SubmissionPeriod.Should().Be(request.SubmissionPeriod);
                 captured.SubmissionDate.Should().Be(request.SubmissionDate);
@@ -368,7 +368,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         private CreateRegistrationSubmissionDataRequest NewRequest() => new()
         {
             SubmissionId = Guid.NewGuid(),
-            FileId = Guid.NewGuid(),
             RegistrationBlobName = $"av-blob-{Guid.NewGuid()}",
             ComplianceSchemeId = Guid.NewGuid(),
             SubmissionPeriod = "Jan to Jun 2026",
@@ -378,7 +377,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         private void ArrangeNoExistingSnapshot(CreateRegistrationSubmissionDataRequest request)
         {
             _repositoryMock
-                .Setup(r => r.GetBySubmissionAndFileAsync(request.SubmissionId, request.FileId, _ct))
+                .Setup(r => r.GetByRegistrationBlobNameAsync(request.RegistrationBlobName, _ct))
                 .ReturnsAsync((RegistrationSubmissionData?)null);
         }
 

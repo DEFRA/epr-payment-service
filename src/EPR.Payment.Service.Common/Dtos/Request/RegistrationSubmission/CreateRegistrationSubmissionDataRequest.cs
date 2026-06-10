@@ -7,8 +7,6 @@ namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission
     {
         public Guid SubmissionId { get; set; }
 
-        public Guid FileId { get; set; }
-
         public string RegistrationBlobName { get; set; } = string.Empty;
 
         public Guid? ComplianceSchemeId { get; set; }

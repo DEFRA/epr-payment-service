@@ -50,7 +50,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationSubmission
             validatorMock.Setup(v => v.Validate(request)).Returns(new ValidationResult(new[]
             {
                 new ValidationFailure("SubmissionId", "SubmissionId is required."),
-                new ValidationFailure("FileId", "FileId is required."),
+                new ValidationFailure("RegistrationBlobName", "RegistrationBlobName is required."),
             }));
 
             var result = await sut.Create(request, cts.Token);
@@ -59,7 +59,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationSubmission
             {
                 var bad = result.Result.Should().BeOfType<BadRequestObjectResult>().Which;
                 bad.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-                bad.Value.Should().BeOfType<ProblemDetails>().Which.Detail.Should().Contain("SubmissionId is required").And.Contain("FileId is required");
+                bad.Value.Should().BeOfType<ProblemDetails>().Which.Detail.Should().Contain("SubmissionId is required").And.Contain("RegistrationBlobName is required");
                 handlerMock.Verify(h => h.HandleAsync(It.IsAny<CreateRegistrationSubmissionDataRequest>(), It.IsAny<CancellationToken>()), Times.Never);
             }
         }

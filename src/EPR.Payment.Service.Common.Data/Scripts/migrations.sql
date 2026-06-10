@@ -6338,3 +6338,74 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260610155517_RemoveFileIdFromRegistrationSubmissionData'
+)
+BEGIN
+    DROP INDEX [IX_RegistrationSubmissionData_SubmissionId_FileId] ON [registration].[RegistrationSubmissionData];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260610155517_RemoveFileIdFromRegistrationSubmissionData'
+)
+BEGIN
+    DECLARE @var29 sysname;
+    SELECT @var29 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[registration].[RegistrationSubmissionData]') AND [c].[name] = N'FileId');
+    IF @var29 IS NOT NULL EXEC(N'ALTER TABLE [registration].[RegistrationSubmissionData] DROP CONSTRAINT [' + @var29 + '];');
+    ALTER TABLE [registration].[RegistrationSubmissionData] DROP COLUMN [FileId];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260610155517_RemoveFileIdFromRegistrationSubmissionData'
+)
+BEGIN
+
+                    ;WITH dupes AS (
+                        SELECT Id,
+                               ROW_NUMBER() OVER (
+                                   PARTITION BY RegistrationBlobName
+                                   ORDER BY CreatedDate DESC
+                               ) AS rn
+                        FROM [registration].[RegistrationSubmissionData]
+                    )
+                    DELETE rsd
+                    FROM [registration].[RegistrationSubmissionData] rsd
+                    INNER JOIN dupes d ON rsd.Id = d.Id
+                    WHERE d.rn > 1;
+                
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260610155517_RemoveFileIdFromRegistrationSubmissionData'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_RegistrationSubmissionData_RegistrationBlobName] ON [registration].[RegistrationSubmissionData] ([RegistrationBlobName]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260610155517_RemoveFileIdFromRegistrationSubmissionData'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260610155517_RemoveFileIdFromRegistrationSubmissionData', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+

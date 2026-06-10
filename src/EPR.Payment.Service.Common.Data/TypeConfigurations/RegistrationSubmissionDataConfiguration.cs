@@ -17,7 +17,6 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.Property(r => r.Id).HasDefaultValueSql("NEWID()");
 
             builder.Property(r => r.SubmissionId).IsRequired();
-            builder.Property(r => r.FileId).IsRequired();
             builder.Property(r => r.RegistrationBlobName).IsRequired().HasMaxLength(100);
             builder.Property(r => r.ComplianceSchemeId);
             builder.Property(r => r.SubmissionPeriod).IsRequired();
@@ -25,7 +24,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.Property(r => r.CreatedDate).HasColumnType("datetimeoffset").IsRequired();
             builder.Property(r => r.UpdatedDate).HasColumnType("datetimeoffset");
 
-            builder.HasIndex(r => new { r.SubmissionId, r.FileId }).IsUnique();
+            builder.HasIndex(r => r.RegistrationBlobName).IsUnique();
         }
     }
 }

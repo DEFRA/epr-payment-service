@@ -45,26 +45,26 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
         }
 
         [TestMethod]
-        public async Task GetBySubmissionAndFileAsync_Match_ReturnsEntity()
+        public async Task GetByRegistrationBlobNameAsync_Match_ReturnsEntity()
         {
             var submissionId = Guid.NewGuid();
-            var fileId = Guid.NewGuid();
-            var entity = new RegistrationSubmissionData { Id = Guid.NewGuid(), SubmissionId = submissionId, FileId = fileId };
+            var registrationBlobName = $"av-blob-{Guid.NewGuid()}";
+            var entity = new RegistrationSubmissionData { Id = Guid.NewGuid(), SubmissionId = submissionId, RegistrationBlobName = registrationBlobName };
 
             _dataContextMock.Setup(c => c.RegistrationSubmissionData).ReturnsDbSet(new[] { entity });
 
-            var result = await _sut.GetBySubmissionAndFileAsync(submissionId, fileId, _ct);
+            var result = await _sut.GetByRegistrationBlobNameAsync(registrationBlobName, _ct);
 
             result.Should().NotBeNull();
             result!.Id.Should().Be(entity.Id);
         }
 
         [TestMethod]
-        public async Task GetBySubmissionAndFileAsync_NoMatch_ReturnsNull()
+        public async Task GetByRegistrationBlobNameAsync_NoMatch_ReturnsNull()
         {
             _dataContextMock.Setup(c => c.RegistrationSubmissionData).ReturnsDbSet(Array.Empty<RegistrationSubmissionData>());
 
-            var result = await _sut.GetBySubmissionAndFileAsync(Guid.NewGuid(), Guid.NewGuid(), _ct);
+            var result = await _sut.GetByRegistrationBlobNameAsync($"av-blob-{Guid.NewGuid()}", _ct);
 
             result.Should().BeNull();
         }
@@ -123,7 +123,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
             {
                 Id = Guid.NewGuid(),
                 SubmissionId = Guid.NewGuid(),
-                FileId = Guid.NewGuid(),
+                RegistrationBlobName = $"av-blob-{Guid.NewGuid()}",
                 SubmissionPeriod = "period",
                 SubmissionDate = DateTime.UtcNow,
                 CreatedDate = DateTimeOffset.UtcNow,
@@ -157,8 +157,8 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
         public async Task CreateAsync_UniqueViolation_RecoversByRequery(int sqlNumber)
         {
             var submissionId = Guid.NewGuid();
-            var fileId = Guid.NewGuid();
-            var existing = new RegistrationSubmissionData { Id = Guid.NewGuid(), SubmissionId = submissionId, FileId = fileId };
+            var registrationBlobName = $"av-blob-{Guid.NewGuid()}";
+            var existing = new RegistrationSubmissionData { Id = Guid.NewGuid(), SubmissionId = submissionId, RegistrationBlobName = registrationBlobName };
 
             var dbSetMock = new Mock<DbSet<RegistrationSubmissionData>>();
             _dataContextMock.SetupSequence(c => c.RegistrationSubmissionData)
@@ -171,7 +171,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
             {
                 Id = Guid.NewGuid(),
                 SubmissionId = submissionId,
-                FileId = fileId,
+                RegistrationBlobName = registrationBlobName,
                 Producers = new List<RegistrationSubmissionProducer>(),
             };
 
@@ -205,7 +205,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
             {
                 Id = Guid.NewGuid(),
                 SubmissionId = Guid.NewGuid(),
-                FileId = Guid.NewGuid(),
+                RegistrationBlobName = $"av-blob-{Guid.NewGuid()}",
                 Producers = new List<RegistrationSubmissionProducer>(),
             };
 
@@ -226,7 +226,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
             {
                 Id = Guid.NewGuid(),
                 SubmissionId = Guid.NewGuid(),
-                FileId = Guid.NewGuid(),
+                RegistrationBlobName = $"av-blob-{Guid.NewGuid()}",
                 Producers = new List<RegistrationSubmissionProducer>(),
             };
 

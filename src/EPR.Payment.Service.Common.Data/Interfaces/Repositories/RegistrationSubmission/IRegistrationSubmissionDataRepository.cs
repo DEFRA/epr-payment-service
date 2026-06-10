@@ -4,7 +4,7 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSu
 {
     public interface IRegistrationSubmissionDataRepository
     {
-        Task<RegistrationSubmissionData?> GetBySubmissionAndFileAsync(Guid submissionId, Guid fileId, CancellationToken cancellationToken);
+        Task<RegistrationSubmissionData?> GetByRegistrationBlobNameAsync(string registrationBlobName, CancellationToken cancellationToken);
 
         Task<RegistrationSubmissionData?> GetLatestWithProducersAndSubsidiariesAsync(Guid submissionId, CancellationToken cancellationToken);
 
