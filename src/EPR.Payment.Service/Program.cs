@@ -149,6 +149,11 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
+if (app.Environment.IsDevelopment() && builder.Configuration.GetValue<bool>("RunMigration"))
+{
+    app.MigrateDbContext<AppDbContext>();
+}
+
 app.UseHttpsRedirection();
 app.UseSerilogRequestLogging();
 app.UseRouting();
@@ -160,3 +165,6 @@ app.MapControllers();
 
 app.MapHealthChecks("/admin/health", HealthCheckOptionsBuilder.Build()).AllowAnonymous();
 await app.RunAsync();
+
+// Exposed to EPR.Payment.Service.IntegrationTests so WebApplicationFactory<Program> can host the API in-process.
+public partial class Program;

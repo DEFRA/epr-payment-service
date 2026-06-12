@@ -19,6 +19,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.Data.Un
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.Messaging", "EPR.Payment.Service.Messaging\EPR.Payment.Service.Messaging.csproj", "{D143CE0D-1B41-4D7C-9DEF-667ACF97F55F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{C5299E08-751D-4047-802D-2B932AA0BBED}"
+	ProjectSection(SolutionItems) = preProject
+		..\docker-compose.yml = ..\docker-compose.yml
+		..\Makefile = ..\Makefile
+		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
+		..\LICENCE.md = ..\LICENCE.md
+		..\README.md = ..\README.md
+		..\docker-compose-servicebus-config.json = ..\docker-compose-servicebus-config.json
+		..\CODEOWNERS = ..\CODEOWNERS
+		..\compose.env = ..\compose.env
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Service.IntegrationTests", "EPR.Payment.Service.IntegrationTests\EPR.Payment.Service.IntegrationTests.csproj", "{622CE9A8-C5DD-430F-8068-E2783DA628FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +67,10 @@ Global
 		{D143CE0D-1B41-4D7C-9DEF-667ACF97F55F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D143CE0D-1B41-4D7C-9DEF-667ACF97F55F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D143CE0D-1B41-4D7C-9DEF-667ACF97F55F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{622CE9A8-C5DD-430F-8068-E2783DA628FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{622CE9A8-C5DD-430F-8068-E2783DA628FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{622CE9A8-C5DD-430F-8068-E2783DA628FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{622CE9A8-C5DD-430F-8068-E2783DA628FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
