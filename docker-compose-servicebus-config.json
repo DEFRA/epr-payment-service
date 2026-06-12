@@ -1,0 +1,36 @@
+{
+    "UserConfig": {
+        "Namespaces": [
+            {
+                "Name": "sbemulatorns",
+                "Topics": [
+                    {
+                        "Name": "defra.epr.registration.submit.for.fees",
+                        "Properties": {
+                            "DefaultMessageTimeToLive": "PT1H",
+                            "DuplicateDetectionHistoryTimeWindow": "PT20S",
+                            "RequiresDuplicateDetection": false
+                        },
+                        "Subscriptions": [
+                            {
+                                "Name": "registration-submitted-payment-service",
+                                "Properties": {
+                                    "DeadLetteringOnMessageExpiration": false,
+                                    "DefaultMessageTimeToLive": "PT1H",
+                                    "LockDuration": "PT1M",
+                                    "MaxDeliveryCount": 3,
+                                    "ForwardDeadLetteredMessagesTo": "",
+                                    "ForwardTo": "",
+                                    "RequiresSession": false
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Logging": {
+            "Type": "File"
+        }
+    }
+}
