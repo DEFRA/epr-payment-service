@@ -1,5 +1,6 @@
 using EPR.Payment.Service.Common.Data;
 using EPR.Payment.Service.Common.Data.DataModels;
+using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using EPR.Payment.Service.Common.Enums;
 
 namespace EPR.Payment.Service.IntegrationTests.Infrastructure.Builders;
@@ -33,6 +34,8 @@ public static class DatabaseDataGenerator
 
         context.Payment.Add(payment); 
         await context.SaveChangesAsync();
+        
+        payment.OnlinePayment.RequestorType = new RequestorType() { Id = 1, Type = "NA"};
 
         return payment;
     }

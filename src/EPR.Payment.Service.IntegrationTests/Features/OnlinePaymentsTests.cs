@@ -5,7 +5,7 @@ using EPR.Payment.Service.Common.Dtos.Response.Payments;
 
 namespace EPR.Payment.Service.IntegrationTests.Features;
 
-public class OnlinePaymentsTests(PaymentServiceFactory factory) : IntegrationTestBase(factory)
+public class OnlinePaymentsTests(ServiceFixture fixture) : IntegrationTestBase(fixture)
 {
     [Fact]
     public async Task GIVEN_OnlinePaymentExists_WHEN_GetOnlinePayment_THEN_Returns200WithOnlinePayment()
@@ -21,7 +21,7 @@ public class OnlinePaymentsTests(PaymentServiceFactory factory) : IntegrationTes
         {
             payment.ExternalPaymentId,
             payment.UpdatedByUserId,
-            payment.UpdatedByOrgId,
+            payment.UpdatedByOrganisationId,
             payment.GovPayPaymentId,
             payment.Reference,
             payment.Amount,

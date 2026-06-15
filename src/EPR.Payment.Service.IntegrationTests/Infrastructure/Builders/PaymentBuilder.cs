@@ -12,7 +12,7 @@ public sealed class PaymentBuilder(TestBuilders builders)
         await builders.WithDbContextAsync(async ctx =>
         {
             payment = await DatabaseDataGenerator.InsertRandomPayment(ctx);
-        }, save: true);
+        }, save: false);
         return new BuiltPayment(payment);
     }
 }

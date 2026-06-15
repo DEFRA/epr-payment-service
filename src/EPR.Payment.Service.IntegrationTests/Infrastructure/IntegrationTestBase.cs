@@ -6,7 +6,7 @@ namespace EPR.Payment.Service.IntegrationTests.Infrastructure;
 [Trait("Category", "IntegrationTest")]
 public abstract class IntegrationTestBase
 {
-    protected PaymentServiceFactory Factory { get; }
+    private readonly ServiceFixture _fixture;
     protected HttpClient Client { get; }
 
     /// <summary>
@@ -16,10 +16,10 @@ public abstract class IntegrationTestBase
     /// </summary>
     protected TestBuilders Builder { get; }
 
-    protected IntegrationTestBase(PaymentServiceFactory factory)
+    protected IntegrationTestBase(ServiceFixture fixture)
     {
-        Factory = factory;
-        Client = factory.CreateClient();
-        Builder = new TestBuilders(factory);
+        _fixture = fixture;
+        Client = _fixture.CreateHttpClient();
+        Builder = new TestBuilders(fixture);
     }
 }

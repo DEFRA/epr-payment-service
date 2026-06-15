@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Testcontainers.MsSql;
 
 namespace EPR.Payment.Service.IntegrationTests.Infrastructure;
@@ -12,54 +13,25 @@ namespace EPR.Payment.Service.IntegrationTests.Infrastructure;
 /// Test classes share this via <see cref="PaymentServiceCollection"/> and use unique IDs
 /// (Guid.NewGuid + per-class label prefixes) to stay isolated from each other.
 /// </summary>
-public sealed class PaymentServiceFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public sealed class PaymentServiceFactory(IConfiguration? configuration = null)
+    : WebApplicationFactory<Program>
 {
-    private MsSqlContainer _container = null!;
-    private string _connectionString = null!;
-
-    public async Task InitializeAsync()
-    {
-        _container = new MsSqlBuilder()
-            .WithImage("mcr.microsoft.com/mssql/server:2025-latest")
-            .WithPassword("Password1!")
-            .WithCreateParameterModifier(p => p.HostConfig.Memory = (long)(3.5 * 1024 * 1024 * 1024))
-            .Build();
-        await _container.StartAsync();
-
-        var master = _container.GetConnectionString();
-        var databaseName = "FeesPayment_" + Guid.NewGuid().ToString("N")[..12];
-        await using (var conn = new SqlConnection(master))
-        {
-            await conn.OpenAsync();
-            await using var cmd = conn.CreateCommand();
-            cmd.CommandText = $"CREATE DATABASE [{databaseName}]";
-            await cmd.ExecuteNonQueryAsync();
-        }
-
-        _connectionString = new SqlConnectionStringBuilder(master)
-        {
-            InitialCatalog = databaseName,
-        }.ConnectionString;
-    }
-
-    async Task IAsyncLifetime.DisposeAsync()
-    {
-        await _container.DisposeAsync();
-    }
-
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    protected override IHost CreateHost(IHostBuilder builder)
     {
         builder.UseEnvironment("Development");
 
-        builder.ConfigureAppConfiguration((_, config) =>
+        builder.ConfigureHostConfiguration(config =>
         {
-            config.AddInMemoryCollection(new Dictionary<string, string?>
+            // config here is in the context of the host - the web application - so this
+            // builds it from the web application's appsettings file
+            config.AddJsonFile("appsettings.json");
+            
+            // And then add any custom config passed in from the test project
+            if (configuration != null)
             {
-                ["ConnectionStrings:PaymentConnectionString"] = _connectionString,
-                // The first CreateClient() forces Program.Main, which sees RunMigration=true and
-                // migrates the empty DB. Subsequent clients reuse the same Host with no further DDL.
-                ["RunMigration"] = "true",
-            });
+                config.AddConfiguration(configuration);
+            }
         });
+        return base.CreateHost(builder);
     }
 }
