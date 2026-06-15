@@ -117,7 +117,7 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
 
             await handler.HandleAsync(request, args.CancellationToken);
 
-            await args.CompleteMessageAsync(args.Message);
+        await args.CompleteMessageAsync(args.Message);
 
             _logger.LogInformation(
                 "Processed registration submitted message for SubmissionId {SubmissionId}",
