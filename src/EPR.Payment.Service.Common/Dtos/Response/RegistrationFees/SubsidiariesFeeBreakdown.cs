@@ -5,6 +5,9 @@
         public decimal TotalSubsidiariesOMPFees { get; set; }
         public int CountOfOMPSubsidiaries { get; set; }
         public decimal UnitOMPFees { get; set; }
+        public decimal TotalSubsidiariesClosedLoopRecyclingFees { get; set; }
+        public int CountOfClosedLoopRecyclingSubsidiaries { get; set; }
+        public decimal UnitClosedLoopRecyclingFees { get; set; }
         public List<FeeBreakdown> FeeBreakdowns { get; set; } = new();
     }
 

@@ -6,6 +6,7 @@ namespace EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer
     {
         public decimal ProducerRegistrationFee { get; set; } = 0; // Default to 0 if not applicable
         public decimal ProducerOnlineMarketPlaceFee { get; set; } = 0; // Default to 0 if not applicable
+        public decimal ProducerClosedLoopRecyclingFee { get; set; } = 0; // Default to 0 if not applicable
         public decimal SubsidiariesFee { get; set; } = 0; // Default to 0 if not applicable
         public decimal ProducerLateRegistrationFee { get; set; } = 0; // Default to 0 if not applicable
         public decimal TotalFee { get; set; } // Total fee will be computed

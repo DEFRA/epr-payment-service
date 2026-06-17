@@ -39,8 +39,14 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees
             return _feesRepository.GetOnlineMarketFeeAsync(regulator, submissionDate, cancellationToken);
         }
 
+        protected virtual Task<decimal> GetClosedLoopRecyclingFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
+        {
+            return _feesRepository.GetClosedLoopRecyclingFeeAsync(regulator, submissionDate, cancellationToken);
+        }
+
         protected abstract int GetNoOfSubsidiaries(TRequestDto request);
         protected abstract int GetNoOfOMPSubsidiaries(TRequestDto request);
+        protected abstract int GetNoOfClosedLoopRecyclingSubsidiaries(TRequestDto request);
         protected abstract RegulatorType GetRegulator(TRequestDto request);
         protected abstract DateTime GetSubmissionDate(TRequestDto request);
 
@@ -49,6 +55,10 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees
             var regulator = GetRegulator(request);
             var submissionDate = GetSubmissionDate(request);
             var unitOMPFees = await GetOnlineMarketFeeAsync(regulator, submissionDate, cancellationToken);
+            var noOfClosedLoopRecyclingSubsidiaries = GetNoOfClosedLoopRecyclingSubsidiaries(request);
+            var unitClosedLoopRecyclingFees = noOfClosedLoopRecyclingSubsidiaries > 0
+                ? await GetClosedLoopRecyclingFeeAsync(regulator, submissionDate, cancellationToken)
+                : 0m;
 
             // Fee breakdown initialization
             var subsidiariesFeeBreakdown = new SubsidiariesFeeBreakdown
@@ -56,6 +66,9 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees
                 CountOfOMPSubsidiaries = GetNoOfOMPSubsidiaries(request),
                 UnitOMPFees = unitOMPFees,
                 TotalSubsidiariesOMPFees = GetNoOfOMPSubsidiaries(request) * unitOMPFees,
+                CountOfClosedLoopRecyclingSubsidiaries = noOfClosedLoopRecyclingSubsidiaries,
+                UnitClosedLoopRecyclingFees = unitClosedLoopRecyclingFees,
+                TotalSubsidiariesClosedLoopRecyclingFees = noOfClosedLoopRecyclingSubsidiaries * unitClosedLoopRecyclingFees,
                 FeeBreakdowns = new List<FeeBreakdown>()
             };
 

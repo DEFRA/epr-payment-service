@@ -10,8 +10,7 @@ namespace EPR.Payment.Service.Validations.Common
         {
             return ruleBuilder
                 .NotEmpty().WithMessage(ValidationMessages.InvalidSubmissionDate)
-                .Must(BeInUtc).WithMessage(ValidationMessages.SubmissionDateMustBeUtc)
-                .LessThanOrEqualTo(DateTime.UtcNow).WithMessage(ValidationMessages.FutureSubmissionDate);
+                .Must(BeInUtc).WithMessage(ValidationMessages.SubmissionDateMustBeUtc);
         }
 
 
@@ -19,8 +18,7 @@ namespace EPR.Payment.Service.Validations.Common
         {
             return ruleBuilder
                 .NotEmpty().WithMessage(ValidationMessages.ResubmissionDateRequired)
-                .Must(BeInUtc).WithMessage(ValidationMessages.ResubmissionDateMustBeUtc)
-                .LessThanOrEqualTo(DateTime.UtcNow).WithMessage(ValidationMessages.FutureResubmissionDate);
+                .Must(BeInUtc).WithMessage(ValidationMessages.ResubmissionDateMustBeUtc);
         }
 
         private static bool BeInUtc(DateTime dateTime)

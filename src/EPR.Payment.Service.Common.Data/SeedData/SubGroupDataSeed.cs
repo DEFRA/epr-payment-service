@@ -25,7 +25,8 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                 new SubGroup { Id = (int)ServiceCommonEnums.SubGroup.PaperOrBoardOrFibreBasedCompositeMaterial, Type = ServiceCommonEnums.SubGroup.PaperOrBoardOrFibreBasedCompositeMaterial.ToString(), Description = ServiceCommonEnums.SubGroup.PaperOrBoardOrFibreBasedCompositeMaterial.GetDescription() },
                 new SubGroup { Id = (int)ServiceCommonEnums.SubGroup.Plastic, Type = ServiceCommonEnums.SubGroup.Plastic.ToString(), Description = ServiceCommonEnums.SubGroup.Plastic.GetDescription() },
                 new SubGroup { Id = (int)ServiceCommonEnums.SubGroup.Steel, Type = ServiceCommonEnums.SubGroup.Steel.ToString(), Description = ServiceCommonEnums.SubGroup.Steel.GetDescription() },
-                new SubGroup { Id = (int)ServiceCommonEnums.SubGroup.Wood, Type = ServiceCommonEnums.SubGroup.Wood.ToString(), Description = ServiceCommonEnums.SubGroup.Wood.GetDescription() });
+                new SubGroup { Id = (int)ServiceCommonEnums.SubGroup.Wood, Type = ServiceCommonEnums.SubGroup.Wood.ToString(), Description = ServiceCommonEnums.SubGroup.Wood.GetDescription() },
+                new SubGroup { Id = (int)ServiceCommonEnums.SubGroup.ClosedLoop, Type = ServiceCommonEnums.SubGroup.ClosedLoop.ToString(), Description = ServiceCommonEnums.SubGroup.ClosedLoop.GetDescription() });
         }
     }
 }

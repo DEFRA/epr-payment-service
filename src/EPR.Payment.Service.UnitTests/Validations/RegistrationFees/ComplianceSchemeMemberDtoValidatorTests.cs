@@ -115,5 +115,130 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationFees
             result.ShouldHaveValidationErrorFor(x => x.NoOfSubsidiariesOnlineMarketplace)
                   .WithErrorMessage(ValidationMessages.NumberOfOMPSubsidiariesLessThanOrEqualToNumberOfSubsidiaries);
         }
+
+        [TestMethod]
+        public void Validate_LargeMember_WithClosedLoopRecycling_ShouldNotHaveError()
+        {
+            var dto = new ComplianceSchemeMemberDto
+            {
+                MemberId = "M1",
+                MemberType = "LARGE",
+                IsClosedLoopRecycling = true,
+                NumberOfSubsidiaries = 0,
+                NoOfSubsidiariesOnlineMarketplace = 0
+            };
+
+            var result = _validator.TestValidate(dto);
+
+            result.ShouldNotHaveValidationErrorFor(x => x);
+        }
+
+        [TestMethod]
+        public void Validate_SmallMember_WithClosedLoopRecycling_ShouldHaveError()
+        {
+            var dto = new ComplianceSchemeMemberDto
+            {
+                MemberId = "M1",
+                MemberType = "SMALL",
+                IsClosedLoopRecycling = true,
+                NumberOfSubsidiaries = 0,
+                NoOfSubsidiariesOnlineMarketplace = 0
+            };
+
+            var result = _validator.TestValidate(dto);
+
+            result.ShouldHaveValidationErrorFor(x => x)
+                .WithErrorMessage(ValidationMessages.ClosedLoopRecyclingNotAllowedForSmall);
+        }
+
+        [TestMethod]
+        public void Validate_NoOfClosedLoopRecyclingSubsidiariesGreaterThanNumberOfSubsidiaries_ShouldHaveError()
+        {
+            var dto = new ComplianceSchemeMemberDto
+            {
+                MemberId = "M1",
+                MemberType = "LARGE",
+                NumberOfSubsidiaries = 2,
+                NoOfSubsidiariesOnlineMarketplace = 0,
+                NoOfSubsidiariesClosedLoopRecycling = 5
+            };
+
+            var result = _validator.TestValidate(dto);
+
+            result.ShouldHaveValidationErrorFor(x => x.NoOfSubsidiariesClosedLoopRecycling)
+                .WithErrorMessage(ValidationMessages.NumberOfClosedLoopRecyclingSubsidiariesLessThanOrEqualToNumberOfSubsidiaries);
+        }
+
+        [TestMethod]
+        public void Validate_NoOfClosedLoopRecyclingSubsidiariesNegative_ShouldHaveError()
+        {
+            var dto = new ComplianceSchemeMemberDto
+            {
+                MemberId = "M1",
+                MemberType = "LARGE",
+                NumberOfSubsidiaries = 5,
+                NoOfSubsidiariesOnlineMarketplace = 0,
+                NoOfSubsidiariesClosedLoopRecycling = -1
+            };
+
+            var result = _validator.TestValidate(dto);
+
+            result.ShouldHaveValidationErrorFor(x => x.NoOfSubsidiariesClosedLoopRecycling)
+                .WithErrorMessage(ValidationMessages.NoOfSubsidiariesClosedLoopRecyclingRange);
+        }
+
+        [TestMethod]
+        public void Validate_SmallMember_WithClosedLoopRecyclingSubsidiariesGreaterThanZero_ShouldHaveError()
+        {
+            var dto = new ComplianceSchemeMemberDto
+            {
+                MemberId = "M1",
+                MemberType = "SMALL",
+                NumberOfSubsidiaries = 5,
+                NoOfSubsidiariesOnlineMarketplace = 0,
+                IsClosedLoopRecycling = false,
+                NoOfSubsidiariesClosedLoopRecycling = 2
+            };
+
+            var result = _validator.TestValidate(dto);
+
+            result.ShouldHaveValidationErrorFor(x => x)
+                .WithErrorMessage(ValidationMessages.ClosedLoopRecyclingNotAllowedForSmall);
+        }
+
+        [TestMethod]
+        public void Validate_LargeMember_WithClosedLoopRecyclingSubsidiaries_ShouldNotHaveError()
+        {
+            var dto = new ComplianceSchemeMemberDto
+            {
+                MemberId = "M1",
+                MemberType = "LARGE",
+                NumberOfSubsidiaries = 5,
+                NoOfSubsidiariesOnlineMarketplace = 0,
+                IsClosedLoopRecycling = false,
+                NoOfSubsidiariesClosedLoopRecycling = 3
+            };
+
+            var result = _validator.TestValidate(dto);
+
+            result.ShouldNotHaveValidationErrorFor(x => x);
+        }
+
+        [TestMethod]
+        public void Validate_SmallMember_WithoutClosedLoopRecycling_ShouldNotHaveClosedLoopError()
+        {
+            var dto = new ComplianceSchemeMemberDto
+            {
+                MemberId = "M1",
+                MemberType = "SMALL",
+                IsClosedLoopRecycling = false,
+                NumberOfSubsidiaries = 0,
+                NoOfSubsidiariesOnlineMarketplace = 0
+            };
+
+            var result = _validator.TestValidate(dto);
+
+            result.ShouldNotHaveValidationErrorFor(x => x);
+        }
     }
 }

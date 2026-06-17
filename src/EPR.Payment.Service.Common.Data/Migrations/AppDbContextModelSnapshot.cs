@@ -4472,6 +4472,86 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 5,
                             RegulatorId = 4,
                             SubGroupId = 7
+                        },
+                        new
+                        {
+                            Id = 26000060,
+                            Amount = 254800m,
+                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2026, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 2,
+                            RegulatorId = 1,
+                            SubGroupId = 15
+                        },
+                        new
+                        {
+                            Id = 26000061,
+                            Amount = 254800m,
+                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2026, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 2,
+                            RegulatorId = 2,
+                            SubGroupId = 15
+                        },
+                        new
+                        {
+                            Id = 26000062,
+                            Amount = 254800m,
+                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2026, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 2,
+                            RegulatorId = 3,
+                            SubGroupId = 15
+                        },
+                        new
+                        {
+                            Id = 26000063,
+                            Amount = 254800m,
+                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2026, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 2,
+                            RegulatorId = 4,
+                            SubGroupId = 15
+                        },
+                        new
+                        {
+                            Id = 26000064,
+                            Amount = 254800m,
+                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2026, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 1,
+                            RegulatorId = 1,
+                            SubGroupId = 15
+                        },
+                        new
+                        {
+                            Id = 26000065,
+                            Amount = 254800m,
+                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2026, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 1,
+                            RegulatorId = 2,
+                            SubGroupId = 15
+                        },
+                        new
+                        {
+                            Id = 26000066,
+                            Amount = 254800m,
+                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2026, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 1,
+                            RegulatorId = 3,
+                            SubGroupId = 15
+                        },
+                        new
+                        {
+                            Id = 26000067,
+                            Amount = 254800m,
+                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveTo = new DateTime(2026, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
+                            GroupId = 1,
+                            RegulatorId = 4,
+                            SubGroupId = 15
                         });
                 });
 
@@ -4679,6 +4759,12 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             Id = 14,
                             Description = "Wood",
                             Type = "Wood"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Description = "Closed Loop Recycling",
+                            Type = "ClosedLoop"
                         });
                 });
 

@@ -7,9 +7,11 @@ namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceSch
         public required RegulatorType Regulator { get; set; } // "GB-ENG", "GB-SCT", etc.
         public required string MemberType { get; set; } //"Large" or "Small"
         public bool IsOnlineMarketplace { get; set; }
+        public bool IsClosedLoopRecycling { get; set; }
         public bool IsLateFeeApplicable { get; set; }
         public int NumberOfSubsidiaries { get; set; }
         public int NoOfSubsidiariesOnlineMarketplace { get; set; }
+        public int NoOfSubsidiariesClosedLoopRecycling { get; set; }
         public required DateTime SubmissionDate { get; set; }
     }
 }

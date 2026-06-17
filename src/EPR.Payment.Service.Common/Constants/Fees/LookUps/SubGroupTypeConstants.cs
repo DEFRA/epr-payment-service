@@ -5,6 +5,7 @@
         public const string ReSubmitting = "ReSubmitting";
         public const string OnlineMarket = "Online";
         public const string LateFee = "LateFee";
+        public const string ClosedLoopRecycling = "ClosedLoop";
     }
 }
 

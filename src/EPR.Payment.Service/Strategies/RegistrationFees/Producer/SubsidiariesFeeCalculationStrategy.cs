@@ -15,6 +15,11 @@ namespace EPR.Payment.Service.Strategies.RegistrationFees.Producer
             return request.NoOfSubsidiariesOnlineMarketplace;
         }
 
+        protected override int GetNoOfClosedLoopRecyclingSubsidiaries(ProducerRegistrationFeesRequestDto request)
+        {
+            return request.NoOfSubsidiariesClosedLoopRecycling;
+        }
+
         protected override int GetNoOfSubsidiaries(ProducerRegistrationFeesRequestDto request)
         {
             return request.NumberOfSubsidiaries;
