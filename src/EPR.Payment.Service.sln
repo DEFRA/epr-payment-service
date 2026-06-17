@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
@@ -18,6 +18,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.Data.UnitTests", "EPR.Payment.Service.Data.UnitTests\EPR.Payment.Service.Data.UnitTests.csproj", "{DBDD3A6A-7AF8-47EC-9270-7B90D41DBB54}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Service.Messaging", "EPR.Payment.Service.Messaging\EPR.Payment.Service.Messaging.csproj", "{D143CE0D-1B41-4D7C-9DEF-667ACF97F55F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Service.IntegrationTests", "EPR.Payment.Service.IntegrationTests\EPR.Payment.Service.IntegrationTests.csproj", "{8B9FC014-DEF1-4839-AC46-57D5AB745FF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{D143CE0D-1B41-4D7C-9DEF-667ACF97F55F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D143CE0D-1B41-4D7C-9DEF-667ACF97F55F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D143CE0D-1B41-4D7C-9DEF-667ACF97F55F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B9FC014-DEF1-4839-AC46-57D5AB745FF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B9FC014-DEF1-4839-AC46-57D5AB745FF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B9FC014-DEF1-4839-AC46-57D5AB745FF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B9FC014-DEF1-4839-AC46-57D5AB745FF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{D9D75872-84A7-49FA-B6D4-E4667B957F6F} = {603ACB27-F7CA-4E8E-9F5E-34154C0599FA}
 		{7FB983DC-BD2D-45D3-8539-1166510090BC} = {603ACB27-F7CA-4E8E-9F5E-34154C0599FA}
 		{DBDD3A6A-7AF8-47EC-9270-7B90D41DBB54} = {603ACB27-F7CA-4E8E-9F5E-34154C0599FA}
+		{8B9FC014-DEF1-4839-AC46-57D5AB745FF2} = {603ACB27-F7CA-4E8E-9F5E-34154C0599FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0EC279C7-54F8-4894-92D8-ED41CBE2C33A}

@@ -4828,6 +4828,9 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnOrder(4);
 
+                    b.Property<Guid?>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("OrganisationId")
                         .HasColumnType("uniqueidentifier");
 
@@ -4964,6 +4967,9 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
+
+                    b.Property<Guid?>("FileId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

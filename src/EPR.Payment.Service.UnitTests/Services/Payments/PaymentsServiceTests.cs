@@ -86,5 +86,21 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
                 .Should().ThrowAsync<ArgumentException>()
                 .WithMessage(PaymentConstants.InvalidReference);
         }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetPreviousPaymentsByFileIdAsync_RepositoryReturnsAResult_ShouldReturnPreviousPayments(
+            [Frozen] decimal expectedPreviousPayments,
+            Guid fileId
+            )
+        {
+            //Arrange
+            _paymentsRepositoryMock.Setup(i => i.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken)).ReturnsAsync(expectedPreviousPayments);
+
+            //Act
+            var result = await _service!.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken);
+
+            //Assert
+            result.Should().Be(expectedPreviousPayments);
+        }
     }
 }

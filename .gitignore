@@ -33,3 +33,5 @@ appsettings.Test.json
 /src/EPR.Payment.Service.UnitTests/TestResults/04d1bfc0-3d89-4dac-8294-059d6beceb48/coverage.cobertura.xml
 .env
 .idea/
+
+src/.idea/.idea.EPR.Payment.Service/.idea/

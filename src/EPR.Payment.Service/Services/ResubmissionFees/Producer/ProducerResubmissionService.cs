@@ -27,7 +27,11 @@ namespace EPR.Payment.Service.Services.ResubmissionFees.Producer
             ProducerResubmissionFeeRequestDto request, CancellationToken cancellationToken)
         {
             var baseFee = await _resubmissionAmountStrategy.CalculateFeeAsync(request, cancellationToken);
-            var previousPayments = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, cancellationToken);
+            var previousPayments = request.FileId.HasValue
+                ? await _paymentsService.GetPreviousPaymentsByFileIdAsync(request.FileId.Value, cancellationToken)
+                : await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, cancellationToken);
+            if (request.FileId.HasValue && previousPayments == 0)
+                previousPayments = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, cancellationToken);
 
             decimal totalFee;
 

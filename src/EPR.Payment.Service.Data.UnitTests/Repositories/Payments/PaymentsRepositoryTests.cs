@@ -158,8 +158,62 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
             //Act
             var result = await _mockPaymentsRepository.GetPreviousPaymentIncludeChildrenByReferenceAsync(reference, _cancellationToken);
 
-            //Assert            
-            Assert.IsNull(result);            
-        }        
+            //Assert
+            Assert.IsNull(result);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetPreviousPaymentsByFileIdAsync_SinglePaymentWithMatchingFileId_ShouldReturnAmount(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] PaymentsRepository _mockPaymentsRepository)
+        {
+            //Arrange
+            _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
+            _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object);
+
+            var fileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5113");
+
+            //Act
+            var result = await _mockPaymentsRepository.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken);
+
+            //Assert
+            result.Should().Be(50.0m);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetPreviousPaymentsByFileIdAsync_MultiplePaymentsWithMatchingFileId_ShouldReturnSummedAmount(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] PaymentsRepository _mockPaymentsRepository)
+        {
+            //Arrange
+            _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
+            _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object);
+
+            var fileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5111");
+
+            //Act
+            var result = await _mockPaymentsRepository.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken);
+
+            //Assert
+            result.Should().Be(100.0m);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task GetPreviousPaymentsByFileIdAsync_NoMatchingFileId_ShouldReturnZeroAmount(
+            [Frozen] Mock<IAppDbContext> _dataContextMock,
+            [Greedy] PaymentsRepository _mockPaymentsRepository)
+        {
+            //Arrange
+            _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
+            _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object);
+
+            var fileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5110");
+
+            //Act
+            var result = await _mockPaymentsRepository.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken);
+
+            //Assert
+            result.Should().Be(0.0m);
+        }
     }
 }

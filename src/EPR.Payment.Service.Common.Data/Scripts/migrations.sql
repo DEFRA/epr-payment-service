@@ -1,4 +1,4 @@
-﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
     CREATE TABLE [__EFMigrationsHistory] (
         [MigrationId] nvarchar(150) NOT NULL,
@@ -6134,6 +6134,38 @@ IF NOT EXISTS (
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
     VALUES (N'20260427101504_add-closed-loop-recycling-fee-2026', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260322000000_AddFileIdToOfflinePayment'
+)
+BEGIN
+    ALTER TABLE [Payment] ADD [FileId] uniqueidentifier NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260322000000_AddFileIdToOfflinePayment'
+)
+BEGIN
+    ALTER TABLE [OfflinePayment] ADD [FileId] uniqueidentifier NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260322000000_AddFileIdToOfflinePayment'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260322000000_AddFileIdToOfflinePayment', N'8.0.4');
 END;
 GO
 

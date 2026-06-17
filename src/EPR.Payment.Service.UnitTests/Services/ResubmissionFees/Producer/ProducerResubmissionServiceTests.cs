@@ -252,5 +252,119 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.Producer
             result.PreviousPayments.Should().Be(overpayment);
             result.OutstandingPayment.Should().Be(baseFee - overpayment); // Should be negative due to excess overpayment
         }
+
+        [TestMethod]
+        public async Task GetResubmissionFeeAsync_WithFileId_ShouldUsePreviousPaymentsByFileId()
+        {
+            // Arrange
+            var fileId = Guid.NewGuid();
+            var request = new ProducerResubmissionFeeRequestDto
+            {
+                Regulator = "GB-ENG",
+                ReferenceNumber = "REF12345",
+                MemberCount = 1,
+                FileId = fileId
+            };
+
+            decimal baseFee = 10000m;
+            decimal filePayments = 5000m;
+
+            _resubmissionAmountStrategyMock
+                .Setup(s => s.CalculateFeeAsync(request, _cancellationToken))
+                .ReturnsAsync(baseFee);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken))
+                .ReturnsAsync(filePayments);
+
+            // Act
+            var result = await _resubmissionService.GetResubmissionFeeAsync(request, _cancellationToken);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.PreviousPayments.Should().Be(filePayments);
+                result.OutstandingPayment.Should().Be(baseFee - filePayments);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+            }
+        }
+
+        [TestMethod]
+        public async Task GetResubmissionFeeAsync_WithFileId_WhenNoFilePayments_ShouldFallBackToReferencePayments()
+        {
+            // Arrange
+            var fileId = Guid.NewGuid();
+            var request = new ProducerResubmissionFeeRequestDto
+            {
+                Regulator = "GB-ENG",
+                ReferenceNumber = "REF12345",
+                MemberCount = 1,
+                FileId = fileId
+            };
+
+            decimal baseFee = 10000m;
+            decimal referencePayments = 5000m;
+
+            _resubmissionAmountStrategyMock
+                .Setup(s => s.CalculateFeeAsync(request, _cancellationToken))
+                .ReturnsAsync(baseFee);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken))
+                .ReturnsAsync(0m);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, _cancellationToken))
+                .ReturnsAsync(referencePayments);
+
+            // Act
+            var result = await _resubmissionService.GetResubmissionFeeAsync(request, _cancellationToken);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.PreviousPayments.Should().Be(referencePayments);
+                result.OutstandingPayment.Should().Be(baseFee - referencePayments);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, _cancellationToken), Times.Once);
+            }
+        }
+
+        [TestMethod]
+        public async Task GetResubmissionFeeAsync_WithNoFileId_ShouldUsePreviousPaymentsByReference()
+        {
+            // Arrange
+            var request = new ProducerResubmissionFeeRequestDto
+            {
+                Regulator = "GB-ENG",
+                ReferenceNumber = "REF12345",
+                MemberCount = 1,
+                FileId = null
+            };
+
+            decimal baseFee = 10000m;
+            decimal referencePayments = 5000m;
+
+            _resubmissionAmountStrategyMock
+                .Setup(s => s.CalculateFeeAsync(request, _cancellationToken))
+                .ReturnsAsync(baseFee);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, _cancellationToken))
+                .ReturnsAsync(referencePayments);
+
+            // Act
+            var result = await _resubmissionService.GetResubmissionFeeAsync(request, _cancellationToken);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.PreviousPayments.Should().Be(referencePayments);
+                result.OutstandingPayment.Should().Be(baseFee - referencePayments);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, _cancellationToken), Times.Once);
+            }
+        }
     }
 }

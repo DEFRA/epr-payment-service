@@ -143,7 +143,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             var mapped = new FeeItemSaveRequest
             {
                 ApplicationReferenceNumber = request.ApplicationReferenceNumber,
-                FileId = request.FileId,
+                FileId = request.FileId.Value,
                 ExternalId = request.ExternalId,
                 InvoicePeriod = new DateTimeOffset(request.SubmissionDate, TimeSpan.Zero),
                 PayerId = request.PayerId,
@@ -339,7 +339,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             var mapped = new FeeItemSaveRequest
             {
                 ApplicationReferenceNumber = request.ApplicationReferenceNumber,
-                FileId = request.FileId,
+                FileId = request.FileId.Value,
                 ExternalId = request.ExternalId,
                 InvoicePeriod = new DateTimeOffset(request.SubmissionDate, TimeSpan.Zero),
                 PayerId = request.PayerId,

@@ -12,9 +12,9 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
         {
             var paymentMock = new Mock<DbSet<Data.DataModels.Payment>>();
 
-            var paymentMockData = new List<Data.DataModels.Payment>()
+            var paymentMockData = new List<Data.DataModels.Payment>
             {
-                new Data.DataModels.Payment()
+                new()
                 {
                     Id = 1,
                     ExternalPaymentId = Guid.Parse("d0f74b07-42e1-43a7-ae9d-0e279f213278"),
@@ -27,7 +27,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    OnlinePayment = new Data.DataModels.OnlinePayment()
+                    OnlinePayment = new Data.DataModels.OnlinePayment
                     {
                         Id = 1,
                         PaymentId = 1,
@@ -41,7 +41,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                         },
                     }
                 },
-               new Data.DataModels.Payment()
+               new()
                 {
                     Id = 2,
                     ExternalPaymentId = Guid.Parse("dab3d8e1-409b-4b40-a610-1b41843e4710"),
@@ -54,14 +54,14 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    OfflinePayment = new Data.DataModels.OfflinePayment
                     {
                         Id = 1,
                         PaymentId = 2,
                         PaymentDate = new DateTime()
                     }
                 },
-               new Data.DataModels.Payment()
+               new()
                 {
                     Id = 3,
                     ExternalPaymentId = Guid.Parse("5b44fe7c-f63d-40ae-a28a-97c4680e082c"),
@@ -81,7 +81,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                         PaymentDate = new DateTime()
                     }
                 },
-               new Data.DataModels.Payment()
+               new()
                 {
                     Id = 4,
                     ExternalPaymentId = Guid.Parse("5c81a6b3-3669-413a-a961-f072e18c6025"),
@@ -94,7 +94,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    OfflinePayment = new Data.DataModels.OfflinePayment
                     {
                         Id = 3,
                         PaymentId = 4,
@@ -102,7 +102,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     }
                 },
                //Next three records are added for negative payments. A permitted scenario
-               new Data.DataModels.Payment()
+               new()
                 {
                     Id = 5,
                     ExternalPaymentId = Guid.Parse("482963c7-57da-4758-b630-f25737c18793"),
@@ -115,13 +115,13 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    OnlinePayment = new Data.DataModels.OnlinePayment()
+                    OnlinePayment = new Data.DataModels.OnlinePayment
                     {
                         Id = 2,
                         PaymentId = 5,
                         UpdatedByOrgId = Guid.NewGuid(),
                         OrganisationId = Guid.NewGuid(),
-                        RequestorType = new Data.DataModels.Lookups.RequestorType()
+                        RequestorType = new Data.DataModels.Lookups.RequestorType
                         {
                             Id = DefaultDataConstants.NotApplicableIdValue,
                             Type = DefaultDataConstants.NotApplicableTypeValue,
@@ -129,7 +129,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                         },
                     }
                 },
-                new Data.DataModels.Payment()
+                new()
                 {
                     Id = 6,
                     ExternalPaymentId = Guid.Parse("47bb50c4-c2cd-4791-95e8-f31159411eb4"),
@@ -142,14 +142,14 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    OfflinePayment = new Data.DataModels.OfflinePayment
                     {
                         Id = 4,
                         PaymentId = 6,
                         PaymentDate = new DateTime()
                     }
                 },
-                new Data.DataModels.Payment()
+                new()
                 {
                     Id = 7,
                     ExternalPaymentId = Guid.Parse("5a8fad6e-5570-48b3-83b9-174195b0f0b0"),
@@ -162,14 +162,14 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    OfflinePayment = new Data.DataModels.OfflinePayment
                     {
                         Id = 5,
                         PaymentId = 7,
                         PaymentDate = new DateTime()
                     }
                 },
-               new Data.DataModels.Payment()
+               new()
                 {
                     Id = 3,
                     ExternalPaymentId = Guid.Parse("dab3d8e1-409b-4b40-a610-1b41843e4710"),
@@ -182,7 +182,7 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    OfflinePayment = new Data.DataModels.OfflinePayment
                     {
                         Id = 2,
                         PaymentId = 3,
@@ -202,14 +202,14 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    OfflinePayment = new Data.DataModels.OfflinePayment
                     {
                         Id = 3,
                         PaymentId = 4,
                         PaymentDate = new DateTime()
                     }
                 },
-                new Data.DataModels.Payment()
+                new()
                 {
                     Id = 5,
                     ExternalPaymentId = Guid.Parse("dab3d8e1-409b-4b40-a610-1b41843e4712"),
@@ -222,14 +222,14 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    OfflinePayment = new Data.DataModels.OfflinePayment()
+                    OfflinePayment = new Data.DataModels.OfflinePayment
                     {
                         Id = 3,
                         PaymentId = 4,
                         PaymentDate = new DateTime()
                     }
                 },
-                new Data.DataModels.Payment()
+                new()
                 {
                     Id = 6,
                     ExternalPaymentId = Guid.Parse("dab3d8e1-409b-4b40-a610-1b41843e4713"),
@@ -242,12 +242,78 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    OnlinePayment = new Data.DataModels.OnlinePayment()
+                    OnlinePayment = new Data.DataModels.OnlinePayment
                     {
                         Id = 2,
                         PaymentId = 5,
                         UpdatedByOrgId = Guid.NewGuid(),
                         OrganisationId = Guid.NewGuid()
+                    }
+                },
+                new()
+                {
+                    Id = 7,
+                    ExternalPaymentId = Guid.Parse("0cebe086-0188-4654-85e3-b5f2be920444"),
+                    UserId = Guid.NewGuid(),
+                    Regulator = "Test Regulator",
+                    Reference = "Test Reference With FileId",
+                    InternalStatusId = Enums.Status.Success,
+                    Amount = 75.0M,
+                    ReasonForPayment = "Test FileId",
+                    CreatedDate = new DateTime(),
+                    UpdatedByUserId = Guid.NewGuid(),
+                    UpdatedDate = new DateTime(),
+                    FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5111"),
+                    OfflinePayment = new Data.DataModels.OfflinePayment
+                    {
+                        Id = 10,
+                        PaymentId = 7,
+                        PaymentDate = new DateTime(),
+                        FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5111")
+                    }
+                },
+                new()
+                {
+                    Id = 8,
+                    ExternalPaymentId = Guid.Parse("0cebe086-0188-4654-85e3-b5f2be920445"),
+                    UserId = Guid.NewGuid(),
+                    Regulator = "Test Regulator",
+                    Reference = "Test Reference With FileId",
+                    InternalStatusId = Enums.Status.Success,
+                    Amount = 25.0M,
+                    ReasonForPayment = "Test FileId 2",
+                    CreatedDate = new DateTime(),
+                    UpdatedByUserId = Guid.NewGuid(),
+                    UpdatedDate = new DateTime(),
+                    FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5111"),
+                    OfflinePayment = new Data.DataModels.OfflinePayment
+                    {
+                        Id = 11,
+                        PaymentId = 8,
+                        PaymentDate = new DateTime(),
+                        FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5112")
+                    }
+                },
+                new()
+                {
+                    Id = 9,
+                    ExternalPaymentId = Guid.Parse("0cebe086-0188-4654-85e3-b5f2be920446"),
+                    UserId = Guid.NewGuid(),
+                    Regulator = "Test Regulator",
+                    Reference = "Test Reference With Different FileId",
+                    InternalStatusId = Enums.Status.Success,
+                    Amount = 50.0M,
+                    ReasonForPayment = "Test FileId Different",
+                    CreatedDate = new DateTime(),
+                    UpdatedByUserId = Guid.NewGuid(),
+                    UpdatedDate = new DateTime(),
+                    FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5113"),
+                    OfflinePayment = new Data.DataModels.OfflinePayment
+                    {
+                        Id = 12,
+                        PaymentId = 9,
+                        PaymentDate = new DateTime(),
+                        FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5113")
                     }
                 }
             }.AsQueryable();
