@@ -47,26 +47,8 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission
 
             _dataContext.RegistrationSubmissionData.Add(entity);
 
-            try
-            {
-                await _dataContext.SaveChangesAsync(cancellationToken);
-                return entity.Id;
-            }
-            catch (DbUpdateException ex) when (IsUniqueConstraintViolation(ex))
-            {
-                var existing = await GetByRegistrationBlobNameAsync(entity.RegistrationBlobName, cancellationToken);
-                if (existing is null)
-                {
-                    throw;
-                }
-
-                _logger.LogInformation(
-                    "Concurrent write detected for RegistrationBlobName {RegistrationBlobName}; using winning snapshot {ExistingId}.",
-                    entity.RegistrationBlobName,
-                    existing.Id);
-
-                return existing.Id;
-            }
+             await _dataContext.SaveChangesAsync(cancellationToken);
+             return entity.Id;
         }
 
         private static bool IsUniqueConstraintViolation(DbUpdateException ex) =>

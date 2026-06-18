@@ -1,7 +1,6 @@
 using EPR.Payment.Service.Common.Data.DataModels;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission;
-using EPR.Payment.Service.Data.UnitTests.TestHelpers;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
@@ -149,69 +148,6 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
                 dbSetMock.Verify(s => s.Add(entity), Times.Once);
                 _dataContextMock.Verify(c => c.SaveChangesAsync(_ct), Times.Once);
             }
-        }
-
-        [DataTestMethod]
-        [DataRow(2601)]
-        [DataRow(2627)]
-        public async Task CreateAsync_UniqueViolation_RecoversByRequery(int sqlNumber)
-        {
-            var submissionId = Guid.NewGuid();
-            var registrationBlobName = $"av-blob-{Guid.NewGuid()}";
-            var existing = new RegistrationSubmissionData { Id = Guid.NewGuid(), SubmissionId = submissionId, RegistrationBlobName = registrationBlobName };
-
-            var dbSetMock = new Mock<DbSet<RegistrationSubmissionData>>();
-            _dataContextMock.SetupSequence(c => c.RegistrationSubmissionData)
-                .Returns(dbSetMock.Object)
-                .ReturnsDbSet(new[] { existing });
-            _dataContextMock.Setup(c => c.SaveChangesAsync(_ct))
-                .ThrowsAsync(new DbUpdateException("unique violation", SqlExceptionFactory.Create(sqlNumber)));
-
-            var entity = new RegistrationSubmissionData
-            {
-                Id = Guid.NewGuid(),
-                SubmissionId = submissionId,
-                RegistrationBlobName = registrationBlobName,
-                Producers = new List<RegistrationSubmissionProducer>(),
-            };
-
-            var result = await _sut.CreateAsync(entity, _ct);
-
-            using (new AssertionScope())
-            {
-                result.Should().Be(existing.Id);
-                _loggerMock.Verify(
-                    x => x.Log(
-                        LogLevel.Information,
-                        It.IsAny<EventId>(),
-                        It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Concurrent write detected")),
-                        It.IsAny<Exception?>(),
-                        It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-                    Times.Once);
-            }
-        }
-
-        [TestMethod]
-        public async Task CreateAsync_UniqueViolation_NoExistingRowFound_Rethrows()
-        {
-            var dbSetMock = new Mock<DbSet<RegistrationSubmissionData>>();
-            _dataContextMock.SetupSequence(c => c.RegistrationSubmissionData)
-                .Returns(dbSetMock.Object)
-                .ReturnsDbSet(Array.Empty<RegistrationSubmissionData>());
-            _dataContextMock.Setup(c => c.SaveChangesAsync(_ct))
-                .ThrowsAsync(new DbUpdateException("unique violation", SqlExceptionFactory.Create(2601)));
-
-            var entity = new RegistrationSubmissionData
-            {
-                Id = Guid.NewGuid(),
-                SubmissionId = Guid.NewGuid(),
-                RegistrationBlobName = $"av-blob-{Guid.NewGuid()}",
-                Producers = new List<RegistrationSubmissionProducer>(),
-            };
-
-            Func<Task> act = () => _sut.CreateAsync(entity, _ct);
-
-            await act.Should().ThrowAsync<DbUpdateException>();
         }
 
         [TestMethod]
