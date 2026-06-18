@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260601091016_AddRegistrationBlobNameToRegistrationSubmissionData")]
+    partial class AddRegistrationBlobNameToRegistrationSubmissionData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4988,6 +4991,9 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("RegistrationBlobName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -5003,12 +5009,12 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("RegistrationBlobName")
-                        .IsUnique();
-
-                    b.ToTable("RegistrationSubmissionData", "registration");
+                    b.ToTable("RegistrationSubmissionData", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionProducer", b =>
@@ -5050,7 +5056,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.HasIndex("RegistrationSubmissionDataId");
 
-                    b.ToTable("RegistrationSubmissionProducer", "registration");
+                    b.ToTable("RegistrationSubmissionProducer", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionSubsidiary", b =>
@@ -5084,7 +5090,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.HasIndex("RegistrationSubmissionProducerId");
 
-                    b.ToTable("RegistrationSubmissionSubsidiary", "registration");
+                    b.ToTable("RegistrationSubmissionSubsidiary", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeItem", b =>

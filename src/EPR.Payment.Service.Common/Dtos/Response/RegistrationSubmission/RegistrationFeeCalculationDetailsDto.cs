@@ -1,0 +1,26 @@
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace EPR.Payment.Service.Common.Dtos.Response.RegistrationSubmission
+{
+    [ExcludeFromCodeCoverage]
+    public class RegistrationFeeCalculationDetailsDto
+    {
+        public string OrganisationId { get; set; } = string.Empty;
+
+        public int NumberOfSubsidiaries { get; set; }
+
+        public int NumberOfSubsidiariesBeingOnlineMarketPlace { get; set; }
+
+        public int NumberOfSubsidiariesBeingClosedLoopRecycling { get; set; }
+
+        public string OrganisationSize { get; set; } = string.Empty;
+
+        public bool IsOnlineMarketplace { get; set; }
+
+        public bool IsClosedLoopRecycling { get; set; }
+
+        public bool IsNewJoiner { get; set; }
+
+        public int NationId { get; set; }
+    }
+}

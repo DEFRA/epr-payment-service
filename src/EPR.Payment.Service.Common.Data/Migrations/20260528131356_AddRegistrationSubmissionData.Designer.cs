@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260528131356_AddRegistrationSubmissionData")]
+    partial class AddRegistrationSubmissionData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4988,10 +4991,12 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("RegistrationBlobName")
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SubmissionDate")
                         .HasColumnType("datetime2");
@@ -5003,88 +5008,12 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("RegistrationBlobName")
-                        .IsUnique();
-
-                    b.ToTable("RegistrationSubmissionData", "registration");
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionProducer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
+                    b.Property<DateTimeOffset?>("UpdatedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<bool>("IsClosedLoopRecycling")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsNewJoiner")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsOnlineMarketplace")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("NationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OrganisationId")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("OrganisationSize")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<Guid>("RegistrationSubmissionDataId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("RegistrationSubmissionDataId");
-
-                    b.ToTable("RegistrationSubmissionProducer", "registration");
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionSubsidiary", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsClosedLoopRecycling")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsNewJoiner")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsOnlineMarketplace")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("RegistrationSubmissionProducerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("SubsidiaryId")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RegistrationSubmissionProducerId");
-
-                    b.ToTable("RegistrationSubmissionSubsidiary", "registration");
+                    b.ToTable("RegistrationSubmissionData", (string)null);
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeItem", b =>
@@ -5217,28 +5146,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Navigation("PaymentStatus");
                 });
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionProducer", b =>
-                {
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionData", "RegistrationSubmissionData")
-                        .WithMany("Producers")
-                        .HasForeignKey("RegistrationSubmissionDataId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RegistrationSubmissionData");
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionSubsidiary", b =>
-                {
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionProducer", "RegistrationSubmissionProducer")
-                        .WithMany("Subsidiaries")
-                        .HasForeignKey("RegistrationSubmissionProducerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RegistrationSubmissionProducer");
-                });
-
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.FeeType", b =>
                 {
                     b.Navigation("FeeItems");
@@ -5266,16 +5173,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Navigation("OnlinePayment")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionData", b =>
-                {
-                    b.Navigation("Producers");
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionProducer", b =>
-                {
-                    b.Navigation("Subsidiaries");
                 });
 #pragma warning restore 612, 618
         }
