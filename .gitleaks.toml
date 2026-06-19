@@ -1,0 +1,11 @@
+title = "epr-payment-service gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Service Bus emulator placeholders — never real secrets"
+regexTarget = "match"
+regexes = [
+    '''SharedAccessKey=<replace-me>''',
+]
