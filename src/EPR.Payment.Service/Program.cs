@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Azure.Storage.Blobs;
@@ -175,4 +176,5 @@ app.MapHealthChecks("/admin/health", HealthCheckOptionsBuilder.Build()).AllowAno
 await app.RunAsync();
 
 // Exposed to EPR.Payment.Service.IntegrationTests so WebApplicationFactory<Program> can host the API in-process.
+[SuppressMessage("Major Code Smell", "S1118:Add a \'protected\' constructor or the \'static\' keyword to the class declaration.", Justification = "This is a marker class required or the WebApplicationFactory in integration tests")]
 public partial class Program;
