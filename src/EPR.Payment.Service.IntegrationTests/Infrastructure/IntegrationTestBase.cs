@@ -1,4 +1,7 @@
+using Azure.Messaging.ServiceBus.Administration;
 using EPR.Payment.Service.IntegrationTests.Infrastructure.Builders;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EPR.Payment.Service.IntegrationTests.Infrastructure;
 
@@ -8,6 +11,9 @@ public abstract class IntegrationTestBase
 {
     private readonly ServiceFixture _fixture;
     protected HttpClient Client { get; }
+    
+    protected readonly ServiceBusAdministrationClient ServiceBusAdministrationClient;
+    protected readonly IConfiguration Configuration;
 
     /// <summary>
     /// Fluent test-data entrypoint. See <see cref="TestBuilders"/> for the available builders —
@@ -21,5 +27,7 @@ public abstract class IntegrationTestBase
         _fixture = fixture;
         Client = _fixture.CreateHttpClient();
         Builder = new TestBuilders(fixture);
+        ServiceBusAdministrationClient = _fixture.SharedServices.GetRequiredService<ServiceBusAdministrationClient>();
+        Configuration = _fixture.SharedServices.GetRequiredService<IConfiguration>();
     }
 }

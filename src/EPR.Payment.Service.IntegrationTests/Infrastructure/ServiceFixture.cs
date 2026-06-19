@@ -1,8 +1,10 @@
+using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.MsSql;
+using Testcontainers.ServiceBus;
 
 namespace EPR.Payment.Service.IntegrationTests.Infrastructure;
 
@@ -10,7 +12,8 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
 {
     private bool _disposed;
 
-    private MsSqlContainer _container = null!;
+    private MsSqlContainer _sqlContainer = null!;
+    private ServiceBusContainer _serviceBusContainer = null!;
 
     private WebApplicationFactory<Program>? _factory;
     
@@ -20,14 +23,19 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
     
     public async Task InitializeAsync()
     {
-        _container = new MsSqlBuilder()
-            .WithImage("mcr.microsoft.com/mssql/server:2025-latest")
-            .WithPassword("Password1!")
+        const string sqlPassword = "Password1!";
+        const string sqlContainerAlias = "int-tests-sql"; 
+        var containerNetwork = new NetworkBuilder().WithName("integration-tests").Build();
+        
+        _sqlContainer = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2025-latest")
+            .WithPassword(sqlPassword)
+            .WithNetwork(containerNetwork)
+            .WithNetworkAliases(sqlContainerAlias)
             .WithCreateParameterModifier(p => p.HostConfig.Memory = (long)(3.5 * 1024 * 1024 * 1024))
             .Build();
-        await _container.StartAsync();
+        await _sqlContainer.StartAsync();
 
-        var master = _container.GetConnectionString();
+        var master = _sqlContainer.GetConnectionString();
         var databaseName = "FeesPayment_" + Guid.NewGuid().ToString("N")[..12];
         await using (var conn = new SqlConnection(master))
         {
@@ -41,6 +49,15 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
         {
             InitialCatalog = databaseName,
         }.ConnectionString;
+
+        _serviceBusContainer = new ServiceBusBuilder("mcr.microsoft.com/azure-messaging/servicebus-emulator:latest")
+            .WithAcceptLicenseAgreement(true)
+            .WithMsSqlContainer(containerNetwork, _sqlContainer, sqlContainerAlias, sqlPassword)
+            .Build();
+        await _serviceBusContainer.StartAsync();
+
+        var serviceBusConnectionString = _serviceBusContainer.GetConnectionString();
+        var serviceBusAdminConnectionString = _serviceBusContainer.GetHttpConnectionString();
         
         // builds config from only the test appsettings
         var testConfig = new ConfigurationBuilder()
@@ -48,7 +65,9 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
             .AddJsonFile("appsettings.test.json")
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                ["ConnectionStrings:PaymentConnectionString"] = connectionString
+                ["ConnectionStrings:PaymentConnectionString"] = connectionString,
+                ["ServiceBus:ConnectionString"] = serviceBusConnectionString,
+                ["ServiceBus:AdminConnectionString"] = serviceBusAdminConnectionString
             })
             .Build();
 
@@ -69,9 +88,15 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
         return this._factory.Services.CreateScope();
     }
 
+    public IServiceProvider SharedServices
+    {
+        get => _factory?.Services ?? throw new InvalidOperationException("SharedServices not initialized");
+    }
+
     public async Task DisposeAsync()
     {
-        await _container.DisposeAsync();
+        await _serviceBusContainer.DisposeAsync();
+        await _sqlContainer.DisposeAsync();
 
         if (_factory != null)
         {
