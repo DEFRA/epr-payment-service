@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Testcontainers.MsSql;
 
 namespace EPR.Payment.Service.IntegrationTests.Infrastructure;
 
