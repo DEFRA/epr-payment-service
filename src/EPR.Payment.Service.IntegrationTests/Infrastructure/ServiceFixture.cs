@@ -88,6 +88,11 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
         return this._factory.Services.CreateScope();
     }
 
+    public IServiceProvider SharedServices
+    {
+        get => _factory?.Services ?? throw new InvalidOperationException("SharedServices not initialized");
+    }
+
     public async Task DisposeAsync()
     {
         await _serviceBusContainer.DisposeAsync();
