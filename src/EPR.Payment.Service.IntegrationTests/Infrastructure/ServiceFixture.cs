@@ -48,10 +48,7 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
             .AddJsonFile("appsettings.test.json")
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
-                ["ConnectionStrings:PaymentConnectionString"] = connectionString,
-                // The first CreateClient() forces Program.Main, which sees RunMigration=true and
-                // migrates the empty DB. Subsequent clients reuse the same Host with no further DDL.
-                ["RunMigration"] = "true",
+                ["ConnectionStrings:PaymentConnectionString"] = connectionString
             })
             .Build();
 
