@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Azure.Storage.Blobs;
@@ -92,42 +93,6 @@ var app = builder.Build();
 var featureManager = app.Services.GetRequiredService<IFeatureManager>();
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
-bool enableApplyPendingMigrationsFeature = await featureManager.IsEnabledAsync("EnableApplyPendingMigrationsFeature");
-logger.LogInformation("EnableApplyPendingMigrationsFeature: {EnableApplyPendingMigrationsFeature}", enableApplyPendingMigrationsFeature);
-
-if (enableApplyPendingMigrationsFeature)
-{
-    // Apply pending migrations at startup
-    using var scope = app.Services.CreateScope();
-    
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-    try
-    {
-        var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
-        
-        if (pendingMigrations.Any())
-        {
-            Console.WriteLine("Applying pending migrations:");
-            
-            foreach (var migration in pendingMigrations)
-            {
-                Console.WriteLine($"- {migration}");
-            }
-            
-            await dbContext.Database.MigrateAsync();
-        }
-        else
-        {
-            Console.WriteLine("No pending migrations.");
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"An error occurred while migrating the database: {ex.Message}");
-    }
-}
-
 bool enableOnlinePaymentsFeature = await featureManager.IsEnabledAsync("EnableOnlinePaymentsFeature");
 bool enableOnlinePaymentInsert = await featureManager.IsEnabledAsync("EnableOnlinePaymentInsert");
 bool enableOnlinePaymentUpdate = await featureManager.IsEnabledAsync("EnableOnlinePaymentUpdate");
@@ -157,6 +122,11 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
+if (app.Environment.IsDevelopment() && builder.Configuration.GetValue<bool>("RunMigration"))
+{
+    app.MigrateDbContext<AppDbContext>();
+}
+
 app.UseHttpsRedirection();
 app.UseSerilogRequestLogging();
 app.UseRouting();
@@ -168,3 +138,7 @@ app.MapControllers();
 
 app.MapHealthChecks("/admin/health", HealthCheckOptionsBuilder.Build()).AllowAnonymous();
 await app.RunAsync();
+
+// Exposed to EPR.Payment.Service.IntegrationTests so WebApplicationFactory<Program> can host the API in-process.
+[SuppressMessage("Major Code Smell", "S1118:Add a \'protected\' constructor or the \'static\' keyword to the class declaration.", Justification = "This is a marker class required or the WebApplicationFactory in integration tests")]
+public partial class Program;

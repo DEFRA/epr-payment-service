@@ -1,6 +1,6 @@
 services:
   sql:
-    container_name: sql
+    container_name: payments-service-sql
     image: mcr.microsoft.com/azure-sql-edge
     restart: always
     cap_add:
@@ -9,7 +9,7 @@ services:
       - "1433:1433"
     environment:
       - ACCEPT_EULA=1
-      - SA_PASSWORD=${SQL_PASSWORD}
+    env_file: compose.env
     networks:
       - sb-emulator
 
@@ -24,8 +24,8 @@ services:
       - "5300:5300"
     environment:
       SQL_SERVER: sql
-      MSSQL_SA_PASSWORD: ${SQL_PASSWORD}
       ACCEPT_EULA: "Y"
+    env_file: compose.env
     depends_on:
       - sql
     networks:
