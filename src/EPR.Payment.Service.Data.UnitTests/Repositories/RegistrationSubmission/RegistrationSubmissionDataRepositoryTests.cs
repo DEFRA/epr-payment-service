@@ -1,11 +1,9 @@
-using EPR.Payment.Service.Common.Data.DataModels;
+﻿using EPR.Payment.Service.Common.Data.DataModels;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.EntityFrameworkCore;
@@ -16,7 +14,6 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
     public class RegistrationSubmissionDataRepositoryTests
     {
         private Mock<IAppDbContext> _dataContextMock = null!;
-        private Mock<ILogger<RegistrationSubmissionDataRepository>> _loggerMock = null!;
         private RegistrationSubmissionDataRepository _sut = null!;
         private CancellationToken _ct;
 
@@ -24,22 +21,14 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
         public void Init()
         {
             _dataContextMock = new Mock<IAppDbContext>();
-            _loggerMock = new Mock<ILogger<RegistrationSubmissionDataRepository>>();
-            _sut = new RegistrationSubmissionDataRepository(_dataContextMock.Object, _loggerMock.Object);
+            _sut = new RegistrationSubmissionDataRepository(_dataContextMock.Object);
             _ct = CancellationToken.None;
         }
 
         [TestMethod]
         public void Constructor_NullContext_Throws()
         {
-            Action act = () => new RegistrationSubmissionDataRepository(null!, NullLogger<RegistrationSubmissionDataRepository>.Instance);
-            act.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void Constructor_NullLogger_Throws()
-        {
-            Action act = () => new RegistrationSubmissionDataRepository(_dataContextMock.Object, null!);
+            Action act = () => new RegistrationSubmissionDataRepository(null!);
             act.Should().Throw<ArgumentNullException>();
         }
 
@@ -151,12 +140,12 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
         }
 
         [TestMethod]
-        public async Task CreateAsync_OtherDbUpdateException_Rethrows()
+        public async Task CreateAsync_DbUpdateException_Rethrows()
         {
             var dbSetMock = new Mock<DbSet<RegistrationSubmissionData>>();
             _dataContextMock.Setup(c => c.RegistrationSubmissionData).Returns(dbSetMock.Object);
             _dataContextMock.Setup(c => c.SaveChangesAsync(_ct))
-                .ThrowsAsync(new DbUpdateException("not a unique violation", new InvalidOperationException("inner")));
+                .ThrowsAsync(new DbUpdateException("save failed", new InvalidOperationException("inner")));
 
             var entity = new RegistrationSubmissionData
             {
@@ -168,7 +157,7 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
 
             Func<Task> act = () => _sut.CreateAsync(entity, _ct);
 
-            await act.Should().ThrowAsync<DbUpdateException>().WithMessage("not a unique violation");
+            await act.Should().ThrowAsync<DbUpdateException>().WithMessage("save failed");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Data.DataModels;
+﻿using System.Diagnostics;
+using EPR.Payment.Service.Common.Data.DataModels;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmission;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission;
 using EPR.Payment.Service.Common.Services.Interfaces.RegistrationSubmission;
@@ -36,6 +37,12 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
         {
             ArgumentNullException.ThrowIfNull(request);
 
+            using var logScope = _logger.BeginScope(new Dictionary<string, object>
+            {
+                ["SubmissionId"] = request.SubmissionId,
+                ["RegistrationBlobName"] = request.RegistrationBlobName,
+            });
+
             _logger.LogInformation(
                 "Processing registration submission data for SubmissionId {SubmissionId} RegistrationBlobName {RegistrationBlobName} ComplianceSchemeId {ComplianceSchemeId}.",
                 request.SubmissionId,
@@ -47,6 +54,11 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 var existing = await _repository.GetByRegistrationBlobNameAsync(request.RegistrationBlobName, cancellationToken);
                 if (existing is not null)
                 {
+                    _logger.LogInformation(
+                        "Duplicate registration submission detected for SubmissionId {SubmissionId} RegistrationBlobName {RegistrationBlobName}; returning existing Id {ExistingId} without creating database records.",
+                        request.SubmissionId,
+                        request.RegistrationBlobName,
+                        existing.Id);
                     return existing.Id;
                 }
 
@@ -55,7 +67,19 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 var now = _timeProvider.GetUtcNow();
                 var entity = BuildEntity(request, rows, now);
 
-                return await _repository.CreateAsync(entity, cancellationToken);
+                var createStart = Stopwatch.GetTimestamp();
+                var newId = await _repository.CreateAsync(entity, cancellationToken);
+                var createMs = Stopwatch.GetElapsedTime(createStart).TotalMilliseconds;
+
+                _logger.LogInformation(
+                    "Created registration submission data Id {NewId} for SubmissionId {SubmissionId} with {ProducerCount} producers from {RowCount} CSV rows. DbCreateMs={DbCreateMs}.",
+                    newId,
+                    request.SubmissionId,
+                    entity.Producers.Count,
+                    rows.Count,
+                    createMs);
+
+                return newId;
             }
             catch (Exception ex)
             {
