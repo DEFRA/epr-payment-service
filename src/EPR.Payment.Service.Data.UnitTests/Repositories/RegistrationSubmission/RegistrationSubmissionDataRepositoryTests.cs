@@ -1,0 +1,163 @@
+﻿using EPR.Payment.Service.Common.Data.DataModels;
+using EPR.Payment.Service.Common.Data.Interfaces;
+using EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission;
+using FluentAssertions;
+using FluentAssertions.Execution;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Moq.EntityFrameworkCore;
+
+namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
+{
+    [TestClass]
+    public class RegistrationSubmissionDataRepositoryTests
+    {
+        private Mock<IAppDbContext> _dataContextMock = null!;
+        private RegistrationSubmissionDataRepository _sut = null!;
+        private CancellationToken _ct;
+
+        [TestInitialize]
+        public void Init()
+        {
+            _dataContextMock = new Mock<IAppDbContext>();
+            _sut = new RegistrationSubmissionDataRepository(_dataContextMock.Object);
+            _ct = CancellationToken.None;
+        }
+
+        [TestMethod]
+        public void Constructor_NullContext_Throws()
+        {
+            Action act = () => new RegistrationSubmissionDataRepository(null!);
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public async Task GetByRegistrationBlobNameAsync_Match_ReturnsEntity()
+        {
+            var submissionId = Guid.NewGuid();
+            var registrationBlobName = $"av-blob-{Guid.NewGuid()}";
+            var entity = new RegistrationSubmissionData { Id = Guid.NewGuid(), SubmissionId = submissionId, RegistrationBlobName = registrationBlobName };
+
+            _dataContextMock.Setup(c => c.RegistrationSubmissionData).ReturnsDbSet(new[] { entity });
+
+            var result = await _sut.GetByRegistrationBlobNameAsync(registrationBlobName, _ct);
+
+            result.Should().NotBeNull();
+            result!.Id.Should().Be(entity.Id);
+        }
+
+        [TestMethod]
+        public async Task GetByRegistrationBlobNameAsync_NoMatch_ReturnsNull()
+        {
+            _dataContextMock.Setup(c => c.RegistrationSubmissionData).ReturnsDbSet(Array.Empty<RegistrationSubmissionData>());
+
+            var result = await _sut.GetByRegistrationBlobNameAsync($"av-blob-{Guid.NewGuid()}", _ct);
+
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task CreateAsync_NullEntity_Throws()
+        {
+            Func<Task> act = () => _sut.CreateAsync(null!, _ct);
+            await act.Should().ThrowAsync<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public async Task GetLatestWithProducersAndSubsidiariesAsync_NoMatch_ReturnsNull()
+        {
+            _dataContextMock.Setup(c => c.RegistrationSubmissionData).ReturnsDbSet(Array.Empty<RegistrationSubmissionData>());
+
+            var result = await _sut.GetLatestWithProducersAndSubsidiariesAsync(Guid.NewGuid(), _ct);
+
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task GetLatestWithProducersAndSubsidiariesAsync_MultipleRows_ReturnsMostRecent()
+        {
+            var submissionId = Guid.NewGuid();
+            var older = new RegistrationSubmissionData
+            {
+                Id = Guid.NewGuid(),
+                SubmissionId = submissionId,
+                CreatedDate = new DateTimeOffset(2026, 5, 28, 0, 0, 0, TimeSpan.Zero),
+                Producers = new List<RegistrationSubmissionProducer>(),
+            };
+            var newer = new RegistrationSubmissionData
+            {
+                Id = Guid.NewGuid(),
+                SubmissionId = submissionId,
+                CreatedDate = new DateTimeOffset(2026, 5, 29, 0, 0, 0, TimeSpan.Zero),
+                Producers = new List<RegistrationSubmissionProducer>(),
+            };
+            _dataContextMock.Setup(c => c.RegistrationSubmissionData).ReturnsDbSet(new[] { older, newer });
+
+            var result = await _sut.GetLatestWithProducersAndSubsidiariesAsync(submissionId, _ct);
+
+            result.Should().NotBeNull();
+            result!.Id.Should().Be(newer.Id);
+        }
+
+        [TestMethod]
+        public async Task CreateAsync_AddsEntityAndSavesOnce()
+        {
+            var dbSetMock = new Mock<DbSet<RegistrationSubmissionData>>();
+            _dataContextMock.Setup(c => c.RegistrationSubmissionData).Returns(dbSetMock.Object);
+            _dataContextMock.Setup(c => c.SaveChangesAsync(_ct)).ReturnsAsync(1);
+
+            var entity = new RegistrationSubmissionData
+            {
+                Id = Guid.NewGuid(),
+                SubmissionId = Guid.NewGuid(),
+                RegistrationBlobName = $"av-blob-{Guid.NewGuid()}",
+                SubmissionPeriod = "period",
+                SubmissionDate = DateTime.UtcNow,
+                CreatedDate = DateTimeOffset.UtcNow,
+                Producers = new List<RegistrationSubmissionProducer>
+                {
+                    new()
+                    {
+                        OrganisationId = "ORG-1",
+                        OrganisationSize = "Large",
+                        Subsidiaries = new List<RegistrationSubmissionSubsidiary>
+                        {
+                            new() { SubsidiaryId = "S-1" },
+                        },
+                    },
+                },
+            };
+
+            var resultId = await _sut.CreateAsync(entity, _ct);
+
+            using (new AssertionScope())
+            {
+                resultId.Should().Be(entity.Id);
+                dbSetMock.Verify(s => s.Add(entity), Times.Once);
+                _dataContextMock.Verify(c => c.SaveChangesAsync(_ct), Times.Once);
+            }
+        }
+
+        [TestMethod]
+        public async Task CreateAsync_DbUpdateException_Rethrows()
+        {
+            var dbSetMock = new Mock<DbSet<RegistrationSubmissionData>>();
+            _dataContextMock.Setup(c => c.RegistrationSubmissionData).Returns(dbSetMock.Object);
+            _dataContextMock.Setup(c => c.SaveChangesAsync(_ct))
+                .ThrowsAsync(new DbUpdateException("save failed", new InvalidOperationException("inner")));
+
+            var entity = new RegistrationSubmissionData
+            {
+                Id = Guid.NewGuid(),
+                SubmissionId = Guid.NewGuid(),
+                RegistrationBlobName = $"av-blob-{Guid.NewGuid()}",
+                Producers = new List<RegistrationSubmissionProducer>(),
+            };
+
+            Func<Task> act = () => _sut.CreateAsync(entity, _ct);
+
+            await act.Should().ThrowAsync<DbUpdateException>().WithMessage("save failed");
+        }
+    }
+}

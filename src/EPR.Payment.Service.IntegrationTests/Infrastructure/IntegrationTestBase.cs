@@ -1,50 +1,33 @@
-using EPR.Payment.Service.Common.Data;
-using EPR.Payment.Service.Common.Enums;
-using Microsoft.Data.SqlClient;
+using Azure.Messaging.ServiceBus.Administration;
+using EPR.Payment.Service.IntegrationTests.Infrastructure.Builders;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PaymentEntity = EPR.Payment.Service.Common.Data.DataModels.Payment;
 
 namespace EPR.Payment.Service.IntegrationTests.Infrastructure;
 
+[Collection(PaymentServiceCollection.Name)]
+[Trait("Category", "IntegrationTest")]
 public abstract class IntegrationTestBase
 {
-    protected HttpClient Client { get; private set; } = null!;
+    private readonly ServiceFixture _fixture;
+    protected HttpClient Client { get; }
+    
+    protected readonly ServiceBusAdministrationClient ServiceBusAdministrationClient;
+    protected readonly IConfiguration Configuration;
 
-    [SetUp]
-    public async Task SetUpAsync()
+    /// <summary>
+    /// Fluent test-data entrypoint. See <see cref="TestBuilders"/> for the available builders —
+    /// <c>Builder.Producer().Build()</c>, <c>Builder.Regulator().InNation(x).Build()</c>,
+    /// <c>Builder.SchemeOperator().WithAdmin().Build()</c>, etc.
+    /// </summary>
+    protected TestBuilders Builder { get; }
+
+    protected IntegrationTestBase(ServiceFixture fixture)
     {
-        Client = ContainerFixture.Factory.CreateClient();
-
-        await using var connection = new SqlConnection(ContainerFixture.ConnectionString);
-        await connection.OpenAsync();
-        await ContainerFixture.Respawner.ResetAsync(connection);
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-        Client.Dispose();
-    }
-
-    protected async Task SeedPaymentAsync(Guid? fileId, decimal amount, string reference, Status status = Status.Success)
-    {
-        using var scope = ContainerFixture.Factory.Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        context.Payment.Add(new PaymentEntity
-        {
-            UserId = Guid.NewGuid(),
-            InternalStatusId = status,
-            Regulator = "GB-ENG",
-            Reference = reference,
-            Amount = amount,
-            ReasonForPayment = "Test payment",
-            CreatedDate = DateTime.UtcNow,
-            UpdatedByUserId = Guid.NewGuid(),
-            UpdatedDate = DateTime.UtcNow,
-            FileId = fileId
-        });
-
-        await context.SaveChangesAsync();
+        _fixture = fixture;
+        Client = _fixture.CreateHttpClient();
+        Builder = new TestBuilders(fixture);
+        ServiceBusAdministrationClient = _fixture.SharedServices.GetRequiredService<ServiceBusAdministrationClient>();
+        Configuration = _fixture.SharedServices.GetRequiredService<IConfiguration>();
     }
 }

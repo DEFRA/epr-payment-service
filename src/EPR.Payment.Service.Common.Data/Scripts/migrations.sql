@@ -6094,46 +6094,346 @@ GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20260427101504_add-closed-loop-recycling-fee-2026'
+    WHERE [MigrationId] = N'20260528131356_AddRegistrationSubmissionData'
 )
 BEGIN
-    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
-        SET IDENTITY_INSERT [Lookup].[SubGroup] ON;
-    EXEC(N'INSERT INTO [Lookup].[SubGroup] ([Id], [Description], [Type])
-    VALUES (15, ''Closed Loop Recycling'', ''ClosedLoop'')');
-    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
-        SET IDENTITY_INSERT [Lookup].[SubGroup] OFF;
+    CREATE TABLE [RegistrationSubmissionData] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [SubmissionId] uniqueidentifier NOT NULL,
+        [FileId] uniqueidentifier NOT NULL,
+        [FileName] nvarchar(max) NOT NULL,
+        [ComplianceSchemeId] uniqueidentifier NULL,
+        [SubmissionPeriod] nvarchar(max) NOT NULL,
+        [SubmissionDate] datetime2 NOT NULL,
+        [CreatedDate] datetimeoffset NOT NULL,
+        [UpdatedDate] datetimeoffset NULL,
+        CONSTRAINT [PK_RegistrationSubmissionData] PRIMARY KEY ([Id])
+    );
 END;
 GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20260427101504_add-closed-loop-recycling-fee-2026'
-)
-BEGIN
-    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
-        SET IDENTITY_INSERT [Lookup].[RegistrationFees] ON;
-    EXEC(N'INSERT INTO [Lookup].[RegistrationFees] ([Id], [Amount], [EffectiveFrom], [EffectiveTo], [GroupId], [RegulatorId], [SubGroupId])
-    VALUES (26000060, 254800.0, ''2026-01-01T00:00:00.0000000Z'', ''2026-12-31T23:59:59.0000000Z'', 2, 1, 15),
-    (26000061, 254800.0, ''2026-01-01T00:00:00.0000000Z'', ''2026-12-31T23:59:59.0000000Z'', 2, 2, 15),
-    (26000062, 254800.0, ''2026-01-01T00:00:00.0000000Z'', ''2026-12-31T23:59:59.0000000Z'', 2, 3, 15),
-    (26000063, 254800.0, ''2026-01-01T00:00:00.0000000Z'', ''2026-12-31T23:59:59.0000000Z'', 2, 4, 15),
-    (26000064, 254800.0, ''2026-01-01T00:00:00.0000000Z'', ''2026-12-31T23:59:59.0000000Z'', 1, 1, 15),
-    (26000065, 254800.0, ''2026-01-01T00:00:00.0000000Z'', ''2026-12-31T23:59:59.0000000Z'', 1, 2, 15),
-    (26000066, 254800.0, ''2026-01-01T00:00:00.0000000Z'', ''2026-12-31T23:59:59.0000000Z'', 1, 3, 15),
-    (26000067, 254800.0, ''2026-01-01T00:00:00.0000000Z'', ''2026-12-31T23:59:59.0000000Z'', 1, 4, 15)');
-    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
-        SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
-END;
-GO
-
-IF NOT EXISTS (
-    SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20260427101504_add-closed-loop-recycling-fee-2026'
+    WHERE [MigrationId] = N'20260528131356_AddRegistrationSubmissionData'
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20260427101504_add-closed-loop-recycling-fee-2026', N'8.0.4');
+    VALUES (N'20260528131356_AddRegistrationSubmissionData', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260529091235_AddRegistrationSubmissionProducerAndSubsidiary'
+)
+BEGIN
+    DECLARE @var28 sysname;
+    SELECT @var28 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[RegistrationSubmissionData]') AND [c].[name] = N'FileName');
+    IF @var28 IS NOT NULL EXEC(N'ALTER TABLE [RegistrationSubmissionData] DROP CONSTRAINT [' + @var28 + '];');
+    ALTER TABLE [RegistrationSubmissionData] DROP COLUMN [FileName];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260529091235_AddRegistrationSubmissionProducerAndSubsidiary'
+)
+BEGIN
+    CREATE TABLE [RegistrationSubmissionProducer] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RegistrationSubmissionDataId] uniqueidentifier NOT NULL,
+        [OrganisationId] nvarchar(20) NOT NULL,
+        [OrganisationSize] nvarchar(20) NOT NULL,
+        [NationId] int NOT NULL,
+        [IsOnlineMarketplace] bit NOT NULL,
+        [IsClosedLoopRecycling] bit NOT NULL,
+        [IsNewJoiner] bit NOT NULL,
+        [CreatedDate] datetimeoffset NOT NULL,
+        CONSTRAINT [PK_RegistrationSubmissionProducer] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationSubmissionProducer_RegistrationSubmissionData_RegistrationSubmissionDataId] FOREIGN KEY ([RegistrationSubmissionDataId]) REFERENCES [RegistrationSubmissionData] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260529091235_AddRegistrationSubmissionProducerAndSubsidiary'
+)
+BEGIN
+    CREATE TABLE [RegistrationSubmissionSubsidiary] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RegistrationSubmissionProducerId] uniqueidentifier NOT NULL,
+        [SubsidiaryId] nvarchar(32) NOT NULL,
+        [IsOnlineMarketplace] bit NOT NULL,
+        [IsClosedLoopRecycling] bit NOT NULL,
+        [IsNewJoiner] bit NOT NULL,
+        [CreatedDate] datetimeoffset NOT NULL,
+        CONSTRAINT [PK_RegistrationSubmissionSubsidiary] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationSubmissionSubsidiary_RegistrationSubmissionProducer_RegistrationSubmissionProducerId] FOREIGN KEY ([RegistrationSubmissionProducerId]) REFERENCES [RegistrationSubmissionProducer] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260529091235_AddRegistrationSubmissionProducerAndSubsidiary'
+)
+BEGIN
+    CREATE INDEX [IX_RegistrationSubmissionProducer_RegistrationSubmissionDataId] ON [RegistrationSubmissionProducer] ([RegistrationSubmissionDataId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260529091235_AddRegistrationSubmissionProducerAndSubsidiary'
+)
+BEGIN
+    CREATE INDEX [IX_RegistrationSubmissionSubsidiary_RegistrationSubmissionProducerId] ON [RegistrationSubmissionSubsidiary] ([RegistrationSubmissionProducerId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260529091235_AddRegistrationSubmissionProducerAndSubsidiary'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260529091235_AddRegistrationSubmissionProducerAndSubsidiary', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260601091016_AddRegistrationBlobNameToRegistrationSubmissionData'
+)
+BEGIN
+    ALTER TABLE [RegistrationSubmissionData] ADD [RegistrationBlobName] nvarchar(100) NOT NULL DEFAULT N'';
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260601091016_AddRegistrationBlobNameToRegistrationSubmissionData'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260601091016_AddRegistrationBlobNameToRegistrationSubmissionData', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260603133301_AddRegistrationSubmissionDataUniqueIndex'
+)
+BEGIN
+
+                    ;WITH dupes AS (
+                        SELECT Id,
+                               ROW_NUMBER() OVER (
+                                   PARTITION BY SubmissionId, FileId
+                                   ORDER BY CreatedDate DESC
+                               ) AS rn
+                        FROM RegistrationSubmissionData
+                    )
+                    DELETE rsd
+                    FROM RegistrationSubmissionData rsd
+                    INNER JOIN dupes d ON rsd.Id = d.Id
+                    WHERE d.rn > 1;
+                
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260603133301_AddRegistrationSubmissionDataUniqueIndex'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_RegistrationSubmissionData_SubmissionId_FileId] ON [RegistrationSubmissionData] ([SubmissionId], [FileId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260603133301_AddRegistrationSubmissionDataUniqueIndex'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260603133301_AddRegistrationSubmissionDataUniqueIndex', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260604100043_MoveRegistrationSubmissionTablesToRegistrationSchema'
+)
+BEGIN
+    IF SCHEMA_ID(N'registration') IS NULL EXEC(N'CREATE SCHEMA [registration];');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260604100043_MoveRegistrationSubmissionTablesToRegistrationSchema'
+)
+BEGIN
+    ALTER SCHEMA [registration] TRANSFER [RegistrationSubmissionSubsidiary];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260604100043_MoveRegistrationSubmissionTablesToRegistrationSchema'
+)
+BEGIN
+    ALTER SCHEMA [registration] TRANSFER [RegistrationSubmissionProducer];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260604100043_MoveRegistrationSubmissionTablesToRegistrationSchema'
+)
+BEGIN
+    ALTER SCHEMA [registration] TRANSFER [RegistrationSubmissionData];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260604100043_MoveRegistrationSubmissionTablesToRegistrationSchema'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260604100043_MoveRegistrationSubmissionTablesToRegistrationSchema', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260610155517_RemoveFileIdFromRegistrationSubmissionData'
+)
+BEGIN
+    DROP INDEX [IX_RegistrationSubmissionData_SubmissionId_FileId] ON [registration].[RegistrationSubmissionData];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260610155517_RemoveFileIdFromRegistrationSubmissionData'
+)
+BEGIN
+    DECLARE @var29 sysname;
+    SELECT @var29 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[registration].[RegistrationSubmissionData]') AND [c].[name] = N'FileId');
+    IF @var29 IS NOT NULL EXEC(N'ALTER TABLE [registration].[RegistrationSubmissionData] DROP CONSTRAINT [' + @var29 + '];');
+    ALTER TABLE [registration].[RegistrationSubmissionData] DROP COLUMN [FileId];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260610155517_RemoveFileIdFromRegistrationSubmissionData'
+)
+BEGIN
+
+                    ;WITH dupes AS (
+                        SELECT Id,
+                               ROW_NUMBER() OVER (
+                                   PARTITION BY RegistrationBlobName
+                                   ORDER BY CreatedDate DESC
+                               ) AS rn
+                        FROM [registration].[RegistrationSubmissionData]
+                    )
+                    DELETE rsd
+                    FROM [registration].[RegistrationSubmissionData] rsd
+                    INNER JOIN dupes d ON rsd.Id = d.Id
+                    WHERE d.rn > 1;
+                
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260610155517_RemoveFileIdFromRegistrationSubmissionData'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_RegistrationSubmissionData_RegistrationBlobName] ON [registration].[RegistrationSubmissionData] ([RegistrationBlobName]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260610155517_RemoveFileIdFromRegistrationSubmissionData'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260610155517_RemoveFileIdFromRegistrationSubmissionData', N'8.0.4');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260615144607_RemoveUpdatedDateFromRegistrationSubmissionData'
+)
+BEGIN
+    DECLARE @var30 sysname;
+    SELECT @var30 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[registration].[RegistrationSubmissionData]') AND [c].[name] = N'UpdatedDate');
+    IF @var30 IS NOT NULL EXEC(N'ALTER TABLE [registration].[RegistrationSubmissionData] DROP CONSTRAINT [' + @var30 + '];');
+    ALTER TABLE [registration].[RegistrationSubmissionData] DROP COLUMN [UpdatedDate];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260615144607_RemoveUpdatedDateFromRegistrationSubmissionData'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260615144607_RemoveUpdatedDateFromRegistrationSubmissionData', N'8.0.4');
 END;
 GO
 

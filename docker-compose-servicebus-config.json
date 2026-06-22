@@ -3,9 +3,25 @@
         "Namespaces": [
             {
                 "Name": "sbemulatorns",
+                "Queues": [
+                    {
+                        "Name": "queue.1",
+                        "Properties": {
+                            "DeadLetteringOnMessageExpiration": false,
+                            "DefaultMessageTimeToLive": "PT1H",
+                            "DuplicateDetectionHistoryTimeWindow": "PT20S",
+                            "ForwardDeadLetteredMessagesTo": "",
+                            "ForwardTo": "",
+                            "LockDuration": "PT1M",
+                            "MaxDeliveryCount": 3,
+                            "RequiresDuplicateDetection": false,
+                            "RequiresSession": false
+                        }
+                    }
+                ],
                 "Topics": [
                     {
-                        "Name": "defra.epr.registration.submit.for.fees",
+                        "Name": "topic.1",
                         "Properties": {
                             "DefaultMessageTimeToLive": "PT1H",
                             "DuplicateDetectionHistoryTimeWindow": "PT20S",
@@ -13,7 +29,7 @@
                         },
                         "Subscriptions": [
                             {
-                                "Name": "registration-submitted-payment-service",
+                                "Name": "subscription.1",
                                 "Properties": {
                                     "DeadLetteringOnMessageExpiration": false,
                                     "DefaultMessageTimeToLive": "PT1H",
