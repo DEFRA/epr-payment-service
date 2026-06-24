@@ -1,4 +1,4 @@
-namespace EPR.Payment.Service.IntegrationTests.Infrastructure.Builders;
+namespace EPR.Payment.Service.IntegrationTests.Infrastructure.Builders.Payments;
 
 /// <summary>
 /// Bundle returned by the <see cref="PaymentBuilder"/>

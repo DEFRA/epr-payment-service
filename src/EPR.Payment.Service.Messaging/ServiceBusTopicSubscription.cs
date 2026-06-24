@@ -42,7 +42,7 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
                 throw new InvalidOperationException(
                     "Service bus client is null. Please check your connection string.");
             }
-
+            
             _logger.LogInformation("Setting up service bus subscription for topic {TopicName}", _topicName);
 
             try
@@ -89,6 +89,8 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
     {
         var message = args.Message.Body.ToObjectFromJson<RegistrationSubmittedMessage>();
 
+        Thread.Sleep(15000);
+            
         if (message is null)
         {
             _logger.LogWarning("Received a null or undeserializable message, skipping");
