@@ -28,7 +28,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission
                 .Include(r => r.Producers)
                     .ThenInclude(p => p.Subsidiaries)
                 .Where(r => r.SubmissionId == submissionId)
-                .OrderByDescending(r => r.CreatedDate)
+                .OrderByDescending(r => r.SubmissionDate)
                 .FirstOrDefaultAsync(cancellationToken);
         }
 

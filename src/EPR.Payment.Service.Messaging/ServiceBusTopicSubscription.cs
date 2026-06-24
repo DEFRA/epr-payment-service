@@ -89,8 +89,6 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
     {
         var message = args.Message.Body.ToObjectFromJson<RegistrationSubmittedMessage>();
 
-        Thread.Sleep(15000);
-            
         if (message is null)
         {
             _logger.LogWarning("Received a null or undeserializable message, skipping");
