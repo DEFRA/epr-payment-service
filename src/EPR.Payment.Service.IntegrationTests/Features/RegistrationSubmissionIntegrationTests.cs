@@ -41,4 +41,16 @@ public class RegistrationSubmissionIntegrationTests(ServiceFixture fixture) : In
         item.NumberOfSubsidiariesBeingOnlineMarketPlace.Should().Be(0);
         item.NumberOfSubsidiariesBeingClosedLoopRecycling.Should().Be(1);
     }
+    [Fact]
+    public async Task GIVEN_Registration_file_not_uploaded_WHEN_RegistrationSubmittedMessage_consumed_THEN_fee_calculation_details_endpoint_returns_404()
+    {
+        // Arrange
+        var submissionId = Guid.NewGuid();
+        
+        // act
+        var response = await Client.GetAsync($"/api/v1/registration-submission-data/{submissionId}/fee-calculation-details");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
 }
