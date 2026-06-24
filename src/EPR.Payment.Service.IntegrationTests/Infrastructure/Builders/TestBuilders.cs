@@ -1,4 +1,7 @@
+using Azure.Storage.Blobs;
 using EPR.Payment.Service.Common.Data;
+using EPR.Payment.Service.IntegrationTests.Infrastructure.Builders.Payments;
+using EPR.Payment.Service.IntegrationTests.Infrastructure.Builders.Registrations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EPR.Payment.Service.IntegrationTests.Infrastructure.Builders;
@@ -18,5 +21,16 @@ public sealed class TestBuilders(ServiceFixture fixture)
         if (save) await ctx.SaveChangesAsync();
     }
 
+    internal async Task WithBlobContainer(Func<BlobContainerClient, Task> action)
+    {
+        using var scope = fixture.CreateScope();
+        var blobServiceClient = scope.ServiceProvider.GetRequiredService<BlobServiceClient>();
+        var containerClient = blobServiceClient.GetBlobContainerClient(ServiceFixture.BlobContainerName);
+        await containerClient.CreateIfNotExistsAsync();
+        await action(containerClient);
+    }
+
     public PaymentBuilder Payment() => new(this);
+    
+    public RegistrationFileBuilder RegistrationFileBuilder() => new(this);
 }

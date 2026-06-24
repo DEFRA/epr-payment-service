@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Testcontainers.Azurite;
 using Testcontainers.MsSql;
 using Testcontainers.ServiceBus;
 
@@ -14,6 +15,9 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
 
     private MsSqlContainer _sqlContainer = null!;
     private ServiceBusContainer _serviceBusContainer = null!;
+    private AzuriteContainer _azuriteContainer = null!;
+
+    public const string BlobContainerName = "registrations";
 
     private WebApplicationFactory<Program>? _factory;
     
@@ -54,11 +58,17 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
             .WithAcceptLicenseAgreement(true)
             .WithMsSqlContainer(containerNetwork, _sqlContainer, sqlContainerAlias, sqlPassword)
             .Build();
-        await _serviceBusContainer.StartAsync();
+
+        _azuriteContainer = new AzuriteBuilder("mcr.microsoft.com/azure-storage/azurite:latest").Build();
+
+        await Task.WhenAll(
+            _serviceBusContainer.StartAsync(),
+            _azuriteContainer.StartAsync());
 
         var serviceBusConnectionString = _serviceBusContainer.GetConnectionString();
         var serviceBusAdminConnectionString = _serviceBusContainer.GetHttpConnectionString();
-        
+        var azuriteConnectionString = _azuriteContainer.GetConnectionString();
+
         // builds config from only the test appsettings
         var testConfig = new ConfigurationBuilder()
             // could replace the abstract ConfigurationFilePath with something more complicated if necessary
@@ -67,7 +77,9 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
             {
                 ["ConnectionStrings:PaymentConnectionString"] = connectionString,
                 ["ServiceBus:ConnectionString"] = serviceBusConnectionString,
-                ["ServiceBus:AdminConnectionString"] = serviceBusAdminConnectionString
+                ["ServiceBus:AdminConnectionString"] = serviceBusAdminConnectionString,
+                ["StorageAccount:ConnectionString"] = azuriteConnectionString,
+                ["StorageAccount:RegistrationContainer"] = BlobContainerName,
             })
             .Build();
 
@@ -95,6 +107,7 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
 
     public async Task DisposeAsync()
     {
+        await _azuriteContainer.DisposeAsync();
         await _serviceBusContainer.DisposeAsync();
         await _sqlContainer.DisposeAsync();
 

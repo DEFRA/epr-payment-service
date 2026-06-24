@@ -1,4 +1,4 @@
-namespace EPR.Payment.Service.IntegrationTests.Infrastructure.Builders;
+namespace EPR.Payment.Service.IntegrationTests.Infrastructure.Builders.Payments;
 
 /// <summary>
 /// Builds a producer organisation with an ApprovedPerson admin enrolment (Approved status).
