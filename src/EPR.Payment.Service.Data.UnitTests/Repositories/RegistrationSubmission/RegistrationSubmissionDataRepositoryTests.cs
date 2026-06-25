@@ -75,32 +75,6 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
         }
 
         [TestMethod]
-        public async Task GetLatestWithProducersAndSubsidiariesAsync_MultipleRows_ReturnsMostRecent()
-        {
-            var submissionId = Guid.NewGuid();
-            var older = new RegistrationSubmissionData
-            {
-                Id = Guid.NewGuid(),
-                SubmissionId = submissionId,
-                CreatedDate = new DateTimeOffset(2026, 5, 28, 0, 0, 0, TimeSpan.Zero),
-                Producers = new List<RegistrationSubmissionProducer>(),
-            };
-            var newer = new RegistrationSubmissionData
-            {
-                Id = Guid.NewGuid(),
-                SubmissionId = submissionId,
-                CreatedDate = new DateTimeOffset(2026, 5, 29, 0, 0, 0, TimeSpan.Zero),
-                Producers = new List<RegistrationSubmissionProducer>(),
-            };
-            _dataContextMock.Setup(c => c.RegistrationSubmissionData).ReturnsDbSet(new[] { older, newer });
-
-            var result = await _sut.GetLatestWithProducersAndSubsidiariesAsync(submissionId, _ct);
-
-            result.Should().NotBeNull();
-            result!.Id.Should().Be(newer.Id);
-        }
-
-        [TestMethod]
         public async Task CreateAsync_AddsEntityAndSavesOnce()
         {
             var dbSetMock = new Mock<DbSet<RegistrationSubmissionData>>();

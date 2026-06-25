@@ -5,12 +5,12 @@ namespace EPR.Payment.Service.IntegrationTests.Infrastructure.Builders.Registrat
 /// </summary>
 public sealed class RegistrationFileBuilder(TestBuilders builders)
 {
-    public async Task<BuiltRegistrationFile> Build()
+    public async Task<BuiltRegistrationFile> Build(Guid? existingSubmissionId = null)
     {
         BuiltRegistrationFile registrationFile = null!;
         await builders.WithBlobContainer(async ctx =>
         {
-            registrationFile = await RegistrationSubmissionBlobFileGenerator.StoreRandomRegistrationCsv(ctx);
+            registrationFile = await RegistrationSubmissionBlobFileGenerator.StoreRandomRegistrationCsv(ctx, existingSubmissionId);
         });
         return registrationFile;
     }
