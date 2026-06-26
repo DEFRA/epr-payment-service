@@ -279,7 +279,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240723085319_Initial', N'8.0.4');
+    VALUES (N'20240723085319_Initial', N'8.0.28');
 END;
 GO
 
@@ -527,7 +527,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240725154904_RegistrationFeesTablesUpdate', N'8.0.4');
+    VALUES (N'20240725154904_RegistrationFeesTablesUpdate', N'8.0.28');
 END;
 GO
 
@@ -552,7 +552,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240821075038_RemoveTable', N'8.0.4');
+    VALUES (N'20240821075038_RemoveTable', N'8.0.28');
 END;
 GO
 
@@ -729,7 +729,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240821075639_ChangeColumnType', N'8.0.4');
+    VALUES (N'20240821075639_ChangeColumnType', N'8.0.28');
 END;
 GO
 
@@ -1230,7 +1230,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240822124821_ProducerResubmission', N'8.0.4');
+    VALUES (N'20240822124821_ProducerResubmission', N'8.0.28');
 END;
 GO
 
@@ -1730,7 +1730,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240903101544_UpdateRegistrationFeesDates', N'8.0.4');
+    VALUES (N'20240903101544_UpdateRegistrationFeesDates', N'8.0.28');
 END;
 GO
 
@@ -2159,7 +2159,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240905115928_AddOnlineMarketToProducer', N'8.0.4');
+    VALUES (N'20240905115928_AddOnlineMarketToProducer', N'8.0.28');
 END;
 GO
 
@@ -2206,7 +2206,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241011074943_LateFeeData', N'8.0.4');
+    VALUES (N'20241011074943_LateFeeData', N'8.0.28');
 END;
 GO
 
@@ -2239,7 +2239,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241016152809_ComplianceLateFeeData', N'8.0.4');
+    VALUES (N'20241016152809_ComplianceLateFeeData', N'8.0.28');
 END;
 GO
 
@@ -2286,7 +2286,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241018135341_ComplianceSchemeResubmission', N'8.0.4');
+    VALUES (N'20241018135341_ComplianceSchemeResubmission', N'8.0.28');
 END;
 GO
 
@@ -2600,7 +2600,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241028134619_RefactorPaymentTables', N'8.0.4');
+    VALUES (N'20241028134619_RefactorPaymentTables', N'8.0.28');
 END;
 GO
 
@@ -2660,7 +2660,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241108152208_CSUpdateLargeFee', N'8.0.4');
+    VALUES (N'20241108152208_CSUpdateLargeFee', N'8.0.28');
 END;
 GO
 
@@ -2706,7 +2706,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241114105610_ChangeNullableFields', N'8.0.4');
+    VALUES (N'20241114105610_ChangeNullableFields', N'8.0.28');
 END;
 GO
 
@@ -2756,7 +2756,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250508103111_SeedDataGroupandSubGroupTables', N'8.0.4');
+    VALUES (N'20250508103111_SeedDataGroupandSubGroupTables', N'8.0.28');
 END;
 GO
 
@@ -2809,7 +2809,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250508114330_SeedRegistrationFeesTablesExporterData', N'8.0.4');
+    VALUES (N'20250508114330_SeedRegistrationFeesTablesExporterData', N'8.0.28');
 END;
 GO
 
@@ -2862,7 +2862,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250509082826_SeedRegistrationFeesTablesReprocessorData', N'8.0.4');
+    VALUES (N'20250509082826_SeedRegistrationFeesTablesReprocessorData', N'8.0.28');
 END;
 GO
 
@@ -2929,7 +2929,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250509154544_CreateAccreditationFeesTable', N'8.0.4');
+    VALUES (N'20250509154544_CreateAccreditationFeesTable', N'8.0.28');
 END;
 GO
 
@@ -3056,7 +3056,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250512155019_SeedAccreditationFeesTablesExporterData', N'8.0.4');
+    VALUES (N'20250512155019_SeedAccreditationFeesTablesExporterData', N'8.0.28');
 END;
 GO
 
@@ -3183,7 +3183,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250513003609_SeedAccreditationFeesTablesReprocessors', N'8.0.4');
+    VALUES (N'20250513003609_SeedAccreditationFeesTablesReprocessors', N'8.0.28');
 END;
 GO
 
@@ -3208,7 +3208,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250515105845_AddingPaymentMethodColumn', N'8.0.4');
+    VALUES (N'20250515105845_AddingPaymentMethodColumn', N'8.0.28');
 END;
 GO
 
@@ -3233,7 +3233,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250515115823_AddingRequestorTypeColumn', N'8.0.4');
+    VALUES (N'20250515115823_AddingRequestorTypeColumn', N'8.0.28');
 END;
 GO
 
@@ -3280,7 +3280,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250605112455_AddingTonnageBandTable', N'8.0.4');
+    VALUES (N'20250605112455_AddingTonnageBandTable', N'8.0.28');
 END;
 GO
 
@@ -5465,7 +5465,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250606151503_AccreditationFeeTableDesignChanges', N'8.0.4');
+    VALUES (N'20250606151503_AccreditationFeeTableDesignChanges', N'8.0.28');
 END;
 GO
 
@@ -5513,7 +5513,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250611100506_AddingRequestorTypeTable', N'8.0.4');
+    VALUES (N'20250611100506_AddingRequestorTypeTable', N'8.0.28');
 END;
 GO
 
@@ -5571,7 +5571,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250611164617_ChangedOnlinePaymentTable', N'8.0.4');
+    VALUES (N'20250611164617_ChangedOnlinePaymentTable', N'8.0.28');
 END;
 GO
 
@@ -5619,7 +5619,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250612130529_AddedPaymentMethodTable', N'8.0.4');
+    VALUES (N'20250612130529_AddedPaymentMethodTable', N'8.0.28');
 END;
 GO
 
@@ -5677,7 +5677,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250616080947_ChangedOfflinePaymentTable', N'8.0.4');
+    VALUES (N'20250616080947_ChangedOfflinePaymentTable', N'8.0.28');
 END;
 GO
 
@@ -5702,7 +5702,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250702083006_AddingOrganisationIdColumn', N'8.0.4');
+    VALUES (N'20250702083006_AddingOrganisationIdColumn', N'8.0.28');
 END;
 GO
 
@@ -5850,7 +5850,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250718150533_AddFeeSummaryTables', N'8.0.4');
+    VALUES (N'20250718150533_AddFeeSummaryTables', N'8.0.28');
 END;
 GO
 
@@ -5944,7 +5944,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20251006153104_AddFeeItemTable', N'8.0.4');
+    VALUES (N'20251006153104_AddFeeItemTable', N'8.0.28');
 END;
 GO
 
@@ -5992,7 +5992,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20251007103058_FeeTypeDataSeedData', N'8.0.4');
+    VALUES (N'20251007103058_FeeTypeDataSeedData', N'8.0.28');
 END;
 GO
 
@@ -6082,7 +6082,7 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20251203105439_registration-fees-2026', N'8.0.4');
+    VALUES (N'20251203105439_registration-fees-2026', N'8.0.28');
 END;
 GO
 
@@ -6133,7 +6133,117 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20260427101504_add-closed-loop-recycling-fee-2026', N'8.0.4');
+    VALUES (N'20260427101504_add-closed-loop-recycling-fee-2026', N'8.0.28');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260624132409_AddRegistrationSubmissionData'
+)
+BEGIN
+    IF SCHEMA_ID(N'registration') IS NULL EXEC(N'CREATE SCHEMA [registration];');
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260624132409_AddRegistrationSubmissionData'
+)
+BEGIN
+    CREATE TABLE [registration].[RegistrationSubmissionData] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [SubmissionId] uniqueidentifier NOT NULL,
+        [RegistrationBlobName] nvarchar(100) NOT NULL,
+        [ComplianceSchemeId] uniqueidentifier NULL,
+        [SubmissionPeriod] nvarchar(50) NOT NULL,
+        [SubmissionDate] datetime2 NOT NULL,
+        [CreatedDate] datetimeoffset NOT NULL,
+        CONSTRAINT [PK_RegistrationSubmissionData] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260624132409_AddRegistrationSubmissionData'
+)
+BEGIN
+    CREATE TABLE [registration].[RegistrationSubmissionProducer] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RegistrationSubmissionDataId] uniqueidentifier NOT NULL,
+        [OrganisationId] nvarchar(20) NOT NULL,
+        [OrganisationSize] nvarchar(20) NOT NULL,
+        [NationId] int NOT NULL,
+        [IsOnlineMarketplace] bit NOT NULL,
+        [IsClosedLoopRecycling] bit NOT NULL,
+        [IsNewJoiner] bit NOT NULL,
+        [CreatedDate] datetimeoffset NOT NULL,
+        CONSTRAINT [PK_RegistrationSubmissionProducer] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationSubmissionProducer_RegistrationSubmissionData_RegistrationSubmissionDataId] FOREIGN KEY ([RegistrationSubmissionDataId]) REFERENCES [registration].[RegistrationSubmissionData] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260624132409_AddRegistrationSubmissionData'
+)
+BEGIN
+    CREATE TABLE [registration].[RegistrationSubmissionSubsidiary] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RegistrationSubmissionProducerId] uniqueidentifier NOT NULL,
+        [SubsidiaryId] nvarchar(32) NOT NULL,
+        [IsOnlineMarketplace] bit NOT NULL,
+        [IsClosedLoopRecycling] bit NOT NULL,
+        [IsNewJoiner] bit NOT NULL,
+        [CreatedDate] datetimeoffset NOT NULL,
+        CONSTRAINT [PK_RegistrationSubmissionSubsidiary] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationSubmissionSubsidiary_RegistrationSubmissionProducer_RegistrationSubmissionProducerId] FOREIGN KEY ([RegistrationSubmissionProducerId]) REFERENCES [registration].[RegistrationSubmissionProducer] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260624132409_AddRegistrationSubmissionData'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_RegistrationSubmissionData_RegistrationBlobName] ON [registration].[RegistrationSubmissionData] ([RegistrationBlobName]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260624132409_AddRegistrationSubmissionData'
+)
+BEGIN
+    CREATE INDEX [IX_RegistrationSubmissionProducer_RegistrationSubmissionDataId] ON [registration].[RegistrationSubmissionProducer] ([RegistrationSubmissionDataId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260624132409_AddRegistrationSubmissionData'
+)
+BEGIN
+    CREATE INDEX [IX_RegistrationSubmissionSubsidiary_RegistrationSubmissionProducerId] ON [registration].[RegistrationSubmissionSubsidiary] ([RegistrationSubmissionProducerId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260624132409_AddRegistrationSubmissionData'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260624132409_AddRegistrationSubmissionData', N'8.0.28');
 END;
 GO
 

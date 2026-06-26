@@ -18,6 +18,8 @@
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.21.1" />
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.1.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
@@ -29,14 +31,11 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="8.0.4" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="3.3.1" />
-    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.6.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.4" />
-    <PackageReference Include="System.Formats.Asn1" Version="6.0.1" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.6.0" />
     <PackageReference Include="System.Text.Json" Version="8.0.6" />
   </ItemGroup>
 
@@ -46,19 +45,15 @@
     <ProjectReference Include="..\EPR.Payment.Service.Messaging\EPR.Payment.Service.Messaging.csproj" />
   </ItemGroup>
 
-	<ItemGroup>
-		<SonarQubeSetting Include="sonar.coverage.exclusions">
-			<value>Program.cs</value>
-		</SonarQubeSetting>
-	</ItemGroup>
+  <ItemGroup>
+    <SonarQubeSetting Include="sonar.coverage.exclusions">
+      <Value>**/Program.cs</Value>
+    </SonarQubeSetting>
+  </ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Services\RegistrationFees\" />
-	  <Folder Include="Strategies\AccrediationFees\" />
-	  <Folder Include="Strategies\AccrediationFees\ReprocessorExporter\" />
-	</ItemGroup>
-	<ItemGroup>
 		<SonarQubeSetting Include="sonar.cpd.exclusions">
+      <Value>**/Program.cs</Value>
 			<Value>Validations\RegistrationFees\ComplianceScheme\ComplianceSchemeFeesRequestV2DtoValidator.cs</Value>
 			<Value>Validations\RegistrationFees\Producer\ProducerFeesRequestDtoV2Validator.cs</Value>
 			<Value>Validations\ResubmissionFees\ComplianceScheme\ComplianceSchemeResubmissionFeeRequestV2DtoValidator.cs</Value>
