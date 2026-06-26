@@ -16,6 +16,11 @@ parameters:
     - 'SonarQube'
     # - 'SonarQubeLatest'
     
+  - name: runIntegrationTests
+    displayName: 'Run integration tests'
+    type: boolean
+    default: true
+
 pool: DEFRA-COMMON-ubuntu2204-SSV3
 
 variables:
@@ -57,6 +62,7 @@ extends:
     sonarQubeProjectKey: ${{ variables.sonarQubeProjectKey }}
     sonarQubeProjectName: ${{ variables.sonarQubeProjectName }}
     runTests: ${{ variables.runTests }}
+    runIntegrationTests: ${{ parameters.runIntegrationTests }}
     azureSubscription: $(azureSubscription)
     acrAzureContainerRegistryName: $(acr.azureContainerRegistryName)
     acrRepositoryName: $(acr.repositoryName)
