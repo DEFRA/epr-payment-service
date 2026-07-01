@@ -24,15 +24,5 @@ namespace EPR.Payment.Service.Services.Payments
 
             await _OfflinePaymentRepository.InsertOfflinePaymentAsync(paymentEntity, cancellationToken);
         }
-
-        public async Task InsertOfflinePaymentAsync(
-            OfflinePaymentInsertRequestV2Dto paymentInsertRequest,
-            CancellationToken cancellationToken)
-        {
-            var paymentEntity = _mapper.Map<Common.Data.DataModels.Payment>(paymentInsertRequest);
-            paymentEntity.OfflinePayment = _mapper.Map<Common.Data.DataModels.OfflinePayment>(paymentInsertRequest);
-
-            await _OfflinePaymentRepository.InsertOfflinePaymentAsync(paymentEntity, cancellationToken);
-        }
     }
 }

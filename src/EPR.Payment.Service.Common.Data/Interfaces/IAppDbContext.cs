@@ -16,9 +16,7 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
         DbSet<RegistrationFees> RegistrationFees { get; }
         DbSet<AccreditationFee> AccreditationFees { get; }
 
-        DbSet<FeeType> FeeTypes { get; }
         DbSet<PayerType> PayerTypes { get; }
-        DbSet<FeeItem> FeeItems { get; }
         DbSet<RegistrationSubmissionData> RegistrationSubmissionData { get; }
         DbSet<RegistrationSubmissionProducer> RegistrationSubmissionProducer { get; }
         DbSet<RegistrationSubmissionSubsidiary> RegistrationSubmissionSubsidiary { get; }
