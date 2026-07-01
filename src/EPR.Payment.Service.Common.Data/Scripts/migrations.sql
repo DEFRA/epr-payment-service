@@ -6250,3 +6250,37 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260701110906_DropV2FeeItemAndFeeType'
+)
+BEGIN
+    DROP TABLE [FeeItem];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260701110906_DropV2FeeItemAndFeeType'
+)
+BEGIN
+    DROP TABLE [Lookup].[FeeTypes];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260701110906_DropV2FeeItemAndFeeType'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260701110906_DropV2FeeItemAndFeeType', N'8.0.28');
+END;
+GO
+
+COMMIT;
+GO
+

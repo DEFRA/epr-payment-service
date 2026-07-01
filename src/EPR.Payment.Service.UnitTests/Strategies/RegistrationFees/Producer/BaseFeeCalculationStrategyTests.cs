@@ -58,17 +58,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             BaseFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create("GB-ENG");
@@ -90,17 +85,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             BaseFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 Regulator = null!, // Regulator is null
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             // Act & Assert
@@ -114,17 +104,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             BaseFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = string.Empty, // ProducerType is empty
                 Regulator = "GB-ENG", // Valid Regulator
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             // Act
@@ -141,17 +126,12 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             BaseFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 Regulator = string.Empty, // Regulator is empty
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             // Act & Assert

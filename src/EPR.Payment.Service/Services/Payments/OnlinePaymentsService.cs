@@ -25,14 +25,6 @@ namespace EPR.Payment.Service.Services.Payments
             return await _onlinePaymentRepository.InsertOnlinePaymentAsync(paymentEntity, cancellationToken);
         }
 
-        public async Task<Guid> InsertOnlinePaymentAsync(OnlinePaymentInsertRequestV2Dto onlinePaymentInsertRequest, CancellationToken cancellationToken)
-        {
-            var paymentEntity = _mapper.Map<Common.Data.DataModels.Payment>(onlinePaymentInsertRequest);
-            paymentEntity.OnlinePayment = _mapper.Map<Common.Data.DataModels.OnlinePayment>(onlinePaymentInsertRequest);
-
-            return await _onlinePaymentRepository.InsertOnlinePaymentAsync(paymentEntity, cancellationToken);
-        }
-
         public async Task UpdateOnlinePaymentAsync(Guid externalPaymentId, OnlinePaymentUpdateRequestDto onlinePaymentUpdateRequest, CancellationToken cancellationToken)
         {
             var entity = await _onlinePaymentRepository.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, cancellationToken);

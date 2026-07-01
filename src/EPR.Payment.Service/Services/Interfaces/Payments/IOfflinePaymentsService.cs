@@ -7,9 +7,5 @@ namespace EPR.Payment.Service.Services.Interfaces.Payments
         Task InsertOfflinePaymentAsync(
             OfflinePaymentInsertRequestDto paymentInsertRequest,
             CancellationToken cancellationToken);
-
-        Task InsertOfflinePaymentAsync(
-            OfflinePaymentInsertRequestV2Dto paymentInsertRequest,
-            CancellationToken cancellationToken);
     }
 }
