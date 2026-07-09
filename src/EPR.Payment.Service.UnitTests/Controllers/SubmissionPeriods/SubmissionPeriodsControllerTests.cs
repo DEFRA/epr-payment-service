@@ -1,12 +1,12 @@
-﻿using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
-using EPR.Payment.Service.Controllers.RegistrationFees;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Dtos.Response.SubmissionPeriods;
+using EPR.Payment.Service.Controllers.SubmissionPeriods;
+using EPR.Payment.Service.Services.Interfaces.SubmissionPeriods;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees
+namespace EPR.Payment.Service.UnitTests.Controllers.SubmissionPeriods
 {
     [TestClass]
     public class SubmissionPeriodsControllerTests

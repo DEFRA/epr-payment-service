@@ -1,10 +1,10 @@
 ﻿using Asp.Versioning;
-using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Common.Dtos.Response.SubmissionPeriods;
+using EPR.Payment.Service.Services.Interfaces.SubmissionPeriods;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace EPR.Payment.Service.Controllers.RegistrationFees
+namespace EPR.Payment.Service.Controllers.SubmissionPeriods
 {
     [ApiVersion(1)]
     [ApiController]

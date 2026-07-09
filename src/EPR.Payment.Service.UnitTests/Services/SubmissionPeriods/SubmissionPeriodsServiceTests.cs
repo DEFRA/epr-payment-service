@@ -1,12 +1,12 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using EPR.Payment.Service.Common.Data.Interfaces;
-using EPR.Payment.Service.Services.RegistrationFees;
+using EPR.Payment.Service.Services.SubmissionPeriods;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Moq;
 using Moq.EntityFrameworkCore;
 
-namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees
+namespace EPR.Payment.Service.UnitTests.Services.SubmissionPeriods
 {
     [TestClass]
     public class SubmissionPeriodsServiceTests

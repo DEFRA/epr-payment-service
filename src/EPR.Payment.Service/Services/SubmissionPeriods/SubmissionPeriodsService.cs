@@ -1,9 +1,9 @@
-using EPR.Payment.Service.Common.Data.Interfaces;
-using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
-using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Data.Interfaces;
+using EPR.Payment.Service.Common.Dtos.Response.SubmissionPeriods;
+using EPR.Payment.Service.Services.Interfaces.SubmissionPeriods;
 using Microsoft.EntityFrameworkCore;
 
-namespace EPR.Payment.Service.Services.RegistrationFees
+namespace EPR.Payment.Service.Services.SubmissionPeriods
 {
     public class SubmissionPeriodsService : ISubmissionPeriodsService
     {

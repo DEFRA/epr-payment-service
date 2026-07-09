@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace EPR.Payment.Service.Common.Dtos.Response.RegistrationFees
+namespace EPR.Payment.Service.Common.Dtos.Response.SubmissionPeriods
 {
     [ExcludeFromCodeCoverage]
     public class SubmissionPeriodResponseDto

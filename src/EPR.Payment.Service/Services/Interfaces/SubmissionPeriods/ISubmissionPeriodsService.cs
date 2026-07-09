@@ -1,6 +1,6 @@
-﻿using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
+﻿using EPR.Payment.Service.Common.Dtos.Response.SubmissionPeriods;
 
-namespace EPR.Payment.Service.Services.Interfaces.RegistrationFees
+namespace EPR.Payment.Service.Services.Interfaces.SubmissionPeriods
 {
     public interface ISubmissionPeriodsService
     {
