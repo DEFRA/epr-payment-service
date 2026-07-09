@@ -25,6 +25,8 @@ using EPR.Payment.Service.Services.Interfaces.RegistrationSubmission;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.ResubmissionFees.Producer;
 using EPR.Payment.Service.Services.Payments;
+using EPR.Payment.Service.Services.Interfaces.RegistrationFees;
+using EPR.Payment.Service.Services.RegistrationFees;
 using EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.RegistrationFees.ReprocessorOrExporter;
@@ -91,6 +93,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IPreviousPaymentsHelper, PreviousPaymentsHelper>();
             services.AddScoped<IAccreditationFeesCalculatorService, AccreditationFeesCalculatorService>();
             services.AddScoped<IReprocessorOrExporterFeesCalculatorService, ReprocessorOrExporterFeesCalculatorService>();
+            services.AddScoped<ISubmissionPeriodsService, SubmissionPeriodsService>();
 
             services.AddScoped<FeesKeyValueStore>();
 

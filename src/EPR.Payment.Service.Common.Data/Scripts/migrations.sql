@@ -6284,3 +6284,137 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionSubsidiary];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionProducer];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionData];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    DECLARE @var28 sysname;
+    SELECT @var28 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[registration].[RegistrationSubmissionData]') AND [c].[name] = N'SubmissionPeriod');
+    IF @var28 IS NOT NULL EXEC(N'ALTER TABLE [registration].[RegistrationSubmissionData] DROP CONSTRAINT [' + @var28 + '];');
+    ALTER TABLE [registration].[RegistrationSubmissionData] DROP COLUMN [SubmissionPeriod];
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    ALTER TABLE [registration].[RegistrationSubmissionData] ADD [SubmissionPeriodId] int NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    CREATE TABLE [Lookup].[SubmissionPeriod] (
+        [Id] int NOT NULL IDENTITY,
+        [WindowType] nvarchar(40) NOT NULL,
+        [RegistrationYear] int NOT NULL,
+        [OpeningDate] datetime2 NOT NULL,
+        [DeadlineDate] datetime2 NOT NULL,
+        [ClosingDate] datetime2 NOT NULL,
+        CONSTRAINT [PK_SubmissionPeriod] PRIMARY KEY ([Id])
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ClosingDate', N'DeadlineDate', N'OpeningDate', N'RegistrationYear', N'WindowType') AND [object_id] = OBJECT_ID(N'[Lookup].[SubmissionPeriod]'))
+        SET IDENTITY_INSERT [Lookup].[SubmissionPeriod] ON;
+    EXEC(N'INSERT INTO [Lookup].[SubmissionPeriod] ([Id], [ClosingDate], [DeadlineDate], [OpeningDate], [RegistrationYear], [WindowType])
+    VALUES (1, ''2026-02-01T00:00:00.0000000Z'', ''2025-04-02T00:00:00.0000000Z'', ''2024-07-01T00:00:00.0000000Z'', 2025, N''Cso''),
+    (2, ''2026-01-01T00:00:00.0000000Z'', ''2025-04-02T00:00:00.0000000Z'', ''2024-07-01T00:00:00.0000000Z'', 2025, N''Direct''),
+    (3, ''2027-01-29T00:00:00.0000000Z'', ''2025-10-02T00:00:00.0000000Z'', ''2025-07-01T00:00:00.0000000Z'', 2026, N''CsoLargeProducer''),
+    (4, ''2027-01-29T00:00:00.0000000Z'', ''2026-04-02T00:00:00.0000000Z'', ''2026-01-01T00:00:00.0000000Z'', 2026, N''CsoSmallProducer''),
+    (5, ''2027-01-01T00:00:00.0000000Z'', ''2025-10-02T00:00:00.0000000Z'', ''2025-07-01T00:00:00.0000000Z'', 2026, N''DirectLargeProducer''),
+    (6, ''2027-01-01T00:00:00.0000000Z'', ''2026-04-02T00:00:00.0000000Z'', ''2026-01-01T00:00:00.0000000Z'', 2026, N''DirectSmallProducer''),
+    (7, ''2028-01-29T00:00:00.0000000Z'', ''2026-10-02T00:00:00.0000000Z'', ''2026-07-01T00:00:00.0000000Z'', 2027, N''CsoLargeProducer''),
+    (8, ''2028-01-29T00:00:00.0000000Z'', ''2027-04-02T00:00:00.0000000Z'', ''2027-01-01T00:00:00.0000000Z'', 2027, N''CsoSmallProducer''),
+    (9, ''2028-01-01T00:00:00.0000000Z'', ''2026-10-02T00:00:00.0000000Z'', ''2026-07-01T00:00:00.0000000Z'', 2027, N''DirectLargeProducer''),
+    (10, ''2028-01-01T00:00:00.0000000Z'', ''2027-04-02T00:00:00.0000000Z'', ''2027-01-01T00:00:00.0000000Z'', 2027, N''DirectSmallProducer'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ClosingDate', N'DeadlineDate', N'OpeningDate', N'RegistrationYear', N'WindowType') AND [object_id] = OBJECT_ID(N'[Lookup].[SubmissionPeriod]'))
+        SET IDENTITY_INSERT [Lookup].[SubmissionPeriod] OFF;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    CREATE INDEX [IX_RegistrationSubmissionData_SubmissionPeriodId] ON [registration].[RegistrationSubmissionData] ([SubmissionPeriodId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_SubmissionPeriod_WindowType_RegistrationYear] ON [Lookup].[SubmissionPeriod] ([WindowType], [RegistrationYear]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    ALTER TABLE [registration].[RegistrationSubmissionData] ADD CONSTRAINT [FK_RegistrationSubmissionData_SubmissionPeriod_SubmissionPeriodId] FOREIGN KEY ([SubmissionPeriodId]) REFERENCES [Lookup].[SubmissionPeriod] ([Id]) ON DELETE NO ACTION;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260709105007_AddSubmissionPeriodAndLink', N'8.0.28');
+END;
+GO
+
+COMMIT;
+GO
+

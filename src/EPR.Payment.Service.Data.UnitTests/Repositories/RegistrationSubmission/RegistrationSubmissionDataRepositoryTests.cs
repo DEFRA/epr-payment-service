@@ -112,7 +112,6 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
                 Id = Guid.NewGuid(),
                 SubmissionId = Guid.NewGuid(),
                 RegistrationBlobName = $"av-blob-{Guid.NewGuid()}",
-                SubmissionPeriod = "period",
                 SubmissionDate = DateTime.UtcNow,
                 CreatedDate = DateTimeOffset.UtcNow,
                 Producers = new List<RegistrationSubmissionProducer>
