@@ -19,11 +19,17 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.Property(r => r.SubmissionId).IsRequired();
             builder.Property(r => r.RegistrationBlobName).IsRequired().HasMaxLength(100);
             builder.Property(r => r.ComplianceSchemeId);
-            builder.Property(r => r.SubmissionPeriod).IsRequired().HasMaxLength(50);
             builder.Property(r => r.SubmissionDate).HasColumnType("datetime2").IsRequired();
             builder.Property(r => r.CreatedDate).HasColumnType("datetimeoffset").IsRequired();
+            builder.Property(r => r.SubmissionPeriodId).IsRequired(false);
 
             builder.HasIndex(r => r.RegistrationBlobName).IsUnique();
+
+            builder.HasOne(r => r.SubmissionPeriodWindow)
+                   .WithMany()
+                   .HasForeignKey(r => r.SubmissionPeriodId)
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .IsRequired(false);
         }
     }
 }

@@ -34,6 +34,8 @@
 
         public const string RegistrationSubmissionSubsidiaryTableName = "RegistrationSubmissionSubsidiary";
 
+        public const string SubmissionPeriodTableName = "SubmissionPeriod";
+
         public const string RegistrationSchemaName = "registration";
     }
 }

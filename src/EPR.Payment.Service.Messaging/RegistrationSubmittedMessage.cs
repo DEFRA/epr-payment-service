@@ -7,6 +7,6 @@ public record RegistrationSubmittedMessage(
     Guid SubmissionId,
     string RegistrationBlobName,
     Guid? ComplianceSchemeId,
-    string SubmissionPeriod,
-    DateTime SubmissionDate
+    DateTime SubmissionDate,
+    int? SubmissionPeriodId = null
 );

@@ -28,6 +28,7 @@ namespace EPR.Payment.Service.Common.Data
         public DbSet<RegistrationFees> RegistrationFees => Set<RegistrationFees>();
         public DbSet<AccreditationFee> AccreditationFees => Set<AccreditationFee>();
         public DbSet<PayerType> PayerTypes => Set<PayerType>();
+        public DbSet<SubmissionPeriod> SubmissionPeriod => Set<SubmissionPeriod>();
         public DbSet<RegistrationSubmissionData> RegistrationSubmissionData => Set<RegistrationSubmissionData>();
         public DbSet<RegistrationSubmissionProducer> RegistrationSubmissionProducer => Set<RegistrationSubmissionProducer>();
         public DbSet<RegistrationSubmissionSubsidiary> RegistrationSubmissionSubsidiary => Set<RegistrationSubmissionSubsidiary>();
