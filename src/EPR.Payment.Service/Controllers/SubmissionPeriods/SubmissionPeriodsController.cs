@@ -12,10 +12,14 @@ namespace EPR.Payment.Service.Controllers.SubmissionPeriods
     public class SubmissionPeriodsController : ControllerBase
     {
         private readonly ISubmissionPeriodsService _submissionPeriodsService;
+        private readonly ILogger<SubmissionPeriodsController> _logger;
 
-        public SubmissionPeriodsController(ISubmissionPeriodsService submissionPeriodsService)
+        public SubmissionPeriodsController(
+            ISubmissionPeriodsService submissionPeriodsService,
+            ILogger<SubmissionPeriodsController> logger)
         {
             _submissionPeriodsService = submissionPeriodsService ?? throw new ArgumentNullException(nameof(submissionPeriodsService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [ApiExplorerSettings(GroupName = "v1")]
@@ -29,7 +33,17 @@ namespace EPR.Payment.Service.Controllers.SubmissionPeriods
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetSubmissionPeriods(CancellationToken cancellationToken)
         {
+            using var logScope = _logger.BeginScope(new Dictionary<string, object>
+            {
+                ["Operation"] = nameof(GetSubmissionPeriods),
+            });
+
+            _logger.LogInformation("Retrieving submission periods lookup rows.");
+
             var periods = await _submissionPeriodsService.GetAllAsync(cancellationToken);
+
+            _logger.LogInformation("Retrieved {PeriodCount} submission periods.", periods.Count);
+
             return Ok(periods);
         }
     }
