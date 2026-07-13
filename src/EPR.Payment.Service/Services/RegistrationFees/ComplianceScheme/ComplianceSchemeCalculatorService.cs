@@ -98,12 +98,12 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
 
             response.TotalFee = response.ComplianceSchemeRegistrationFee
                                 + response.ComplianceSchemeMembersWithFees.Sum(m => m.TotalMemberFee);
-            if (request.FileId.HasValue)
+            if (!string.IsNullOrEmpty(request.RegistrationBlobName))
             {
-                response.PreviousPayment = await _paymentsService.GetPreviousPaymentsByFileIdAsync(request.FileId.Value, cancellationToken);
+                response.PreviousPayment = await _paymentsService.GetPreviousPaymentsByRegistrationBlobNameAsync(request.RegistrationBlobName, cancellationToken);
             }
             //Fallback to previous logic
-            if (!request.FileId.HasValue || response.PreviousPayment == 0)
+            if (string.IsNullOrEmpty(request.RegistrationBlobName) || response.PreviousPayment == 0)
             {
                 response.PreviousPayment = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
             }

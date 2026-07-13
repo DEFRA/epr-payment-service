@@ -3,22 +3,22 @@ using System.Net.Http.Json;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.IntegrationTests.Infrastructure;
-using FluentAssertions;
+using AwesomeAssertions;
 
 namespace EPR.Payment.Service.IntegrationTests.Controllers;
 
-public class ComplianceSchemeFeesControllerTests : IntegrationTestBase
+public class ComplianceSchemeFeesControllerTests(ServiceFixture fixture) : IntegrationTestBase(fixture)
 {
     private static readonly DateTime ValidSubmissionDate = new(2025, 6, 1, 0, 0, 0, DateTimeKind.Utc);
 
-    [Test]
-    public async Task CalculateFees_WithFileId_ReturnsPreviousPaymentByFileId()
+    [Fact]
+    public async Task CalculateFees_WithRegistrationBlobName_ReturnsPreviousPaymentByBlobName()
     {
-        // Arrange - seed a successful payment linked to a specific FileId
-        var fileId = Guid.NewGuid();
-        await SeedPaymentAsync(fileId, amount: 750m, reference: "REF-CS-001");
+        // Arrange - seed a successful payment whose reference equals the blob name (join key)
+        var blobName = $"blob-cs-001-{Guid.NewGuid():N}";
+        await SeedPaymentAsync(registrationBlobName: blobName, amount: 750m, reference: blobName);
 
-        var request = BuildRequest("REF-CS-001", fileId: fileId);
+        var request = BuildRequest(applicationReferenceNumber: blobName, registrationBlobName: blobName);
 
         // Act
         var response = await Client.PostAsJsonAsync("/api/v1/compliance-scheme/registration-fee", request);
@@ -31,14 +31,15 @@ public class ComplianceSchemeFeesControllerTests : IntegrationTestBase
         result.TotalFee.Should().BeGreaterThan(0);
     }
 
-    [Test]
-    public async Task CalculateFees_WithFileId_WhenNoMatchingPayment_FallsBackToReferencePayment()
+    [Fact]
+    public async Task CalculateFees_WithRegistrationBlobName_WhenNoMatchingPayment_FallsBackToReferencePayment()
     {
-        // Arrange - payment exists on the reference but with a different FileId
-        await SeedPaymentAsync(fileId: Guid.NewGuid(), amount: 400m, reference: "REF-CS-002");
+        // Arrange - payment exists on the reference but no RegistrationSubmissionData for the blob name
+        var reference = $"REF-CS-002-{Guid.NewGuid():N}";
+        await SeedPaymentAsync(registrationBlobName: null, amount: 400m, reference: reference);
 
-        var unmatchedFileId = Guid.NewGuid();
-        var request = BuildRequest("REF-CS-002", fileId: unmatchedFileId);
+        var unknownBlobName = $"unknown-blob-{Guid.NewGuid():N}";
+        var request = BuildRequest(applicationReferenceNumber: reference, registrationBlobName: unknownBlobName);
 
         // Act
         var response = await Client.PostAsJsonAsync("/api/v1/compliance-scheme/registration-fee", request);
@@ -46,17 +47,18 @@ public class ComplianceSchemeFeesControllerTests : IntegrationTestBase
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var result = await response.Content.ReadFromJsonAsync<ComplianceSchemeFeesResponseDto>();
-        // FileId lookup returns 0 → falls back to reference → finds 400
+        // Blob name lookup returns 0 → falls back to reference → finds 400
         result!.PreviousPayment.Should().Be(400m);
     }
 
-    [Test]
-    public async Task CalculateFees_WithoutFileId_UsesPreviousPaymentByReference()
+    [Fact]
+    public async Task CalculateFees_WithoutRegistrationBlobName_UsesPreviousPaymentByReference()
     {
-        // Arrange - payment only linked via reference, no FileId
-        await SeedPaymentAsync(fileId: null, amount: 250m, reference: "REF-CS-003");
+        // Arrange - payment only linked via reference, no blob name
+        var reference = $"REF-CS-003-{Guid.NewGuid():N}";
+        await SeedPaymentAsync(registrationBlobName: null, amount: 250m, reference: reference);
 
-        var request = BuildRequest("REF-CS-003", fileId: null);
+        var request = BuildRequest(applicationReferenceNumber: reference, registrationBlobName: null);
 
         // Act
         var response = await Client.PostAsJsonAsync("/api/v1/compliance-scheme/registration-fee", request);
@@ -67,15 +69,15 @@ public class ComplianceSchemeFeesControllerTests : IntegrationTestBase
         result!.PreviousPayment.Should().Be(250m);
     }
 
-    [Test]
-    public async Task CalculateFees_WithFileId_DoesNotDoubleCountWhenReferenceAlsoHasPayments()
+    [Fact]
+    public async Task CalculateFees_WithRegistrationBlobName_DoesNotDoubleCountWhenOtherPaymentsExist()
     {
-        // Arrange - one payment matches FileId; another matches only the reference
-        var fileId = Guid.NewGuid();
-        await SeedPaymentAsync(fileId, amount: 600m, reference: "REF-CS-004");
-        await SeedPaymentAsync(fileId: null, amount: 800m, reference: "REF-CS-004");
+        // Arrange - payment1 matches blob name; payment2 has a different reference
+        var blobName = $"blob-cs-004-{Guid.NewGuid():N}";
+        await SeedPaymentAsync(registrationBlobName: blobName, amount: 600m, reference: blobName);
+        await SeedPaymentAsync(registrationBlobName: null, amount: 800m, reference: $"other-ref-{Guid.NewGuid():N}");
 
-        var request = BuildRequest("REF-CS-004", fileId: fileId);
+        var request = BuildRequest(applicationReferenceNumber: blobName, registrationBlobName: blobName);
 
         // Act
         var response = await Client.PostAsJsonAsync("/api/v1/compliance-scheme/registration-fee", request);
@@ -83,11 +85,11 @@ public class ComplianceSchemeFeesControllerTests : IntegrationTestBase
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var result = await response.Content.ReadFromJsonAsync<ComplianceSchemeFeesResponseDto>();
-        // FileId lookup returns 600 (non-zero), so reference fallback is skipped
+        // Blob name lookup returns 600 (non-zero), so reference fallback is skipped
         result!.PreviousPayment.Should().Be(600m);
     }
 
-    [Test]
+    [Fact]
     public async Task CalculateFees_WithInvalidRegulator_Returns400()
     {
         // Arrange
@@ -105,13 +107,13 @@ public class ComplianceSchemeFeesControllerTests : IntegrationTestBase
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-    private static ComplianceSchemeFeesRequestDto BuildRequest(string reference, Guid? fileId = null) =>
+    private static ComplianceSchemeFeesRequestDto BuildRequest(string applicationReferenceNumber, string? registrationBlobName = null) =>
         new()
         {
             Regulator = "GB-ENG",
-            ApplicationReferenceNumber = reference,
+            ApplicationReferenceNumber = applicationReferenceNumber,
             SubmissionDate = ValidSubmissionDate,
-            FileId = fileId,
+            RegistrationBlobName = registrationBlobName,
             IncludeRegistrationFee = true,
             ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>
             {

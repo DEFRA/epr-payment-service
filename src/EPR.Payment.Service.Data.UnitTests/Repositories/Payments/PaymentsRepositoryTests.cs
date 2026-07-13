@@ -163,54 +163,54 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.Payments
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetPreviousPaymentsByFileIdAsync_SinglePaymentWithMatchingFileId_ShouldReturnAmount(
+        public async Task GetPreviousPaymentsByRegistrationBlobNameAsync_SinglePaymentWithMatchingBlobName_ShouldReturnAmount(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] PaymentsRepository _mockPaymentsRepository)
         {
             //Arrange
+            var registrationSubmissionDataMock = MockIPaymentRepository.GetRegistrationSubmissionDataMock();
             _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
+            _dataContextMock.Setup(i => i.RegistrationSubmissionData).ReturnsDbSet(registrationSubmissionDataMock.Object);
             _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object);
 
-            var fileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5113");
-
             //Act
-            var result = await _mockPaymentsRepository.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken);
+            var result = await _mockPaymentsRepository.GetPreviousPaymentsByRegistrationBlobNameAsync("blob-name-113", _cancellationToken);
 
             //Assert
             result.Should().Be(50.0m);
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetPreviousPaymentsByFileIdAsync_MultiplePaymentsWithMatchingFileId_ShouldReturnSummedAmount(
+        public async Task GetPreviousPaymentsByRegistrationBlobNameAsync_MultiplePaymentsWithMatchingBlobName_ShouldReturnSummedAmount(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] PaymentsRepository _mockPaymentsRepository)
         {
             //Arrange
+            var registrationSubmissionDataMock = MockIPaymentRepository.GetRegistrationSubmissionDataMock();
             _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
+            _dataContextMock.Setup(i => i.RegistrationSubmissionData).ReturnsDbSet(registrationSubmissionDataMock.Object);
             _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object);
 
-            var fileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5111");
-
             //Act
-            var result = await _mockPaymentsRepository.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken);
+            var result = await _mockPaymentsRepository.GetPreviousPaymentsByRegistrationBlobNameAsync("blob-name-111", _cancellationToken);
 
             //Assert
             result.Should().Be(100.0m);
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetPreviousPaymentsByFileIdAsync_NoMatchingFileId_ShouldReturnZeroAmount(
+        public async Task GetPreviousPaymentsByRegistrationBlobNameAsync_NoMatchingBlobName_ShouldReturnZeroAmount(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] PaymentsRepository _mockPaymentsRepository)
         {
             //Arrange
+            var registrationSubmissionDataMock = MockIPaymentRepository.GetRegistrationSubmissionDataMock();
             _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
+            _dataContextMock.Setup(i => i.RegistrationSubmissionData).ReturnsDbSet(registrationSubmissionDataMock.Object);
             _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object);
 
-            var fileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5110");
-
             //Act
-            var result = await _mockPaymentsRepository.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken);
+            var result = await _mockPaymentsRepository.GetPreviousPaymentsByRegistrationBlobNameAsync("blob-name-999", _cancellationToken);
 
             //Assert
             result.Should().Be(0.0m);

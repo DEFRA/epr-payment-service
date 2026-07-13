@@ -10,8 +10,7 @@ namespace EPR.Payment.Service.Common.Data.Profiles
         public PaymentProfile()
         {
             CreateMap<OnlinePaymentInsertRequestDto, DataModels.Payment>()
-                .ForMember(dest => dest.InternalStatusId, opt => opt.MapFrom(src => src.Status))
-                .ForMember(dest => dest.FileId, opt => opt.MapFrom(src => src.FileId));
+                .ForMember(dest => dest.InternalStatusId, opt => opt.MapFrom(src => src.Status));
 
             CreateMap<OnlinePaymentInsertRequestDto, DataModels.OnlinePayment>()
                 .ForMember(dest => dest.RequestorType, opt => opt.Ignore())
@@ -40,22 +39,18 @@ namespace EPR.Payment.Service.Common.Data.Profiles
                 .ForMember(dest => dest.RequestorType, opt => opt.MapFrom(src => src.OnlinePayment.RequestorType.Type));
 
             CreateMap<OfflinePaymentInsertRequestDto, DataModels.Payment>()
-                .ForMember(dest => dest.ReasonForPayment, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.FileId, opt => opt.MapFrom(src => src.FileId));
+                .ForMember(dest => dest.ReasonForPayment, opt => opt.MapFrom(src => src.Description));
 
             CreateMap<OfflinePaymentInsertRequestDto, DataModels.OfflinePayment>()
                 .ForMember(dest => dest.PaymentMethod, opt => opt.Ignore())
-                .ForMember(dest => dest.FileId, opt => opt.MapFrom(src => src.FileId))
                 .ReverseMap();
 
             CreateMap<OfflinePaymentInsertRequestV2Dto, DataModels.Payment>()
-                .ForMember(dest => dest.ReasonForPayment, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.FileId, opt => opt.MapFrom(src => src.FileId));
+                .ForMember(dest => dest.ReasonForPayment, opt => opt.MapFrom(src => src.Description));
 
             CreateMap<OfflinePaymentInsertRequestV2Dto, DataModels.OfflinePayment>()
                 .ForMember(dest => dest.PaymentMethodId, opt => opt.MapFrom(src => src.PaymentMethod.HasValue ? (int)src.PaymentMethod.Value : DefaultDataConstants.NotApplicableIdValue))
                 .ForMember(dest => dest.PaymentMethod, opt => opt.Ignore())
-                .ForMember(dest => dest.FileId, opt => opt.MapFrom(src => src.FileId))
                 .ReverseMap();
         }
     }

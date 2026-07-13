@@ -51,9 +51,6 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.Property(p => p.UpdatedDate)
                    .HasColumnOrder(11);
 
-            builder.Property(p => p.FileId)
-                   .IsRequired(false);
-
             builder.HasIndex(p => p.ExternalPaymentId)
                    .IsUnique();
 

@@ -88,16 +88,16 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         }
 
         [TestMethod, AutoMoqData]
-        public async Task GetPreviousPaymentsByFileIdAsync_RepositoryReturnsAResult_ShouldReturnPreviousPayments(
+        public async Task GetPreviousPaymentsByRegistrationBlobNameAsync_RepositoryReturnsAResult_ShouldReturnPreviousPayments(
             [Frozen] decimal expectedPreviousPayments,
-            Guid fileId
+            string registrationBlobName
             )
         {
             //Arrange
-            _paymentsRepositoryMock.Setup(i => i.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken)).ReturnsAsync(expectedPreviousPayments);
+            _paymentsRepositoryMock.Setup(i => i.GetPreviousPaymentsByRegistrationBlobNameAsync(registrationBlobName, _cancellationToken)).ReturnsAsync(expectedPreviousPayments);
 
             //Act
-            var result = await _service!.GetPreviousPaymentsByFileIdAsync(fileId, _cancellationToken);
+            var result = await _service!.GetPreviousPaymentsByRegistrationBlobNameAsync(registrationBlobName, _cancellationToken);
 
             //Assert
             result.Should().Be(expectedPreviousPayments);

@@ -1045,11 +1045,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenFileIdIsPresent_UseGetPreviousPaymentsByFileId(
+        public async Task CalculateFeesAsync_WhenRegistrationBlobNameIsPresent_UseGetPreviousPaymentsByRegistrationBlobName(
             [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
-            var fileId = Guid.NewGuid();
+            var blobName = Guid.NewGuid().ToString();
             var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
@@ -1058,7 +1058,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 ApplicationReferenceNumber = "A123",
                 IsLateFeeApplicable = false,
                 SubmissionDate = DateTime.UtcNow,
-                FileId = fileId
+                RegistrationBlobName = blobName
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -1070,7 +1070,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
-            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()))
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(200M);
 
             // Act
@@ -1081,13 +1081,13 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             {
                 result.PreviousPayment.Should().Be(200M);
                 result.OutstandingPayment.Should().Be(result.TotalFee - 200M);
-                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()), Times.Once);
                 _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
             }
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenFileIdIsNull_UseGetPreviousPaymentsByReference(
+        public async Task CalculateFeesAsync_WhenRegistrationBlobNameIsNull_UseGetPreviousPaymentsByReference(
             [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
@@ -1099,7 +1099,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 ApplicationReferenceNumber = "A123",
                 IsLateFeeApplicable = false,
                 SubmissionDate = DateTime.UtcNow,
-                FileId = null
+                RegistrationBlobName = null
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -1123,16 +1123,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 result.PreviousPayment.Should().Be(150M);
                 result.OutstandingPayment.Should().Be(result.TotalFee - 150M);
                 _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()), Times.Once);
-                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
             }
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateFeesAsync_WhenFileIdIsPresentButReturnsZero_FallsBackToGetPreviousPaymentsByReference(
+        public async Task CalculateFeesAsync_WhenRegistrationBlobNameIsPresentButReturnsZero_FallsBackToGetPreviousPaymentsByReference(
             [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
-            var fileId = Guid.NewGuid();
+            var blobName = Guid.NewGuid().ToString();
             var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
@@ -1141,7 +1141,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 ApplicationReferenceNumber = "A123",
                 IsLateFeeApplicable = false,
                 SubmissionDate = DateTime.UtcNow,
-                FileId = fileId
+                RegistrationBlobName = blobName
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -1153,7 +1153,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _validatorMock.Setup(v => v.Validate(It.IsAny<ProducerRegistrationFeesRequestDto>()))
                 .Returns(new ValidationResult());
 
-            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()))
+            _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(0M);
 
             _paymentsServiceMock.Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
@@ -1167,7 +1167,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             {
                 result.PreviousPayment.Should().Be(150M);
                 result.OutstandingPayment.Should().Be(result.TotalFee - 150M);
-                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()), Times.Once);
                 _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()), Times.Once);
             }
         }

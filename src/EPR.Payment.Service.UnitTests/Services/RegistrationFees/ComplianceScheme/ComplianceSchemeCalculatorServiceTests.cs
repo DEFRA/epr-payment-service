@@ -1078,16 +1078,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         }
 
         [TestMethod]
-        public async Task CalculateFeesAsync_WhenFileIdIsPresent_UseGetPreviousPaymentsByFileId()
+        public async Task CalculateFeesAsync_WhenRegistrationBlobNameIsPresent_UseGetPreviousPaymentsByRegistrationBlobName()
         {
             // Arrange
-            var fileId = Guid.NewGuid();
+            var blobName = Guid.NewGuid().ToString();
             var request = new ComplianceSchemeFeesRequestDto
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = fileId,
+                RegistrationBlobName = blobName,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
             };
 
@@ -1096,7 +1096,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 .ReturnsAsync(1380400);
 
             _paymentsServiceMock
-                .Setup(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()))
+                .Setup(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(200M);
 
             // Act
@@ -1107,13 +1107,13 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 result.PreviousPayment.Should().Be(200M);
                 result.OutstandingPayment.Should().Be(result.TotalFee - 200M);
-                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()), Times.Once);
                 _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
             }
         }
 
         [TestMethod]
-        public async Task CalculateFeesAsync_WhenFileIdIsNull_UseGetPreviousPaymentsByReference()
+        public async Task CalculateFeesAsync_WhenRegistrationBlobNameIsNull_UseGetPreviousPaymentsByReference()
         {
             // Arrange
             var request = new ComplianceSchemeFeesRequestDto
@@ -1121,7 +1121,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = null,
+                RegistrationBlobName = null,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
             };
 
@@ -1142,21 +1142,21 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 result.PreviousPayment.Should().Be(150M);
                 result.OutstandingPayment.Should().Be(result.TotalFee - 150M);
                 _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()), Times.Once);
-                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
             }
         }
 
         [TestMethod]
-        public async Task CalculateFeesAsync_WhenFileIdIsPresentButReturnsZero_FallsBackToGetPreviousPaymentsByReference()
+        public async Task CalculateFeesAsync_WhenRegistrationBlobNameIsPresentButReturnsZero_FallsBackToGetPreviousPaymentsByReference()
         {
             // Arrange
-            var fileId = Guid.NewGuid();
+            var blobName = Guid.NewGuid().ToString();
             var request = new ComplianceSchemeFeesRequestDto
             {
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "ABC123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = fileId,
+                RegistrationBlobName = blobName,
                 ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
             };
 
@@ -1165,7 +1165,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 .ReturnsAsync(1380400);
 
             _paymentsServiceMock
-                .Setup(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()))
+                .Setup(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(0M);
 
             _paymentsServiceMock
@@ -1180,7 +1180,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             {
                 result.PreviousPayment.Should().Be(150M);
                 result.OutstandingPayment.Should().Be(result.TotalFee - 150M);
-                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()), Times.Once);
                 _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()), Times.Once);
             }
         }

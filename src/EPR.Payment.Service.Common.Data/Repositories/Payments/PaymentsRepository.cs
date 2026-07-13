@@ -20,12 +20,16 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Payments
                    .SumAsync(a => a.Amount, cancellationToken);
         }
 
-        public async Task<decimal> GetPreviousPaymentsByFileIdAsync(Guid fileId, CancellationToken cancellationToken)
+        public async Task<decimal> GetPreviousPaymentsByRegistrationBlobNameAsync(string registrationBlobName, CancellationToken cancellationToken)
         {
-            return await _dataContext.Payment
-                   .Where(a => a.InternalStatusId == Enums.Status.Success &&
-                               a.FileId == fileId)
-                   .SumAsync(a => a.Amount, cancellationToken);
+            return await (
+                from p in _dataContext.Payment
+                join rsd in _dataContext.RegistrationSubmissionData
+                    on p.Reference equals rsd.RegistrationBlobName
+                where rsd.RegistrationBlobName == registrationBlobName
+                   && p.InternalStatusId == Enums.Status.Success
+                select p.Amount
+            ).SumAsync(cancellationToken);
         }
 
         public async Task<DataModels.Payment?> GetPreviousPaymentIncludeChildrenByReferenceAsync(string reference, CancellationToken cancellationToken)

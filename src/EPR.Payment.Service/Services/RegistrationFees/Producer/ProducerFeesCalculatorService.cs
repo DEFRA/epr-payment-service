@@ -55,13 +55,12 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
             response.SubsidiariesFee = response.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees + response.SubsidiariesFeeBreakdown.TotalSubsidiariesClosedLoopRecyclingFees + response.SubsidiariesFeeBreakdown.FeeBreakdowns.Select(i => i.TotalPrice).Sum();
             response.TotalFee = response.ProducerRegistrationFee + response.ProducerOnlineMarketPlaceFee + response.ProducerClosedLoopRecyclingFee + response.SubsidiariesFee + response.ProducerLateRegistrationFee;
             
-            if (request.FileId.HasValue)
+            if (!string.IsNullOrEmpty(request.RegistrationBlobName))
             {
-                response.PreviousPayment = await _paymentsService.GetPreviousPaymentsByFileIdAsync(request.FileId.Value, cancellationToken);
-                
+                response.PreviousPayment = await _paymentsService.GetPreviousPaymentsByRegistrationBlobNameAsync(request.RegistrationBlobName, cancellationToken);
             }
             //Fallback to previous logic
-            if (!request.FileId.HasValue || response.PreviousPayment == 0)
+            if (string.IsNullOrEmpty(request.RegistrationBlobName) || response.PreviousPayment == 0)
             {
                 response.PreviousPayment = await _paymentsService.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, cancellationToken);
             }

@@ -1,6 +1,10 @@
+using EPR.Payment.Service.Common.Data;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EPR.Payment.Service.IntegrationTests.Infrastructure;
 
@@ -13,22 +17,56 @@ namespace EPR.Payment.Service.IntegrationTests.Infrastructure;
 public sealed class PaymentServiceFactory(IConfiguration? configuration = null)
     : WebApplicationFactory<Program>
 {
-    protected override IHost CreateHost(IHostBuilder builder)
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Development");
 
-        builder.ConfigureHostConfiguration(config =>
+        // ConfigureAppConfiguration runs after the app's default sources, so values added here
+        // take precedence over appsettings.json. Feature flags are set explicitly in-memory;
+        // dynamic values (connection strings, RunMigration) come from ServiceFixture via `configuration`.
+        builder.ConfigureAppConfiguration((_, config) =>
         {
-            // config here is in the context of the host - the web application - so this
-            // builds it from the web application's appsettings file
-            config.AddJsonFile("appsettings.json");
-            
-            // And then add any custom config passed in from the test project
+            config.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["FeatureManagement:EnableRegistrationFeesFeature"] = "true",
+                ["FeatureManagement:EnableRegistrationFeesCalculation"] = "true",
+                ["FeatureManagement:EnableComplianceSchemeFeature"] = "true",
+                ["FeatureManagement:EnableComplianceSchemeFees"] = "true",
+                ["FeatureManagement:EnableApplyPendingMigrationsFeature"] = "false"
+            });
+
             if (configuration != null)
             {
                 config.AddConfiguration(configuration);
             }
         });
-        return base.CreateHost(builder);
+
+        // ConfigureServices runs after ConfigureAppConfiguration, so ctx.Configuration has the
+        // real test values. Program.cs registers both AppDbContext and the Azure Service Bus clients
+        // before ConfigureAppConfiguration applies the test overrides, so they end up with the empty
+        // connection strings from appsettings.json. We replace them here with the real ones.
+        builder.ConfigureServices((ctx, services) =>
+        {
+            var sqlCs = ctx.Configuration["ConnectionStrings:PaymentConnectionString"];
+            var sbCs = ctx.Configuration["ServiceBus:ConnectionString"];
+            var sbAdminCs = ctx.Configuration["ServiceBus:AdminConnectionString"];
+
+            // Replace AppDbContext registered with empty connection string
+            var dbDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
+            if (dbDescriptor != null)
+                services.Remove(dbDescriptor);
+
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(sqlCs, o => o.CommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds)));
+
+            // Replace Service Bus clients registered with empty connection strings
+            services.AddAzureClients(clients =>
+            {
+                if (!string.IsNullOrEmpty(sbCs))
+                    clients.AddServiceBusClient(sbCs);
+                if (!string.IsNullOrEmpty(sbAdminCs))
+                    clients.AddServiceBusAdministrationClient(sbAdminCs);
+            });
+        });
     }
 }

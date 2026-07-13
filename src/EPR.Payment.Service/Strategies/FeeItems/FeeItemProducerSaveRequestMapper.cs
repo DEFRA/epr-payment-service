@@ -108,7 +108,7 @@ namespace EPR.Payment.Service.Strategies.FeeItems
         {
             return new FeeItemSaveRequest
             {
-                FileId = req.FileId ?? Guid.NewGuid(),
+                FileId = Guid.NewGuid(),
                 ExternalId = req.ExternalId ?? Guid.NewGuid(),
                 ApplicationReferenceNumber = req.ReferenceNumber,
                 InvoicePeriod = invoicePeriod,

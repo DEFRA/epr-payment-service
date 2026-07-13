@@ -256,20 +256,18 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     ExternalPaymentId = Guid.Parse("0cebe086-0188-4654-85e3-b5f2be920444"),
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
-                    Reference = "Test Reference With FileId",
+                    Reference = "blob-name-111",
                     InternalStatusId = Enums.Status.Success,
                     Amount = 75.0M,
-                    ReasonForPayment = "Test FileId",
+                    ReasonForPayment = "Test RegistrationBlobName",
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5111"),
                     OfflinePayment = new Data.DataModels.OfflinePayment
                     {
                         Id = 10,
                         PaymentId = 7,
-                        PaymentDate = new DateTime(),
-                        FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5111")
+                        PaymentDate = new DateTime()
                     }
                 },
                 new()
@@ -278,20 +276,18 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     ExternalPaymentId = Guid.Parse("0cebe086-0188-4654-85e3-b5f2be920445"),
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
-                    Reference = "Test Reference With FileId",
+                    Reference = "blob-name-111",
                     InternalStatusId = Enums.Status.Success,
                     Amount = 25.0M,
-                    ReasonForPayment = "Test FileId 2",
+                    ReasonForPayment = "Test RegistrationBlobName 2",
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5111"),
                     OfflinePayment = new Data.DataModels.OfflinePayment
                     {
                         Id = 11,
                         PaymentId = 8,
-                        PaymentDate = new DateTime(),
-                        FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5112")
+                        PaymentDate = new DateTime()
                     }
                 },
                 new()
@@ -300,20 +296,18 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     ExternalPaymentId = Guid.Parse("0cebe086-0188-4654-85e3-b5f2be920446"),
                     UserId = Guid.NewGuid(),
                     Regulator = "Test Regulator",
-                    Reference = "Test Reference With Different FileId",
+                    Reference = "blob-name-113",
                     InternalStatusId = Enums.Status.Success,
                     Amount = 50.0M,
-                    ReasonForPayment = "Test FileId Different",
+                    ReasonForPayment = "Test RegistrationBlobName Different",
                     CreatedDate = new DateTime(),
                     UpdatedByUserId = Guid.NewGuid(),
                     UpdatedDate = new DateTime(),
-                    FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5113"),
                     OfflinePayment = new Data.DataModels.OfflinePayment
                     {
                         Id = 12,
                         PaymentId = 9,
-                        PaymentDate = new DateTime(),
-                        FileId = Guid.Parse("140511a0-6a77-4ce9-871a-661b495d5113")
+                        PaymentDate = new DateTime()
                     }
                 }
             }.AsQueryable();
@@ -331,6 +325,47 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
             paymentMock.As<IQueryable<Data.DataModels.Payment>>().Setup(m => m.GetEnumerator()).Returns(() => paymentMockData.GetEnumerator());
 
             return paymentMock;
+        }
+
+        public static Mock<DbSet<Data.DataModels.RegistrationSubmissionData>> GetRegistrationSubmissionDataMock()
+        {
+            var mock = new Mock<DbSet<Data.DataModels.RegistrationSubmissionData>>();
+
+            var data = new List<Data.DataModels.RegistrationSubmissionData>
+            {
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    SubmissionId = Guid.NewGuid(),
+                    RegistrationBlobName = "blob-name-111",
+                    SubmissionPeriod = "2025",
+                    SubmissionDate = DateTime.UtcNow,
+                    CreatedDate = DateTimeOffset.UtcNow
+                },
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    SubmissionId = Guid.NewGuid(),
+                    RegistrationBlobName = "blob-name-113",
+                    SubmissionPeriod = "2025",
+                    SubmissionDate = DateTime.UtcNow,
+                    CreatedDate = DateTimeOffset.UtcNow
+                }
+            }.AsQueryable();
+
+            mock.As<IDbAsyncEnumerable<Data.DataModels.RegistrationSubmissionData>>()
+                .Setup(m => m.GetAsyncEnumerator())
+                .Returns(new TestHelperDbAsyncEnumerator<Data.DataModels.RegistrationSubmissionData>(data.GetEnumerator()));
+
+            mock.As<IQueryable<Data.DataModels.RegistrationSubmissionData>>()
+                .Setup(m => m.Provider)
+                .Returns(new TestHelperDbAsyncQueryProvider<Data.DataModels.RegistrationSubmissionData>(data.Provider));
+
+            mock.As<IQueryable<Data.DataModels.RegistrationSubmissionData>>().Setup(m => m.Expression).Returns(data.Expression);
+            mock.As<IQueryable<Data.DataModels.RegistrationSubmissionData>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            mock.As<IQueryable<Data.DataModels.RegistrationSubmissionData>>().Setup(m => m.GetEnumerator()).Returns(() => data.GetEnumerator());
+
+            return mock;
         }
 
         public static Mock<DbSet<Data.DataModels.Lookups.PaymentStatus>> GetPaymentStatusMock(bool returnResults)

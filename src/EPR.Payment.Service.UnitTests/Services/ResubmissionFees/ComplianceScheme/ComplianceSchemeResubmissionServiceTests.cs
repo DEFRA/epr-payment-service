@@ -341,26 +341,26 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateResubmissionFeeAsync_WithFileId_ShouldUsePreviousPaymentsByFileId(
+        public async Task CalculateResubmissionFeeAsync_WithRegistrationBlobName_ShouldUsePreviousPaymentsByRegistrationBlobName(
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
             [Frozen] Mock<IPaymentsService> paymentsServiceMock,
             [Greedy] ComplianceSchemeResubmissionService service)
         {
             // Arrange
-            var fileId = Guid.NewGuid();
+            var blobName = Guid.NewGuid().ToString();
             var request = new ComplianceSchemeResubmissionFeeRequestDto
             {
                 Regulator = "GB-ENG",
                 MemberCount = 1,
                 ReferenceNumber = "REF12345",
-                FileId = fileId
+                RegistrationBlobName = blobName
             };
 
             decimal baseFee = 10000m;
-            decimal filePayments = 5000m;
+            decimal blobPayments = 5000m;
 
             strategyMock.Setup(x => x.CalculateFeeAsync(request, It.IsAny<CancellationToken>())).ReturnsAsync(baseFee);
-            paymentsServiceMock.Setup(x => x.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>())).ReturnsAsync(filePayments);
+            paymentsServiceMock.Setup(x => x.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>())).ReturnsAsync(blobPayments);
 
             // Act
             var result = await service.CalculateResubmissionFeeAsync(request, CancellationToken.None);
@@ -368,34 +368,34 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
             // Assert
             using (new AssertionScope())
             {
-                result.PreviousPayments.Should().Be(filePayments);
-                result.OutstandingPayment.Should().Be(baseFee - filePayments);
-                paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()), Times.Once);
+                result.PreviousPayments.Should().Be(blobPayments);
+                result.OutstandingPayment.Should().Be(baseFee - blobPayments);
+                paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()), Times.Once);
                 paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
             }
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateResubmissionFeeAsync_WithFileId_WhenNoFilePayments_ShouldFallBackToReferencePayments(
+        public async Task CalculateResubmissionFeeAsync_WithRegistrationBlobName_WhenNoBlobPayments_ShouldFallBackToReferencePayments(
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
             [Frozen] Mock<IPaymentsService> paymentsServiceMock,
             [Greedy] ComplianceSchemeResubmissionService service)
         {
             // Arrange
-            var fileId = Guid.NewGuid();
+            var blobName = Guid.NewGuid().ToString();
             var request = new ComplianceSchemeResubmissionFeeRequestDto
             {
                 Regulator = "GB-ENG",
                 MemberCount = 1,
                 ReferenceNumber = "REF12345",
-                FileId = fileId
+                RegistrationBlobName = blobName
             };
 
             decimal baseFee = 10000m;
             decimal referencePayments = 5000m;
 
             strategyMock.Setup(x => x.CalculateFeeAsync(request, It.IsAny<CancellationToken>())).ReturnsAsync(baseFee);
-            paymentsServiceMock.Setup(x => x.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>())).ReturnsAsync(0m);
+            paymentsServiceMock.Setup(x => x.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>())).ReturnsAsync(0m);
             paymentsServiceMock.Setup(x => x.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, It.IsAny<CancellationToken>())).ReturnsAsync(referencePayments);
 
             // Act
@@ -406,13 +406,13 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
             {
                 result.PreviousPayments.Should().Be(referencePayments);
                 result.OutstandingPayment.Should().Be(baseFee - referencePayments);
-                paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(fileId, It.IsAny<CancellationToken>()), Times.Once);
+                paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()), Times.Once);
                 paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, It.IsAny<CancellationToken>()), Times.Once);
             }
         }
 
         [TestMethod, AutoMoqData]
-        public async Task CalculateResubmissionFeeAsync_WithNoFileId_ShouldUsePreviousPaymentsByReference(
+        public async Task CalculateResubmissionFeeAsync_WithNoRegistrationBlobName_ShouldUsePreviousPaymentsByReference(
             [Frozen] Mock<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>> strategyMock,
             [Frozen] Mock<IPaymentsService> paymentsServiceMock,
             [Greedy] ComplianceSchemeResubmissionService service)
@@ -423,7 +423,7 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
                 Regulator = "GB-ENG",
                 MemberCount = 1,
                 ReferenceNumber = "REF12345",
-                FileId = null
+                RegistrationBlobName = null
             };
 
             decimal baseFee = 10000m;
@@ -440,7 +440,7 @@ namespace EPR.Payment.Service.UnitTests.Services.ResubmissionFees.ComplianceSche
             {
                 result.PreviousPayments.Should().Be(referencePayments);
                 result.OutstandingPayment.Should().Be(baseFee - referencePayments);
-                paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByFileIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+                paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
                 paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ReferenceNumber, It.IsAny<CancellationToken>()), Times.Once);
             }
         }
