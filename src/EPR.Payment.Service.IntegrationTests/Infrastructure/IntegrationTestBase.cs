@@ -32,7 +32,7 @@ public abstract class IntegrationTestBase
         _fixture = fixture;
         Client = _fixture.CreateHttpClient();
         Builder = new TestBuilders(fixture);
-        ServiceBusAdministrationClient = _fixture.ServiceBusAdminClient;
+        ServiceBusAdministrationClient = _fixture.SharedServices.GetRequiredService<ServiceBusAdministrationClient>();
         Configuration = _fixture.SharedServices.GetRequiredService<IConfiguration>();
     }
 

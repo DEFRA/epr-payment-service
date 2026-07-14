@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using EPR.Payment.Service.Common.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -67,6 +68,15 @@ public sealed class PaymentServiceFactory(IConfiguration? configuration = null)
                 if (!string.IsNullOrEmpty(sbAdminCs))
                     clients.AddServiceBusAdministrationClient(sbAdminCs);
             });
+
+            // Replace BlobServiceClient — Program.cs constructs it from StorageAccount:ConnectionString
+            // which is empty in test environments. Use the Azurite development endpoint so construction
+            // succeeds without needing a real storage account.
+            var blobDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(BlobServiceClient));
+            if (blobDescriptor != null)
+                services.Remove(blobDescriptor);
+
+            services.AddSingleton(_ => new BlobServiceClient("UseDevelopmentStorage=true"));
         });
     }
 }
