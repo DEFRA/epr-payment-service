@@ -1,5 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <AzureBuild Condition="'$(AzureBuild)' == ''">true</AzureBuild>
-  </PropertyGroup>
-</Project>
