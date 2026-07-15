@@ -1,4 +1,4 @@
-﻿using AutoFixture.MSTest;
+using Komainu.AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Constants.RegistrationFees;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Dtos.Response.Payments;

@@ -1,4 +1,4 @@
-﻿using AutoFixture.MSTest;
+using Komainu.AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Data.DataModels;
 using EPR.Payment.Service.Common.Data.Dtos;
 using EPR.Payment.Service.Common.Data.Interfaces;

@@ -1,4 +1,4 @@
-﻿using AutoFixture.MSTest;
+using Komainu.AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationSubmission;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.RegistrationSubmission;
