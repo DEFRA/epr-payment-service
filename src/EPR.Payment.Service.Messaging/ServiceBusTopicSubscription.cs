@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission;
+using EPR.Payment.Service.Common.Logging;
 using EPR.Payment.Service.Common.Services.Interfaces.RegistrationSubmission;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +17,10 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
     private readonly IServiceProvider _serviceProvider;
     private readonly ServiceBusClient? _client;
     private readonly ServiceBusAdministrationClient? _adminClient;
-    private readonly string _topicName;
-    private readonly string _subscriptionName;
+    private readonly string _regSubmittedForFeesCalculationTopicName;
+    private readonly string _regSubmittedForFeesCalculationSubscriptionName;
+    private readonly string _regSubmittedForRegulatorApprovalTopicName;
+    private readonly string _regSubmittedForRegulatorApprovalSubscriptionName;
     private ServiceBusProcessor? _processor;
 
     public ServiceBusTopicSubscription(
@@ -27,8 +30,10 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
-        _topicName = configuration.GetValue<string>("ServiceBus:TopicName")!;
-        _subscriptionName = configuration.GetValue<string>("ServiceBus:SubscriptionName")!;
+        _regSubmittedForFeesCalculationTopicName = configuration.GetValue<string>("ServiceBus:RegistrationSubmittedForFeesCalculationTopicName")!;
+        _regSubmittedForFeesCalculationSubscriptionName = configuration.GetValue<string>("ServiceBus:RegistrationSubmittedForFeesCalculationSubscriptionName")!;
+        _regSubmittedForRegulatorApprovalTopicName = configuration.GetValue<string>("ServiceBus:RegistrationSubmittedForRegulatorApprovalTopicName")!;
+        _regSubmittedForRegulatorApprovalSubscriptionName = configuration.GetValue<string>("ServiceBus:RegistrationSubmittedForRegulatorApprovalSubscriptionName")!;
         _client = serviceProvider.GetService(typeof(ServiceBusClient)) as ServiceBusClient;
         _adminClient = serviceProvider.GetService(typeof(ServiceBusAdministrationClient)) as ServiceBusAdministrationClient;
     }
@@ -43,45 +48,60 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
                     "Service bus client is null. Please check your connection string.");
             }
 
-            _logger.LogInformation("Setting up service bus subscription for topic {TopicName}", _topicName);
+            await SetupSubscription(_regSubmittedForFeesCalculationTopicName, _regSubmittedForFeesCalculationSubscriptionName);
+            await SetupSubscription(_regSubmittedForRegulatorApprovalTopicName, _regSubmittedForRegulatorApprovalSubscriptionName);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while setting up the service bus subscription");
+        }
+    }
+
+    private async Task SetupSubscription(string topicName, string subscriptionName)
+    {
+        using (_logger.AddScopedData(new Dictionary<string, object>
+               {
+                   ["TopicName"] = topicName,
+                   ["SubscriptionName"] = subscriptionName
+               }))
+        {
+            _logger.LogInformation("Setting up service bus subscription");
 
             try
             {
-                var topicExists = await _adminClient.TopicExistsAsync(_topicName);
+                var topicExists = await _adminClient.TopicExistsAsync(topicName);
                 if (!topicExists.Value)
                 {
-                    _logger.LogInformation("Creating topic {TopicName}", _topicName);
-                    await _adminClient.CreateTopicAsync(_topicName);
+                    _logger.LogInformation("Creating topic");
+                    await _adminClient.CreateTopicAsync(topicName);
                 }
 
-                var subscriptionExists = await _adminClient.SubscriptionExistsAsync(_topicName, _subscriptionName);
+                var subscriptionExists = await _adminClient.SubscriptionExistsAsync(topicName, subscriptionName);
                 if (!subscriptionExists.Value)
                 {
-                    _logger.LogInformation("Creating subscription {SubscriptionName} on topic {TopicName}", _subscriptionName, _topicName);
-                    await _adminClient.CreateSubscriptionAsync(_topicName, _subscriptionName);
+                    _logger.LogInformation("Creating subscription");
+                    await _adminClient.CreateSubscriptionAsync(topicName, subscriptionName);
                 }
 
-                _logger.LogInformation("Service bus subscription {SubscriptionName} on topic {TopicName} is ready", _subscriptionName, _topicName);
+                _logger.LogInformation("Service bus subscription is ready");
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Unable to verify or create topic/subscription via admin client — assuming they already exist and proceeding");
+                _logger.LogWarning(ex,
+                    "Unable to verify or create topic/subscription via admin client — assuming they already exist and proceeding");
             }
 
-            _processor = _client.CreateProcessor(_topicName, _subscriptionName, new ServiceBusProcessorOptions
+            _processor = _client.CreateProcessor(topicName, subscriptionName, new ServiceBusProcessorOptions
             {
                 MaxConcurrentCalls = 1,
                 AutoCompleteMessages = false
             });
 
+            // TODO: the processor should be a separate class for each type of message
             _processor.ProcessMessageAsync += ProcessMessageAsync;
             _processor.ProcessErrorAsync += ProcessErrorAsync;
 
             await _processor.StartProcessingAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while setting up the service bus subscription");
         }
     }
 
