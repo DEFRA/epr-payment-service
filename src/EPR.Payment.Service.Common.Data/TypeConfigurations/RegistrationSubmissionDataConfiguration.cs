@@ -21,7 +21,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.Property(r => r.ComplianceSchemeId);
             builder.Property(r => r.SubmissionDate).HasColumnType("datetime2").IsRequired();
             builder.Property(r => r.CreatedDate).HasColumnType("datetimeoffset").IsRequired();
-            builder.Property(r => r.SubmissionPeriodId).IsRequired(false);
+            builder.Property(r => r.SubmissionPeriodId).IsRequired();
 
             builder.HasIndex(r => r.RegistrationBlobName).IsUnique();
 
@@ -29,7 +29,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
                    .WithMany()
                    .HasForeignKey(r => r.SubmissionPeriodId)
                    .OnDelete(DeleteBehavior.Restrict)
-                   .IsRequired(false);
+                   .IsRequired();
         }
     }
 }

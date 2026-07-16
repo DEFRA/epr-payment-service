@@ -8,5 +8,5 @@ public record RegistrationSubmittedMessage(
     string RegistrationBlobName,
     Guid? ComplianceSchemeId,
     DateTime SubmissionDate,
-    int? SubmissionPeriodId = null
+    int SubmissionPeriodId
 );
