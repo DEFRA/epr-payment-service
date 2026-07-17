@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260709105007_AddSubmissionPeriodAndLink")]
+    partial class AddSubmissionPeriodAndLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4954,7 +4957,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<Guid>("SubmissionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("SubmissionPeriodId")
+                    b.Property<int?>("SubmissionPeriodId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -5159,8 +5162,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.SubmissionPeriod", "SubmissionPeriodWindow")
                         .WithMany()
                         .HasForeignKey("SubmissionPeriodId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("SubmissionPeriodWindow");
                 });

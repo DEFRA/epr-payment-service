@@ -44,10 +44,11 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             });
 
             _logger.LogInformation(
-                "Processing registration submission data for SubmissionId {SubmissionId} RegistrationBlobName {RegistrationBlobName} ComplianceSchemeId {ComplianceSchemeId}.",
+                "Processing registration submission data for SubmissionId {SubmissionId} RegistrationBlobName {RegistrationBlobName} ComplianceSchemeId {ComplianceSchemeId} SubmissionPeriodId {SubmissionPeriodId}.",
                 request.SubmissionId,
                 request.RegistrationBlobName,
-                request.ComplianceSchemeId);
+                request.ComplianceSchemeId,
+                request.SubmissionPeriodId);
 
             try
             {
@@ -115,8 +116,8 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 SubmissionId = request.SubmissionId,
                 RegistrationBlobName = request.RegistrationBlobName,
                 ComplianceSchemeId = request.ComplianceSchemeId,
-                SubmissionPeriod = request.SubmissionPeriod,
                 SubmissionDate = request.SubmissionDate,
+                SubmissionPeriodId = request.SubmissionPeriodId,
                 CreatedDate = now,
             };
 

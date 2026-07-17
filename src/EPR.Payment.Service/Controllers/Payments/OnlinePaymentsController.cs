@@ -13,7 +13,6 @@ namespace EPR.Payment.Service.Controllers
     [FeatureGate("EnableOnlinePaymentsFeature")]
     public class OnlinePaymentsController(IOnlinePaymentsService onlinePaymentsService,
         IValidator<OnlinePaymentInsertRequestDto> onlinePaymentInsertRequestValidator,
-        IValidator<OnlinePaymentInsertRequestV2Dto> onlinePaymentInsertRequestValidatorV2,
         IValidator<OnlinePaymentUpdateRequestDto> onlinePaymentUpdateRequestValidator) : ControllerBase
     {
         [ApiExplorerSettings(GroupName = "v1")]
@@ -27,32 +26,6 @@ namespace EPR.Payment.Service.Controllers
             CancellationToken cancellationToken)
         {
             var validatorResult = onlinePaymentInsertRequestValidator.Validate(onlinePaymentInsertRequest);
-
-            if (!validatorResult.IsValid)
-            {
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "Validation Error",
-                    Detail = string.Join("; ", validatorResult.Errors.Select(e => e.ErrorMessage)),
-                    Status = StatusCodes.Status400BadRequest
-                });
-            }
-
-            return await InsertWithErrorHanding(() => onlinePaymentsService.InsertOnlinePaymentAsync(onlinePaymentInsertRequest, cancellationToken), PaymentConstants.InsertingPaymentError);
-        }
-
-
-        [ApiExplorerSettings(GroupName = "v2")]
-        [HttpPost("v2/online-payments")]
-        [ProducesResponseType(typeof(NoContentResult), 204)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [FeatureGate("EnableOnlinePaymentInsertV2")]
-        public async Task<ActionResult<Guid>> InsertOnlinePaymentV2(
-            [FromBody] OnlinePaymentInsertRequestV2Dto onlinePaymentInsertRequest,
-            CancellationToken cancellationToken)
-        {
-            var validatorResult = onlinePaymentInsertRequestValidatorV2.Validate(onlinePaymentInsertRequest);
 
             if (!validatorResult.IsValid)
             {
