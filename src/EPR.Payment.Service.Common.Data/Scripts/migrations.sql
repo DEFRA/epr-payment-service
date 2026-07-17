@@ -6418,3 +6418,45 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260715113527_MakeSubmissionPeriodIdRequired'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionData] WHERE [SubmissionPeriodId] IS NULL;
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260715113527_MakeSubmissionPeriodIdRequired'
+)
+BEGIN
+    DROP INDEX [IX_RegistrationSubmissionData_SubmissionPeriodId] ON [registration].[RegistrationSubmissionData];
+    DECLARE @var29 sysname;
+    SELECT @var29 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[registration].[RegistrationSubmissionData]') AND [c].[name] = N'SubmissionPeriodId');
+    IF @var29 IS NOT NULL EXEC(N'ALTER TABLE [registration].[RegistrationSubmissionData] DROP CONSTRAINT [' + @var29 + '];');
+    ALTER TABLE [registration].[RegistrationSubmissionData] ALTER COLUMN [SubmissionPeriodId] int NOT NULL;
+    CREATE INDEX [IX_RegistrationSubmissionData_SubmissionPeriodId] ON [registration].[RegistrationSubmissionData] ([SubmissionPeriodId]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260715113527_MakeSubmissionPeriodIdRequired'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260715113527_MakeSubmissionPeriodIdRequired', N'8.0.28');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -13,6 +13,6 @@ namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission
 
         public DateTime SubmissionDate { get; set; }
 
-        public int? SubmissionPeriodId { get; set; }
+        public int SubmissionPeriodId { get; set; }
     }
 }

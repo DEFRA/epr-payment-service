@@ -18,10 +18,10 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public DateTimeOffset CreatedDate { get; set; }
 
-        public int? SubmissionPeriodId { get; set; }
+        public int SubmissionPeriodId { get; set; }
 
         public ICollection<RegistrationSubmissionProducer> Producers { get; set; } = new List<RegistrationSubmissionProducer>();
 
-        public virtual SubmissionPeriod? SubmissionPeriodWindow { get; set; }
+        public virtual SubmissionPeriod SubmissionPeriodWindow { get; set; } = null!;
     }
 }

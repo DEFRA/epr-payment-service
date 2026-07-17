@@ -370,25 +370,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         }
 
         [TestMethod]
-        public async Task HandleAsync_NullSubmissionPeriodId_PersistsNull()
-        {
-            var request = NewRequest();
-            request.SubmissionPeriodId = null;
-            ArrangeNoExistingSnapshot(request);
-            ArrangeCsvRows(request.RegistrationBlobName, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1") });
-
-            RegistrationSubmissionData? captured = null;
-            _repositoryMock
-                .Setup(r => r.CreateAsync(It.IsAny<RegistrationSubmissionData>(), _ct))
-                .Callback<RegistrationSubmissionData, CancellationToken>((e, _) => captured = e)
-                .ReturnsAsync(Guid.NewGuid());
-
-            await _sut.HandleAsync(request, _ct);
-
-            captured!.SubmissionPeriodId.Should().BeNull();
-        }
-
-        [TestMethod]
         public async Task HandleAsync_DownloadsBlobByRegistrationBlobName()
         {
             var request = NewRequest();
@@ -408,6 +389,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             RegistrationBlobName = $"av-blob-{Guid.NewGuid()}",
             ComplianceSchemeId = Guid.NewGuid(),
             SubmissionDate = new DateTime(2026, 5, 28, 12, 0, 0, DateTimeKind.Utc),
+            SubmissionPeriodId = 1,
         };
 
         private void ArrangeNoExistingSnapshot(CreateRegistrationSubmissionDataRequest request)
