@@ -17,7 +17,6 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationSubmission
                 SubmissionId = Guid.NewGuid(),
                 RegistrationBlobName = "av-blob-name",
                 ComplianceSchemeId = Guid.NewGuid(),
-                SubmissionPeriod = "Jan to Jun 2026",
                 SubmissionDate = new DateTime(2026, 5, 28, 0, 0, 0, DateTimeKind.Utc),
             };
 
@@ -33,7 +32,6 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationSubmission
             {
                 SubmissionId = Guid.Empty,
                 RegistrationBlobName = string.Empty,
-                SubmissionPeriod = string.Empty,
                 SubmissionDate = default,
             };
 
@@ -51,7 +49,6 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationSubmission
                 SubmissionId = Guid.NewGuid(),
                 RegistrationBlobName = "av-blob-name",
                 ComplianceSchemeId = null,
-                SubmissionPeriod = "Jan to Jun 2026",
                 SubmissionDate = new DateTime(2026, 5, 28, 0, 0, 0, DateTimeKind.Utc),
             };
 

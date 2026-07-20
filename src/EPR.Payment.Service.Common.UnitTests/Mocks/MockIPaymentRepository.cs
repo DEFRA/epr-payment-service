@@ -338,7 +338,6 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     Id = Guid.NewGuid(),
                     SubmissionId = Guid.NewGuid(),
                     RegistrationBlobName = "blob-name-111",
-                    SubmissionPeriod = "2025",
                     SubmissionDate = DateTime.UtcNow,
                     CreatedDate = DateTimeOffset.UtcNow
                 },
@@ -347,7 +346,6 @@ namespace EPR.Payment.Service.Common.UnitTests.Mocks
                     Id = Guid.NewGuid(),
                     SubmissionId = Guid.NewGuid(),
                     RegistrationBlobName = "blob-name-113",
-                    SubmissionPeriod = "2025",
                     SubmissionDate = DateTime.UtcNow,
                     CreatedDate = DateTimeOffset.UtcNow
                 }

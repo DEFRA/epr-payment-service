@@ -74,7 +74,6 @@ public abstract class IntegrationTestBase
                 {
                     SubmissionId = Guid.NewGuid(),
                     RegistrationBlobName = registrationBlobName,
-                    SubmissionPeriod = "2025",
                     SubmissionDate = DateTime.UtcNow,
                     CreatedDate = DateTimeOffset.UtcNow
                 });
