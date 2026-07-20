@@ -12,7 +12,7 @@
 
         public required string Description { get; set; }
 
-        public Guid? FileId { get; set; }
+        public string? RegistrationBlobName { get; set; }
 
         public DateTime? PaymentDate { get; set; }
 
