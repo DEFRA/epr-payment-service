@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 
 namespace EPR.Payment.Service.Common.Data.DataModels
 {
@@ -13,12 +14,14 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public Guid? ComplianceSchemeId { get; set; }
 
-        public string SubmissionPeriod { get; set; } = null!;
-
         public DateTime SubmissionDate { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }
 
+        public int SubmissionPeriodId { get; set; }
+
         public ICollection<RegistrationSubmissionProducer> Producers { get; set; } = new List<RegistrationSubmissionProducer>();
+
+        public virtual SubmissionPeriod SubmissionPeriodWindow { get; set; } = null!;
     }
 }

@@ -11,8 +11,8 @@ namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission
 
         public Guid? ComplianceSchemeId { get; set; }
 
-        public string SubmissionPeriod { get; set; } = string.Empty;
-
         public DateTime SubmissionDate { get; set; }
+
+        public int SubmissionPeriodId { get; set; }
     }
 }

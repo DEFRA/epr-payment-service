@@ -146,7 +146,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 captured!.SubmissionId.Should().Be(request.SubmissionId);
                 captured.RegistrationBlobName.Should().Be(request.RegistrationBlobName);
                 captured.ComplianceSchemeId.Should().Be(request.ComplianceSchemeId);
-                captured.SubmissionPeriod.Should().Be(request.SubmissionPeriod);
                 captured.SubmissionDate.Should().Be(request.SubmissionDate);
                 captured.CreatedDate.Should().Be(_now);
                 captured.Producers.Should().HaveCount(1);
@@ -352,6 +351,25 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         }
 
         [TestMethod]
+        public async Task HandleAsync_PersistsSubmissionPeriodIdFromRequest()
+        {
+            var request = NewRequest();
+            request.SubmissionPeriodId = 42;
+            ArrangeNoExistingSnapshot(request);
+            ArrangeCsvRows(request.RegistrationBlobName, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", organisationSize: "Large") });
+
+            RegistrationSubmissionData? captured = null;
+            _repositoryMock
+                .Setup(r => r.CreateAsync(It.IsAny<RegistrationSubmissionData>(), _ct))
+                .Callback<RegistrationSubmissionData, CancellationToken>((e, _) => captured = e)
+                .ReturnsAsync(Guid.NewGuid());
+
+            await _sut.HandleAsync(request, _ct);
+
+            captured!.SubmissionPeriodId.Should().Be(42);
+        }
+
+        [TestMethod]
         public async Task HandleAsync_DownloadsBlobByRegistrationBlobName()
         {
             var request = NewRequest();
@@ -370,8 +388,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             SubmissionId = Guid.NewGuid(),
             RegistrationBlobName = $"av-blob-{Guid.NewGuid()}",
             ComplianceSchemeId = Guid.NewGuid(),
-            SubmissionPeriod = "Jan to Jun 2026",
             SubmissionDate = new DateTime(2026, 5, 28, 12, 0, 0, DateTimeKind.Utc),
+            SubmissionPeriodId = 1,
         };
 
         private void ArrangeNoExistingSnapshot(CreateRegistrationSubmissionDataRequest request)

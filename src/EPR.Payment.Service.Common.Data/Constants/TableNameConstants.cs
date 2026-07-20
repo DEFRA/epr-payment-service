@@ -26,17 +26,15 @@
 
         public const string PaymentMethodTableName = "PaymentMethod";
 
-        public const string FeeTypesTableName = "FeeTypes";
-
         public const string PayerTypesTableName = "PayerTypes";
-
-        public const string FeeItemTableName = "FeeItem";
 
         public const string RegistrationSubmissionDataTableName = "RegistrationSubmissionData";
 
         public const string RegistrationSubmissionProducerTableName = "RegistrationSubmissionProducer";
 
         public const string RegistrationSubmissionSubsidiaryTableName = "RegistrationSubmissionSubsidiary";
+
+        public const string SubmissionPeriodTableName = "SubmissionPeriod";
 
         public const string RegistrationSchemaName = "registration";
     }
