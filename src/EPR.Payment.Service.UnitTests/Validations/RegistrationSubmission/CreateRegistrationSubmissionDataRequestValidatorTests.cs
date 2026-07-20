@@ -38,7 +38,7 @@ namespace EPR.Payment.Service.UnitTests.Validations.RegistrationSubmission
             var result = _sut.Validate(request);
 
             result.IsValid.Should().BeFalse();
-            result.Errors.Select(e => e.PropertyName).Should().Contain(new[] { "SubmissionId", "RegistrationBlobName", "SubmissionPeriod", "SubmissionDate" });
+            result.Errors.Select(e => e.PropertyName).Should().Contain(new[] { "SubmissionId", "RegistrationBlobName", "SubmissionDate" });
         }
 
         [TestMethod]

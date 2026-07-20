@@ -75,7 +75,8 @@ public abstract class IntegrationTestBase
                     SubmissionId = Guid.NewGuid(),
                     RegistrationBlobName = registrationBlobName,
                     SubmissionDate = DateTime.UtcNow,
-                    CreatedDate = DateTimeOffset.UtcNow
+                    CreatedDate = DateTimeOffset.UtcNow,
+                    SubmissionPeriodId = 1
                 });
             }
         }
