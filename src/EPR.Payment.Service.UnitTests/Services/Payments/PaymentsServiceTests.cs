@@ -1,4 +1,3 @@
-using Komainu.AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Constants.Payments;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;

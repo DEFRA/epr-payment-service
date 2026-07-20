@@ -1,4 +1,3 @@
-using Komainu.AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
