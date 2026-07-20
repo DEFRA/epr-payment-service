@@ -1,4 +1,3 @@
-﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.Fees;
 using EPR.Payment.Service.Common.UnitTests.Mocks;

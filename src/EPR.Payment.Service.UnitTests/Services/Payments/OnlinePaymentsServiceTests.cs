@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using AutoFixture.MSTest;
+using AutoFixture;
 using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Profiles;
