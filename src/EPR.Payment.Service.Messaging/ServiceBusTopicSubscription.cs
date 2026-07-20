@@ -111,8 +111,8 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
                 SubmissionId = message.SubmissionId,
                 RegistrationBlobName = message.RegistrationBlobName,
                 ComplianceSchemeId = message.ComplianceSchemeId,
-                SubmissionPeriod = message.SubmissionPeriod,
                 SubmissionDate = message.SubmissionDate,
+                SubmissionPeriodId = message.SubmissionPeriodId,
             };
 
             await handler.HandleAsync(request, args.CancellationToken);
