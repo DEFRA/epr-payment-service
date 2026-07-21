@@ -56,8 +56,8 @@ namespace EPR.Payment.Service.UnitTests.Messaging
                 SubmissionId: Guid.NewGuid(),
                 RegistrationBlobName: $"av-blob-{Guid.NewGuid()}",
                 ComplianceSchemeId: Guid.NewGuid(),
-                SubmissionPeriod: "January to December 2026",
-                SubmissionDate: new DateTime(2026, 6, 15, 12, 0, 0, DateTimeKind.Utc));
+                SubmissionDate: new DateTime(2026, 6, 15, 12, 0, 0, DateTimeKind.Utc),
+                SubmissionPeriodId: 42);
             var message = ServiceBusModelFactory.ServiceBusReceivedMessage(body: BinaryData.FromObjectAsJson(messagePayload));
 
             CreateRegistrationSubmissionDataRequest? captured = null;
@@ -74,7 +74,7 @@ namespace EPR.Payment.Service.UnitTests.Messaging
                 captured!.SubmissionId.Should().Be(messagePayload.SubmissionId);
                 captured.RegistrationBlobName.Should().Be(messagePayload.RegistrationBlobName);
                 captured.ComplianceSchemeId.Should().Be(messagePayload.ComplianceSchemeId);
-                captured.SubmissionPeriod.Should().Be(messagePayload.SubmissionPeriod);
+                captured.SubmissionPeriodId.Should().Be(messagePayload.SubmissionPeriodId);
                 captured.SubmissionDate.Should().Be(messagePayload.SubmissionDate);
                 _handlerMock.Verify(
                     h => h.HandleAsync(It.IsAny<CreateRegistrationSubmissionDataRequest>(), It.IsAny<CancellationToken>()),
@@ -89,8 +89,8 @@ namespace EPR.Payment.Service.UnitTests.Messaging
                 SubmissionId: Guid.NewGuid(),
                 RegistrationBlobName: "av-blob-xyz",
                 ComplianceSchemeId: null,
-                SubmissionPeriod: "January to December 2026",
-                SubmissionDate: DateTime.UtcNow);
+                SubmissionDate: DateTime.UtcNow,
+                SubmissionPeriodId: 1);
             var message = ServiceBusModelFactory.ServiceBusReceivedMessage(body: BinaryData.FromObjectAsJson(messagePayload));
 
             _handlerMock
@@ -127,8 +127,8 @@ namespace EPR.Payment.Service.UnitTests.Messaging
                 SubmissionId: Guid.NewGuid(),
                 RegistrationBlobName: "av-blob-xyz",
                 ComplianceSchemeId: null,
-                SubmissionPeriod: "January to December 2026",
-                SubmissionDate: DateTime.UtcNow);
+                SubmissionDate: DateTime.UtcNow,
+                SubmissionPeriodId: 1);
             var message = ServiceBusModelFactory.ServiceBusReceivedMessage(body: BinaryData.FromObjectAsJson(messagePayload));
 
             _handlerMock

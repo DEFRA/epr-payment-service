@@ -5900,8 +5900,6 @@ COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20260721112318_AddRegistrationSubmissionDataEvents'
@@ -5917,7 +5915,6 @@ BEGIN
         CONSTRAINT [FK_RegistrationSubmissionDataEvents_RegistrationSubmissionData_RegistrationSubmissionDataId] FOREIGN KEY ([RegistrationSubmissionDataId]) REFERENCES [registration].[RegistrationSubmissionData] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5926,7 +5923,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE UNIQUE INDEX [IX_RegistrationSubmissionDataEvents_SubmissionData_Event_Date_Unique] ON [registration].[RegistrationSubmissionDataEvents] ([RegistrationSubmissionDataId], [EventName], [EventDate]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5934,9 +5930,8 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20260721112318_AddRegistrationSubmissionDataEvents', N'8.0.28');
+    VALUES (N'20260721112318_AddRegistrationSubmissionDataEvents', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO

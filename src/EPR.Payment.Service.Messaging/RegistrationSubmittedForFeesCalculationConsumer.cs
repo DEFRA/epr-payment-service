@@ -36,7 +36,7 @@ public class RegistrationSubmittedForFeesCalculationConsumer : ServiceBusMessage
             SubmissionId = message.SubmissionId,
             RegistrationBlobName = message.RegistrationBlobName,
             ComplianceSchemeId = message.ComplianceSchemeId,
-            SubmissionPeriod = message.SubmissionPeriod,
+            SubmissionPeriodId = message.SubmissionPeriodId,
             SubmissionDate = message.SubmissionDate,
         };
 
