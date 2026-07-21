@@ -26,6 +26,9 @@ public static class ServiceCollectionExtensions
             }
         });
 
+        services.AddSingleton<IServiceBusMessageConsumer, RegistrationSubmittedForFeesCalculationConsumer>();
+        services.AddSingleton<IServiceBusMessageConsumer, RegistrationSubmittedForRegulatorApprovalConsumer>();
+
         services.AddSingleton<IServiceBusTopicSubscription, ServiceBusTopicSubscription>();
         services.AddHostedService<WorkerServiceBus>();
 

@@ -38,6 +38,8 @@
 
         public const string RegistrationSubmissionSubsidiaryTableName = "RegistrationSubmissionSubsidiary";
 
+        public const string RegistrationSubmissionDataEventsTableName = "RegistrationSubmissionDataEvents";
+
         public const string RegistrationSchemaName = "registration";
     }
 }

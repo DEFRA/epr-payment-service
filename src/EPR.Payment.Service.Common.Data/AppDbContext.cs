@@ -33,6 +33,7 @@ namespace EPR.Payment.Service.Common.Data
         public DbSet<RegistrationSubmissionData> RegistrationSubmissionData => Set<RegistrationSubmissionData>();
         public DbSet<RegistrationSubmissionProducer> RegistrationSubmissionProducer => Set<RegistrationSubmissionProducer>();
         public DbSet<RegistrationSubmissionSubsidiary> RegistrationSubmissionSubsidiary => Set<RegistrationSubmissionSubsidiary>();
+        public DbSet<RegistrationSubmissionDataEvent> RegistrationSubmissionDataEvents => Set<RegistrationSubmissionDataEvent>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

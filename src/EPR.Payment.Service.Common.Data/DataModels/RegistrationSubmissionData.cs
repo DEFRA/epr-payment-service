@@ -20,5 +20,7 @@ namespace EPR.Payment.Service.Common.Data.DataModels
         public DateTimeOffset CreatedDate { get; set; }
 
         public ICollection<RegistrationSubmissionProducer> Producers { get; set; } = new List<RegistrationSubmissionProducer>();
+
+        public ICollection<RegistrationSubmissionDataEvent> Events { get; set; } = new List<RegistrationSubmissionDataEvent>();
     }
 }
