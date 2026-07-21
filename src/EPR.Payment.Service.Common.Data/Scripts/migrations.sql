@@ -6250,3 +6250,45 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260721112318_AddRegistrationSubmissionDataEvents'
+)
+BEGIN
+    CREATE TABLE [registration].[RegistrationSubmissionDataEvents] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RegistrationSubmissionDataId] uniqueidentifier NOT NULL,
+        [EventName] nvarchar(100) NOT NULL,
+        [EventDate] datetime2 NOT NULL,
+        [CreatedDate] datetimeoffset NOT NULL,
+        CONSTRAINT [PK_RegistrationSubmissionDataEvents] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationSubmissionDataEvents_RegistrationSubmissionData_RegistrationSubmissionDataId] FOREIGN KEY ([RegistrationSubmissionDataId]) REFERENCES [registration].[RegistrationSubmissionData] ([Id]) ON DELETE CASCADE
+    );
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260721112318_AddRegistrationSubmissionDataEvents'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_RegistrationSubmissionDataEvents_SubmissionData_Event_Date_Unique] ON [registration].[RegistrationSubmissionDataEvents] ([RegistrationSubmissionDataId], [EventName], [EventDate]);
+END;
+GO
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260721112318_AddRegistrationSubmissionDataEvents'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260721112318_AddRegistrationSubmissionDataEvents', N'8.0.28');
+END;
+GO
+
+COMMIT;
+GO
+
