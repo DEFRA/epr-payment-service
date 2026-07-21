@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using AutoFixture.MSTest;
+using AutoFixture;
 using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
 using EPR.Payment.Service.Common.Data.Profiles;
@@ -89,28 +88,6 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
 
             _onlinePaymentsRepositoryMock.Setup(r =>
                r.InsertOnlinePaymentAsync(It.IsAny<Common.Data.DataModels.Payment>(), _cancellationToken)).ReturnsAsync(expectedResult);
-
-            // Act
-            Guid result = await _service!.InsertOnlinePaymentAsync(request, _cancellationToken);
-
-            // Assert
-            result.Should().Be(expectedResult);
-        }
-
-        [TestMethod]
-        [AutoMoqData]
-        public async Task InsertOnlinePaymentV2StatusAsync_ValidInput_ShouldReturnGuid(Guid expectedResult)
-        {
-            // Arrange
-            OnlinePaymentInsertRequestV2Dto request = _fixture!
-                .Build<OnlinePaymentInsertRequestV2Dto>()
-                .With(d => d.UserId, Guid.NewGuid())
-                .With(x => x.OrganisationId, Guid.NewGuid())
-                .Create();
-
-            _onlinePaymentsRepositoryMock
-                .Setup(r => r.InsertOnlinePaymentAsync(It.IsAny<Common.Data.DataModels.Payment>(), _cancellationToken))
-                .ReturnsAsync(expectedResult);
 
             // Act
             Guid result = await _service!.InsertOnlinePaymentAsync(request, _cancellationToken);

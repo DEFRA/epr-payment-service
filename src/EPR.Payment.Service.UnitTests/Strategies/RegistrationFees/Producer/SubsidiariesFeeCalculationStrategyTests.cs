@@ -1,4 +1,3 @@
-﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
@@ -51,7 +50,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 50,
@@ -59,11 +58,6 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ApplicationReferenceNumber = "A123",
                 NoOfSubsidiariesOnlineMarketplace = 0,
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
@@ -91,7 +85,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 50,
@@ -99,11 +93,6 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 ApplicationReferenceNumber = "A123",
                 NoOfSubsidiariesOnlineMarketplace = 2,
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
@@ -135,7 +124,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 101,
@@ -143,11 +132,6 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 NoOfSubsidiariesOnlineMarketplace = 0,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
@@ -178,7 +162,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 101,
@@ -186,11 +170,6 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 NoOfSubsidiariesOnlineMarketplace = 2,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
@@ -225,18 +204,13 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 0,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             // Act
@@ -253,18 +227,13 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
                 Regulator = null!,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             // Act & Assert
@@ -278,18 +247,13 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);
@@ -314,7 +278,7 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
             SubsidiariesFeeCalculationStrategy strategy)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
@@ -322,11 +286,6 @@ namespace EPR.Payment.Service.UnitTests.Strategies.RegistrationFees.Producer
                 NoOfSubsidiariesOnlineMarketplace = 2,
                 ApplicationReferenceNumber = "A123",
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             var regulator = RegulatorType.Create(request.Regulator);

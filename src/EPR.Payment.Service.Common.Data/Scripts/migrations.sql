@@ -9,8 +9,6 @@ END;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240723085319_Initial'
@@ -18,7 +16,6 @@ IF NOT EXISTS (
 BEGIN
     IF SCHEMA_ID(N'Lookup') IS NULL EXEC(N'CREATE SCHEMA [Lookup];');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -36,7 +33,6 @@ BEGIN
         CONSTRAINT [PK_AdditionalRegistrationFees] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -54,7 +50,6 @@ BEGIN
         CONSTRAINT [PK_ComplianceSchemeRegistrationFees] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -67,7 +62,6 @@ BEGIN
         CONSTRAINT [PK_PaymentStatus] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -85,7 +79,6 @@ BEGIN
         CONSTRAINT [PK_ProducerRegistrationFees] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -104,7 +97,6 @@ BEGIN
         CONSTRAINT [PK_SubsidiariesRegistrationFees] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -133,7 +125,6 @@ BEGIN
         CONSTRAINT [FK_Payment_PaymentStatus_InternalStatusId] FOREIGN KEY ([InternalStatusId]) REFERENCES [Lookup].[PaymentStatus] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -154,7 +145,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'Description', N'EffectiveFrom', N'EffectiveTo', N'FeesSubType', N'Regulator') AND [object_id] = OBJECT_ID(N'[Lookup].[AdditionalRegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[AdditionalRegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -183,7 +173,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'Description', N'EffectiveFrom', N'EffectiveTo', N'FeesType', N'Regulator') AND [object_id] = OBJECT_ID(N'[Lookup].[ComplianceSchemeRegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[ComplianceSchemeRegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -202,7 +191,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Status') AND [object_id] = OBJECT_ID(N'[Lookup].[PaymentStatus]'))
         SET IDENTITY_INSERT [Lookup].[PaymentStatus] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -223,7 +211,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'Description', N'EffectiveFrom', N'EffectiveTo', N'ProducerType', N'Regulator') AND [object_id] = OBJECT_ID(N'[Lookup].[ProducerRegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[ProducerRegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -244,7 +231,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'Description', N'EffectiveFrom', N'EffectiveTo', N'MaxNumberOfSubsidiaries', N'MinNumberOfSubsidiaries', N'Regulator') AND [object_id] = OBJECT_ID(N'[Lookup].[SubsidiariesRegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[SubsidiariesRegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -253,7 +239,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE UNIQUE INDEX [IX_Payment_ExternalPaymentId] ON [Payment] ([ExternalPaymentId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -262,7 +247,6 @@ IF NOT EXISTS (
 BEGIN
     EXEC(N'CREATE UNIQUE INDEX [IX_Payment_GovpayPaymentId] ON [Payment] ([GovpayPaymentId]) WHERE [GovpayPaymentId] IS NOT NULL');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -271,7 +255,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_Payment_InternalStatusId] ON [Payment] ([InternalStatusId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -279,16 +262,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240723085319_Initial', N'8.0.28');
+    VALUES (N'20240723085319_Initial', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240725154904_RegistrationFeesTablesUpdate'
@@ -296,7 +276,6 @@ IF NOT EXISTS (
 BEGIN
     DROP TABLE [Lookup].[AdditionalRegistrationFees];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -305,7 +284,6 @@ IF NOT EXISTS (
 BEGIN
     DROP TABLE [Lookup].[ComplianceSchemeRegistrationFees];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -314,7 +292,6 @@ IF NOT EXISTS (
 BEGIN
     DROP TABLE [Lookup].[ProducerRegistrationFees];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -323,7 +300,6 @@ IF NOT EXISTS (
 BEGIN
     DROP TABLE [Lookup].[SubsidiariesRegistrationFees];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -337,7 +313,6 @@ BEGIN
         CONSTRAINT [PK_Group] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -351,7 +326,6 @@ BEGIN
         CONSTRAINT [PK_Regulator] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -365,7 +339,6 @@ BEGIN
         CONSTRAINT [PK_SubGroup] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -386,7 +359,6 @@ BEGIN
         CONSTRAINT [FK_RegistrationFees_SubGroup_SubGroupId] FOREIGN KEY ([SubGroupId]) REFERENCES [Lookup].[SubGroup] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -403,7 +375,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[Group]'))
         SET IDENTITY_INSERT [Lookup].[Group] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -420,7 +391,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[Regulator]'))
         SET IDENTITY_INSERT [Lookup].[Regulator] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -439,7 +409,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
         SET IDENTITY_INSERT [Lookup].[SubGroup] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -492,7 +461,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -501,7 +469,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_RegistrationFees_GroupId] ON [Lookup].[RegistrationFees] ([GroupId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -510,7 +477,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_RegistrationFees_RegulatorId] ON [Lookup].[RegistrationFees] ([RegulatorId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -519,7 +485,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_RegistrationFees_SubGroupId] ON [Lookup].[RegistrationFees] ([SubGroupId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -527,16 +492,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240725154904_RegistrationFeesTablesUpdate', N'8.0.28');
+    VALUES (N'20240725154904_RegistrationFeesTablesUpdate', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240821075038_RemoveTable'
@@ -544,7 +506,6 @@ IF NOT EXISTS (
 BEGIN
     DROP TABLE [Payment];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -552,120 +513,110 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240821075038_RemoveTable', N'8.0.28');
+    VALUES (N'20240821075038_RemoveTable', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
 )
 BEGIN
-    DECLARE @var0 sysname;
-    SELECT @var0 = [d].[name]
+    DECLARE @var nvarchar(max);
+    SELECT @var = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[SubGroup]') AND [c].[name] = N'Type');
-    IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[SubGroup] DROP CONSTRAINT [' + @var0 + '];');
+    IF @var IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[SubGroup] DROP CONSTRAINT ' + @var + ';');
     ALTER TABLE [Lookup].[SubGroup] ALTER COLUMN [Type] varchar(50) NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
 )
 BEGIN
-    DECLARE @var1 sysname;
-    SELECT @var1 = [d].[name]
+    DECLARE @var1 nvarchar(max);
+    SELECT @var1 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[SubGroup]') AND [c].[name] = N'Description');
-    IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[SubGroup] DROP CONSTRAINT [' + @var1 + '];');
+    IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[SubGroup] DROP CONSTRAINT ' + @var1 + ';');
     ALTER TABLE [Lookup].[SubGroup] ALTER COLUMN [Description] varchar(255) NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
 )
 BEGIN
-    DECLARE @var2 sysname;
-    SELECT @var2 = [d].[name]
+    DECLARE @var2 nvarchar(max);
+    SELECT @var2 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[Regulator]') AND [c].[name] = N'Type');
-    IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Regulator] DROP CONSTRAINT [' + @var2 + '];');
+    IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Regulator] DROP CONSTRAINT ' + @var2 + ';');
     ALTER TABLE [Lookup].[Regulator] ALTER COLUMN [Type] varchar(50) NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
 )
 BEGIN
-    DECLARE @var3 sysname;
-    SELECT @var3 = [d].[name]
+    DECLARE @var3 nvarchar(max);
+    SELECT @var3 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[Regulator]') AND [c].[name] = N'Description');
-    IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Regulator] DROP CONSTRAINT [' + @var3 + '];');
+    IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Regulator] DROP CONSTRAINT ' + @var3 + ';');
     ALTER TABLE [Lookup].[Regulator] ALTER COLUMN [Description] varchar(255) NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
 )
 BEGIN
-    DECLARE @var4 sysname;
-    SELECT @var4 = [d].[name]
+    DECLARE @var4 nvarchar(max);
+    SELECT @var4 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[PaymentStatus]') AND [c].[name] = N'Status');
-    IF @var4 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[PaymentStatus] DROP CONSTRAINT [' + @var4 + '];');
+    IF @var4 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[PaymentStatus] DROP CONSTRAINT ' + @var4 + ';');
     ALTER TABLE [Lookup].[PaymentStatus] ALTER COLUMN [Status] varchar(20) NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
 )
 BEGIN
-    DECLARE @var5 sysname;
-    SELECT @var5 = [d].[name]
+    DECLARE @var5 nvarchar(max);
+    SELECT @var5 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[Group]') AND [c].[name] = N'Type');
-    IF @var5 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Group] DROP CONSTRAINT [' + @var5 + '];');
+    IF @var5 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Group] DROP CONSTRAINT ' + @var5 + ';');
     ALTER TABLE [Lookup].[Group] ALTER COLUMN [Type] varchar(50) NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240821075639_ChangeColumnType'
 )
 BEGIN
-    DECLARE @var6 sysname;
-    SELECT @var6 = [d].[name]
+    DECLARE @var6 nvarchar(max);
+    SELECT @var6 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[Group]') AND [c].[name] = N'Description');
-    IF @var6 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Group] DROP CONSTRAINT [' + @var6 + '];');
+    IF @var6 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[Group] DROP CONSTRAINT ' + @var6 + ';');
     ALTER TABLE [Lookup].[Group] ALTER COLUMN [Description] varchar(255) NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -694,7 +645,6 @@ BEGIN
         CONSTRAINT [FK_Payment_PaymentStatus_InternalStatusId] FOREIGN KEY ([InternalStatusId]) REFERENCES [Lookup].[PaymentStatus] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -703,7 +653,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE UNIQUE INDEX [IX_Payment_ExternalPaymentId] ON [Payment] ([ExternalPaymentId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -712,7 +661,6 @@ IF NOT EXISTS (
 BEGIN
     EXEC(N'CREATE UNIQUE INDEX [IX_Payment_GovpayPaymentId] ON [Payment] ([GovpayPaymentId]) WHERE [GovpayPaymentId] IS NOT NULL');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -721,7 +669,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_Payment_InternalStatusId] ON [Payment] ([InternalStatusId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -729,16 +676,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240821075639_ChangeColumnType', N'8.0.28');
+    VALUES (N'20240821075639_ChangeColumnType', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240822124821_ProducerResubmission'
@@ -751,7 +695,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[Group]'))
         SET IDENTITY_INSERT [Lookup].[Group] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -762,7 +705,6 @@ BEGIN
     WHERE [Id] = 1;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -773,7 +715,6 @@ BEGIN
     WHERE [Id] = 2;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -784,7 +725,6 @@ BEGIN
     WHERE [Id] = 3;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -795,7 +735,6 @@ BEGIN
     WHERE [Id] = 4;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -806,7 +745,6 @@ BEGIN
     WHERE [Id] = 5;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -817,7 +755,6 @@ BEGIN
     WHERE [Id] = 6;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -828,7 +765,6 @@ BEGIN
     WHERE [Id] = 7;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -839,7 +775,6 @@ BEGIN
     WHERE [Id] = 8;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -850,7 +785,6 @@ BEGIN
     WHERE [Id] = 9;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -861,7 +795,6 @@ BEGIN
     WHERE [Id] = 10;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -872,7 +805,6 @@ BEGIN
     WHERE [Id] = 11;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -883,7 +815,6 @@ BEGIN
     WHERE [Id] = 12;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -894,7 +825,6 @@ BEGIN
     WHERE [Id] = 13;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -905,7 +835,6 @@ BEGIN
     WHERE [Id] = 14;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -916,7 +845,6 @@ BEGIN
     WHERE [Id] = 15;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -927,7 +855,6 @@ BEGIN
     WHERE [Id] = 16;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -938,7 +865,6 @@ BEGIN
     WHERE [Id] = 17;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -949,7 +875,6 @@ BEGIN
     WHERE [Id] = 18;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -960,7 +885,6 @@ BEGIN
     WHERE [Id] = 19;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -971,7 +895,6 @@ BEGIN
     WHERE [Id] = 20;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -982,7 +905,6 @@ BEGIN
     WHERE [Id] = 21;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -993,7 +915,6 @@ BEGIN
     WHERE [Id] = 22;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1004,7 +925,6 @@ BEGIN
     WHERE [Id] = 23;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1015,7 +935,6 @@ BEGIN
     WHERE [Id] = 24;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1026,7 +945,6 @@ BEGIN
     WHERE [Id] = 25;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1037,7 +955,6 @@ BEGIN
     WHERE [Id] = 26;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1048,7 +965,6 @@ BEGIN
     WHERE [Id] = 27;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1059,7 +975,6 @@ BEGIN
     WHERE [Id] = 28;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1070,7 +985,6 @@ BEGIN
     WHERE [Id] = 29;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1081,7 +995,6 @@ BEGIN
     WHERE [Id] = 30;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1092,7 +1005,6 @@ BEGIN
     WHERE [Id] = 31;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1103,7 +1015,6 @@ BEGIN
     WHERE [Id] = 32;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1114,7 +1025,6 @@ BEGIN
     WHERE [Id] = 33;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1125,7 +1035,6 @@ BEGIN
     WHERE [Id] = 34;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1136,7 +1045,6 @@ BEGIN
     WHERE [Id] = 35;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1147,7 +1055,6 @@ BEGIN
     WHERE [Id] = 36;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1158,7 +1065,6 @@ BEGIN
     WHERE [Id] = 37;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1169,7 +1075,6 @@ BEGIN
     WHERE [Id] = 38;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1180,7 +1085,6 @@ BEGIN
     WHERE [Id] = 39;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1191,7 +1095,6 @@ BEGIN
     WHERE [Id] = 40;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1205,7 +1108,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
         SET IDENTITY_INSERT [Lookup].[SubGroup] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1222,7 +1124,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1230,16 +1131,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240822124821_ProducerResubmission', N'8.0.28');
+    VALUES (N'20240822124821_ProducerResubmission', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240903101544_UpdateRegistrationFeesDates'
@@ -1249,7 +1147,6 @@ BEGIN
     WHERE [Id] = 1;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1260,7 +1157,6 @@ BEGIN
     WHERE [Id] = 2;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1271,7 +1167,6 @@ BEGIN
     WHERE [Id] = 3;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1282,7 +1177,6 @@ BEGIN
     WHERE [Id] = 4;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1293,7 +1187,6 @@ BEGIN
     WHERE [Id] = 5;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1304,7 +1197,6 @@ BEGIN
     WHERE [Id] = 6;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1315,7 +1207,6 @@ BEGIN
     WHERE [Id] = 7;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1326,7 +1217,6 @@ BEGIN
     WHERE [Id] = 8;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1337,7 +1227,6 @@ BEGIN
     WHERE [Id] = 9;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1348,7 +1237,6 @@ BEGIN
     WHERE [Id] = 10;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1359,7 +1247,6 @@ BEGIN
     WHERE [Id] = 11;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1370,7 +1257,6 @@ BEGIN
     WHERE [Id] = 12;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1381,7 +1267,6 @@ BEGIN
     WHERE [Id] = 13;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1392,7 +1277,6 @@ BEGIN
     WHERE [Id] = 14;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1403,7 +1287,6 @@ BEGIN
     WHERE [Id] = 15;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1414,7 +1297,6 @@ BEGIN
     WHERE [Id] = 16;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1425,7 +1307,6 @@ BEGIN
     WHERE [Id] = 17;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1436,7 +1317,6 @@ BEGIN
     WHERE [Id] = 18;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1447,7 +1327,6 @@ BEGIN
     WHERE [Id] = 19;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1458,7 +1337,6 @@ BEGIN
     WHERE [Id] = 20;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1469,7 +1347,6 @@ BEGIN
     WHERE [Id] = 21;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1480,7 +1357,6 @@ BEGIN
     WHERE [Id] = 22;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1491,7 +1367,6 @@ BEGIN
     WHERE [Id] = 23;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1502,7 +1377,6 @@ BEGIN
     WHERE [Id] = 24;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1513,7 +1387,6 @@ BEGIN
     WHERE [Id] = 25;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1524,7 +1397,6 @@ BEGIN
     WHERE [Id] = 26;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1535,7 +1407,6 @@ BEGIN
     WHERE [Id] = 27;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1546,7 +1417,6 @@ BEGIN
     WHERE [Id] = 28;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1557,7 +1427,6 @@ BEGIN
     WHERE [Id] = 29;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1568,7 +1437,6 @@ BEGIN
     WHERE [Id] = 30;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1579,7 +1447,6 @@ BEGIN
     WHERE [Id] = 31;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1590,7 +1457,6 @@ BEGIN
     WHERE [Id] = 32;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1601,7 +1467,6 @@ BEGIN
     WHERE [Id] = 33;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1612,7 +1477,6 @@ BEGIN
     WHERE [Id] = 34;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1623,7 +1487,6 @@ BEGIN
     WHERE [Id] = 35;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1634,7 +1497,6 @@ BEGIN
     WHERE [Id] = 36;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1645,7 +1507,6 @@ BEGIN
     WHERE [Id] = 37;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1656,7 +1517,6 @@ BEGIN
     WHERE [Id] = 38;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1667,7 +1527,6 @@ BEGIN
     WHERE [Id] = 39;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1678,7 +1537,6 @@ BEGIN
     WHERE [Id] = 40;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1689,7 +1547,6 @@ BEGIN
     WHERE [Id] = 41;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1700,7 +1557,6 @@ BEGIN
     WHERE [Id] = 42;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1711,7 +1567,6 @@ BEGIN
     WHERE [Id] = 43;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1722,7 +1577,6 @@ BEGIN
     WHERE [Id] = 44;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1730,16 +1584,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240903101544_UpdateRegistrationFeesDates', N'8.0.28');
+    VALUES (N'20240903101544_UpdateRegistrationFeesDates', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20240905115928_AddOnlineMarketToProducer'
@@ -1749,7 +1600,6 @@ BEGIN
     WHERE [Id] = 9;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1760,7 +1610,6 @@ BEGIN
     WHERE [Id] = 10;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1771,7 +1620,6 @@ BEGIN
     WHERE [Id] = 11;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1782,7 +1630,6 @@ BEGIN
     WHERE [Id] = 12;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1793,7 +1640,6 @@ BEGIN
     WHERE [Id] = 13;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1804,7 +1650,6 @@ BEGIN
     WHERE [Id] = 14;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1815,7 +1660,6 @@ BEGIN
     WHERE [Id] = 15;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1826,7 +1670,6 @@ BEGIN
     WHERE [Id] = 16;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1837,7 +1680,6 @@ BEGIN
     WHERE [Id] = 17;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1848,7 +1690,6 @@ BEGIN
     WHERE [Id] = 18;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1859,7 +1700,6 @@ BEGIN
     WHERE [Id] = 19;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1870,7 +1710,6 @@ BEGIN
     WHERE [Id] = 20;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1881,7 +1720,6 @@ BEGIN
     WHERE [Id] = 21;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1892,7 +1730,6 @@ BEGIN
     WHERE [Id] = 22;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1903,7 +1740,6 @@ BEGIN
     WHERE [Id] = 23;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1914,7 +1750,6 @@ BEGIN
     WHERE [Id] = 24;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1925,7 +1760,6 @@ BEGIN
     WHERE [Id] = 25;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1936,7 +1770,6 @@ BEGIN
     WHERE [Id] = 26;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1947,7 +1780,6 @@ BEGIN
     WHERE [Id] = 27;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1958,7 +1790,6 @@ BEGIN
     WHERE [Id] = 28;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1969,7 +1800,6 @@ BEGIN
     WHERE [Id] = 29;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1980,7 +1810,6 @@ BEGIN
     WHERE [Id] = 30;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -1991,7 +1820,6 @@ BEGIN
     WHERE [Id] = 31;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2002,7 +1830,6 @@ BEGIN
     WHERE [Id] = 32;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2013,7 +1840,6 @@ BEGIN
     WHERE [Id] = 33;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2024,7 +1850,6 @@ BEGIN
     WHERE [Id] = 34;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2035,7 +1860,6 @@ BEGIN
     WHERE [Id] = 35;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2046,7 +1870,6 @@ BEGIN
     WHERE [Id] = 36;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2057,7 +1880,6 @@ BEGIN
     WHERE [Id] = 37;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2068,7 +1890,6 @@ BEGIN
     WHERE [Id] = 38;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2079,7 +1900,6 @@ BEGIN
     WHERE [Id] = 39;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2090,7 +1910,6 @@ BEGIN
     WHERE [Id] = 40;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2101,7 +1920,6 @@ BEGIN
     WHERE [Id] = 41;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2112,7 +1930,6 @@ BEGIN
     WHERE [Id] = 42;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2123,7 +1940,6 @@ BEGIN
     WHERE [Id] = 43;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2134,7 +1950,6 @@ BEGIN
     WHERE [Id] = 44;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2151,7 +1966,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2159,16 +1973,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20240905115928_AddOnlineMarketToProducer', N'8.0.28');
+    VALUES (N'20240905115928_AddOnlineMarketToProducer', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241011074943_LateFeeData'
@@ -2181,7 +1992,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
         SET IDENTITY_INSERT [Lookup].[SubGroup] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2198,7 +2008,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2206,16 +2015,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241011074943_LateFeeData', N'8.0.28');
+    VALUES (N'20241011074943_LateFeeData', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241016152809_ComplianceLateFeeData'
@@ -2231,7 +2037,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2239,16 +2044,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241016152809_ComplianceLateFeeData', N'8.0.28');
+    VALUES (N'20241016152809_ComplianceLateFeeData', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241018135341_ComplianceSchemeResubmission'
@@ -2261,7 +2063,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[Group]'))
         SET IDENTITY_INSERT [Lookup].[Group] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2278,7 +2079,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2286,16 +2086,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241018135341_ComplianceSchemeResubmission', N'8.0.28');
+    VALUES (N'20241018135341_ComplianceSchemeResubmission', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
@@ -2303,233 +2100,217 @@ IF NOT EXISTS (
 BEGIN
     DROP INDEX [IX_Payment_GovpayPaymentId] ON [Payment];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var7 sysname;
-    SELECT @var7 = [d].[name]
+    DECLARE @var7 nvarchar(max);
+    SELECT @var7 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'ErrorCode');
-    IF @var7 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var7 + '];');
+    IF @var7 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var7 + ';');
     ALTER TABLE [Payment] DROP COLUMN [ErrorCode];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var8 sysname;
-    SELECT @var8 = [d].[name]
+    DECLARE @var8 nvarchar(max);
+    SELECT @var8 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'ErrorMessage');
-    IF @var8 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var8 + '];');
+    IF @var8 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var8 + ';');
     ALTER TABLE [Payment] DROP COLUMN [ErrorMessage];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var9 sysname;
-    SELECT @var9 = [d].[name]
+    DECLARE @var9 nvarchar(max);
+    SELECT @var9 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'GovPayStatus');
-    IF @var9 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var9 + '];');
+    IF @var9 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var9 + ';');
     ALTER TABLE [Payment] DROP COLUMN [GovPayStatus];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var10 sysname;
-    SELECT @var10 = [d].[name]
+    DECLARE @var10 nvarchar(max);
+    SELECT @var10 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'GovpayPaymentId');
-    IF @var10 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var10 + '];');
+    IF @var10 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var10 + ';');
     ALTER TABLE [Payment] DROP COLUMN [GovpayPaymentId];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var11 sysname;
-    SELECT @var11 = [d].[name]
+    DECLARE @var11 nvarchar(max);
+    SELECT @var11 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'OrganisationId');
-    IF @var11 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var11 + '];');
+    IF @var11 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var11 + ';');
     ALTER TABLE [Payment] DROP COLUMN [OrganisationId];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var12 sysname;
-    SELECT @var12 = [d].[name]
+    DECLARE @var12 nvarchar(max);
+    SELECT @var12 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'UpdatedByOrganisationId');
-    IF @var12 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var12 + '];');
+    IF @var12 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var12 + ';');
     ALTER TABLE [Payment] DROP COLUMN [UpdatedByOrganisationId];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var13 sysname;
-    SELECT @var13 = [d].[name]
+    DECLARE @var13 nvarchar(max);
+    SELECT @var13 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'UpdatedDate');
-    IF @var13 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var13 + '];');
+    IF @var13 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var13 + ';');
     ALTER TABLE [Payment] ALTER COLUMN [UpdatedDate] datetime2 NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var14 sysname;
-    SELECT @var14 = [d].[name]
+    DECLARE @var14 nvarchar(max);
+    SELECT @var14 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'UpdatedByUserId');
-    IF @var14 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var14 + '];');
+    IF @var14 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var14 + ';');
     ALTER TABLE [Payment] ALTER COLUMN [UpdatedByUserId] uniqueidentifier NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var15 sysname;
-    SELECT @var15 = [d].[name]
+    DECLARE @var15 nvarchar(max);
+    SELECT @var15 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'Regulator');
-    IF @var15 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var15 + '];');
+    IF @var15 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var15 + ';');
     ALTER TABLE [Payment] ALTER COLUMN [Regulator] varchar(20) NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var16 sysname;
-    SELECT @var16 = [d].[name]
+    DECLARE @var16 nvarchar(max);
+    SELECT @var16 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'Reference');
-    IF @var16 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var16 + '];');
+    IF @var16 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var16 + ';');
     ALTER TABLE [Payment] ALTER COLUMN [Reference] nvarchar(255) NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var17 sysname;
-    SELECT @var17 = [d].[name]
+    DECLARE @var17 nvarchar(max);
+    SELECT @var17 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'ReasonForPayment');
-    IF @var17 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var17 + '];');
+    IF @var17 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var17 + ';');
     ALTER TABLE [Payment] ALTER COLUMN [ReasonForPayment] nvarchar(255) NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var18 sysname;
-    SELECT @var18 = [d].[name]
+    DECLARE @var18 nvarchar(max);
+    SELECT @var18 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'InternalStatusId');
-    IF @var18 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var18 + '];');
+    IF @var18 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var18 + ';');
     ALTER TABLE [Payment] ALTER COLUMN [InternalStatusId] int NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var19 sysname;
-    SELECT @var19 = [d].[name]
+    DECLARE @var19 nvarchar(max);
+    SELECT @var19 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'ExternalPaymentId');
-    IF @var19 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var19 + '];');
+    IF @var19 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var19 + ';');
     ALTER TABLE [Payment] ALTER COLUMN [ExternalPaymentId] uniqueidentifier NOT NULL;
     ALTER TABLE [Payment] ADD DEFAULT (NEWID()) FOR [ExternalPaymentId];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var20 sysname;
-    SELECT @var20 = [d].[name]
+    DECLARE @var20 nvarchar(max);
+    SELECT @var20 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'CreatedDate');
-    IF @var20 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var20 + '];');
+    IF @var20 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var20 + ';');
     ALTER TABLE [Payment] ALTER COLUMN [CreatedDate] datetime2 NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241028134619_RefactorPaymentTables'
 )
 BEGIN
-    DECLARE @var21 sysname;
-    SELECT @var21 = [d].[name]
+    DECLARE @var21 nvarchar(max);
+    SELECT @var21 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Payment]') AND [c].[name] = N'Amount');
-    IF @var21 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT [' + @var21 + '];');
+    IF @var21 IS NOT NULL EXEC(N'ALTER TABLE [Payment] DROP CONSTRAINT ' + @var21 + ';');
     ALTER TABLE [Payment] ALTER COLUMN [Amount] decimal(19,4) NOT NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2545,7 +2326,6 @@ BEGIN
         CONSTRAINT [FK_OfflinePayment_Payment_PaymentId] FOREIGN KEY ([PaymentId]) REFERENCES [Payment] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2565,7 +2345,6 @@ BEGIN
         CONSTRAINT [FK_OnlinePayment_Payment_PaymentId] FOREIGN KEY ([PaymentId]) REFERENCES [Payment] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2574,7 +2353,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE UNIQUE INDEX [IX_OfflinePayment_PaymentId] ON [OfflinePayment] ([PaymentId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2583,7 +2361,6 @@ IF NOT EXISTS (
 BEGIN
     EXEC(N'CREATE UNIQUE INDEX [IX_OnlinePayment_GovPayPaymentId] ON [OnlinePayment] ([GovPayPaymentId]) WHERE [GovPayPaymentId] IS NOT NULL');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2592,7 +2369,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE UNIQUE INDEX [IX_OnlinePayment_PaymentId] ON [OnlinePayment] ([PaymentId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2600,16 +2376,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241028134619_RefactorPaymentTables', N'8.0.28');
+    VALUES (N'20241028134619_RefactorPaymentTables', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241108152208_CSUpdateLargeFee'
@@ -2619,7 +2392,6 @@ BEGIN
     WHERE [Id] = 13;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2630,7 +2402,6 @@ BEGIN
     WHERE [Id] = 14;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2641,7 +2412,6 @@ BEGIN
     WHERE [Id] = 15;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2652,7 +2422,6 @@ BEGIN
     WHERE [Id] = 16;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2660,45 +2429,40 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241108152208_CSUpdateLargeFee', N'8.0.28');
+    VALUES (N'20241108152208_CSUpdateLargeFee', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241114105610_ChangeNullableFields'
 )
 BEGIN
-    DECLARE @var22 sysname;
-    SELECT @var22 = [d].[name]
+    DECLARE @var22 nvarchar(max);
+    SELECT @var22 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[OfflinePayment]') AND [c].[name] = N'PaymentDate');
-    IF @var22 IS NOT NULL EXEC(N'ALTER TABLE [OfflinePayment] DROP CONSTRAINT [' + @var22 + '];');
+    IF @var22 IS NOT NULL EXEC(N'ALTER TABLE [OfflinePayment] DROP CONSTRAINT ' + @var22 + ';');
     ALTER TABLE [OfflinePayment] ALTER COLUMN [PaymentDate] datetime2 NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20241114105610_ChangeNullableFields'
 )
 BEGIN
-    DECLARE @var23 sysname;
-    SELECT @var23 = [d].[name]
+    DECLARE @var23 nvarchar(max);
+    SELECT @var23 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[OfflinePayment]') AND [c].[name] = N'Comments');
-    IF @var23 IS NOT NULL EXEC(N'ALTER TABLE [OfflinePayment] DROP CONSTRAINT [' + @var23 + '];');
+    IF @var23 IS NOT NULL EXEC(N'ALTER TABLE [OfflinePayment] DROP CONSTRAINT ' + @var23 + ';');
     ALTER TABLE [OfflinePayment] ALTER COLUMN [Comments] nvarchar(255) NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2706,16 +2470,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20241114105610_ChangeNullableFields', N'8.0.28');
+    VALUES (N'20241114105610_ChangeNullableFields', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250508103111_SeedDataGroupandSubGroupTables'
@@ -2729,7 +2490,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[Group]'))
         SET IDENTITY_INSERT [Lookup].[Group] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2748,7 +2508,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
         SET IDENTITY_INSERT [Lookup].[SubGroup] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2756,16 +2515,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250508103111_SeedDataGroupandSubGroupTables', N'8.0.28');
+    VALUES (N'20250508103111_SeedDataGroupandSubGroupTables', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250508114330_SeedRegistrationFeesTablesExporterData'
@@ -2801,7 +2557,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2809,16 +2564,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250508114330_SeedRegistrationFeesTablesExporterData', N'8.0.28');
+    VALUES (N'20250508114330_SeedRegistrationFeesTablesExporterData', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250509082826_SeedRegistrationFeesTablesReprocessorData'
@@ -2854,7 +2606,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2862,16 +2613,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250509082826_SeedRegistrationFeesTablesReprocessorData', N'8.0.28');
+    VALUES (N'20250509082826_SeedRegistrationFeesTablesReprocessorData', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250509154544_CreateAccreditationFeesTable'
@@ -2894,7 +2642,6 @@ BEGIN
         CONSTRAINT [FK_AccreditationFees_SubGroup_SubGroupId] FOREIGN KEY ([SubGroupId]) REFERENCES [Lookup].[SubGroup] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2903,7 +2650,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_AccreditationFees_GroupId] ON [Lookup].[AccreditationFees] ([GroupId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2912,7 +2658,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_AccreditationFees_RegulatorId] ON [Lookup].[AccreditationFees] ([RegulatorId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2921,7 +2666,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_AccreditationFees_SubGroupId] ON [Lookup].[AccreditationFees] ([SubGroupId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -2929,16 +2673,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250509154544_CreateAccreditationFeesTable', N'8.0.28');
+    VALUES (N'20250509154544_CreateAccreditationFeesTable', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250512155019_SeedAccreditationFeesTablesExporterData'
@@ -3048,7 +2789,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'FeesPerSite', N'GroupId', N'RegulatorId', N'SubGroupId', N'TonnesOver', N'TonnesUpTo') AND [object_id] = OBJECT_ID(N'[Lookup].[AccreditationFees]'))
         SET IDENTITY_INSERT [Lookup].[AccreditationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3056,16 +2796,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250512155019_SeedAccreditationFeesTablesExporterData', N'8.0.28');
+    VALUES (N'20250512155019_SeedAccreditationFeesTablesExporterData', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250513003609_SeedAccreditationFeesTablesReprocessors'
@@ -3175,7 +2912,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'FeesPerSite', N'GroupId', N'RegulatorId', N'SubGroupId', N'TonnesOver', N'TonnesUpTo') AND [object_id] = OBJECT_ID(N'[Lookup].[AccreditationFees]'))
         SET IDENTITY_INSERT [Lookup].[AccreditationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3183,16 +2919,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250513003609_SeedAccreditationFeesTablesReprocessors', N'8.0.28');
+    VALUES (N'20250513003609_SeedAccreditationFeesTablesReprocessors', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250515105845_AddingPaymentMethodColumn'
@@ -3200,7 +2933,6 @@ IF NOT EXISTS (
 BEGIN
     ALTER TABLE [OfflinePayment] ADD [PaymentMethod] nvarchar(20) NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3208,16 +2940,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250515105845_AddingPaymentMethodColumn', N'8.0.28');
+    VALUES (N'20250515105845_AddingPaymentMethodColumn', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250515115823_AddingRequestorTypeColumn'
@@ -3225,7 +2954,6 @@ IF NOT EXISTS (
 BEGIN
     ALTER TABLE [OnlinePayment] ADD [RequestorType] nvarchar(50) NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3233,16 +2961,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250515115823_AddingRequestorTypeColumn', N'8.0.28');
+    VALUES (N'20250515115823_AddingRequestorTypeColumn', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250605112455_AddingTonnageBandTable'
@@ -3255,7 +2980,6 @@ BEGIN
         CONSTRAINT [PK_TonnageBand] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3272,7 +2996,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[TonnageBand]'))
         SET IDENTITY_INSERT [Lookup].[TonnageBand] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3280,45 +3003,40 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250605112455_AddingTonnageBandTable', N'8.0.28');
+    VALUES (N'20250605112455_AddingTonnageBandTable', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
 )
 BEGIN
-    DECLARE @var24 sysname;
-    SELECT @var24 = [d].[name]
+    DECLARE @var24 nvarchar(max);
+    SELECT @var24 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[AccreditationFees]') AND [c].[name] = N'TonnesOver');
-    IF @var24 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[AccreditationFees] DROP CONSTRAINT [' + @var24 + '];');
+    IF @var24 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[AccreditationFees] DROP CONSTRAINT ' + @var24 + ';');
     ALTER TABLE [Lookup].[AccreditationFees] DROP COLUMN [TonnesOver];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250606151503_AccreditationFeeTableDesignChanges'
 )
 BEGIN
-    DECLARE @var25 sysname;
-    SELECT @var25 = [d].[name]
+    DECLARE @var25 nvarchar(max);
+    SELECT @var25 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Lookup].[AccreditationFees]') AND [c].[name] = N'TonnesUpTo');
-    IF @var25 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[AccreditationFees] DROP CONSTRAINT [' + @var25 + '];');
+    IF @var25 IS NOT NULL EXEC(N'ALTER TABLE [Lookup].[AccreditationFees] DROP CONSTRAINT ' + @var25 + ';');
     ALTER TABLE [Lookup].[AccreditationFees] DROP COLUMN [TonnesUpTo];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3327,7 +3045,6 @@ IF NOT EXISTS (
 BEGIN
     ALTER TABLE [Lookup].[AccreditationFees] ADD [TonnageBandId] int NOT NULL DEFAULT 1;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3338,7 +3055,6 @@ BEGIN
     WHERE [Id] = 1;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3349,7 +3065,6 @@ BEGIN
     WHERE [Id] = 2;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3360,7 +3075,6 @@ BEGIN
     WHERE [Id] = 3;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3371,7 +3085,6 @@ BEGIN
     WHERE [Id] = 4;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3382,7 +3095,6 @@ BEGIN
     WHERE [Id] = 5;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3393,7 +3105,6 @@ BEGIN
     WHERE [Id] = 6;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3404,7 +3115,6 @@ BEGIN
     WHERE [Id] = 7;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3415,7 +3125,6 @@ BEGIN
     WHERE [Id] = 8;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3426,7 +3135,6 @@ BEGIN
     WHERE [Id] = 9;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3437,7 +3145,6 @@ BEGIN
     WHERE [Id] = 10;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3448,7 +3155,6 @@ BEGIN
     WHERE [Id] = 11;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3459,7 +3165,6 @@ BEGIN
     WHERE [Id] = 12;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3470,7 +3175,6 @@ BEGIN
     WHERE [Id] = 13;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3481,7 +3185,6 @@ BEGIN
     WHERE [Id] = 14;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3492,7 +3195,6 @@ BEGIN
     WHERE [Id] = 15;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3503,7 +3205,6 @@ BEGIN
     WHERE [Id] = 16;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3514,7 +3215,6 @@ BEGIN
     WHERE [Id] = 17;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3525,7 +3225,6 @@ BEGIN
     WHERE [Id] = 18;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3536,7 +3235,6 @@ BEGIN
     WHERE [Id] = 19;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3547,7 +3245,6 @@ BEGIN
     WHERE [Id] = 20;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3558,7 +3255,6 @@ BEGIN
     WHERE [Id] = 21;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3569,7 +3265,6 @@ BEGIN
     WHERE [Id] = 22;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3580,7 +3275,6 @@ BEGIN
     WHERE [Id] = 23;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3591,7 +3285,6 @@ BEGIN
     WHERE [Id] = 24;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3602,7 +3295,6 @@ BEGIN
     WHERE [Id] = 25;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3613,7 +3305,6 @@ BEGIN
     WHERE [Id] = 26;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3624,7 +3315,6 @@ BEGIN
     WHERE [Id] = 27;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3635,7 +3325,6 @@ BEGIN
     WHERE [Id] = 28;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3646,7 +3335,6 @@ BEGIN
     WHERE [Id] = 29;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3657,7 +3345,6 @@ BEGIN
     WHERE [Id] = 30;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3668,7 +3355,6 @@ BEGIN
     WHERE [Id] = 31;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3679,7 +3365,6 @@ BEGIN
     WHERE [Id] = 32;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3690,7 +3375,6 @@ BEGIN
     WHERE [Id] = 33;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3701,7 +3385,6 @@ BEGIN
     WHERE [Id] = 34;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3712,7 +3395,6 @@ BEGIN
     WHERE [Id] = 35;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3723,7 +3405,6 @@ BEGIN
     WHERE [Id] = 36;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3734,7 +3415,6 @@ BEGIN
     WHERE [Id] = 37;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3745,7 +3425,6 @@ BEGIN
     WHERE [Id] = 38;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3756,7 +3435,6 @@ BEGIN
     WHERE [Id] = 39;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3767,7 +3445,6 @@ BEGIN
     WHERE [Id] = 40;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3778,7 +3455,6 @@ BEGIN
     WHERE [Id] = 41;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3789,7 +3465,6 @@ BEGIN
     WHERE [Id] = 42;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3800,7 +3475,6 @@ BEGIN
     WHERE [Id] = 43;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3811,7 +3485,6 @@ BEGIN
     WHERE [Id] = 44;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3822,7 +3495,6 @@ BEGIN
     WHERE [Id] = 45;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3833,7 +3505,6 @@ BEGIN
     WHERE [Id] = 46;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3844,7 +3515,6 @@ BEGIN
     WHERE [Id] = 47;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3855,7 +3525,6 @@ BEGIN
     WHERE [Id] = 48;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3866,7 +3535,6 @@ BEGIN
     WHERE [Id] = 49;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3877,7 +3545,6 @@ BEGIN
     WHERE [Id] = 50;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3888,7 +3555,6 @@ BEGIN
     WHERE [Id] = 51;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3899,7 +3565,6 @@ BEGIN
     WHERE [Id] = 52;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3910,7 +3575,6 @@ BEGIN
     WHERE [Id] = 53;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3921,7 +3585,6 @@ BEGIN
     WHERE [Id] = 54;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3932,7 +3595,6 @@ BEGIN
     WHERE [Id] = 55;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3943,7 +3605,6 @@ BEGIN
     WHERE [Id] = 56;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3954,7 +3615,6 @@ BEGIN
     WHERE [Id] = 57;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3965,7 +3625,6 @@ BEGIN
     WHERE [Id] = 58;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3976,7 +3635,6 @@ BEGIN
     WHERE [Id] = 59;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3987,7 +3645,6 @@ BEGIN
     WHERE [Id] = 60;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -3998,7 +3655,6 @@ BEGIN
     WHERE [Id] = 61;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4009,7 +3665,6 @@ BEGIN
     WHERE [Id] = 62;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4020,7 +3675,6 @@ BEGIN
     WHERE [Id] = 63;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4031,7 +3685,6 @@ BEGIN
     WHERE [Id] = 64;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4042,7 +3695,6 @@ BEGIN
     WHERE [Id] = 65;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4053,7 +3705,6 @@ BEGIN
     WHERE [Id] = 66;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4064,7 +3715,6 @@ BEGIN
     WHERE [Id] = 67;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4075,7 +3725,6 @@ BEGIN
     WHERE [Id] = 68;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4086,7 +3735,6 @@ BEGIN
     WHERE [Id] = 69;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4097,7 +3745,6 @@ BEGIN
     WHERE [Id] = 70;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4108,7 +3755,6 @@ BEGIN
     WHERE [Id] = 71;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4119,7 +3765,6 @@ BEGIN
     WHERE [Id] = 72;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4130,7 +3775,6 @@ BEGIN
     WHERE [Id] = 73;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4141,7 +3785,6 @@ BEGIN
     WHERE [Id] = 74;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4152,7 +3795,6 @@ BEGIN
     WHERE [Id] = 75;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4163,7 +3805,6 @@ BEGIN
     WHERE [Id] = 76;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4174,7 +3815,6 @@ BEGIN
     WHERE [Id] = 77;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4185,7 +3825,6 @@ BEGIN
     WHERE [Id] = 78;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4196,7 +3835,6 @@ BEGIN
     WHERE [Id] = 79;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4207,7 +3845,6 @@ BEGIN
     WHERE [Id] = 80;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4218,7 +3855,6 @@ BEGIN
     WHERE [Id] = 81;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4229,7 +3865,6 @@ BEGIN
     WHERE [Id] = 82;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4240,7 +3875,6 @@ BEGIN
     WHERE [Id] = 83;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4251,7 +3885,6 @@ BEGIN
     WHERE [Id] = 84;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4262,7 +3895,6 @@ BEGIN
     WHERE [Id] = 85;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4273,7 +3905,6 @@ BEGIN
     WHERE [Id] = 86;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4284,7 +3915,6 @@ BEGIN
     WHERE [Id] = 87;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4295,7 +3925,6 @@ BEGIN
     WHERE [Id] = 88;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4306,7 +3935,6 @@ BEGIN
     WHERE [Id] = 89;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4317,7 +3945,6 @@ BEGIN
     WHERE [Id] = 90;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4328,7 +3955,6 @@ BEGIN
     WHERE [Id] = 91;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4339,7 +3965,6 @@ BEGIN
     WHERE [Id] = 92;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4350,7 +3975,6 @@ BEGIN
     WHERE [Id] = 93;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4361,7 +3985,6 @@ BEGIN
     WHERE [Id] = 94;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4372,7 +3995,6 @@ BEGIN
     WHERE [Id] = 95;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4383,7 +4005,6 @@ BEGIN
     WHERE [Id] = 96;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4394,7 +4015,6 @@ BEGIN
     WHERE [Id] = 97;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4405,7 +4025,6 @@ BEGIN
     WHERE [Id] = 98;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4416,7 +4035,6 @@ BEGIN
     WHERE [Id] = 99;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4427,7 +4045,6 @@ BEGIN
     WHERE [Id] = 100;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4438,7 +4055,6 @@ BEGIN
     WHERE [Id] = 101;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4449,7 +4065,6 @@ BEGIN
     WHERE [Id] = 102;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4460,7 +4075,6 @@ BEGIN
     WHERE [Id] = 103;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4471,7 +4085,6 @@ BEGIN
     WHERE [Id] = 104;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4482,7 +4095,6 @@ BEGIN
     WHERE [Id] = 105;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4493,7 +4105,6 @@ BEGIN
     WHERE [Id] = 106;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4504,7 +4115,6 @@ BEGIN
     WHERE [Id] = 107;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4515,7 +4125,6 @@ BEGIN
     WHERE [Id] = 108;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4526,7 +4135,6 @@ BEGIN
     WHERE [Id] = 109;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4537,7 +4145,6 @@ BEGIN
     WHERE [Id] = 110;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4548,7 +4155,6 @@ BEGIN
     WHERE [Id] = 111;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4559,7 +4165,6 @@ BEGIN
     WHERE [Id] = 112;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4570,7 +4175,6 @@ BEGIN
     WHERE [Id] = 113;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4581,7 +4185,6 @@ BEGIN
     WHERE [Id] = 114;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4592,7 +4195,6 @@ BEGIN
     WHERE [Id] = 115;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4603,7 +4205,6 @@ BEGIN
     WHERE [Id] = 116;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4614,7 +4215,6 @@ BEGIN
     WHERE [Id] = 117;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4625,7 +4225,6 @@ BEGIN
     WHERE [Id] = 118;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4636,7 +4235,6 @@ BEGIN
     WHERE [Id] = 119;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4647,7 +4245,6 @@ BEGIN
     WHERE [Id] = 120;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4658,7 +4255,6 @@ BEGIN
     WHERE [Id] = 121;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4669,7 +4265,6 @@ BEGIN
     WHERE [Id] = 122;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4680,7 +4275,6 @@ BEGIN
     WHERE [Id] = 123;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4691,7 +4285,6 @@ BEGIN
     WHERE [Id] = 124;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4702,7 +4295,6 @@ BEGIN
     WHERE [Id] = 125;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4713,7 +4305,6 @@ BEGIN
     WHERE [Id] = 126;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4724,7 +4315,6 @@ BEGIN
     WHERE [Id] = 127;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4735,7 +4325,6 @@ BEGIN
     WHERE [Id] = 128;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4746,7 +4335,6 @@ BEGIN
     WHERE [Id] = 129;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4757,7 +4345,6 @@ BEGIN
     WHERE [Id] = 130;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4768,7 +4355,6 @@ BEGIN
     WHERE [Id] = 131;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4779,7 +4365,6 @@ BEGIN
     WHERE [Id] = 132;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4790,7 +4375,6 @@ BEGIN
     WHERE [Id] = 133;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4801,7 +4385,6 @@ BEGIN
     WHERE [Id] = 134;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4812,7 +4395,6 @@ BEGIN
     WHERE [Id] = 135;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4823,7 +4405,6 @@ BEGIN
     WHERE [Id] = 136;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4834,7 +4415,6 @@ BEGIN
     WHERE [Id] = 137;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4845,7 +4425,6 @@ BEGIN
     WHERE [Id] = 138;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4856,7 +4435,6 @@ BEGIN
     WHERE [Id] = 139;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4867,7 +4445,6 @@ BEGIN
     WHERE [Id] = 140;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4878,7 +4455,6 @@ BEGIN
     WHERE [Id] = 141;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4889,7 +4465,6 @@ BEGIN
     WHERE [Id] = 142;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4900,7 +4475,6 @@ BEGIN
     WHERE [Id] = 143;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4911,7 +4485,6 @@ BEGIN
     WHERE [Id] = 144;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4922,7 +4495,6 @@ BEGIN
     WHERE [Id] = 145;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4933,7 +4505,6 @@ BEGIN
     WHERE [Id] = 146;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4944,7 +4515,6 @@ BEGIN
     WHERE [Id] = 147;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4955,7 +4525,6 @@ BEGIN
     WHERE [Id] = 148;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4966,7 +4535,6 @@ BEGIN
     WHERE [Id] = 149;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4977,7 +4545,6 @@ BEGIN
     WHERE [Id] = 150;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4988,7 +4555,6 @@ BEGIN
     WHERE [Id] = 151;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -4999,7 +4565,6 @@ BEGIN
     WHERE [Id] = 152;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5010,7 +4575,6 @@ BEGIN
     WHERE [Id] = 153;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5021,7 +4585,6 @@ BEGIN
     WHERE [Id] = 154;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5032,7 +4595,6 @@ BEGIN
     WHERE [Id] = 155;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5043,7 +4605,6 @@ BEGIN
     WHERE [Id] = 156;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5054,7 +4615,6 @@ BEGIN
     WHERE [Id] = 157;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5065,7 +4625,6 @@ BEGIN
     WHERE [Id] = 158;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5076,7 +4635,6 @@ BEGIN
     WHERE [Id] = 159;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5087,7 +4645,6 @@ BEGIN
     WHERE [Id] = 160;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5098,7 +4655,6 @@ BEGIN
     WHERE [Id] = 161;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5109,7 +4665,6 @@ BEGIN
     WHERE [Id] = 162;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5120,7 +4675,6 @@ BEGIN
     WHERE [Id] = 163;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5131,7 +4685,6 @@ BEGIN
     WHERE [Id] = 164;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5142,7 +4695,6 @@ BEGIN
     WHERE [Id] = 165;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5153,7 +4705,6 @@ BEGIN
     WHERE [Id] = 166;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5164,7 +4715,6 @@ BEGIN
     WHERE [Id] = 167;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5175,7 +4725,6 @@ BEGIN
     WHERE [Id] = 168;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5186,7 +4735,6 @@ BEGIN
     WHERE [Id] = 169;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5197,7 +4745,6 @@ BEGIN
     WHERE [Id] = 170;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5208,7 +4755,6 @@ BEGIN
     WHERE [Id] = 171;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5219,7 +4765,6 @@ BEGIN
     WHERE [Id] = 172;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5230,7 +4775,6 @@ BEGIN
     WHERE [Id] = 173;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5241,7 +4785,6 @@ BEGIN
     WHERE [Id] = 174;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5252,7 +4795,6 @@ BEGIN
     WHERE [Id] = 175;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5263,7 +4805,6 @@ BEGIN
     WHERE [Id] = 176;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5274,7 +4815,6 @@ BEGIN
     WHERE [Id] = 177;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5285,7 +4825,6 @@ BEGIN
     WHERE [Id] = 178;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5296,7 +4835,6 @@ BEGIN
     WHERE [Id] = 179;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5307,7 +4845,6 @@ BEGIN
     WHERE [Id] = 180;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5318,7 +4855,6 @@ BEGIN
     WHERE [Id] = 181;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5329,7 +4865,6 @@ BEGIN
     WHERE [Id] = 182;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5340,7 +4875,6 @@ BEGIN
     WHERE [Id] = 183;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5351,7 +4885,6 @@ BEGIN
     WHERE [Id] = 184;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5362,7 +4895,6 @@ BEGIN
     WHERE [Id] = 185;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5373,7 +4905,6 @@ BEGIN
     WHERE [Id] = 186;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5384,7 +4915,6 @@ BEGIN
     WHERE [Id] = 187;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5395,7 +4925,6 @@ BEGIN
     WHERE [Id] = 188;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5406,7 +4935,6 @@ BEGIN
     WHERE [Id] = 189;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5417,7 +4945,6 @@ BEGIN
     WHERE [Id] = 190;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5428,7 +4955,6 @@ BEGIN
     WHERE [Id] = 191;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5439,7 +4965,6 @@ BEGIN
     WHERE [Id] = 192;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5448,7 +4973,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_AccreditationFees_TonnageBandId] ON [Lookup].[AccreditationFees] ([TonnageBandId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5457,7 +4981,6 @@ IF NOT EXISTS (
 BEGIN
     ALTER TABLE [Lookup].[AccreditationFees] ADD CONSTRAINT [FK_AccreditationFees_TonnageBand_TonnageBandId] FOREIGN KEY ([TonnageBandId]) REFERENCES [Lookup].[TonnageBand] ([Id]) ON DELETE CASCADE;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5465,16 +4988,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250606151503_AccreditationFeeTableDesignChanges', N'8.0.28');
+    VALUES (N'20250606151503_AccreditationFeeTableDesignChanges', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250611100506_AddingRequestorTypeTable'
@@ -5487,7 +5007,6 @@ BEGIN
         CONSTRAINT [PK_RequestorType] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5505,7 +5024,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[RequestorType]'))
         SET IDENTITY_INSERT [Lookup].[RequestorType] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5513,30 +5031,26 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250611100506_AddingRequestorTypeTable', N'8.0.28');
+    VALUES (N'20250611100506_AddingRequestorTypeTable', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250611164617_ChangedOnlinePaymentTable'
 )
 BEGIN
-    DECLARE @var26 sysname;
-    SELECT @var26 = [d].[name]
+    DECLARE @var26 nvarchar(max);
+    SELECT @var26 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[OnlinePayment]') AND [c].[name] = N'RequestorType');
-    IF @var26 IS NOT NULL EXEC(N'ALTER TABLE [OnlinePayment] DROP CONSTRAINT [' + @var26 + '];');
+    IF @var26 IS NOT NULL EXEC(N'ALTER TABLE [OnlinePayment] DROP CONSTRAINT ' + @var26 + ';');
     ALTER TABLE [OnlinePayment] DROP COLUMN [RequestorType];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5545,7 +5059,6 @@ IF NOT EXISTS (
 BEGIN
     ALTER TABLE [OnlinePayment] ADD [RequestorTypeId] int NOT NULL DEFAULT 1;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5554,7 +5067,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_OnlinePayment_RequestorTypeId] ON [OnlinePayment] ([RequestorTypeId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5563,7 +5075,6 @@ IF NOT EXISTS (
 BEGIN
     ALTER TABLE [OnlinePayment] ADD CONSTRAINT [FK_OnlinePayment_RequestorType_RequestorTypeId] FOREIGN KEY ([RequestorTypeId]) REFERENCES [Lookup].[RequestorType] ([Id]) ON DELETE CASCADE;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5571,16 +5082,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250611164617_ChangedOnlinePaymentTable', N'8.0.28');
+    VALUES (N'20250611164617_ChangedOnlinePaymentTable', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250612130529_AddedPaymentMethodTable'
@@ -5593,7 +5101,6 @@ BEGIN
         CONSTRAINT [PK_PaymentMethod] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5611,7 +5118,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[PaymentMethod]'))
         SET IDENTITY_INSERT [Lookup].[PaymentMethod] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5619,30 +5125,26 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250612130529_AddedPaymentMethodTable', N'8.0.28');
+    VALUES (N'20250612130529_AddedPaymentMethodTable', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250616080947_ChangedOfflinePaymentTable'
 )
 BEGIN
-    DECLARE @var27 sysname;
-    SELECT @var27 = [d].[name]
+    DECLARE @var27 nvarchar(max);
+    SELECT @var27 = QUOTENAME([d].[name])
     FROM [sys].[default_constraints] [d]
     INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
     WHERE ([d].[parent_object_id] = OBJECT_ID(N'[OfflinePayment]') AND [c].[name] = N'PaymentMethod');
-    IF @var27 IS NOT NULL EXEC(N'ALTER TABLE [OfflinePayment] DROP CONSTRAINT [' + @var27 + '];');
+    IF @var27 IS NOT NULL EXEC(N'ALTER TABLE [OfflinePayment] DROP CONSTRAINT ' + @var27 + ';');
     ALTER TABLE [OfflinePayment] DROP COLUMN [PaymentMethod];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5651,7 +5153,6 @@ IF NOT EXISTS (
 BEGIN
     ALTER TABLE [OfflinePayment] ADD [PaymentMethodId] int NOT NULL DEFAULT 1;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5660,7 +5161,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_OfflinePayment_PaymentMethodId] ON [OfflinePayment] ([PaymentMethodId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5669,7 +5169,6 @@ IF NOT EXISTS (
 BEGIN
     ALTER TABLE [OfflinePayment] ADD CONSTRAINT [FK_OfflinePayment_PaymentMethod_PaymentMethodId] FOREIGN KEY ([PaymentMethodId]) REFERENCES [Lookup].[PaymentMethod] ([Id]) ON DELETE CASCADE;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5677,16 +5176,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250616080947_ChangedOfflinePaymentTable', N'8.0.28');
+    VALUES (N'20250616080947_ChangedOfflinePaymentTable', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250702083006_AddingOrganisationIdColumn'
@@ -5694,7 +5190,6 @@ IF NOT EXISTS (
 BEGIN
     ALTER TABLE [OfflinePayment] ADD [OrganisationId] uniqueidentifier NULL;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5702,16 +5197,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250702083006_AddingOrganisationIdColumn', N'8.0.28');
+    VALUES (N'20250702083006_AddingOrganisationIdColumn', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20250718150533_AddFeeSummaryTables'
@@ -5723,7 +5215,6 @@ BEGIN
         CONSTRAINT [PK_FeeTypes] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5736,7 +5227,6 @@ BEGIN
         CONSTRAINT [PK_PayerTypes] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5762,7 +5252,6 @@ BEGIN
         CONSTRAINT [FK_FeeSummaries_PayerTypes_PayerTypeId] FOREIGN KEY ([PayerTypeId]) REFERENCES [Lookup].[PayerTypes] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5777,7 +5266,6 @@ BEGIN
         CONSTRAINT [FK_FileFeeSummaryConnections_FeeSummaries_FeeSummaryId] FOREIGN KEY ([FeeSummaryId]) REFERENCES [FeeSummaries] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5798,7 +5286,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
         SET IDENTITY_INSERT [Lookup].[FeeTypes] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5815,7 +5302,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[PayerTypes]'))
         SET IDENTITY_INSERT [Lookup].[PayerTypes] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5824,7 +5310,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_FeeSummaries_FeeTypeId] ON [FeeSummaries] ([FeeTypeId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5833,7 +5318,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_FeeSummaries_PayerTypeId] ON [FeeSummaries] ([PayerTypeId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5842,7 +5326,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_FileFeeSummaryConnections_FeeSummaryId] ON [FileFeeSummaryConnections] ([FeeSummaryId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5850,16 +5333,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20250718150533_AddFeeSummaryTables', N'8.0.28');
+    VALUES (N'20250718150533_AddFeeSummaryTables', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20251006153104_AddFeeItemTable'
@@ -5867,7 +5347,6 @@ IF NOT EXISTS (
 BEGIN
     DROP TABLE [FileFeeSummaryConnections];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5876,7 +5355,6 @@ IF NOT EXISTS (
 BEGIN
     DROP TABLE [FeeSummaries];
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5903,7 +5381,6 @@ BEGIN
         CONSTRAINT [FK_FeeItem_PayerTypes_PayerTypeId] FOREIGN KEY ([PayerTypeId]) REFERENCES [Lookup].[PayerTypes] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5918,7 +5395,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
         SET IDENTITY_INSERT [Lookup].[FeeTypes] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5927,7 +5403,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_FeeItem_FeeTypeId] ON [FeeItem] ([FeeTypeId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5936,7 +5411,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_FeeItem_PayerTypeId] ON [FeeItem] ([PayerTypeId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5944,16 +5418,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20251006153104_AddFeeItemTable', N'8.0.28');
+    VALUES (N'20251006153104_AddFeeItemTable', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20251007103058_FeeTypeDataSeedData'
@@ -5963,7 +5434,6 @@ BEGIN
     WHERE [Id] = 10;
     SELECT @@ROWCOUNT');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5984,7 +5454,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Name') AND [object_id] = OBJECT_ID(N'[Lookup].[FeeTypes]'))
         SET IDENTITY_INSERT [Lookup].[FeeTypes] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -5992,16 +5461,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20251007103058_FeeTypeDataSeedData', N'8.0.28');
+    VALUES (N'20251007103058_FeeTypeDataSeedData', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20251203105439_registration-fees-2026'
@@ -6074,7 +5540,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -6082,16 +5547,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20251203105439_registration-fees-2026', N'8.0.28');
+    VALUES (N'20251203105439_registration-fees-2026', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20260427101504_add-closed-loop-recycling-fee-2026'
@@ -6104,7 +5566,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Description', N'Type') AND [object_id] = OBJECT_ID(N'[Lookup].[SubGroup]'))
         SET IDENTITY_INSERT [Lookup].[SubGroup] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -6125,7 +5586,6 @@ BEGIN
     IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
         SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -6133,16 +5593,13 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20260427101504_add-closed-loop-recycling-fee-2026', N'8.0.28');
+    VALUES (N'20260427101504_add-closed-loop-recycling-fee-2026', N'10.0.0');
 END;
-GO
 
 COMMIT;
 GO
 
 BEGIN TRANSACTION;
-GO
-
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20260624132409_AddRegistrationSubmissionData'
@@ -6150,7 +5607,6 @@ IF NOT EXISTS (
 BEGIN
     IF SCHEMA_ID(N'registration') IS NULL EXEC(N'CREATE SCHEMA [registration];');
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -6168,7 +5624,6 @@ BEGIN
         CONSTRAINT [PK_RegistrationSubmissionData] PRIMARY KEY ([Id])
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -6189,7 +5644,6 @@ BEGIN
         CONSTRAINT [FK_RegistrationSubmissionProducer_RegistrationSubmissionData_RegistrationSubmissionDataId] FOREIGN KEY ([RegistrationSubmissionDataId]) REFERENCES [registration].[RegistrationSubmissionData] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -6208,7 +5662,6 @@ BEGIN
         CONSTRAINT [FK_RegistrationSubmissionSubsidiary_RegistrationSubmissionProducer_RegistrationSubmissionProducerId] FOREIGN KEY ([RegistrationSubmissionProducerId]) REFERENCES [registration].[RegistrationSubmissionProducer] ([Id]) ON DELETE CASCADE
     );
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -6217,7 +5670,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE UNIQUE INDEX [IX_RegistrationSubmissionData_RegistrationBlobName] ON [registration].[RegistrationSubmissionData] ([RegistrationBlobName]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -6226,7 +5678,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_RegistrationSubmissionProducer_RegistrationSubmissionDataId] ON [registration].[RegistrationSubmissionProducer] ([RegistrationSubmissionDataId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -6235,7 +5686,6 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX [IX_RegistrationSubmissionSubsidiary_RegistrationSubmissionProducerId] ON [registration].[RegistrationSubmissionSubsidiary] ([RegistrationSubmissionProducerId]);
 END;
-GO
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
@@ -6243,9 +5693,208 @@ IF NOT EXISTS (
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20260624132409_AddRegistrationSubmissionData', N'8.0.28');
+    VALUES (N'20260624132409_AddRegistrationSubmissionData', N'10.0.0');
 END;
+
+COMMIT;
 GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260701110906_DropV2FeeItemAndFeeType'
+)
+BEGIN
+    DROP TABLE [FeeItem];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260701110906_DropV2FeeItemAndFeeType'
+)
+BEGIN
+    DROP TABLE [Lookup].[FeeTypes];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260701110906_DropV2FeeItemAndFeeType'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260701110906_DropV2FeeItemAndFeeType', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionSubsidiary];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionProducer];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionData];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    DECLARE @var28 nvarchar(max);
+    SELECT @var28 = QUOTENAME([d].[name])
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[registration].[RegistrationSubmissionData]') AND [c].[name] = N'SubmissionPeriod');
+    IF @var28 IS NOT NULL EXEC(N'ALTER TABLE [registration].[RegistrationSubmissionData] DROP CONSTRAINT ' + @var28 + ';');
+    ALTER TABLE [registration].[RegistrationSubmissionData] DROP COLUMN [SubmissionPeriod];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    ALTER TABLE [registration].[RegistrationSubmissionData] ADD [SubmissionPeriodId] int NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    CREATE TABLE [Lookup].[SubmissionPeriod] (
+        [Id] int NOT NULL IDENTITY,
+        [WindowType] nvarchar(40) NOT NULL,
+        [RegistrationYear] int NOT NULL,
+        [OpeningDate] datetime2 NOT NULL,
+        [DeadlineDate] datetime2 NOT NULL,
+        [ClosingDate] datetime2 NOT NULL,
+        CONSTRAINT [PK_SubmissionPeriod] PRIMARY KEY ([Id])
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ClosingDate', N'DeadlineDate', N'OpeningDate', N'RegistrationYear', N'WindowType') AND [object_id] = OBJECT_ID(N'[Lookup].[SubmissionPeriod]'))
+        SET IDENTITY_INSERT [Lookup].[SubmissionPeriod] ON;
+    EXEC(N'INSERT INTO [Lookup].[SubmissionPeriod] ([Id], [ClosingDate], [DeadlineDate], [OpeningDate], [RegistrationYear], [WindowType])
+    VALUES (1, ''2026-02-01T00:00:00.0000000Z'', ''2025-04-02T00:00:00.0000000Z'', ''2024-07-01T00:00:00.0000000Z'', 2025, N''Cso''),
+    (2, ''2026-01-01T00:00:00.0000000Z'', ''2025-04-02T00:00:00.0000000Z'', ''2024-07-01T00:00:00.0000000Z'', 2025, N''Direct''),
+    (3, ''2027-01-29T00:00:00.0000000Z'', ''2025-10-02T00:00:00.0000000Z'', ''2025-07-01T00:00:00.0000000Z'', 2026, N''CsoLargeProducer''),
+    (4, ''2027-01-29T00:00:00.0000000Z'', ''2026-04-02T00:00:00.0000000Z'', ''2026-01-01T00:00:00.0000000Z'', 2026, N''CsoSmallProducer''),
+    (5, ''2027-01-01T00:00:00.0000000Z'', ''2025-10-02T00:00:00.0000000Z'', ''2025-07-01T00:00:00.0000000Z'', 2026, N''DirectLargeProducer''),
+    (6, ''2027-01-01T00:00:00.0000000Z'', ''2026-04-02T00:00:00.0000000Z'', ''2026-01-01T00:00:00.0000000Z'', 2026, N''DirectSmallProducer''),
+    (7, ''2028-01-29T00:00:00.0000000Z'', ''2026-10-02T00:00:00.0000000Z'', ''2026-07-01T00:00:00.0000000Z'', 2027, N''CsoLargeProducer''),
+    (8, ''2028-01-29T00:00:00.0000000Z'', ''2027-04-02T00:00:00.0000000Z'', ''2027-01-01T00:00:00.0000000Z'', 2027, N''CsoSmallProducer''),
+    (9, ''2028-01-01T00:00:00.0000000Z'', ''2026-10-02T00:00:00.0000000Z'', ''2026-07-01T00:00:00.0000000Z'', 2027, N''DirectLargeProducer''),
+    (10, ''2028-01-01T00:00:00.0000000Z'', ''2027-04-02T00:00:00.0000000Z'', ''2027-01-01T00:00:00.0000000Z'', 2027, N''DirectSmallProducer'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ClosingDate', N'DeadlineDate', N'OpeningDate', N'RegistrationYear', N'WindowType') AND [object_id] = OBJECT_ID(N'[Lookup].[SubmissionPeriod]'))
+        SET IDENTITY_INSERT [Lookup].[SubmissionPeriod] OFF;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    CREATE INDEX [IX_RegistrationSubmissionData_SubmissionPeriodId] ON [registration].[RegistrationSubmissionData] ([SubmissionPeriodId]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_SubmissionPeriod_WindowType_RegistrationYear] ON [Lookup].[SubmissionPeriod] ([WindowType], [RegistrationYear]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    ALTER TABLE [registration].[RegistrationSubmissionData] ADD CONSTRAINT [FK_RegistrationSubmissionData_SubmissionPeriod_SubmissionPeriodId] FOREIGN KEY ([SubmissionPeriodId]) REFERENCES [Lookup].[SubmissionPeriod] ([Id]) ON DELETE NO ACTION;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260709105007_AddSubmissionPeriodAndLink'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260709105007_AddSubmissionPeriodAndLink', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260715113527_MakeSubmissionPeriodIdRequired'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionData] WHERE [SubmissionPeriodId] IS NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260715113527_MakeSubmissionPeriodIdRequired'
+)
+BEGIN
+    DROP INDEX [IX_RegistrationSubmissionData_SubmissionPeriodId] ON [registration].[RegistrationSubmissionData];
+    DECLARE @var29 nvarchar(max);
+    SELECT @var29 = QUOTENAME([d].[name])
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[registration].[RegistrationSubmissionData]') AND [c].[name] = N'SubmissionPeriodId');
+    IF @var29 IS NOT NULL EXEC(N'ALTER TABLE [registration].[RegistrationSubmissionData] DROP CONSTRAINT ' + @var29 + ';');
+    ALTER TABLE [registration].[RegistrationSubmissionData] ALTER COLUMN [SubmissionPeriodId] int NOT NULL;
+    CREATE INDEX [IX_RegistrationSubmissionData_SubmissionPeriodId] ON [registration].[RegistrationSubmissionData] ([SubmissionPeriodId]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260715113527_MakeSubmissionPeriodIdRequired'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260715113527_MakeSubmissionPeriodIdRequired', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260720102344_UpgradeSnapshotToEfCore10'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260720102344_UpgradeSnapshotToEfCore10', N'10.0.0');
+END;
 
 COMMIT;
 GO

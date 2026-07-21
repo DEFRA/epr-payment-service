@@ -1,4 +1,3 @@
-﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
@@ -310,7 +309,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
         public async Task CalculateFeesAsync_WhenLargeProducerWith10Subsidiaries_ReturnsCorrectFees([Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
@@ -318,11 +317,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 ApplicationReferenceNumber = "A123",
                 IsLateFeeApplicable = false,
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -643,7 +637,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Small",
                 NumberOfSubsidiaries = 20,
@@ -652,11 +646,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 IsProducerOnlineMarketplace = true,
                 IsLateFeeApplicable = false,
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -815,7 +804,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
@@ -823,11 +812,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 ApplicationReferenceNumber = "A123",
                 IsLateFeeApplicable = false,
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -863,7 +847,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 0,
@@ -871,11 +855,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 ApplicationReferenceNumber = "A123",
                 IsLateFeeApplicable = true,
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
@@ -914,7 +893,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             [Frozen] SubsidiariesFeeBreakdown ExpectedSubsidiariesFeeBreakdown)
         {
             // Arrange
-            var request = new ProducerRegistrationFeesRequestV2Dto
+            var request = new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
@@ -922,11 +901,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 ApplicationReferenceNumber = "A123",
                 IsLateFeeApplicable = true,
                 SubmissionDate = DateTime.UtcNow,
-                FileId = Guid.NewGuid(),
-                ExternalId = Guid.NewGuid(),
-                InvoicePeriod = new DateTimeOffset(),
-                PayerId = 1,
-                PayerTypeId = 1
             };
 
             _baseFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))

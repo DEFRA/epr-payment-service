@@ -1,5 +1,4 @@
-﻿using System.Data.Entity;
-using AutoFixture.MSTest;
+using System.Data.Entity;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.Fees;
 using EPR.Payment.Service.Common.Enums;

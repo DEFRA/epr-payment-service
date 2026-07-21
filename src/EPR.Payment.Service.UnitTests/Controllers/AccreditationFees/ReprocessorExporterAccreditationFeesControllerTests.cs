@@ -1,6 +1,5 @@
-﻿using AutoFixture;
+using AutoFixture;
 using AutoFixture.AutoMoq;
-using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Dtos.Request.AccreditationFees;
 using EPR.Payment.Service.Common.Dtos.Response.AccreditationFees;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
