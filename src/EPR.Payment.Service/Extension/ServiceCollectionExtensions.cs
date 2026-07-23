@@ -104,6 +104,7 @@ namespace EPR.Payment.Service.Extension
             services.AddSingleton<ICsvStreamParser, CsvStreamParser>();
             services.AddScoped<IRegistrationSubmissionDataHandler, RegistrationSubmissionDataHandler>();
             services.AddScoped<IRegistrationSubmittedForRegulatorApprovalHandler, RegistrationSubmittedForRegulatorApprovalHandler>();
+            services.AddScoped<IRegulatorRegistrationDecisionHandler, RegulatorRegistrationDecisionHandler>();
             services.AddScoped<IRegistrationFeeCalculationDetailsService, RegistrationFeeCalculationDetailsService>();
             services.AddSingleton(TimeProvider.System);
 
