@@ -1,6 +1,5 @@
-﻿using AutoFixture;
+using AutoFixture;
 using AutoFixture.AutoMoq;
-using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;

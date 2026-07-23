@@ -1,4 +1,3 @@
-﻿using AutoFixture.MSTest;
 using EPR.Payment.Service.Common.Dtos.Request.ResubmissionFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Services.Interfaces.Payments;
