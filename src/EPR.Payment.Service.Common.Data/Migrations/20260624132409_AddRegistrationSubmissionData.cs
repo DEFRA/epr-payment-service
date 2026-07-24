@@ -6,17 +6,35 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddRegistrationSubmissionProducerAndSubsidiary : Migration
+    public partial class AddRegistrationSubmissionData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "FileName",
-                table: "RegistrationSubmissionData");
+            migrationBuilder.EnsureSchema(
+                name: "registration");
+
+            migrationBuilder.CreateTable(
+                name: "RegistrationSubmissionData",
+                schema: "registration",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    SubmissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RegistrationBlobName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ComplianceSchemeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SubmissionPeriod = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RegistrationSubmissionData", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "RegistrationSubmissionProducer",
+                schema: "registration",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
@@ -35,6 +53,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     table.ForeignKey(
                         name: "FK_RegistrationSubmissionProducer_RegistrationSubmissionData_RegistrationSubmissionDataId",
                         column: x => x.RegistrationSubmissionDataId,
+                        principalSchema: "registration",
                         principalTable: "RegistrationSubmissionData",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -42,6 +61,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "RegistrationSubmissionSubsidiary",
+                schema: "registration",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
@@ -58,18 +78,28 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     table.ForeignKey(
                         name: "FK_RegistrationSubmissionSubsidiary_RegistrationSubmissionProducer_RegistrationSubmissionProducerId",
                         column: x => x.RegistrationSubmissionProducerId,
+                        principalSchema: "registration",
                         principalTable: "RegistrationSubmissionProducer",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_RegistrationSubmissionData_RegistrationBlobName",
+                schema: "registration",
+                table: "RegistrationSubmissionData",
+                column: "RegistrationBlobName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RegistrationSubmissionProducer_RegistrationSubmissionDataId",
+                schema: "registration",
                 table: "RegistrationSubmissionProducer",
                 column: "RegistrationSubmissionDataId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RegistrationSubmissionSubsidiary_RegistrationSubmissionProducerId",
+                schema: "registration",
                 table: "RegistrationSubmissionSubsidiary",
                 column: "RegistrationSubmissionProducerId");
         }
@@ -78,17 +108,16 @@ namespace EPR.Payment.Service.Common.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "RegistrationSubmissionSubsidiary");
+                name: "RegistrationSubmissionSubsidiary",
+                schema: "registration");
 
             migrationBuilder.DropTable(
-                name: "RegistrationSubmissionProducer");
+                name: "RegistrationSubmissionProducer",
+                schema: "registration");
 
-            migrationBuilder.AddColumn<string>(
-                name: "FileName",
-                table: "RegistrationSubmissionData",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+            migrationBuilder.DropTable(
+                name: "RegistrationSubmissionData",
+                schema: "registration");
         }
     }
 }
