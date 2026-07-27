@@ -6,6 +6,7 @@ using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ComplianceScheme
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Services.Interfaces.RegistrationSubmission;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -20,6 +21,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
     {
         private IFixture _fixture = null!;
         private Mock<IComplianceSchemeCalculatorService> _complianceSchemeCalculatorServiceMock = null!;
+        private Mock<IComplianceSchemeFeeBySubmissionService> _feeBySubmissionServiceMock = null!;
         private Mock<IValidator<ComplianceSchemeFeesRequestDto>> _validatorMock = null!;
         private ComplianceSchemeFeesController _controller = null!;
 
@@ -28,9 +30,11 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _complianceSchemeCalculatorServiceMock = _fixture.Freeze<Mock<IComplianceSchemeCalculatorService>>();
+            _feeBySubmissionServiceMock = _fixture.Freeze<Mock<IComplianceSchemeFeeBySubmissionService>>();
             _validatorMock = _fixture.Freeze<Mock<IValidator<ComplianceSchemeFeesRequestDto>>>();
             _controller = new ComplianceSchemeFeesController(
                 _complianceSchemeCalculatorServiceMock.Object,
+                _feeBySubmissionServiceMock.Object,
                 _validatorMock.Object);
         }
 
@@ -40,6 +44,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             // Act
             var controller = new ComplianceSchemeFeesController(
                 _complianceSchemeCalculatorServiceMock.Object,
+                _feeBySubmissionServiceMock.Object,
                 _validatorMock.Object);
 
             // Assert
@@ -59,11 +64,29 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             // Act
             Action act = () => new ComplianceSchemeFeesController(
                 baseFeeService!,
+                _feeBySubmissionServiceMock.Object,
                 _validatorMock.Object);
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
                 .WithMessage("Value cannot be null. (Parameter 'complianceSchemeCalculatorService')");
+        }
+
+        [TestMethod]
+        public void Constructor_WhenFeeBySubmissionServiceIsNull_ThrowsArgumentNullException()
+        {
+            // Arrange
+            IComplianceSchemeFeeBySubmissionService? feeBySubmissionService = null;
+
+            // Act
+            Action act = () => new ComplianceSchemeFeesController(
+                _complianceSchemeCalculatorServiceMock.Object,
+                feeBySubmissionService!,
+                _validatorMock.Object);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'feeBySubmissionService')");
         }
 
         [TestMethod]
@@ -75,6 +98,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             // Act
             Action act = () => new ComplianceSchemeFeesController(
                 _complianceSchemeCalculatorServiceMock.Object,
+                _feeBySubmissionServiceMock.Object,
                 validator!);
 
             // Assert
@@ -199,6 +223,36 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
                 result.Result.Should().BeOfType<ObjectResult>().Which.Value.Should().Be($"{ComplianceSchemeFeeCalculationExceptions.CalculationError}: {exceptionMessage}");
             }
 
+        }
+
+        [TestMethod]
+        public async Task GetFeesBySubmissionAsync_WhenServiceReturnsResponse_ReturnsOk()
+        {
+            var submissionId = Guid.NewGuid();
+            var response = new ComplianceSchemeFeesResponseDto();
+            _feeBySubmissionServiceMock
+                .Setup(s => s.GetFeesAsync(submissionId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
+
+            var result = await _controller.GetFeesBySubmissionAsync(submissionId, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeSameAs(response);
+            }
+        }
+
+        [TestMethod]
+        public async Task GetFeesBySubmissionAsync_WhenServiceReturnsNull_ReturnsNotFound()
+        {
+            var submissionId = Guid.NewGuid();
+            _feeBySubmissionServiceMock
+                .Setup(s => s.GetFeesAsync(submissionId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync((ComplianceSchemeFeesResponseDto?)null);
+
+            var result = await _controller.GetFeesBySubmissionAsync(submissionId, CancellationToken.None);
+
+            result.Result.Should().BeOfType<NotFoundResult>();
         }
     }
 }

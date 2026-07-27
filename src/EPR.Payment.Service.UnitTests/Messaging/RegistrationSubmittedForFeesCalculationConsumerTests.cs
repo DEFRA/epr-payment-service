@@ -57,7 +57,9 @@ namespace EPR.Payment.Service.UnitTests.Messaging
                 RegistrationBlobName: $"av-blob-{Guid.NewGuid()}",
                 ComplianceSchemeId: Guid.NewGuid(),
                 SubmissionDate: new DateTime(2026, 6, 15, 12, 0, 0, DateTimeKind.Utc),
-                SubmissionPeriodId: 42);
+                SubmissionPeriodId: 42,
+                RegulatorNation: "GB-ENG",
+                ApplicationReferenceNumber: "PEPR2601234");
             var message = ServiceBusModelFactory.ServiceBusReceivedMessage(body: BinaryData.FromObjectAsJson(messagePayload));
 
             CreateRegistrationSubmissionDataRequest? captured = null;
@@ -76,6 +78,8 @@ namespace EPR.Payment.Service.UnitTests.Messaging
                 captured.ComplianceSchemeId.Should().Be(messagePayload.ComplianceSchemeId);
                 captured.SubmissionPeriodId.Should().Be(messagePayload.SubmissionPeriodId);
                 captured.SubmissionDate.Should().Be(messagePayload.SubmissionDate);
+                captured.RegulatorNation.Should().Be(messagePayload.RegulatorNation);
+                captured.ApplicationReferenceNumber.Should().Be(messagePayload.ApplicationReferenceNumber);
                 _handlerMock.Verify(
                     h => h.HandleAsync(It.IsAny<CreateRegistrationSubmissionDataRequest>(), It.IsAny<CancellationToken>()),
                     Times.Once);
@@ -90,7 +94,9 @@ namespace EPR.Payment.Service.UnitTests.Messaging
                 RegistrationBlobName: "av-blob-xyz",
                 ComplianceSchemeId: null,
                 SubmissionDate: DateTime.UtcNow,
-                SubmissionPeriodId: 1);
+                SubmissionPeriodId: 1,
+                RegulatorNation: "GB-ENG",
+                ApplicationReferenceNumber: "PEPR2601234");
             var message = ServiceBusModelFactory.ServiceBusReceivedMessage(body: BinaryData.FromObjectAsJson(messagePayload));
 
             _handlerMock
@@ -128,7 +134,9 @@ namespace EPR.Payment.Service.UnitTests.Messaging
                 RegistrationBlobName: "av-blob-xyz",
                 ComplianceSchemeId: null,
                 SubmissionDate: DateTime.UtcNow,
-                SubmissionPeriodId: 1);
+                SubmissionPeriodId: 1,
+                RegulatorNation: "GB-ENG",
+                ApplicationReferenceNumber: "PEPR2601234");
             var message = ServiceBusModelFactory.ServiceBusReceivedMessage(body: BinaryData.FromObjectAsJson(messagePayload));
 
             _handlerMock

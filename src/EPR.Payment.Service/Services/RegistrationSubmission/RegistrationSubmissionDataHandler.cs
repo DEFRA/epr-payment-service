@@ -118,6 +118,8 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 ComplianceSchemeId = request.ComplianceSchemeId,
                 SubmissionDate = request.SubmissionDate,
                 SubmissionPeriodId = request.SubmissionPeriodId,
+                RegulatorNation = request.RegulatorNation,
+                ApplicationReferenceNumber = request.ApplicationReferenceNumber,
                 CreatedDate = now,
             };
 

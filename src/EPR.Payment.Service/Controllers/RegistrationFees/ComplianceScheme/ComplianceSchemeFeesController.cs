@@ -3,6 +3,7 @@ using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Services.Interfaces.RegistrationSubmission;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement.Mvc;
@@ -17,13 +18,16 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme
     public class ComplianceSchemeFeesController : ControllerBase
     {
         private readonly IComplianceSchemeCalculatorService _complianceSchemeCalculatorService;
+        private readonly IComplianceSchemeFeeBySubmissionService _feeBySubmissionService;
         private readonly IValidator<ComplianceSchemeFeesRequestDto> _validator;
 
         public ComplianceSchemeFeesController(
             IComplianceSchemeCalculatorService complianceSchemeCalculatorService,
+            IComplianceSchemeFeeBySubmissionService feeBySubmissionService,
             IValidator<ComplianceSchemeFeesRequestDto> validator)
         {
             _complianceSchemeCalculatorService = complianceSchemeCalculatorService ?? throw new ArgumentNullException(nameof(complianceSchemeCalculatorService));
+            _feeBySubmissionService = feeBySubmissionService ?? throw new ArgumentNullException(nameof(feeBySubmissionService));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
@@ -76,6 +80,25 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ComplianceSchemeFeeCalculationExceptions.CalculationError}: {ex.Message}");
             }
+        }
+
+        [MapToApiVersion(1)]
+        [HttpGet("registration-fee/{submissionId:guid}")]
+        [SwaggerOperation(
+            Summary = "Calculate compliance scheme fees for a stored submission",
+            Description = "Derives every input to the fee calculation from the stored registration submission (latest non-rejected record and its event lifecycle) and returns the calculated fees."
+        )]
+        [SwaggerResponse(200, "Returns the calculated fees", typeof(ComplianceSchemeFeesResponseDto))]
+        [SwaggerResponse(404, "No non-rejected registration submission found for this submissionId")]
+        [SwaggerResponse(500, "Internal server error occurred while calculating fees")]
+        [ProducesResponseType(typeof(ComplianceSchemeFeesResponseDto), 200)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [FeatureGate("EnableComplianceSchemeFees")]
+        public async Task<ActionResult<ComplianceSchemeFeesResponseDto>> GetFeesBySubmissionAsync(Guid submissionId, CancellationToken cancellationToken)
+        {
+            var result = await _feeBySubmissionService.GetFeesAsync(submissionId, cancellationToken);
+            return result is null ? NotFound() : Ok(result);
         }
     }
 }

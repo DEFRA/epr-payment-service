@@ -5936,3 +5936,64 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionDataEvents];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionSubsidiary];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionProducer];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionData];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    ALTER TABLE [registration].[RegistrationSubmissionData] ADD [ApplicationReferenceNumber] nvarchar(50) NOT NULL DEFAULT N'';
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    ALTER TABLE [registration].[RegistrationSubmissionData] ADD [RegulatorNation] nvarchar(20) NOT NULL DEFAULT N'';
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData', N'10.0.0');
+END;
+
+COMMIT;
+GO
+

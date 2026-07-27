@@ -38,6 +38,8 @@ public class RegistrationSubmittedForFeesCalculationConsumer : ServiceBusMessage
             ComplianceSchemeId = message.ComplianceSchemeId,
             SubmissionPeriodId = message.SubmissionPeriodId,
             SubmissionDate = message.SubmissionDate,
+            RegulatorNation = message.RegulatorNation,
+            ApplicationReferenceNumber = message.ApplicationReferenceNumber,
         };
 
         await handler.HandleAsync(request, cancellationToken);

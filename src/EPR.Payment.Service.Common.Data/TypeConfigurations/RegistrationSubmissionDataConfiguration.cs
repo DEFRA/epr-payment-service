@@ -22,6 +22,8 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.Property(r => r.SubmissionDate).HasColumnType("datetime2").IsRequired();
             builder.Property(r => r.CreatedDate).HasColumnType("datetimeoffset").IsRequired();
             builder.Property(r => r.SubmissionPeriodId).IsRequired();
+            builder.Property(r => r.RegulatorNation).IsRequired().HasMaxLength(20);
+            builder.Property(r => r.ApplicationReferenceNumber).IsRequired().HasMaxLength(50);
 
             builder.HasIndex(r => r.RegistrationBlobName).IsUnique();
 

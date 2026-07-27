@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmission;
+﻿using EPR.Payment.Service.Common.Constants;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmission;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission;
 using EPR.Payment.Service.Common.Services.Interfaces.RegistrationSubmission;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
 {
     public class RegistrationSubmittedForRegulatorApprovalHandler : IRegistrationSubmittedForRegulatorApprovalHandler
     {
-        public const string EventName = "SubmittedForRegulatorApproval";
+        public const string EventName = RegistrationEventNames.SubmittedForRegulatorApproval;
 
         private readonly IRegistrationSubmissionDataEventRepository _repository;
         private readonly ILogger<RegistrationSubmittedForRegulatorApprovalHandler> _logger;

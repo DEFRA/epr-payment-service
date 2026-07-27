@@ -106,6 +106,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IRegistrationSubmittedForRegulatorApprovalHandler, RegistrationSubmittedForRegulatorApprovalHandler>();
             services.AddScoped<IRegulatorRegistrationDecisionHandler, RegulatorRegistrationDecisionHandler>();
             services.AddScoped<IRegistrationFeeCalculationDetailsService, RegistrationFeeCalculationDetailsService>();
+            services.AddScoped<IComplianceSchemeFeeBySubmissionService, ComplianceSchemeFeeBySubmissionService>();
             services.AddSingleton(TimeProvider.System);
 
             return services;
