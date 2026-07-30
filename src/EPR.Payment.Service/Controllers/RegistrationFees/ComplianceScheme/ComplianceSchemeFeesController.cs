@@ -94,6 +94,7 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.ComplianceScheme
         [ProducesResponseType(typeof(ComplianceSchemeFeesResponseDto), 200)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
         public async Task<ActionResult<ComplianceSchemeFeesResponseDto>> GetFeesBySubmissionAsync(Guid submissionId, CancellationToken cancellationToken)
         {
             var result = await _feeBySubmissionService.GetFeesAsync(submissionId, cancellationToken);

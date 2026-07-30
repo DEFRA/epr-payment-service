@@ -2,10 +2,12 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.UnitTests.TestHelpers;
 using EPR.Payment.Service.Controllers.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
+using EPR.Payment.Service.Services.Interfaces.RegistrationSubmission;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -20,6 +22,7 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
     {
         private IFixture _fixture = null!;
         private Mock<IProducerFeesCalculatorService> _producerFeesCalculatorServiceMock = null!;
+        private Mock<IProducerFeeBySubmissionService> _feeBySubmissionServiceMock = null!;
         private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
         private ProducerFeesController _controller = null!;
 
@@ -28,8 +31,12 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _producerFeesCalculatorServiceMock = _fixture.Freeze<Mock<IProducerFeesCalculatorService>>();
+            _feeBySubmissionServiceMock = _fixture.Freeze<Mock<IProducerFeeBySubmissionService>>();
             _validatorMock = _fixture.Freeze<Mock<IValidator<ProducerRegistrationFeesRequestDto>>>();
-            _controller = new ProducerFeesController(_producerFeesCalculatorServiceMock.Object, _validatorMock.Object);
+            _controller = new ProducerFeesController(
+                _producerFeesCalculatorServiceMock.Object,
+                _feeBySubmissionServiceMock.Object,
+                _validatorMock.Object);
         }
 
         [TestMethod]
@@ -41,8 +48,22 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
 
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(
-                () => { var unused = new ProducerFeesController(producerFeesCalculatorService!, _validatorMock.Object); },
+                () => { var unused = new ProducerFeesController(producerFeesCalculatorService!, _feeBySubmissionServiceMock.Object, _validatorMock.Object); },
                 "Value cannot be null. (Parameter 'producerFeesCalculatorService')");
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public void Constructor_WhenFeeBySubmissionServiceIsNull_ThrowsArgumentNullException()
+        {
+            IProducerFeeBySubmissionService? feeBySubmissionService = null;
+
+            Action act = () =>
+            {
+                var unused = new ProducerFeesController(_producerFeesCalculatorServiceMock.Object, feeBySubmissionService!, _validatorMock.Object);
+            };
+
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'feeBySubmissionService')");
         }
 
         [TestMethod]
@@ -55,11 +76,45 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.Producer
             // Act
             Action act = () =>
             {
-                var unused = new ProducerFeesController(_producerFeesCalculatorServiceMock.Object, validator!);
+                var unused = new ProducerFeesController(_producerFeesCalculatorServiceMock.Object, _feeBySubmissionServiceMock.Object, validator!);
             };
 
             // Assert
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'validator')");
+        }
+
+        [TestMethod]
+        public async Task GetFeesBySubmissionAsync_WhenServiceReturnsResponse_ReturnsOk()
+        {
+            var submissionId = Guid.NewGuid();
+            var expected = new RegistrationFeesResponseDto
+            {
+                SubsidiariesFeeBreakdown = new SubsidiariesFeeBreakdown(),
+            };
+            _feeBySubmissionServiceMock
+                .Setup(s => s.GetFeesAsync(submissionId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(expected);
+
+            var result = await _controller.GetFeesBySubmissionAsync(submissionId, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                var ok = result.Result.Should().BeOfType<OkObjectResult>().Subject;
+                ok.Value.Should().BeSameAs(expected);
+            }
+        }
+
+        [TestMethod]
+        public async Task GetFeesBySubmissionAsync_WhenServiceReturnsNull_ReturnsNotFound()
+        {
+            var submissionId = Guid.NewGuid();
+            _feeBySubmissionServiceMock
+                .Setup(s => s.GetFeesAsync(submissionId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync((RegistrationFeesResponseDto?)null);
+
+            var result = await _controller.GetFeesBySubmissionAsync(submissionId, CancellationToken.None);
+
+            result.Result.Should().BeOfType<NotFoundResult>();
         }
 
         [TestMethod]
