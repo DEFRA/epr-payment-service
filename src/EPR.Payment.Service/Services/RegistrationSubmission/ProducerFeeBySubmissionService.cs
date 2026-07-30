@@ -34,27 +34,29 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 ["SubmissionId"] = submissionId,
             });
 
-            var records = await _repository.GetAllForSubmissionAsync(submissionId, cancellationToken);
-            if (records.Count == 0)
-            {
-                _logger.LogInformation("No RegistrationSubmissionData found for SubmissionId {SubmissionId}.", submissionId);
-                return null;
-            }
-
-            var today = _timeProvider.GetUtcNow().UtcDateTime;
-            var lifecycle = SubmissionLifecycleAnalyser.Analyse(records, today);
-
-            if (lifecycle.LatestNonRejected is null)
+            var snapshotRecords = await _repository.GetAllForSubmissionAsync(submissionId, cancellationToken);
+            if (snapshotRecords.Count == 0)
             {
                 _logger.LogInformation(
-                    "All RegistrationSubmissionData rows for SubmissionId {SubmissionId} have been rejected.",
+                    "Skipping producer fee calculation for SubmissionId {SubmissionId}: snapshot is empty.",
                     submissionId);
                 return null;
             }
 
-            var latest = lifecycle.LatestNonRejected;
+            var nowUtc = _timeProvider.GetUtcNow().UtcDateTime;
+            var submissionLifecycle = SubmissionLifecycleAnalyser.Analyse(snapshotRecords, nowUtc);
 
-            if (latest.Producers.Count == 0)
+            if (submissionLifecycle.LatestNonRejected is null)
+            {
+                _logger.LogInformation(
+                    "Skipping producer fee calculation for SubmissionId {SubmissionId}: every snapshot row was rejected by the regulator.",
+                    submissionId);
+                return null;
+            }
+
+            var latestRecord = submissionLifecycle.LatestNonRejected;
+
+            if (latestRecord.Producers.Count == 0)
             {
                 _logger.LogInformation(
                     "Latest RegistrationSubmissionData for SubmissionId {SubmissionId} has no producer rows.",
@@ -62,21 +64,22 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 return null;
             }
 
-            if (latest.Producers.Count > 1)
+            if (latestRecord.Producers.Count > 1)
             {
                 _logger.LogWarning(
                     "Direct-producer submission {SubmissionId} unexpectedly has {ProducerCount} producer rows; using the first.",
                     submissionId,
-                    latest.Producers.Count);
+                    latestRecord.Producers.Count);
             }
 
-            var producer = latest.Producers.First();
-            var deadline = latest.SubmissionPeriodWindow.DeadlineDate;
+            var producer = latestRecord.Producers.First();
+            var submissionDeadline = latestRecord.SubmissionPeriodWindow.DeadlineDate;
 
-            var submissionLevelLate = IsOnOrAfterDeadline(lifecycle.LatestSubmittedForApprovalDate, deadline, today);
-            var isOriginalLate = lifecycle.FirstSubmittedForApprovalDate is DateTime firstApproval
-                                 && firstApproval.Date >= deadline.Date;
-            var noFirstSubmission = lifecycle.FirstSubmittedForApprovalDate is null;
+            var latestSubmittedOnOrAfterDeadline =
+                (submissionLifecycle.LatestSubmittedForApprovalDate ?? nowUtc).Date >= submissionDeadline.Date;
+            var firstSubmissionWasLate = submissionLifecycle.FirstSubmittedForApprovalDate is DateTime firstApproval
+                                          && firstApproval.Date >= submissionDeadline.Date;
+            var neverYetSubmittedForApproval = submissionLifecycle.FirstSubmittedForApprovalDate is null;
 
             var request = new ProducerRegistrationFeesRequestDto
             {
@@ -86,23 +89,20 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 NoOfSubsidiariesClosedLoopRecycling = producer.Subsidiaries.Count(s => s.IsClosedLoopRecycling),
                 IsProducerOnlineMarketplace = producer.IsOnlineMarketplace,
                 IsClosedLoopRecycling = producer.IsClosedLoopRecycling,
-                IsLateFeeApplicable = isOriginalLate || (noFirstSubmission && submissionLevelLate),
-                Regulator = latest.RegulatorNation,
-                ApplicationReferenceNumber = latest.ApplicationReferenceNumber,
-                SubmissionDate = lifecycle.CalcDate,
+                IsLateFeeApplicable = firstSubmissionWasLate || (neverYetSubmittedForApproval && latestSubmittedOnOrAfterDeadline),
+                Regulator = latestRecord.RegulatorNation,
+                ApplicationReferenceNumber = latestRecord.ApplicationReferenceNumber,
+                SubmissionDate = submissionLifecycle.CalcDate,
             };
 
             _logger.LogInformation(
-                "Calculating producer fees for SubmissionId {SubmissionId} (calcDate={CalcDate}, submissionLevelLate={SubmissionLevelLate}, isOriginalLate={IsOriginalLate}).",
+                "Calculating producer fee for SubmissionId {SubmissionId}; calcDate={CalcDate}, latestSubmittedOnOrAfterDeadline={LatestLate}, firstSubmissionWasLate={FirstLate}.",
                 submissionId,
-                lifecycle.CalcDate,
-                submissionLevelLate,
-                isOriginalLate);
+                submissionLifecycle.CalcDate,
+                latestSubmittedOnOrAfterDeadline,
+                firstSubmissionWasLate);
 
             return await _calculatorService.CalculateFeesAsync(request, cancellationToken);
         }
-
-        private static bool IsOnOrAfterDeadline(DateTime? candidate, DateTime deadline, DateTime today) =>
-            (candidate ?? today).Date >= deadline.Date;
     }
 }
