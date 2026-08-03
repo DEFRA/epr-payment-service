@@ -7,6 +7,7 @@
         public decimal PreviousPayment { get; set; }
         public decimal OutstandingPayment { get; set; }
         public List<ComplianceSchemeMembersWithFeesDto> ComplianceSchemeMembersWithFees { get; set; } = new();
+        public string? RegistrationBlobName { get; set; }
     }
 
     public class ComplianceSchemeMembersWithFeesDto

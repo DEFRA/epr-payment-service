@@ -298,6 +298,19 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             }
         }
 
+        [TestMethod]
+        public async Task GetFeesAsync_EchoesRegistrationBlobNameFromLatestNonRejectedRecord()
+        {
+            var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { Producer() });
+            record.RegistrationBlobName = "cso-blob-under-test.csv";
+            SetupRepo(record);
+
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+
+            result.Should().NotBeNull();
+            result!.RegistrationBlobName.Should().Be("cso-blob-under-test.csv");
+        }
+
         // -------- helpers --------
 
         private void SetupRepo(params RegistrationSubmissionData[] records)

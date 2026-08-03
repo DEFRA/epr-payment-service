@@ -85,7 +85,13 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 isOriginalCsoLate,
                 request.ComplianceSchemeMembers.Count);
 
-            return await _calculatorService.CalculateFeesAsync(request, cancellationToken);
+            var response = await _calculatorService.CalculateFeesAsync(request, cancellationToken);
+            if (response is not null)
+            {
+                response.RegistrationBlobName = latest.RegistrationBlobName;
+            }
+
+            return response;
         }
 
         private static ComplianceSchemeMemberDto MapMember(

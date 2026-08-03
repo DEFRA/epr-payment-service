@@ -22,10 +22,10 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 return Array.Empty<RegistrationFeeCalculationDetailsDto>();
             }
 
-            return snapshot.Producers.Select(MapProducer).ToList();
+            return snapshot.Producers.Select(p => MapProducer(p, snapshot.RegistrationBlobName)).ToList();
         }
 
-        private static RegistrationFeeCalculationDetailsDto MapProducer(RegistrationSubmissionProducer producer) => new()
+        private static RegistrationFeeCalculationDetailsDto MapProducer(RegistrationSubmissionProducer producer, string registrationBlobName) => new()
         {
             OrganisationId = producer.OrganisationId,
             OrganisationSize = producer.OrganisationSize,
@@ -36,6 +36,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             NumberOfSubsidiaries = producer.Subsidiaries.Count,
             NumberOfSubsidiariesBeingOnlineMarketPlace = producer.Subsidiaries.Count(s => s.IsOnlineMarketplace),
             NumberOfSubsidiariesBeingClosedLoopRecycling = producer.Subsidiaries.Count(s => s.IsClosedLoopRecycling),
+            RegistrationBlobName = registrationBlobName,
         };
     }
 }

@@ -102,7 +102,13 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 latestSubmittedOnOrAfterDeadline,
                 firstSubmissionWasLate);
 
-            return await _calculatorService.CalculateFeesAsync(request, cancellationToken);
+            var response = await _calculatorService.CalculateFeesAsync(request, cancellationToken);
+            if (response is not null)
+            {
+                response.RegistrationBlobName = latestRecord.RegistrationBlobName;
+            }
+
+            return response;
         }
     }
 }
