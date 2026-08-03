@@ -214,6 +214,43 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             }
         }
 
+        [TestMethod]
+        public void Analyse_UnspecifiedKindEventDate_ExposesUtcKindOnLifecycleDates()
+        {
+            // EF materialises datetime2 columns with Kind=Unspecified. The producer/CSO fee
+            // validators reject a SubmissionDate that isn't strictly UTC, so the analyser must
+            // hand every date it exposes back as Kind=Utc regardless of the underlying storage.
+            var eventDate = DateTime.SpecifyKind(new DateTime(2026, 6, 10, 12, 34, 56), DateTimeKind.Unspecified);
+            var only = Record(
+                created: new DateTime(2026, 6, 1),
+                events: new[] { (RegistrationEventNames.SubmittedForRegulatorApproval, eventDate) });
+
+            var result = SubmissionLifecycleAnalyser.Analyse(new[] { only }, Today);
+
+            using (new AssertionScope())
+            {
+                result.FirstSubmittedForApprovalDate!.Value.Kind.Should().Be(DateTimeKind.Utc);
+                result.LatestSubmittedForApprovalDate!.Value.Kind.Should().Be(DateTimeKind.Utc);
+                result.CalcDate.Kind.Should().Be(DateTimeKind.Utc);
+                result.FirstSubmittedForApprovalDate!.Value.Should().Be(DateTime.SpecifyKind(eventDate, DateTimeKind.Utc));
+            }
+        }
+
+        [TestMethod]
+        public void Analyse_UnspecifiedKindToday_CalcDateFalsBackToUtc()
+        {
+            // When no submitted-for-approval event exists, CalcDate falls back to `today` — the
+            // caller passes GetUtcNow().UtcDateTime which is already UTC-kind, but defensively
+            // the analyser stamps UTC anyway.
+            var unspecifiedToday = DateTime.SpecifyKind(new DateTime(2026, 7, 24, 0, 0, 0), DateTimeKind.Unspecified);
+            var only = Record(created: new DateTime(2026, 6, 1));
+
+            var result = SubmissionLifecycleAnalyser.Analyse(new[] { only }, unspecifiedToday);
+
+            result.CalcDate.Kind.Should().Be(DateTimeKind.Utc);
+            result.CalcDate.Should().Be(DateTime.SpecifyKind(unspecifiedToday, DateTimeKind.Utc));
+        }
+
         private static RegistrationSubmissionData Record(DateTime created, (string EventName, DateTime EventDate)[]? events = null)
         {
             return new RegistrationSubmissionData

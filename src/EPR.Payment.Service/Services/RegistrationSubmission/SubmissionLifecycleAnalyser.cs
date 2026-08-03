@@ -20,20 +20,24 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
 
             var firstSubmittedDate = LatestSubmittedForApprovalDate(first);
             var latestSubmittedDate = LatestSubmittedForApprovalDate(latest);
+            var todayUtc = DateTime.SpecifyKind(today, DateTimeKind.Utc);
 
             return new SubmissionLifecycle(
                 FirstNonRejected: first,
                 LatestNonRejected: latest,
                 FirstSubmittedForApprovalDate: firstSubmittedDate,
                 LatestSubmittedForApprovalDate: latestSubmittedDate,
-                CalcDate: firstSubmittedDate ?? today);
+                CalcDate: firstSubmittedDate ?? todayUtc);
         }
 
+        // EventDate is persisted as SQL Server datetime2 (no timezone) and materialises with
+        // Kind=Unspecified. Downstream fee validation requires strict UTC, so mark the value UTC
+        // here — the stored value already represents UTC, just untagged.
         private static DateTime? LatestSubmittedForApprovalDate(RegistrationSubmissionData? record) =>
             record?.Events
                 .Where(e => e.EventName == RegistrationEventNames.SubmittedForRegulatorApproval)
                 .OrderByDescending(e => e.EventDate)
-                .Select(e => (DateTime?)e.EventDate)
+                .Select(e => (DateTime?)DateTime.SpecifyKind(e.EventDate, DateTimeKind.Utc))
                 .FirstOrDefault();
     }
 }
