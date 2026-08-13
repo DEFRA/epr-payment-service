@@ -72,7 +72,11 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                     new() { SubsidiaryId = "SUB-4", IsOnlineMarketplace = false, IsClosedLoopRecycling = false },
                 },
             };
-            var snapshot = new RegistrationSubmissionData { Producers = new List<RegistrationSubmissionProducer> { producer } };
+            var snapshot = new RegistrationSubmissionData
+            {
+                RegistrationBlobName = "registration-blob-1.csv",
+                Producers = new List<RegistrationSubmissionProducer> { producer },
+            };
             _repositoryMock
                 .Setup(r => r.GetLatestWithProducersAndSubsidiariesAsync(It.IsAny<Guid>(), _ct))
                 .ReturnsAsync(snapshot);
@@ -92,6 +96,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 item.NumberOfSubsidiaries.Should().Be(4);
                 item.NumberOfSubsidiariesBeingOnlineMarketPlace.Should().Be(2);
                 item.NumberOfSubsidiariesBeingClosedLoopRecycling.Should().Be(2);
+                item.RegistrationBlobName.Should().Be("registration-blob-1.csv");
             }
         }
 

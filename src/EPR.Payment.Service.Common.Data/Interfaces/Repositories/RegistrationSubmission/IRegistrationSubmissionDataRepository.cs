@@ -8,6 +8,8 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSu
 
         Task<RegistrationSubmissionData?> GetLatestWithProducersAndSubsidiariesAsync(Guid submissionId, CancellationToken cancellationToken);
 
+        Task<IReadOnlyList<RegistrationSubmissionData>> GetAllForSubmissionAsync(Guid submissionId, CancellationToken cancellationToken);
+
         Task<Guid> CreateAsync(RegistrationSubmissionData entity, CancellationToken cancellationToken);
     }
 }

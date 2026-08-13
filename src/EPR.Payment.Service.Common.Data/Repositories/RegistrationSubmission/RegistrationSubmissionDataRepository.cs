@@ -32,6 +32,19 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<IReadOnlyList<RegistrationSubmissionData>> GetAllForSubmissionAsync(Guid submissionId, CancellationToken cancellationToken)
+        {
+            return await _dataContext.RegistrationSubmissionData
+                .AsNoTracking()
+                .Include(r => r.Producers)
+                    .ThenInclude(p => p.Subsidiaries)
+                .Include(r => r.Events)
+                .Include(r => r.SubmissionPeriodWindow)
+                .Where(r => r.SubmissionId == submissionId)
+                .OrderBy(r => r.CreatedDate)
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task<Guid> CreateAsync(RegistrationSubmissionData entity, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(entity);

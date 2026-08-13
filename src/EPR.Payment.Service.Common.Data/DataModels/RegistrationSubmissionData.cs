@@ -20,8 +20,14 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public int SubmissionPeriodId { get; set; }
 
+        public string RegulatorNation { get; set; } = null!;
+
+        public string ApplicationReferenceNumber { get; set; } = null!;
+
         public ICollection<RegistrationSubmissionProducer> Producers { get; set; } = new List<RegistrationSubmissionProducer>();
 
         public virtual SubmissionPeriod SubmissionPeriodWindow { get; set; } = null!;
+
+        public ICollection<RegistrationSubmissionDataEvent> Events { get; set; } = new List<RegistrationSubmissionDataEvent>();
     }
 }

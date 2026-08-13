@@ -18,5 +18,6 @@ namespace EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer
         public decimal MemberOnlineMarketPlaceFee { get; set; }
         public decimal MemberLateRegistrationFee { get; set; }
         public decimal TotalMemberFee { get; set; }
+        public string? RegistrationBlobName { get; set; }
     }
 }

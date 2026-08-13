@@ -4937,6 +4937,11 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
+                    b.Property<string>("ApplicationReferenceNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<Guid?>("ComplianceSchemeId")
                         .HasColumnType("uniqueidentifier");
 
@@ -4947,6 +4952,11 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("RegulatorNation")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("SubmissionDate")
                         .HasColumnType("datetime2");
@@ -4965,6 +4975,36 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.HasIndex("SubmissionPeriodId");
 
                     b.ToTable("RegistrationSubmissionData", "registration");
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionDataEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTime>("EventDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EventName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("RegistrationSubmissionDataId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RegistrationSubmissionDataId", "EventName", "EventDate")
+                        .IsUnique()
+                        .HasDatabaseName("IX_RegistrationSubmissionDataEvents_SubmissionData_Event_Date_Unique");
+
+                    b.ToTable("RegistrationSubmissionDataEvents", "registration");
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionProducer", b =>
@@ -5165,6 +5205,17 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Navigation("SubmissionPeriodWindow");
                 });
 
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionDataEvent", b =>
+                {
+                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionData", "RegistrationSubmissionData")
+                        .WithMany("Events")
+                        .HasForeignKey("RegistrationSubmissionDataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RegistrationSubmissionData");
+                });
+
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionProducer", b =>
                 {
                     b.HasOne("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionData", "RegistrationSubmissionData")
@@ -5208,6 +5259,8 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionData", b =>
                 {
+                    b.Navigation("Events");
+
                     b.Navigation("Producers");
                 });
 

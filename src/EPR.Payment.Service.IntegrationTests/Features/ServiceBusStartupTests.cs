@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using EPR.Payment.Service.IntegrationTests.Infrastructure;
 using AwesomeAssertions;
 using Microsoft.Extensions.Configuration;
@@ -6,15 +7,17 @@ namespace EPR.Payment.Service.IntegrationTests.Features;
 
 public class ServiceBusStartupTests(ServiceFixture fixture) : IntegrationTestBase(fixture)
 {
-    [Fact]
-    public async Task GIVEN_service_bus_has_no_topic_WHEN_service_starts_THEN_topic_and_subscription_created()
+    [Theory]
+    [InlineData("ServiceBus:RegistrationSubmittedForFeesCalculationTopicName", "ServiceBus:RegistrationSubmittedForFeesCalculationSubscriptionName")]
+    [InlineData("ServiceBus:RegistrationSubmittedForRegulatorApprovalTopicName", "ServiceBus:RegistrationSubmittedForRegulatorApprovalSubscriptionName")]
+    public async Task GIVEN_service_bus_has_no_topic_WHEN_service_starts_THEN_topic_and_subscription_created(string topicName, string subscriptionName)
     {
         // by default, when running in test containers, on system startup the container will contain no topics or subscriptions, 
         // so no setup is required
-        var expectedTopicName = Configuration.GetValue<string>("ServiceBus:TopicName");
+        var expectedTopicName = Configuration.GetValue<string>(topicName);
         var topicExistsResponse = await ServiceBusAdministrationClient.TopicExistsAsync(expectedTopicName);
 
-        var expectedSubscriptionName = Configuration.GetValue<string>("ServiceBus:SubscriptionName");
+        var expectedSubscriptionName = Configuration.GetValue<string>(subscriptionName);
         var subscriptionExistsResponse = await ServiceBusAdministrationClient.SubscriptionExistsAsync(expectedTopicName, expectedSubscriptionName);
 
         topicExistsResponse.Should().NotBeNull();

@@ -5899,3 +5899,101 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260721112318_AddRegistrationSubmissionDataEvents'
+)
+BEGIN
+    CREATE TABLE [registration].[RegistrationSubmissionDataEvents] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RegistrationSubmissionDataId] uniqueidentifier NOT NULL,
+        [EventName] nvarchar(100) NOT NULL,
+        [EventDate] datetime2 NOT NULL,
+        [CreatedDate] datetimeoffset NOT NULL,
+        CONSTRAINT [PK_RegistrationSubmissionDataEvents] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationSubmissionDataEvents_RegistrationSubmissionData_RegistrationSubmissionDataId] FOREIGN KEY ([RegistrationSubmissionDataId]) REFERENCES [registration].[RegistrationSubmissionData] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260721112318_AddRegistrationSubmissionDataEvents'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_RegistrationSubmissionDataEvents_SubmissionData_Event_Date_Unique] ON [registration].[RegistrationSubmissionDataEvents] ([RegistrationSubmissionDataId], [EventName], [EventDate]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260721112318_AddRegistrationSubmissionDataEvents'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260721112318_AddRegistrationSubmissionDataEvents', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionDataEvents];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionSubsidiary];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionProducer];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    DELETE FROM [registration].[RegistrationSubmissionData];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    ALTER TABLE [registration].[RegistrationSubmissionData] ADD [ApplicationReferenceNumber] nvarchar(50) NOT NULL DEFAULT N'';
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    ALTER TABLE [registration].[RegistrationSubmissionData] ADD [RegulatorNation] nvarchar(20) NOT NULL DEFAULT N'';
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260724141248_AddRegulatorNationAndAppReferenceToRegistrationSubmissionData', N'10.0.0');
+END;
+
+COMMIT;
+GO
+

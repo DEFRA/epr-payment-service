@@ -8,5 +8,7 @@ public record RegistrationSubmittedMessage(
     string RegistrationBlobName,
     Guid? ComplianceSchemeId,
     DateTime SubmissionDate,
-    int SubmissionPeriodId
+    int SubmissionPeriodId,
+    string RegulatorNation,
+    string ApplicationReferenceNumber
 );

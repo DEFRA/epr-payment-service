@@ -1,8 +1,7 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationSubmission;
-using EPR.Payment.Service.Common.Services.Interfaces.RegistrationSubmission;
+using EPR.Payment.Service.Common.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -13,24 +12,25 @@ namespace EPR.Payment.Service.Messaging;
 public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
 {
     private readonly ILogger<ServiceBusTopicSubscription> _logger;
+    private readonly IConfiguration _configuration;
     private readonly IServiceProvider _serviceProvider;
     private readonly ServiceBusClient? _client;
     private readonly ServiceBusAdministrationClient? _adminClient;
-    private readonly string _topicName;
-    private readonly string _subscriptionName;
-    private ServiceBusProcessor? _processor;
+    private readonly IReadOnlyList<IServiceBusMessageConsumer> _consumers;
+    private readonly List<ServiceBusProcessor> _processors = new();
 
     public ServiceBusTopicSubscription(
         ILogger<ServiceBusTopicSubscription> logger,
         IConfiguration configuration,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        IEnumerable<IServiceBusMessageConsumer> consumers)
     {
         _logger = logger;
+        _configuration = configuration;
         _serviceProvider = serviceProvider;
-        _topicName = configuration.GetValue<string>("ServiceBus:TopicName")!;
-        _subscriptionName = configuration.GetValue<string>("ServiceBus:SubscriptionName")!;
-        _client = serviceProvider.GetService(typeof(ServiceBusClient)) as ServiceBusClient;
-        _adminClient = serviceProvider.GetService(typeof(ServiceBusAdministrationClient)) as ServiceBusAdministrationClient;
+        _consumers = consumers?.ToList() ?? throw new ArgumentNullException(nameof(consumers));
+        _client = serviceProvider.GetService<ServiceBusClient>();
+        _adminClient = serviceProvider.GetService<ServiceBusAdministrationClient>();
     }
 
     public async Task PrepareServiceBusSubscriptionAsync()
@@ -43,41 +43,10 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
                     "Service bus client is null. Please check your connection string.");
             }
 
-            _logger.LogInformation("Setting up service bus subscription for topic {TopicName}", _topicName);
-
-            try
+            foreach (var consumer in _consumers)
             {
-                var topicExists = await _adminClient.TopicExistsAsync(_topicName);
-                if (!topicExists.Value)
-                {
-                    _logger.LogInformation("Creating topic {TopicName}", _topicName);
-                    await _adminClient.CreateTopicAsync(_topicName);
-                }
-
-                var subscriptionExists = await _adminClient.SubscriptionExistsAsync(_topicName, _subscriptionName);
-                if (!subscriptionExists.Value)
-                {
-                    _logger.LogInformation("Creating subscription {SubscriptionName} on topic {TopicName}", _subscriptionName, _topicName);
-                    await _adminClient.CreateSubscriptionAsync(_topicName, _subscriptionName);
-                }
-
-                _logger.LogInformation("Service bus subscription {SubscriptionName} on topic {TopicName} is ready", _subscriptionName, _topicName);
+                await SetupSubscription(consumer);
             }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Unable to verify or create topic/subscription via admin client — assuming they already exist and proceeding");
-            }
-
-            _processor = _client.CreateProcessor(_topicName, _subscriptionName, new ServiceBusProcessorOptions
-            {
-                MaxConcurrentCalls = 1,
-                AutoCompleteMessages = false
-            });
-
-            _processor.ProcessMessageAsync += ProcessMessageAsync;
-            _processor.ProcessErrorAsync += ProcessErrorAsync;
-
-            await _processor.StartProcessingAsync();
         }
         catch (Exception ex)
         {
@@ -85,50 +54,74 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
         }
     }
 
-    private async Task ProcessMessageAsync(ProcessMessageEventArgs args)
+    private async Task SetupSubscription(IServiceBusMessageConsumer consumer)
     {
-        var message = args.Message.Body.ToObjectFromJson<RegistrationSubmittedMessage>();
+        var topicName = _configuration.GetValue<string>(consumer.TopicConfigKey)
+            ?? throw new InvalidOperationException($"Missing configuration value for {consumer.TopicConfigKey}");
+        var subscriptionName = _configuration.GetValue<string>(consumer.SubscriptionConfigKey)
+            ?? throw new InvalidOperationException($"Missing configuration value for {consumer.SubscriptionConfigKey}");
 
-        if (message is null)
+        using (_logger.AddScopedData(new Dictionary<string, object>
+               {
+                   ["TopicName"] = topicName,
+                   ["SubscriptionName"] = subscriptionName,
+                   ["ConsumerType"] = consumer.GetType().Name,
+               }))
         {
-            _logger.LogWarning("Received a null or undeserializable message, skipping");
-            await args.CompleteMessageAsync(args.Message);
-            return;
+            _logger.LogInformation("Setting up service bus subscription");
+
+            try
+            {
+                var topicExists = await _adminClient!.TopicExistsAsync(topicName);
+                if (!topicExists.Value)
+                {
+                    _logger.LogInformation("Creating topic");
+                    await _adminClient.CreateTopicAsync(topicName);
+                }
+
+                var subscriptionExists = await _adminClient.SubscriptionExistsAsync(topicName, subscriptionName);
+                if (!subscriptionExists.Value)
+                {
+                    _logger.LogInformation("Creating subscription");
+                    await _adminClient.CreateSubscriptionAsync(topicName, subscriptionName);
+                }
+
+                _logger.LogInformation("Service bus subscription is ready");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex,
+                    "Unable to verify or create topic/subscription via admin client — assuming they already exist and proceeding");
+            }
+
+            var processor = _client!.CreateProcessor(topicName, subscriptionName, new ServiceBusProcessorOptions
+            {
+                MaxConcurrentCalls = 1,
+                AutoCompleteMessages = false,
+            });
+
+            processor.ProcessMessageAsync += args => ProcessMessageAsync(consumer, args);
+            processor.ProcessErrorAsync += ProcessErrorAsync;
+
+            await processor.StartProcessingAsync();
+            _processors.Add(processor);
         }
+    }
 
-        _logger.LogInformation(
-            "Registration submitted message received: SubmissionId={SubmissionId}, RegistrationBlobName={RegistrationBlobName}",
-            message.SubmissionId,
-            message.RegistrationBlobName);
-
+    private async Task ProcessMessageAsync(IServiceBusMessageConsumer consumer, ProcessMessageEventArgs args)
+    {
         try
         {
             using var scope = _serviceProvider.CreateScope();
-            var handler = scope.ServiceProvider.GetRequiredService<IRegistrationSubmissionDataHandler>();
-
-            var request = new CreateRegistrationSubmissionDataRequest
-            {
-                SubmissionId = message.SubmissionId,
-                RegistrationBlobName = message.RegistrationBlobName,
-                ComplianceSchemeId = message.ComplianceSchemeId,
-                SubmissionDate = message.SubmissionDate,
-                SubmissionPeriodId = message.SubmissionPeriodId,
-            };
-
-            await handler.HandleAsync(request, args.CancellationToken);
-
-        await args.CompleteMessageAsync(args.Message);
-
-            _logger.LogInformation(
-                "Processed registration submitted message for SubmissionId {SubmissionId}",
-                message.SubmissionId);
+            await consumer.ConsumeAsync(args.Message, scope.ServiceProvider, args.CancellationToken);
+            await args.CompleteMessageAsync(args.Message);
         }
         catch (Exception ex)
         {
             _logger.LogError(
                 ex,
-                "Failed to process registration submitted message for SubmissionId {SubmissionId}",
-                message.SubmissionId);
+                "Failed to process message for consumer {ConsumerType}; abandoning for redelivery",
+                consumer.GetType().Name);
             await args.AbandonMessageAsync(args.Message);
         }
     }
@@ -144,17 +137,17 @@ public class ServiceBusTopicSubscription : IServiceBusTopicSubscription
 
     public async Task CloseSubscriptionAsync()
     {
-        if (_processor != null)
+        foreach (var processor in _processors)
         {
-            await _processor.CloseAsync();
+            await processor.CloseAsync();
         }
     }
 
     public async ValueTask DisposeAsync()
     {
-        if (_processor != null)
+        foreach (var processor in _processors)
         {
-            await _processor.DisposeAsync();
+            await processor.DisposeAsync();
         }
 
         if (_client != null)

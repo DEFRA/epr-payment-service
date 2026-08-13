@@ -99,10 +99,15 @@ namespace EPR.Payment.Service.Extension
 
             // Registration submission snapshot
             services.AddScoped<IRegistrationSubmissionDataRepository, RegistrationSubmissionDataRepository>();
+            services.AddScoped<IRegistrationSubmissionDataEventRepository, RegistrationSubmissionDataEventRepository>();
             services.AddScoped<IBlobReader, BlobReader>();
             services.AddSingleton<ICsvStreamParser, CsvStreamParser>();
             services.AddScoped<IRegistrationSubmissionDataHandler, RegistrationSubmissionDataHandler>();
+            services.AddScoped<IRegistrationSubmittedForRegulatorApprovalHandler, RegistrationSubmittedForRegulatorApprovalHandler>();
+            services.AddScoped<IRegulatorRegistrationDecisionHandler, RegulatorRegistrationDecisionHandler>();
             services.AddScoped<IRegistrationFeeCalculationDetailsService, RegistrationFeeCalculationDetailsService>();
+            services.AddScoped<IComplianceSchemeFeeBySubmissionService, ComplianceSchemeFeeBySubmissionService>();
+            services.AddScoped<IProducerFeeBySubmissionService, ProducerFeeBySubmissionService>();
             services.AddSingleton(TimeProvider.System);
 
             return services;
