@@ -1,18 +1,18 @@
-FROM defradigital/dotnetcore-development:dotnet10.0 AS base
+FROM defradigital/dotnetcore:dotnet10.0 AS base
 
 USER root
 ARG PORT=8080
 ENV ASPNETCORE_URLS=http://*:${PORT}
 EXPOSE ${PORT}
 
-RUN apk update && apk --no-cache add icu-libs
+RUN apk add --no-cache icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
 FROM defradigital/dotnetcore-development:dotnet10.0 AS build
 USER root
 
 # Install dotnet-ef tool
-RUN dotnet tool install dotnet-ef --version 10.* --tool-path "/root/.dotnet/tools"
+RUN dotnet tool install dotnet-ef --version 10.0.0 --tool-path "/root/.dotnet/tools"
 
 # Add the tools folder to PATH
 ENV PATH="${PATH}:/root/.dotnet/tools"
@@ -30,10 +30,7 @@ COPY EPR.Payment.Service.Common.Data/. ./EPR.Payment.Service.Common.Data/.
 COPY EPR.Payment.Service.Messaging/. ./EPR.Payment.Service.Messaging/.
 
 WORKDIR "/src/EPR.Payment.Service"
-RUN dotnet build "EPR.Payment.Service.csproj" -c Release /p:AzureBuild=true -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "EPR.Payment.Service.csproj" -c Release /p:AzureBuild=false -o /app/publish
+RUN dotnet publish "EPR.Payment.Service.csproj" -c Release /p:AzureBuild=false --no-restore -o /app/publish
 
 FROM base AS final
 
@@ -41,6 +38,5 @@ FROM base AS final
 USER dotnet
 
 WORKDIR /app
-COPY --from=publish /app/publish .
-USER dotnet
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "EPR.Payment.Service.dll"]
