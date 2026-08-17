@@ -27,13 +27,17 @@ namespace EPR.Payment.Service.Common.Data.DataModels
 
         public DateTime UpdatedDate { get; set; }
 
+        public Guid? RegistrationSubmissionDataId { get; set; }
+
         #region Navigation properties
 
         public virtual PaymentStatus PaymentStatus { get; set; } = null!;
-        
+
         public virtual OnlinePayment OnlinePayment { get; set; } = null!;
-        
+
         public virtual OfflinePayment OfflinePayment { get; set; } = null!;
+
+        public virtual RegistrationSubmissionData? RegistrationSubmissionData { get; set; }
 
         #endregion Navigation properties
     }

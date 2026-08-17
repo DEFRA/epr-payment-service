@@ -36,6 +36,10 @@
 
         public const string RegistrationSubmissionDataEventsTableName = "RegistrationSubmissionDataEvents";
 
+        public const string RegistrationFeeSnapshotTableName = "RegistrationFeeSnapshot";
+
+        public const string RegistrationFeeLineItemTableName = "RegistrationFeeLineItem";
+
         public const string SubmissionPeriodTableName = "SubmissionPeriod";
 
         public const string RegistrationSchemaName = "registration";

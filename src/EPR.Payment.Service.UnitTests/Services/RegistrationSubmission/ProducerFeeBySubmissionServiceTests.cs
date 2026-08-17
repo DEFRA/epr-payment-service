@@ -5,6 +5,8 @@ using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmis
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.Enums;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.RegistrationSubmission;
 using FluentAssertions;
@@ -21,7 +23,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         private static readonly DateTime Deadline = new(2026, 4, 1, 0, 0, 0, DateTimeKind.Utc);
 
         private Mock<IRegistrationSubmissionDataRepository> _repositoryMock = null!;
+        private Mock<IRegistrationFeeSnapshotRepository> _snapshotRepositoryMock = null!;
         private Mock<IProducerFeesCalculatorService> _calculatorMock = null!;
+        private Mock<IPaymentsService> _paymentsServiceMock = null!;
         private Mock<TimeProvider> _timeProviderMock = null!;
         private Mock<ILogger<ProducerFeeBySubmissionService>> _loggerMock = null!;
         private ProducerFeeBySubmissionService _sut = null!;
@@ -32,7 +36,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         public void Init()
         {
             _repositoryMock = new Mock<IRegistrationSubmissionDataRepository>();
+            _snapshotRepositoryMock = new Mock<IRegistrationFeeSnapshotRepository>();
             _calculatorMock = new Mock<IProducerFeesCalculatorService>();
+            _paymentsServiceMock = new Mock<IPaymentsService>();
             _timeProviderMock = new Mock<TimeProvider>();
             _timeProviderMock.Setup(t => t.GetUtcNow()).Returns(new DateTimeOffset(Today, TimeSpan.Zero));
             _loggerMock = new Mock<ILogger<ProducerFeeBySubmissionService>>();
@@ -48,7 +54,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
 
             _sut = new ProducerFeeBySubmissionService(
                 _repositoryMock.Object,
+                _snapshotRepositoryMock.Object,
                 _calculatorMock.Object,
+                _paymentsServiceMock.Object,
                 _timeProviderMock.Object,
                 _loggerMock.Object);
         }
@@ -58,14 +66,67 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         {
             using (new AssertionScope())
             {
-                ((Action)(() => new ProducerFeeBySubmissionService(null!, _calculatorMock.Object, _timeProviderMock.Object, _loggerMock.Object)))
+                ((Action)(() => new ProducerFeeBySubmissionService(null!, _snapshotRepositoryMock.Object, _calculatorMock.Object, _paymentsServiceMock.Object, _timeProviderMock.Object, _loggerMock.Object)))
                     .Should().Throw<ArgumentNullException>();
-                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, null!, _timeProviderMock.Object, _loggerMock.Object)))
+                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, null!, _calculatorMock.Object, _paymentsServiceMock.Object, _timeProviderMock.Object, _loggerMock.Object)))
                     .Should().Throw<ArgumentNullException>();
-                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _calculatorMock.Object, null!, _loggerMock.Object)))
+                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _snapshotRepositoryMock.Object, null!, _paymentsServiceMock.Object, _timeProviderMock.Object, _loggerMock.Object)))
                     .Should().Throw<ArgumentNullException>();
-                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _calculatorMock.Object, _timeProviderMock.Object, null!)))
+                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _snapshotRepositoryMock.Object, _calculatorMock.Object, null!, _timeProviderMock.Object, _loggerMock.Object)))
                     .Should().Throw<ArgumentNullException>();
+                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _snapshotRepositoryMock.Object, _calculatorMock.Object, _paymentsServiceMock.Object, null!, _loggerMock.Object)))
+                    .Should().Throw<ArgumentNullException>();
+                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _snapshotRepositoryMock.Object, _calculatorMock.Object, _paymentsServiceMock.Object, _timeProviderMock.Object, null!)))
+                    .Should().Throw<ArgumentNullException>();
+            }
+        }
+
+        [TestMethod]
+        public async Task GetFeesAsync_SnapshotExists_ReturnsProjectedResponseAndSkipsCalculator()
+        {
+            var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { Producer() });
+            SetupRepo(record);
+
+            var snapshot = new RegistrationFeeSnapshot
+            {
+                Id = Guid.NewGuid(),
+                RegistrationSubmissionDataId = record.Id,
+                TotalFee = 2500m,
+                LineItems = new List<RegistrationFeeLineItem>
+                {
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.ProducerRegistrationFee,
+                        FeeTypeName = nameof(FeeTypeIds.ProducerRegistrationFee),
+                        Amount = 2000m,
+                    },
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.ProducerLateRegistrationFee,
+                        FeeTypeName = nameof(FeeTypeIds.ProducerLateRegistrationFee),
+                        Amount = 500m,
+                    },
+                },
+            };
+            _snapshotRepositoryMock
+                .Setup(s => s.GetByRegistrationSubmissionDataIdAsync(record.Id, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(snapshot);
+            _paymentsServiceMock
+                .Setup(p => p.GetPreviousPaymentsByReferenceAsync(record.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(600m);
+
+            var result = await _sut.GetFeesAsync(record.SubmissionId, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+                result!.TotalFee.Should().Be(2500m);
+                result.ProducerRegistrationFee.Should().Be(2000m);
+                result.ProducerLateRegistrationFee.Should().Be(500m);
+                result.PreviousPayment.Should().Be(600m);
+                result.OutstandingPayment.Should().Be(1900m);
+                result.RegistrationBlobName.Should().Be(record.RegistrationBlobName);
+                _calculatorMock.Verify(c => c.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()), Times.Never);
             }
         }
 

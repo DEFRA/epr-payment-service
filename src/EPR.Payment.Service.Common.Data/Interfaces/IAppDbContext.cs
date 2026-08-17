@@ -22,6 +22,8 @@ namespace EPR.Payment.Service.Common.Data.Interfaces
         DbSet<RegistrationSubmissionProducer> RegistrationSubmissionProducer { get; }
         DbSet<RegistrationSubmissionSubsidiary> RegistrationSubmissionSubsidiary { get; }
         DbSet<RegistrationSubmissionDataEvent> RegistrationSubmissionDataEvents { get; }
+        DbSet<RegistrationFeeSnapshot> RegistrationFeeSnapshot { get; }
+        DbSet<RegistrationFeeLineItem> RegistrationFeeLineItem { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
