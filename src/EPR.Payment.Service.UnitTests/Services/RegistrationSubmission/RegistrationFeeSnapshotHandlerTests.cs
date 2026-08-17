@@ -190,6 +190,42 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         }
 
         [TestMethod]
+        public async Task HandleAsync_ProducerPath_SkipsEmptySubsidiaryBands()
+        {
+            var rsd = BuildProducerRsd();
+            _producerCalculatorMock
+                .Setup(c => c.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), _ct))
+                .ReturnsAsync(new RegistrationFeesResponseDto
+                {
+                    ProducerRegistrationFee = 1000m,
+                    TotalFee = 1690m,
+                    SubsidiariesFeeBreakdown = new SubsidiariesFeeBreakdown
+                    {
+                        FeeBreakdowns = new List<FeeBreakdown>
+                        {
+                            new() { BandNumber = 1, UnitCount = 1, UnitPrice = 690m, TotalPrice = 690m },
+                            new() { BandNumber = 2, UnitCount = 0, UnitPrice = 172m, TotalPrice = 0m },
+                            new() { BandNumber = 3, UnitCount = 0, UnitPrice = 0m, TotalPrice = 0m },
+                        },
+                    },
+                });
+
+            RegistrationFeeSnapshot? captured = null;
+            _snapshotRepositoryMock
+                .Setup(s => s.CreateAsync(It.IsAny<RegistrationFeeSnapshot>(), _ct))
+                .Callback<RegistrationFeeSnapshot, CancellationToken>((s, _) => captured = s)
+                .ReturnsAsync(Guid.NewGuid());
+
+            await _sut.HandleAsync(rsd, Today, NewLifecycle(rsd), _ct);
+
+            using (new AssertionScope())
+            {
+                captured!.LineItems.Where(l => l.FeeTypeId == FeeTypeIds.SubsidiaryFee).Should().ContainSingle()
+                    .Which.BandNumber.Should().Be(1);
+            }
+        }
+
+        [TestMethod]
         public async Task HandleAsync_EmptyProducers_SkipsWithoutError()
         {
             var rsd = BuildProducerRsd();

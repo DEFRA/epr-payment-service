@@ -129,6 +129,11 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
 
             foreach (var band in breakdown.FeeBreakdowns)
             {
+                if (band.UnitCount <= 0 && band.TotalPrice <= 0m)
+                {
+                    continue;
+                }
+
                 snapshot.LineItems.Add(new RegistrationFeeLineItem
                 {
                     FeeTypeId = FeeTypeIds.SubsidiaryFee,
