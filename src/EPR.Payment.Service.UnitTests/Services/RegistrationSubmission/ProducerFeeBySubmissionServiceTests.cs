@@ -131,6 +131,68 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         }
 
         [TestMethod]
+        public async Task GetFeesAsync_SnapshotWithSubsidiaryOmpAndClrRows_SubsidiariesFeeIncludesAllContributions()
+        {
+            // Regression: projector must match ProducerFeesCalculatorService.cs:55 which sets
+            // SubsidiariesFee = band + OMP + CLR. Previously only the band sum was included, so
+            // frontends reading `SubsidiariesFee` saw a lower number for snapshot-backed responses.
+            var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { Producer() });
+            SetupRepo(record);
+
+            var snapshot = new RegistrationFeeSnapshot
+            {
+                Id = Guid.NewGuid(),
+                RegistrationSubmissionDataId = record.Id,
+                TotalFee = 8530m,
+                LineItems = new List<RegistrationFeeLineItem>
+                {
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.SubsidiaryFee,
+                        FeeTypeName = nameof(FeeTypeIds.SubsidiaryFee),
+                        BandNumber = 1,
+                        Quantity = 1,
+                        UnitPrice = 690m,
+                        Amount = 690m,
+                    },
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.SubsidiaryFee,
+                        FeeTypeName = nameof(FeeTypeIds.SubsidiaryFee),
+                        BandNumber = 2,
+                        Quantity = 2,
+                        UnitPrice = 1035m,
+                        Amount = 2070m,
+                    },
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.SubsidiaryOnlineMarketplaceFee,
+                        FeeTypeName = nameof(FeeTypeIds.SubsidiaryOnlineMarketplaceFee),
+                        Quantity = 2,
+                        UnitPrice = 2885m,
+                        Amount = 5770m,
+                    },
+                },
+            };
+            _snapshotRepositoryMock
+                .Setup(s => s.GetByRegistrationSubmissionDataIdAsync(record.Id, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(snapshot);
+            _paymentsServiceMock
+                .Setup(p => p.GetPreviousPaymentsByReferenceAsync(record.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(0m);
+
+            var result = await _sut.GetFeesAsync(record.SubmissionId, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+                result!.SubsidiariesFee.Should().Be(8530m);
+                result.SubsidiariesFeeBreakdown.FeeBreakdowns.Sum(f => f.TotalPrice).Should().Be(2760m);
+                result.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees.Should().Be(5770m);
+            }
+        }
+
+        [TestMethod]
         public async Task GetFeesAsync_NoRecords_ReturnsNullAndDoesNotCallCalculator()
         {
             _repositoryMock.Setup(r => r.GetAllForSubmissionAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
