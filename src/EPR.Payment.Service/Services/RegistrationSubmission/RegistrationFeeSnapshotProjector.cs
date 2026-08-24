@@ -58,7 +58,9 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 }
             }
 
-            response.SubsidiariesFee = breakdown.FeeBreakdowns.Sum(f => f.TotalPrice);
+            response.SubsidiariesFee = breakdown.FeeBreakdowns.Sum(f => f.TotalPrice)
+                                     + breakdown.TotalSubsidiariesOMPFees
+                                     + breakdown.TotalSubsidiariesClosedLoopRecyclingFees;
 
             return response;
         }
@@ -131,14 +133,14 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                     }
                 }
 
-                member.SubsidiariesFee = breakdown.FeeBreakdowns.Sum(f => f.TotalPrice);
+                member.SubsidiariesFee = breakdown.FeeBreakdowns.Sum(f => f.TotalPrice)
+                                        + breakdown.TotalSubsidiariesOMPFees
+                                        + breakdown.TotalSubsidiariesClosedLoopRecyclingFees;
                 member.TotalMemberFee = member.MemberRegistrationFee
                                         + member.MemberOnlineMarketPlaceFee
                                         + member.MemberClosedLoopRecyclingFee
                                         + member.MemberLateRegistrationFee
-                                        + member.SubsidiariesFee
-                                        + breakdown.TotalSubsidiariesOMPFees
-                                        + breakdown.TotalSubsidiariesClosedLoopRecyclingFees;
+                                        + member.SubsidiariesFee;
 
                 response.ComplianceSchemeMembersWithFees.Add(member);
             }

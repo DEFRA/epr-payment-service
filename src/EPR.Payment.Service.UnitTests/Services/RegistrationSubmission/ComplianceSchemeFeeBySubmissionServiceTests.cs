@@ -129,6 +129,66 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         }
 
         [TestMethod]
+        public async Task GetFeesAsync_SnapshotWithMemberSubsidiaryOmpRows_SubsidiariesFeeIncludesOmpAndTotalMemberFeeNotDouble()
+        {
+            // Regression: matches ComplianceSchemeCalculatorService.cs:80-94.
+            // member.SubsidiariesFee = band + OMP + CLR; TotalMemberFee then adds SubsidiariesFee
+            // (not OMP/CLR again). Prior projector under-filled SubsidiariesFee to band only and
+            // added OMP/CLR back on TotalMemberFee — total was right, subtotal was wrong.
+            var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { Producer() });
+            SetupRepo(record);
+
+            var snapshot = new RegistrationFeeSnapshot
+            {
+                Id = Guid.NewGuid(),
+                RegistrationSubmissionDataId = record.Id,
+                TotalFee = 12030m,
+                LineItems = new List<RegistrationFeeLineItem>
+                {
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.MemberRegistrationFee,
+                        FeeTypeName = nameof(FeeTypeIds.MemberRegistrationFee),
+                        Amount = 1803m,
+                        MemberId = "173503",
+                    },
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.SubsidiaryFee,
+                        FeeTypeName = nameof(FeeTypeIds.SubsidiaryFee),
+                        BandNumber = 1,
+                        Quantity = 1,
+                        UnitPrice = 690m,
+                        Amount = 690m,
+                        MemberId = "173503",
+                    },
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.SubsidiaryOnlineMarketplaceFee,
+                        FeeTypeName = nameof(FeeTypeIds.SubsidiaryOnlineMarketplaceFee),
+                        Quantity = 1,
+                        UnitPrice = 2885m,
+                        Amount = 2885m,
+                        MemberId = "173503",
+                    },
+                },
+            };
+            _snapshotRepositoryMock
+                .Setup(s => s.GetByRegistrationSubmissionDataIdAsync(record.Id, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(snapshot);
+
+            var result = await _sut.GetFeesAsync(record.SubmissionId, CancellationToken.None);
+
+            var member = result!.ComplianceSchemeMembersWithFees.Single(m => m.MemberId == "173503");
+            using (new AssertionScope())
+            {
+                member.SubsidiariesFee.Should().Be(3575m); // band 690 + OMP 2885
+                member.TotalMemberFee.Should().Be(5378m);  // reg 1803 + subsidiariesFee 3575 (NOT double-counting OMP)
+                member.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees.Should().Be(2885m);
+            }
+        }
+
+        [TestMethod]
         public async Task GetFeesAsync_NoRecords_ReturnsNullAndDoesNotCallCalculator()
         {
             _repositoryMock.Setup(r => r.GetAllForSubmissionAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
