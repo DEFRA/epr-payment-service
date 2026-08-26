@@ -434,6 +434,38 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             result!.RegistrationBlobName.Should().Be("cso-blob-under-test.csv");
         }
 
+        [TestMethod]
+        public async Task GetFeesAsync_CalculatorPath_EnrichesResponseMembersWithMemberTypeAndSubsidiaryCount()
+        {
+            var producer = new RegistrationSubmissionProducer
+            {
+                OrganisationId = "ORG-1",
+                OrganisationSize = "Large",
+                Subsidiaries = new List<RegistrationSubmissionSubsidiary>
+                {
+                    new() { SubsidiaryId = "S1" },
+                    new() { SubsidiaryId = "S2" },
+                },
+            };
+            var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { producer });
+            SetupRepo(record);
+            _calculatorResponse.ComplianceSchemeMembersWithFees.Add(new ComplianceSchemeMembersWithFeesDto
+            {
+                MemberId = "ORG-1",
+                SubsidiariesFeeBreakdown = new SubsidiariesFeeBreakdown(),
+            });
+
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+
+            result.Should().NotBeNull();
+            var enrichedMember = result!.ComplianceSchemeMembersWithFees.Single();
+            using (new AssertionScope())
+            {
+                enrichedMember.MemberType.Should().Be("Large");
+                enrichedMember.NumberOfSubsidiaries.Should().Be(2);
+            }
+        }
+
         // -------- helpers --------
 
         private void SetupRepo(params RegistrationSubmissionData[] records)

@@ -8,7 +8,9 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
 {
     public static class RegistrationFeeSnapshotProjector
     {
-        public static RegistrationFeesResponseDto ToProducerResponse(RegistrationFeeSnapshot snapshot)
+        public static RegistrationFeesResponseDto ToProducerResponse(
+            RegistrationFeeSnapshot snapshot,
+            RegistrationSubmissionProducer? producer = null)
         {
             ArgumentNullException.ThrowIfNull(snapshot);
 
@@ -18,6 +20,8 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 SubsidiariesFeeBreakdown = breakdown,
                 TotalFee = snapshot.TotalFee,
                 MemberId = string.Empty,
+                ProducerSize = producer?.OrganisationSize,
+                NumberOfSubsidiaries = producer?.Subsidiaries.Count ?? 0,
             };
 
             foreach (var line in snapshot.LineItems)
@@ -65,7 +69,9 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             return response;
         }
 
-        public static ComplianceSchemeFeesResponseDto ToComplianceSchemeResponse(RegistrationFeeSnapshot snapshot)
+        public static ComplianceSchemeFeesResponseDto ToComplianceSchemeResponse(
+            RegistrationFeeSnapshot snapshot,
+            IEnumerable<RegistrationSubmissionProducer>? producers = null)
         {
             ArgumentNullException.ThrowIfNull(snapshot);
 
@@ -73,6 +79,10 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             {
                 TotalFee = snapshot.TotalFee,
             };
+
+            var producersByMemberId = producers?
+                .GroupBy(p => p.OrganisationId, StringComparer.Ordinal)
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.Ordinal);
 
             var memberGroups = snapshot.LineItems
                 .Where(l => l.MemberId is not null)
@@ -89,9 +99,13 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             foreach (var group in memberGroups)
             {
                 var breakdown = new SubsidiariesFeeBreakdown();
+                RegistrationSubmissionProducer? matchedProducer = null;
+                producersByMemberId?.TryGetValue(group.Key, out matchedProducer);
                 var member = new ComplianceSchemeMembersWithFeesDto
                 {
                     MemberId = group.Key,
+                    MemberType = matchedProducer?.OrganisationSize,
+                    NumberOfSubsidiaries = matchedProducer?.Subsidiaries.Count ?? 0,
                     SubsidiariesFeeBreakdown = breakdown,
                 };
 

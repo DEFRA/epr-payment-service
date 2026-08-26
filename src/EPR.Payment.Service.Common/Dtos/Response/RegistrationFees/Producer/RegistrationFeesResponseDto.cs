@@ -13,6 +13,8 @@ namespace EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer
         public decimal PreviousPayment { get; set; }
         public decimal OutstandingPayment { get; set; }
         public required SubsidiariesFeeBreakdown SubsidiariesFeeBreakdown { get; set; }
+        public string? ProducerSize { get; set; }
+        public int NumberOfSubsidiaries { get; set; }
         public string MemberId { get; set; }
         public decimal MemberRegistrationFee { get; set; }
         public decimal MemberOnlineMarketPlaceFee { get; set; }
