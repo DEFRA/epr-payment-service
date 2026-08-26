@@ -62,7 +62,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             var snapshot = await _snapshotRepository.GetByRegistrationSubmissionDataIdAsync(latest.Id, cancellationToken);
             if (snapshot is not null)
             {
-                var snapshotResponse = RegistrationFeeSnapshotProjector.ToComplianceSchemeResponse(snapshot);
+                var snapshotResponse = RegistrationFeeSnapshotProjector.ToComplianceSchemeResponse(snapshot, latest.Producers);
                 snapshotResponse.PreviousPayment = await _paymentsService.GetPreviousPaymentsByReferenceAsync(latest.ApplicationReferenceNumber, cancellationToken);
                 snapshotResponse.OutstandingPayment = snapshotResponse.TotalFee - snapshotResponse.PreviousPayment;
                 snapshotResponse.RegistrationBlobName = latest.RegistrationBlobName;
@@ -81,9 +81,33 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             if (response is not null)
             {
                 response.RegistrationBlobName = latest.RegistrationBlobName;
+                EnrichMemberMetadata(response, latest.Producers);
             }
 
             return response;
+        }
+
+        private static void EnrichMemberMetadata(
+            ComplianceSchemeFeesResponseDto response,
+            ICollection<Common.Data.DataModels.RegistrationSubmissionProducer> producers)
+        {
+            if (response.ComplianceSchemeMembersWithFees.Count == 0 || producers.Count == 0)
+            {
+                return;
+            }
+
+            var producersByMemberId = producers
+                .GroupBy(p => p.OrganisationId, StringComparer.Ordinal)
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.Ordinal);
+
+            foreach (var member in response.ComplianceSchemeMembersWithFees)
+            {
+                if (producersByMemberId.TryGetValue(member.MemberId, out var producer))
+                {
+                    member.MemberType = producer.OrganisationSize;
+                    member.NumberOfSubsidiaries = producer.Subsidiaries.Count;
+                }
+            }
         }
     }
 }

@@ -64,7 +64,8 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             var snapshot = await _snapshotRepository.GetByRegistrationSubmissionDataIdAsync(latestRecord.Id, cancellationToken);
             if (snapshot is not null)
             {
-                var snapshotResponse = RegistrationFeeSnapshotProjector.ToProducerResponse(snapshot);
+                var snapshotProducer = latestRecord.Producers.FirstOrDefault();
+                var snapshotResponse = RegistrationFeeSnapshotProjector.ToProducerResponse(snapshot, snapshotProducer);
                 snapshotResponse.PreviousPayment = await _paymentsService.GetPreviousPaymentsByReferenceAsync(latestRecord.ApplicationReferenceNumber, cancellationToken);
                 snapshotResponse.OutstandingPayment = snapshotResponse.TotalFee - snapshotResponse.PreviousPayment;
                 snapshotResponse.RegistrationBlobName = latestRecord.RegistrationBlobName;
@@ -99,6 +100,8 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             if (response is not null)
             {
                 response.RegistrationBlobName = latestRecord.RegistrationBlobName;
+                response.ProducerSize = producer.OrganisationSize;
+                response.NumberOfSubsidiaries = producer.Subsidiaries.Count;
             }
 
             return response;
