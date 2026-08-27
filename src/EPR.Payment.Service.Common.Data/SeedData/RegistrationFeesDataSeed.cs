@@ -51,13 +51,13 @@ namespace EPR.Payment.Service.Common.Data.SeedData
             var seedIndex = 0;
             var newRegistrationFees = new List<RegistrationFees>();
 
-            // 2026 fees
+            // 2026 fees (EffectiveTo extended to 2050-12-31 by SUB-262)
             seedIndex = 26000000;
             AddProducerFeesForPeriod(
                 newRegistrationFees,
                 Fees2026,
                 new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                new DateTime(2026, 12, 31, 23, 59, 59, DateTimeKind.Utc),
+                new DateTime(2050, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 ref seedIndex);
 
             builder.HasData(newRegistrationFees);
