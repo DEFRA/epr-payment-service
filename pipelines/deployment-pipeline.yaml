@@ -7,7 +7,7 @@ name: 'Deploy code to $(serviceName)'
 parameters:
 - name: teamName
   displayName: 'Select Environment Name:    (works only with "development" as target env)'
-  default: 'DEV11'
+  default: 'DEV1'
   type: string
   values:
     - DEV1
@@ -17,7 +17,6 @@ parameters:
     - DEV7
     - DEV8
     - DEV9
-    - DEV11
     - DEV12
     - DEV13
     - DEV14
