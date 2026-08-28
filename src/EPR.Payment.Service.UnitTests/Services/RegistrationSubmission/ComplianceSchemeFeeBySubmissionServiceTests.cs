@@ -113,7 +113,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .Setup(p => p.GetPreviousPaymentsByReferenceAsync(record.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(750m);
 
-            var result = await _sut.GetFeesAsync(record.SubmissionId, CancellationToken.None);
+            var result = await _sut.GetFeesAsync(record.SubmissionId, false, CancellationToken.None);
 
             using (new AssertionScope())
             {
@@ -177,7 +177,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .Setup(s => s.GetByRegistrationSubmissionDataIdAsync(record.Id, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(snapshot);
 
-            var result = await _sut.GetFeesAsync(record.SubmissionId, CancellationToken.None);
+            var result = await _sut.GetFeesAsync(record.SubmissionId, false, CancellationToken.None);
 
             var member = result!.ComplianceSchemeMembersWithFees.Single(m => m.MemberId == "173503");
             using (new AssertionScope())
@@ -194,7 +194,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             _repositoryMock.Setup(r => r.GetAllForSubmissionAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Array.Empty<RegistrationSubmissionData>());
 
-            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
 
             using (new AssertionScope())
             {
@@ -215,7 +215,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 });
             SetupRepo(rejected);
 
-            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
 
             result.Should().BeNull();
         }
@@ -231,7 +231,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 producers: new[] { Producer(newJoiner: false), Producer(newJoiner: false) });
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.ComplianceSchemeMembers.Should().OnlyContain(m => m.IsLateFeeApplicable);
@@ -249,7 +249,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 producers: new[] { Producer(newJoiner: false), Producer(newJoiner: false) });
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.ComplianceSchemeMembers.Should().OnlyContain(m => m.IsLateFeeApplicable);
@@ -270,7 +270,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 producers: new[] { Producer("A", newJoiner: false), Producer("B", newJoiner: true) });
             SetupRepo(first, latest);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             using (new AssertionScope())
@@ -294,7 +294,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 producers: new[] { Producer("A", newJoiner: false), Producer("B", newJoiner: true) });
             SetupRepo(first, latest);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.ComplianceSchemeMembers.Should().OnlyContain(m => !m.IsLateFeeApplicable);
@@ -309,7 +309,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 events: new[] { (RegistrationEventNames.SubmittedForRegulatorApproval, firstApproval) });
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.SubmissionDate.Should().Be(firstApproval);
@@ -321,7 +321,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var record = BuildRecord(created: Today.AddDays(-1));
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.SubmissionDate.Should().Be(Today);
@@ -333,7 +333,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var record = BuildRecord(created: Today.AddDays(-1), windowType: "CsoSmallProducer");
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.IncludeRegistrationFee.Should().BeFalse();
@@ -345,7 +345,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var record = BuildRecord(created: Today.AddDays(-1), windowType: "CsoLargeProducer");
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.IncludeRegistrationFee.Should().BeTrue();
@@ -364,7 +364,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 applicationReferenceNumber: "NEW-REF");
             SetupRepo(first, latest);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             using (new AssertionScope())
@@ -380,7 +380,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var record = BuildRecord(created: Today.AddDays(-1));
             SetupRepo(record);
 
-            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
 
             result.Should().BeSameAs(_calculatorResponse);
         }
@@ -405,7 +405,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { producer });
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             var member = captured.ComplianceSchemeMembers.Single();
@@ -428,7 +428,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             record.RegistrationBlobName = "cso-blob-under-test.csv";
             SetupRepo(record);
 
-            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
 
             result.Should().NotBeNull();
             result!.RegistrationBlobName.Should().Be("cso-blob-under-test.csv");
@@ -455,7 +455,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 SubsidiariesFeeBreakdown = new SubsidiariesFeeBreakdown(),
             });
 
-            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
 
             result.Should().NotBeNull();
             var enrichedMember = result!.ComplianceSchemeMembersWithFees.Single();
@@ -463,6 +463,43 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             {
                 enrichedMember.MemberType.Should().Be("Large");
                 enrichedMember.NumberOfSubsidiaries.Should().Be(2);
+            }
+        }
+
+        [TestMethod]
+        public async Task GetFeesAsync_RequireSubmittedForApproval_WipResubmissionAfterAcceptedCycle_ReturnsAcceptedCycleFees()
+        {
+            var acceptedCycle = BuildRecord(
+                created: Today.AddMonths(-1),
+                applicationReferenceNumber: "ACCEPTED-REF",
+                events: new[] { (RegistrationEventNames.SubmittedForRegulatorApproval, Today.AddMonths(-1)) },
+                producers: new[] { new RegistrationSubmissionProducer { OrganisationId = "ORG-1", OrganisationSize = "Large" } });
+            var wipResubmission = BuildRecord(
+                created: Today.AddDays(-1),
+                applicationReferenceNumber: "WIP-REF",
+                producers: new[] { new RegistrationSubmissionProducer { OrganisationId = "ORG-1", OrganisationSize = "Large" } });
+            SetupRepo(acceptedCycle, wipResubmission);
+
+            await _sut.GetFeesAsync(Guid.NewGuid(), true, CancellationToken.None);
+            var captured = CapturedRequest();
+
+            captured.ApplicationReferenceNumber.Should().Be("ACCEPTED-REF");
+        }
+
+        [TestMethod]
+        public async Task GetFeesAsync_RequireSubmittedForApproval_NoSubmittedCycle_ReturnsNull()
+        {
+            var wipOnly = BuildRecord(
+                created: Today.AddDays(-1),
+                producers: new[] { new RegistrationSubmissionProducer { OrganisationId = "ORG-1", OrganisationSize = "Large" } });
+            SetupRepo(wipOnly);
+
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), true, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                result.Should().BeNull();
+                _calculatorMock.Verify(c => c.CalculateFeesAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()), Times.Never);
             }
         }
 

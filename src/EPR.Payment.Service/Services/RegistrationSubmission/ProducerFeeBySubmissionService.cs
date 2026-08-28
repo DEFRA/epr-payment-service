@@ -32,11 +32,12 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<RegistrationFeesResponseDto?> GetFeesAsync(Guid submissionId, CancellationToken cancellationToken)
+        public async Task<RegistrationFeesResponseDto?> GetFeesAsync(Guid submissionId, bool requireSubmittedForApproval, CancellationToken cancellationToken)
         {
             using var logScope = _logger.BeginScope(new Dictionary<string, object>
             {
                 ["SubmissionId"] = submissionId,
+                ["RequireSubmittedForApproval"] = requireSubmittedForApproval,
             });
 
             var snapshotRecords = await _repository.GetAllForSubmissionAsync(submissionId, cancellationToken);
@@ -49,13 +50,14 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             }
 
             var nowUtc = _timeProvider.GetUtcNow().UtcDateTime;
-            var submissionLifecycle = SubmissionLifecycleAnalyser.Analyse(snapshotRecords, nowUtc);
+            var submissionLifecycle = SubmissionLifecycleAnalyser.Analyse(snapshotRecords, nowUtc, requireSubmittedForApproval);
 
             if (submissionLifecycle.LatestNonRejected is null)
             {
                 _logger.LogInformation(
-                    "Skipping producer fee calculation for SubmissionId {SubmissionId}: every snapshot row was rejected by the regulator.",
-                    submissionId);
+                    "Skipping producer fee calculation for SubmissionId {SubmissionId}: no eligible snapshot row (requireSubmittedForApproval={RequireSubmittedForApproval}).",
+                    submissionId,
+                    requireSubmittedForApproval);
                 return null;
             }
 

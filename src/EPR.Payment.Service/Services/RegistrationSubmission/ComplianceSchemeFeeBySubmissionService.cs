@@ -32,11 +32,12 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<ComplianceSchemeFeesResponseDto?> GetFeesAsync(Guid submissionId, CancellationToken cancellationToken)
+        public async Task<ComplianceSchemeFeesResponseDto?> GetFeesAsync(Guid submissionId, bool requireSubmittedForApproval, CancellationToken cancellationToken)
         {
             using var logScope = _logger.BeginScope(new Dictionary<string, object>
             {
                 ["SubmissionId"] = submissionId,
+                ["RequireSubmittedForApproval"] = requireSubmittedForApproval,
             });
 
             var records = await _repository.GetAllForSubmissionAsync(submissionId, cancellationToken);
@@ -47,13 +48,14 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             }
 
             var today = _timeProvider.GetUtcNow().UtcDateTime;
-            var lifecycle = SubmissionLifecycleAnalyser.Analyse(records, today);
+            var lifecycle = SubmissionLifecycleAnalyser.Analyse(records, today, requireSubmittedForApproval);
 
             if (lifecycle.LatestNonRejected is null)
             {
                 _logger.LogInformation(
-                    "All RegistrationSubmissionData rows for SubmissionId {SubmissionId} have been rejected.",
-                    submissionId);
+                    "No eligible RegistrationSubmissionData for SubmissionId {SubmissionId} (requireSubmittedForApproval={RequireSubmittedForApproval}).",
+                    submissionId,
+                    requireSubmittedForApproval);
                 return null;
             }
 
