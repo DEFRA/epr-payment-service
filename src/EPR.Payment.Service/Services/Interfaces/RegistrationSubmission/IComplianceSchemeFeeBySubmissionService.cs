@@ -4,6 +4,6 @@ namespace EPR.Payment.Service.Services.Interfaces.RegistrationSubmission
 {
     public interface IComplianceSchemeFeeBySubmissionService
     {
-        Task<ComplianceSchemeFeesResponseDto?> GetFeesAsync(Guid submissionId, CancellationToken cancellationToken);
+        Task<ComplianceSchemeFeesResponseDto?> GetFeesAsync(Guid submissionId, bool requireSubmittedForApproval, CancellationToken cancellationToken);
     }
 }
