@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,16 +12,78 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260716085126_ExtendCurrentFeesEndDatesTo2050")]
+    partial class ExtendCurrentFeesEndDatesTo2050
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "8.0.28")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("AppRefNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("ExternalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("FeeTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("InvoiceDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("InvoicePeriod")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("PayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PayerTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<decimal?>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FeeTypeId");
+
+                    b.HasIndex("PayerTypeId");
+
+                    b.ToTable("FeeItem", (string)null);
+                });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.AccreditationFee", b =>
                 {
@@ -2375,6 +2438,116 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.FeeType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FeeTypes", "Lookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Producer Registration Fee"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Compliance Scheme Registration Fee"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Producer OnlineMarketPlace Fee"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Member Registration Fee"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Member Late Registration Fee"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "UnitOMP Fee"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Subsidiary Fee"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Late Registration Fee"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Producer Resubmission Fee"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Compliance Scheme Resubmission"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "FeePreviousPayment"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "OutstandingPayment"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "BandNumber 1"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "BandNumber 2"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "BandNumber 3"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "PreviousPayment(reuse)"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "OutstandingPayment(reuse)"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "Member OnlineMarketPlace Fee"
+                        });
+                });
+
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.Group", b =>
                 {
                     b.Property<int>("Id")
@@ -4598,131 +4771,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.SubmissionPeriod", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("ClosingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DeadlineDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("OpeningDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("RegistrationYear")
-                        .HasColumnType("int");
-
-                    b.Property<string>("WindowType")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WindowType", "RegistrationYear")
-                        .IsUnique();
-
-                    b.ToTable("SubmissionPeriod", "Lookup");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClosingDate = new DateTime(2026, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DeadlineDate = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OpeningDate = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            RegistrationYear = 2025,
-                            WindowType = "Cso"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClosingDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DeadlineDate = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OpeningDate = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            RegistrationYear = 2025,
-                            WindowType = "Direct"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ClosingDate = new DateTime(2027, 1, 29, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DeadlineDate = new DateTime(2025, 10, 2, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OpeningDate = new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            RegistrationYear = 2026,
-                            WindowType = "CsoLargeProducer"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ClosingDate = new DateTime(2027, 1, 29, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DeadlineDate = new DateTime(2026, 4, 2, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OpeningDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            RegistrationYear = 2026,
-                            WindowType = "CsoSmallProducer"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ClosingDate = new DateTime(2027, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DeadlineDate = new DateTime(2025, 10, 2, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OpeningDate = new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            RegistrationYear = 2026,
-                            WindowType = "DirectLargeProducer"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ClosingDate = new DateTime(2027, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DeadlineDate = new DateTime(2026, 4, 2, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OpeningDate = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            RegistrationYear = 2026,
-                            WindowType = "DirectSmallProducer"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ClosingDate = new DateTime(2028, 1, 29, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DeadlineDate = new DateTime(2026, 10, 2, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OpeningDate = new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            RegistrationYear = 2027,
-                            WindowType = "CsoLargeProducer"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ClosingDate = new DateTime(2028, 1, 29, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DeadlineDate = new DateTime(2027, 4, 2, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OpeningDate = new DateTime(2027, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            RegistrationYear = 2027,
-                            WindowType = "CsoSmallProducer"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ClosingDate = new DateTime(2028, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DeadlineDate = new DateTime(2026, 10, 2, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OpeningDate = new DateTime(2026, 7, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            RegistrationYear = 2027,
-                            WindowType = "DirectLargeProducer"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ClosingDate = new DateTime(2028, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DeadlineDate = new DateTime(2027, 4, 2, 0, 0, 0, 0, DateTimeKind.Utc),
-                            OpeningDate = new DateTime(2027, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            RegistrationYear = 2027,
-                            WindowType = "DirectSmallProducer"
-                        });
-                });
-
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.TonnageBand", b =>
                 {
                     b.Property<int>("Id")
@@ -4937,11 +4985,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<string>("ApplicationReferenceNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<Guid?>("ComplianceSchemeId")
                         .HasColumnType("uniqueidentifier");
 
@@ -4953,58 +4996,23 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("RegulatorNation")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<DateTime>("SubmissionDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("SubmissionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("SubmissionPeriodId")
-                        .HasColumnType("int");
+                    b.Property<string>("SubmissionPeriod")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RegistrationBlobName")
                         .IsUnique();
 
-                    b.HasIndex("SubmissionPeriodId");
-
                     b.ToTable("RegistrationSubmissionData", "registration");
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionDataEvent", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTime>("EventDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EventName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<Guid>("RegistrationSubmissionDataId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RegistrationSubmissionDataId", "EventName", "EventDate")
-                        .IsUnique()
-                        .HasDatabaseName("IX_RegistrationSubmissionDataEvents_SubmissionData_Event_Date_Unique");
-
-                    b.ToTable("RegistrationSubmissionDataEvents", "registration");
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionProducer", b =>
@@ -5081,6 +5089,25 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.HasIndex("RegistrationSubmissionProducerId");
 
                     b.ToTable("RegistrationSubmissionSubsidiary", "registration");
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.FeeItem", b =>
+                {
+                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.FeeType", "FeeType")
+                        .WithMany("FeeItems")
+                        .HasForeignKey("FeeTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.PayerType", "PayerType")
+                        .WithMany("FeeItems")
+                        .HasForeignKey("PayerTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FeeType");
+
+                    b.Navigation("PayerType");
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.AccreditationFee", b =>
@@ -5194,28 +5221,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Navigation("PaymentStatus");
                 });
 
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionData", b =>
-                {
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Lookups.SubmissionPeriod", "SubmissionPeriodWindow")
-                        .WithMany()
-                        .HasForeignKey("SubmissionPeriodId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("SubmissionPeriodWindow");
-                });
-
-            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionDataEvent", b =>
-                {
-                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionData", "RegistrationSubmissionData")
-                        .WithMany("Events")
-                        .HasForeignKey("RegistrationSubmissionDataId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RegistrationSubmissionData");
-                });
-
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionProducer", b =>
                 {
                     b.HasOne("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionData", "RegistrationSubmissionData")
@@ -5236,6 +5241,16 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("RegistrationSubmissionProducer");
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.FeeType", b =>
+                {
+                    b.Navigation("FeeItems");
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.PayerType", b =>
+                {
+                    b.Navigation("FeeItems");
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Lookups.PaymentStatus", b =>
@@ -5259,8 +5274,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.RegistrationSubmissionData", b =>
                 {
-                    b.Navigation("Events");
-
                     b.Navigation("Producers");
                 });
 
