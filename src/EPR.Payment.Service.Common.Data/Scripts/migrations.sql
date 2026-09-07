@@ -6109,3 +6109,36 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260903143105_SUB-225-add-subsidiary-late-fee'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
+        SET IDENTITY_INSERT [Lookup].[RegistrationFees] ON;
+    EXEC(N'INSERT INTO [Lookup].[RegistrationFees] ([Id], [Amount], [EffectiveFrom], [EffectiveTo], [GroupId], [RegulatorId], [SubGroupId])
+    VALUES (26000068, 38600.0, ''2026-01-01T00:00:00.0000000Z'', ''2050-12-31T23:59:59.0000000Z'', 3, 1, 8),
+    (26000069, 38600.0, ''2026-01-01T00:00:00.0000000Z'', ''2050-12-31T23:59:59.0000000Z'', 3, 2, 8),
+    (26000070, 38600.0, ''2026-01-01T00:00:00.0000000Z'', ''2050-12-31T23:59:59.0000000Z'', 3, 3, 8),
+    (26000071, 38600.0, ''2026-01-01T00:00:00.0000000Z'', ''2050-12-31T23:59:59.0000000Z'', 3, 4, 8),
+    (26000072, 38600.0, ''2026-01-01T00:00:00.0000000Z'', ''2050-12-31T23:59:59.0000000Z'', 4, 1, 8),
+    (26000073, 38600.0, ''2026-01-01T00:00:00.0000000Z'', ''2050-12-31T23:59:59.0000000Z'', 4, 2, 8),
+    (26000074, 38600.0, ''2026-01-01T00:00:00.0000000Z'', ''2050-12-31T23:59:59.0000000Z'', 4, 3, 8),
+    (26000075, 38600.0, ''2026-01-01T00:00:00.0000000Z'', ''2050-12-31T23:59:59.0000000Z'', 4, 4, 8)');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Amount', N'EffectiveFrom', N'EffectiveTo', N'GroupId', N'RegulatorId', N'SubGroupId') AND [object_id] = OBJECT_ID(N'[Lookup].[RegistrationFees]'))
+        SET IDENTITY_INSERT [Lookup].[RegistrationFees] OFF;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260903143105_SUB-225-add-subsidiary-late-fee'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260903143105_SUB-225-add-subsidiary-late-fee', N'10.0.0');
+END;
+
+COMMIT;
+GO
+

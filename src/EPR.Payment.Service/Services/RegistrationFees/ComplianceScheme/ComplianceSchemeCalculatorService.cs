@@ -16,6 +16,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
         private readonly ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal> _baseFeeCalculationStrategy;
         private readonly ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeOnlineMarketStrategy;
         private readonly ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal> _complianceSchemeLateFeeStrategy;
+        private readonly ICSSubsidiaryLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal> _complianceSchemeSubsidiaryLateFeeStrategy;
         private readonly ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeMemberStrategy;
         private readonly IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown> _subsidiariesFeeCalculationStrategy;
         private readonly IPaymentsService _paymentsService;
@@ -25,6 +26,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
             ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal> baseFeeCalculationStrategy,
             ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeOnlineMarketStrategy,
             ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal> complianceSchemeLateFeeStrategy,
+            ICSSubsidiaryLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal> complianceSchemeSubsidiaryLateFeeStrategy,
             ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeMemberStrategy,
             IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown> subsidiariesFeeCalculationStrategy,
             IPaymentsService paymentsService,
@@ -33,6 +35,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
             _baseFeeCalculationStrategy = baseFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(baseFeeCalculationStrategy));
             _complianceSchemeOnlineMarketStrategy = complianceSchemeOnlineMarketStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeOnlineMarketStrategy));
             _complianceSchemeLateFeeStrategy = complianceSchemeLateFeeStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeLateFeeStrategy));
+            _complianceSchemeSubsidiaryLateFeeStrategy = complianceSchemeSubsidiaryLateFeeStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeSubsidiaryLateFeeStrategy));
             _subsidiariesFeeCalculationStrategy = subsidiariesFeeCalculationStrategy ?? throw new ArgumentNullException(nameof(subsidiariesFeeCalculationStrategy));
             _complianceSchemeMemberStrategy = complianceSchemeMemberStrategy ?? throw new ArgumentNullException(nameof(complianceSchemeMemberStrategy));
             _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
@@ -52,6 +55,7 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
             };
 
             decimal memberLateFee = await GetMemberLateFee(request, regulatorType, cancellationToken);
+            decimal subLateUnit = await GetSubsidiaryLateFee(request, regulatorType, cancellationToken);
 
             foreach (var item in request.ComplianceSchemeMembers)
             {
@@ -77,14 +81,19 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                     SubsidiariesFeeBreakdown = await _subsidiariesFeeCalculationStrategy.CalculateFeeAsync(complianceSchemeMemberWithRegulatorDto, cancellationToken)
                 };
 
+                decimal memberSubLateTotal = item.NumberOfLateSubsidiaries * subLateUnit;
+                member.SubsidiariesFeeBreakdown.CountOfLateSubsidiaries = item.NumberOfLateSubsidiaries;
+                member.SubsidiariesFeeBreakdown.UnitSubsidiaryLateFee = subLateUnit;
+                member.SubsidiariesFeeBreakdown.TotalSubsidiariesLateFees = memberSubLateTotal;
+
                 member.SubsidiariesFee = member.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees
                                          + member.SubsidiariesFeeBreakdown.TotalSubsidiariesClosedLoopRecyclingFees
+                                         + member.SubsidiariesFeeBreakdown.TotalSubsidiariesLateFees
                                          + member.SubsidiariesFeeBreakdown.FeeBreakdowns.Sum(i => i.TotalPrice);
 
                 if (item.IsLateFeeApplicable)
                 {
-                    var subsidiariesLateFee = item.NumberOfSubsidiaries * memberLateFee;
-                    member.MemberLateRegistrationFee = memberLateFee + subsidiariesLateFee;
+                    member.MemberLateRegistrationFee = memberLateFee;
                 }
 
                 member.TotalMemberFee = member.MemberRegistrationFee
@@ -118,6 +127,23 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
                     cancellationToken);
             }
             return 0;
+        }
+
+        private async Task<decimal> GetSubsidiaryLateFee(ComplianceSchemeFeesRequestDto request, RegulatorType regulatorType, CancellationToken cancellationToken)
+        {
+            if (!request.ComplianceSchemeMembers.Exists(m => m.NumberOfLateSubsidiaries > 0))
+            {
+                return 0m;
+            }
+
+            return await _complianceSchemeSubsidiaryLateFeeStrategy.CalculateFeeAsync(
+                new ComplianceSchemeLateFeeRequestDto
+                {
+                    Regulator = regulatorType,
+                    SubmissionDate = request.SubmissionDate,
+                    IsLateFeeApplicable = true
+                },
+                cancellationToken);
         }
     }
 }

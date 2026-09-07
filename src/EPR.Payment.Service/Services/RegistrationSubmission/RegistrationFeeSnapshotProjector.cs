@@ -59,12 +59,18 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                         breakdown.UnitClosedLoopRecyclingFees = line.UnitPrice ?? 0m;
                         breakdown.CountOfClosedLoopRecyclingSubsidiaries = line.Quantity ?? 0;
                         break;
+                    case FeeTypeIds.SubsidiaryLateFee:
+                        breakdown.TotalSubsidiariesLateFees = line.Amount;
+                        breakdown.UnitSubsidiaryLateFee = line.UnitPrice ?? 0m;
+                        breakdown.CountOfLateSubsidiaries = line.Quantity ?? 0;
+                        break;
                 }
             }
 
             response.SubsidiariesFee = breakdown.FeeBreakdowns.Sum(f => f.TotalPrice)
                                      + breakdown.TotalSubsidiariesOMPFees
-                                     + breakdown.TotalSubsidiariesClosedLoopRecyclingFees;
+                                     + breakdown.TotalSubsidiariesClosedLoopRecyclingFees
+                                     + breakdown.TotalSubsidiariesLateFees;
 
             return response;
         }
@@ -144,12 +150,18 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                             breakdown.UnitClosedLoopRecyclingFees = line.UnitPrice ?? 0m;
                             breakdown.CountOfClosedLoopRecyclingSubsidiaries = line.Quantity ?? 0;
                             break;
+                        case FeeTypeIds.SubsidiaryLateFee:
+                            breakdown.TotalSubsidiariesLateFees = line.Amount;
+                            breakdown.UnitSubsidiaryLateFee = line.UnitPrice ?? 0m;
+                            breakdown.CountOfLateSubsidiaries = line.Quantity ?? 0;
+                            break;
                     }
                 }
 
                 member.SubsidiariesFee = breakdown.FeeBreakdowns.Sum(f => f.TotalPrice)
                                         + breakdown.TotalSubsidiariesOMPFees
-                                        + breakdown.TotalSubsidiariesClosedLoopRecyclingFees;
+                                        + breakdown.TotalSubsidiariesClosedLoopRecyclingFees
+                                        + breakdown.TotalSubsidiariesLateFees;
                 member.TotalMemberFee = member.MemberRegistrationFee
                                         + member.MemberOnlineMarketPlaceFee
                                         + member.MemberClosedLoopRecyclingFee

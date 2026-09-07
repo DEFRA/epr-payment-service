@@ -38,7 +38,9 @@ namespace EPR.Payment.Service.Common.Data.SeedData
             ((int)Group.ProducerSubsidiaries, (int)SubGroup.MoreThan20, 17200),
             ((int)Group.ProducerResubmission, (int)SubGroup.ReSubmitting, 80700),
             ((int)Group.ComplianceScheme, (int)SubGroup.ClosedLoop, 254800),
-            ((int)Group.ProducerType, (int)SubGroup.ClosedLoop, 254800)
+            ((int)Group.ProducerType, (int)SubGroup.ClosedLoop, 254800),
+            ((int)Group.ProducerSubsidiaries, (int)SubGroup.LateFee, 38600),
+            ((int)Group.ComplianceSchemeSubsidiaries, (int)SubGroup.LateFee, 38600)
         };
 
         public static void SeedRegistrationFees(EntityTypeBuilder<RegistrationFees> builder)

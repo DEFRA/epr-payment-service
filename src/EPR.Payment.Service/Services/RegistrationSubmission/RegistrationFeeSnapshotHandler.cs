@@ -34,11 +34,13 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
 
         public async Task HandleAsync(
             RegistrationSubmissionData latestRecord,
+            IReadOnlyList<RegistrationSubmissionData> allRecords,
             DateTime submissionDate,
             SubmissionLifecycle lifecycle,
             CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(latestRecord);
+            ArgumentNullException.ThrowIfNull(allRecords);
             ArgumentNullException.ThrowIfNull(lifecycle);
 
             var existing = await _snapshotRepository.GetByRegistrationSubmissionDataIdAsync(latestRecord.Id, cancellationToken);
@@ -65,11 +67,15 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             };
 
             var today = _timeProvider.GetUtcNow().UtcDateTime;
+            var newlyAddedSubs = NewlyAddedSubsidiaryFinder.Find(
+                latestRecord,
+                allRecords,
+                latestRecord.SubmissionPeriodWindow.DeadlineDate);
 
             if (latestRecord.ComplianceSchemeId is null)
             {
                 var producer = latestRecord.Producers.First();
-                var request = RegistrationFeeRequestBuilder.BuildProducerRequest(latestRecord, producer, lifecycle, today);
+                var request = RegistrationFeeRequestBuilder.BuildProducerRequest(latestRecord, producer, lifecycle, today, newlyAddedSubs);
                 var response = await _producerCalculator.CalculateFeesAsync(request, cancellationToken);
 
                 snapshot.TotalFee = response.TotalFee;
@@ -77,7 +83,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             }
             else
             {
-                var request = RegistrationFeeRequestBuilder.BuildComplianceSchemeRequest(latestRecord, lifecycle, today);
+                var request = RegistrationFeeRequestBuilder.BuildComplianceSchemeRequest(latestRecord, lifecycle, today, newlyAddedSubs);
                 var response = await _complianceSchemeCalculator.CalculateFeesAsync(request, cancellationToken);
 
                 snapshot.TotalFee = response.TotalFee;
@@ -168,6 +174,19 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                     UnitPrice = breakdown.UnitClosedLoopRecyclingFees,
                     Quantity = breakdown.CountOfClosedLoopRecyclingSubsidiaries,
                     Amount = breakdown.TotalSubsidiariesClosedLoopRecyclingFees,
+                    MemberId = memberId,
+                });
+            }
+
+            if (breakdown.TotalSubsidiariesLateFees > 0)
+            {
+                snapshot.LineItems.Add(new RegistrationFeeLineItem
+                {
+                    FeeTypeId = FeeTypeIds.SubsidiaryLateFee,
+                    FeeTypeName = nameof(FeeTypeIds.SubsidiaryLateFee),
+                    UnitPrice = breakdown.UnitSubsidiaryLateFee,
+                    Quantity = breakdown.CountOfLateSubsidiaries,
+                    Amount = breakdown.TotalSubsidiariesLateFees,
                     MemberId = memberId,
                 });
             }

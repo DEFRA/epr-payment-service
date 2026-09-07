@@ -71,7 +71,11 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 return snapshotResponse;
             }
 
-            var request = RegistrationFeeRequestBuilder.BuildComplianceSchemeRequest(latest, lifecycle, today);
+            var newlyAddedSubs = NewlyAddedSubsidiaryFinder.Find(
+                latest,
+                records,
+                latest.SubmissionPeriodWindow.DeadlineDate);
+            var request = RegistrationFeeRequestBuilder.BuildComplianceSchemeRequest(latest, lifecycle, today, newlyAddedSubs);
 
             _logger.LogInformation(
                 "Calculating compliance-scheme fees for SubmissionId {SubmissionId} (calcDate={CalcDate}, memberCount={MemberCount}).",

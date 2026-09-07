@@ -70,7 +70,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         [TestMethod]
         public async Task HandleAsync_NullLatestRecord_Throws()
         {
-            Func<Task> act = () => _sut.HandleAsync(null!, Today, NewLifecycle(), _ct);
+            Func<Task> act = () => _sut.HandleAsync(null!, Array.Empty<RegistrationSubmissionData>(), Today, NewLifecycle(), _ct);
             await act.Should().ThrowAsync<ArgumentNullException>();
         }
 
@@ -82,7 +82,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .Setup(s => s.GetByRegistrationSubmissionDataIdAsync(rsd.Id, _ct))
                 .ReturnsAsync(new RegistrationFeeSnapshot { Id = Guid.NewGuid(), RegistrationSubmissionDataId = rsd.Id });
 
-            await _sut.HandleAsync(rsd, Today, NewLifecycle(rsd), _ct);
+            await _sut.HandleAsync(rsd, new[] { rsd }, Today, NewLifecycle(rsd), _ct);
 
             using (new AssertionScope())
             {
@@ -123,7 +123,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .Callback<RegistrationFeeSnapshot, CancellationToken>((s, _) => captured = s)
                 .ReturnsAsync(Guid.NewGuid());
 
-            await _sut.HandleAsync(rsd, Today, NewLifecycle(rsd), _ct);
+            await _sut.HandleAsync(rsd, new[] { rsd }, Today, NewLifecycle(rsd), _ct);
 
             captured.Should().NotBeNull();
             using (new AssertionScope())
@@ -174,7 +174,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .Callback<RegistrationFeeSnapshot, CancellationToken>((s, _) => captured = s)
                 .ReturnsAsync(Guid.NewGuid());
 
-            await _sut.HandleAsync(rsd, Today, NewLifecycle(rsd), _ct);
+            await _sut.HandleAsync(rsd, new[] { rsd }, Today, NewLifecycle(rsd), _ct);
 
             captured.Should().NotBeNull();
             using (new AssertionScope())
@@ -216,7 +216,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .Callback<RegistrationFeeSnapshot, CancellationToken>((s, _) => captured = s)
                 .ReturnsAsync(Guid.NewGuid());
 
-            await _sut.HandleAsync(rsd, Today, NewLifecycle(rsd), _ct);
+            await _sut.HandleAsync(rsd, new[] { rsd }, Today, NewLifecycle(rsd), _ct);
 
             using (new AssertionScope())
             {
@@ -231,7 +231,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var rsd = BuildProducerRsd();
             rsd.Producers.Clear();
 
-            await _sut.HandleAsync(rsd, Today, NewLifecycle(rsd), _ct);
+            await _sut.HandleAsync(rsd, new[] { rsd }, Today, NewLifecycle(rsd), _ct);
 
             using (new AssertionScope())
             {

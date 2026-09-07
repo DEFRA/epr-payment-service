@@ -64,5 +64,10 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             ValidateFee(fee, string.Format(ProducerResubmissionExceptions.RecordNotFoundProducerResubmissionFeeError, regulator.Value));
             return fee;
         }
+
+        // Pre-2026 submissions have no ProducerSubsidiaries/LateFee row; return 0 rather than
+        // throwing so the calculator omits the sub-late line item entirely for those dates.
+        public Task<decimal> GetSubsidiaryLateFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
+            => GetFeeAsync(GroupTypeConstants.ProducerSubsidiaries, SubGroupTypeConstants.LateFee, regulator, submissionDate, cancellationToken, throwIfSubmissionDateOutOfRange: false);
     }
 }

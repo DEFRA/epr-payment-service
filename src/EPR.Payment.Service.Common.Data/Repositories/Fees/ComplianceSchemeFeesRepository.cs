@@ -71,5 +71,10 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             ValidateFee(fee, string.Format(ComplianceSchemeFeeCalculationExceptions.InvalidComplianceSchemeOrRegulatorError, regulator.Value));
             return fee;
         }
+
+        // Pre-2026 submissions have no ComplianceSchemeSubsidiaries/LateFee row; return 0 so the
+        // calculator omits the sub-late line item entirely for those dates.
+        public Task<decimal> GetSubsidiaryLateFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken)
+            => GetFeeAsync(GroupTypeConstants.ComplianceSchemeSubsidiaries, SubGroupTypeConstants.LateFee, regulator, submissionDate, cancellationToken, throwIfSubmissionDateOutOfRange: false);
     }
 }

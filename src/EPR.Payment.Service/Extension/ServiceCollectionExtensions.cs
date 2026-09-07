@@ -62,6 +62,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, OnlineMarketCalculationStrategy>();
             services.AddScoped<IClosedLoopRecyclingCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, ClosedLoopRecyclingCalculationStrategy>();
             services.AddScoped<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, LateFeeCalculationStrategy>();
+            services.AddScoped<ISubsidiaryLateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>, SubsidiaryLateFeeCalculationStrategy>();
             services.AddScoped<IResubmissionAmountStrategy<ProducerResubmissionFeeRequestDto, decimal>, ProducerResubmissionAmountStrategy>();
 
             // Register the specific implementations of IFeeCalculationStrategy for Compliance Scheme
@@ -70,6 +71,7 @@ namespace EPR.Payment.Service.Extension
             services.AddScoped<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSOnlineMarketCalculationStrategy>();
             services.AddScoped<ICSClosedLoopRecyclingCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>, CSClosedLoopRecyclingCalculationStrategy>();
             services.AddScoped<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>, CSLateFeeCalculationStrategy>();
+            services.AddScoped<ICSSubsidiaryLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>, CSSubsidiaryLateFeeCalculationStrategy>();
             services.AddScoped<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>, CSSubsidiariesFeeCalculationStrategy>();
             services.AddScoped<IComplianceSchemeResubmissionStrategy<ComplianceSchemeResubmissionFeeRequestDto, decimal>, ComplianceSchemeResubmissionStrategy>();
 
