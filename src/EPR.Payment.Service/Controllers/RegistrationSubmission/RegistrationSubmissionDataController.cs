@@ -1,4 +1,4 @@
-﻿using EPR.Payment.Service.Common.Dtos.Response.RegistrationSubmission;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationSubmission;
 using EPR.Payment.Service.Services.Interfaces.RegistrationSubmission;
 using Microsoft.AspNetCore.Mvc;
 

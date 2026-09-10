@@ -1,3 +1,4 @@
+using Azure.Messaging.ServiceBus.Administration;
 using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.SqlClient;
@@ -16,8 +17,9 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
     private ServiceBusContainer _serviceBusContainer = null!;
 
     private WebApplicationFactory<Program>? _factory;
-    
     private HttpClient? _httpClient;
+
+    public ServiceBusAdministrationClient ServiceBusAdminClient { get; private set; } = null!;
     
     public HttpClient CreateHttpClient() => this._factory?.CreateClient() ?? throw new InvalidOperationException("WebApplicationFactory is null");
     
@@ -27,7 +29,7 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
         const string sqlContainerAlias = "int-tests-sql"; 
         var containerNetwork = new NetworkBuilder().WithName("integration-tests").Build();
         
-        _sqlContainer = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2025-latest")
+        _sqlContainer = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2022-latest")
             .WithPassword(sqlPassword)
             .WithNetwork(containerNetwork)
             .WithNetworkAliases(sqlContainerAlias)
@@ -58,13 +60,13 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
 
         var serviceBusConnectionString = _serviceBusContainer.GetConnectionString();
         var serviceBusAdminConnectionString = _serviceBusContainer.GetHttpConnectionString();
-        
-        // builds config from only the test appsettings
+
+        ServiceBusAdminClient = new ServiceBusAdministrationClient(serviceBusAdminConnectionString);
+
         var testConfig = new ConfigurationBuilder()
-            // could replace the abstract ConfigurationFilePath with something more complicated if necessary
-            .AddJsonFile("appsettings.test.json")
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
+                ["RunMigration"] = "true",
                 ["ConnectionStrings:PaymentConnectionString"] = connectionString,
                 ["ServiceBus:ConnectionString"] = serviceBusConnectionString,
                 ["ServiceBus:AdminConnectionString"] = serviceBusAdminConnectionString

@@ -1,4 +1,4 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Services.Interfaces.Payments;
@@ -1074,6 +1074,114 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 member.MemberClosedLoopRecyclingFee.Should().Be(254800M);
                 member.TotalMemberFee.Should().Be(member.MemberRegistrationFee + member.MemberOnlineMarketPlaceFee + member.MemberClosedLoopRecyclingFee + member.SubsidiariesFee + member.MemberLateRegistrationFee);
                 result.TotalFee.Should().Be(result.ComplianceSchemeRegistrationFee + member.TotalMemberFee);
+            }
+        }
+
+        [TestMethod]
+        public async Task CalculateFeesAsync_WhenRegistrationBlobNameIsPresent_UseGetPreviousPaymentsByRegistrationBlobName()
+        {
+            // Arrange
+            var blobName = Guid.NewGuid().ToString();
+            var request = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.UtcNow,
+                RegistrationBlobName = blobName,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
+            };
+
+            _baseFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1380400);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(200M);
+
+            // Act
+            var result = await _service.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.PreviousPayment.Should().Be(200M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - 200M);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+            }
+        }
+
+        [TestMethod]
+        public async Task CalculateFeesAsync_WhenRegistrationBlobNameIsNull_UseGetPreviousPaymentsByReference()
+        {
+            // Arrange
+            var request = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.UtcNow,
+                RegistrationBlobName = null,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
+            };
+
+            _baseFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1380400);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(150M);
+
+            // Act
+            var result = await _service.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.PreviousPayment.Should().Be(150M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - 150M);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+            }
+        }
+
+        [TestMethod]
+        public async Task CalculateFeesAsync_WhenRegistrationBlobNameIsPresentButReturnsZero_FallsBackToGetPreviousPaymentsByReference()
+        {
+            // Arrange
+            var blobName = Guid.NewGuid().ToString();
+            var request = new ComplianceSchemeFeesRequestDto
+            {
+                Regulator = "GB-ENG",
+                ApplicationReferenceNumber = "ABC123",
+                SubmissionDate = DateTime.UtcNow,
+                RegistrationBlobName = blobName,
+                ComplianceSchemeMembers = new List<ComplianceSchemeMemberDto>()
+            };
+
+            _baseFeeCalculationStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1380400);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(0M);
+
+            _paymentsServiceMock
+                .Setup(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(150M);
+
+            // Act
+            var result = await _service.CalculateFeesAsync(request, CancellationToken.None);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                result.PreviousPayment.Should().Be(150M);
+                result.OutstandingPayment.Should().Be(result.TotalFee - 150M);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByRegistrationBlobNameAsync(blobName, It.IsAny<CancellationToken>()), Times.Once);
+                _paymentsServiceMock.Verify(s => s.GetPreviousPaymentsByReferenceAsync(request.ApplicationReferenceNumber, It.IsAny<CancellationToken>()), Times.Once);
             }
         }
     }

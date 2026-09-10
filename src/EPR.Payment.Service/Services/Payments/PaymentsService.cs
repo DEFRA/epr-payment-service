@@ -21,5 +21,10 @@ namespace EPR.Payment.Service.Services.Payments
 
             return await _paymentsRepository.GetPreviousPaymentsByReferenceAsync(reference, cancellationToken);
         }
+
+        public async Task<decimal> GetPreviousPaymentsByRegistrationBlobNameAsync(string registrationBlobName, CancellationToken cancellationToken)
+        {
+            return await _paymentsRepository.GetPreviousPaymentsByRegistrationBlobNameAsync(registrationBlobName, cancellationToken);
+        }
     }
 }

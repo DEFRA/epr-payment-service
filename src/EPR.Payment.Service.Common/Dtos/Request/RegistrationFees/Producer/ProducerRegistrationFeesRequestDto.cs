@@ -20,6 +20,8 @@
 
         public required string ApplicationReferenceNumber { get; set; }
 
+        public string? RegistrationBlobName { get; set; }
+
         public DateTime SubmissionDate { get; set; }
     }
 }

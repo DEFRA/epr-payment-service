@@ -12,6 +12,8 @@
 
         public required string Description { get; set; }
 
+        public string? RegistrationBlobName { get; set; }
+
         public DateTime? PaymentDate { get; set; }
 
         public string? Comments { get; set; }

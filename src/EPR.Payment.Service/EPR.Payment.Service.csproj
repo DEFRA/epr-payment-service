@@ -56,4 +56,10 @@
 			<Value>Validations\ResubmissionFees\Producer\ProducerResubmissionFeeRequestV2DtoValidator.cs</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 </Project>
