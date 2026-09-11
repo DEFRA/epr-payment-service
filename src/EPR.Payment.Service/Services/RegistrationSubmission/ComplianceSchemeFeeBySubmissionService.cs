@@ -1,8 +1,6 @@
-﻿using EPR.Payment.Service.Common.Constants;
-using EPR.Payment.Service.Common.Data.DataModels;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmission;
-using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ComplianceScheme;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationSubmission;
 using Microsoft.Extensions.Logging;
@@ -11,30 +9,35 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
 {
     public class ComplianceSchemeFeeBySubmissionService : IComplianceSchemeFeeBySubmissionService
     {
-        private const string CsoSmallProducerWindowType = "CsoSmallProducer";
-
         private readonly IRegistrationSubmissionDataRepository _repository;
+        private readonly IRegistrationFeeSnapshotRepository _snapshotRepository;
         private readonly IComplianceSchemeCalculatorService _calculatorService;
+        private readonly IPaymentsService _paymentsService;
         private readonly TimeProvider _timeProvider;
         private readonly ILogger<ComplianceSchemeFeeBySubmissionService> _logger;
 
         public ComplianceSchemeFeeBySubmissionService(
             IRegistrationSubmissionDataRepository repository,
+            IRegistrationFeeSnapshotRepository snapshotRepository,
             IComplianceSchemeCalculatorService calculatorService,
+            IPaymentsService paymentsService,
             TimeProvider timeProvider,
             ILogger<ComplianceSchemeFeeBySubmissionService> logger)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _snapshotRepository = snapshotRepository ?? throw new ArgumentNullException(nameof(snapshotRepository));
             _calculatorService = calculatorService ?? throw new ArgumentNullException(nameof(calculatorService));
+            _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<ComplianceSchemeFeesResponseDto?> GetFeesAsync(Guid submissionId, CancellationToken cancellationToken)
+        public async Task<ComplianceSchemeFeesResponseDto?> GetFeesAsync(Guid submissionId, bool requireSubmittedForApproval, CancellationToken cancellationToken)
         {
             using var logScope = _logger.BeginScope(new Dictionary<string, object>
             {
                 ["SubmissionId"] = submissionId,
+                ["RequireSubmittedForApproval"] = requireSubmittedForApproval,
             });
 
             var records = await _repository.GetAllForSubmissionAsync(submissionId, cancellationToken);
@@ -45,78 +48,68 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             }
 
             var today = _timeProvider.GetUtcNow().UtcDateTime;
-            var lifecycle = SubmissionLifecycleAnalyser.Analyse(records, today);
+            var lifecycle = SubmissionLifecycleAnalyser.Analyse(records, today, requireSubmittedForApproval);
 
             if (lifecycle.LatestNonRejected is null)
             {
                 _logger.LogInformation(
-                    "All RegistrationSubmissionData rows for SubmissionId {SubmissionId} have been rejected.",
-                    submissionId);
+                    "No eligible RegistrationSubmissionData for SubmissionId {SubmissionId} (requireSubmittedForApproval={RequireSubmittedForApproval}).",
+                    submissionId,
+                    requireSubmittedForApproval);
                 return null;
             }
 
             var latest = lifecycle.LatestNonRejected;
-            var deadline = latest.SubmissionPeriodWindow.DeadlineDate;
 
-            var submissionLevelLate = IsOnOrAfterDeadline(lifecycle.LatestSubmittedForApprovalDate, deadline, today);
-            var isOriginalCsoLate = lifecycle.FirstSubmittedForApprovalDate is DateTime firstApproval
-                                    && firstApproval.Date >= deadline.Date;
-            var noFirstSubmission = lifecycle.FirstSubmittedForApprovalDate is null;
-
-            var request = new ComplianceSchemeFeesRequestDto
+            var snapshot = await _snapshotRepository.GetByRegistrationSubmissionDataIdAsync(latest.Id, cancellationToken);
+            if (snapshot is not null)
             {
-                Regulator = latest.RegulatorNation,
-                ApplicationReferenceNumber = latest.ApplicationReferenceNumber,
-                SubmissionDate = lifecycle.CalcDate,
-                IncludeRegistrationFee = !string.Equals(
-                    latest.SubmissionPeriodWindow.WindowType,
-                    CsoSmallProducerWindowType,
-                    StringComparison.OrdinalIgnoreCase),
-                ComplianceSchemeMembers = latest.Producers
-                    .Select(p => MapMember(p, isOriginalCsoLate, noFirstSubmission, submissionLevelLate))
-                    .ToList(),
-            };
+                var snapshotResponse = RegistrationFeeSnapshotProjector.ToComplianceSchemeResponse(snapshot, latest.Producers);
+                snapshotResponse.PreviousPayment = await _paymentsService.GetPreviousPaymentsByReferenceAsync(latest.ApplicationReferenceNumber, cancellationToken);
+                snapshotResponse.OutstandingPayment = snapshotResponse.TotalFee - snapshotResponse.PreviousPayment;
+                snapshotResponse.RegistrationBlobName = latest.RegistrationBlobName;
+                return snapshotResponse;
+            }
+
+            var request = RegistrationFeeRequestBuilder.BuildComplianceSchemeRequest(latest, lifecycle, today);
 
             _logger.LogInformation(
-                "Calculating compliance-scheme fees for SubmissionId {SubmissionId} (calcDate={CalcDate}, submissionLevelLate={SubmissionLevelLate}, isOriginalCsoLate={IsOriginalCsoLate}, memberCount={MemberCount}).",
+                "Calculating compliance-scheme fees for SubmissionId {SubmissionId} (calcDate={CalcDate}, memberCount={MemberCount}).",
                 submissionId,
                 lifecycle.CalcDate,
-                submissionLevelLate,
-                isOriginalCsoLate,
                 request.ComplianceSchemeMembers.Count);
 
             var response = await _calculatorService.CalculateFeesAsync(request, cancellationToken);
             if (response is not null)
             {
                 response.RegistrationBlobName = latest.RegistrationBlobName;
+                EnrichMemberMetadata(response, latest.Producers);
             }
 
             return response;
         }
 
-        private static ComplianceSchemeMemberDto MapMember(
-            RegistrationSubmissionProducer producer,
-            bool isOriginalCsoLate,
-            bool noFirstSubmission,
-            bool submissionLevelLate)
+        private static void EnrichMemberMetadata(
+            ComplianceSchemeFeesResponseDto response,
+            ICollection<Common.Data.DataModels.RegistrationSubmissionProducer> producers)
         {
-            return new ComplianceSchemeMemberDto
+            if (response.ComplianceSchemeMembersWithFees.Count == 0 || producers.Count == 0)
             {
-                MemberId = producer.OrganisationId,
-                MemberType = producer.OrganisationSize,
-                IsOnlineMarketplace = producer.IsOnlineMarketplace,
-                IsClosedLoopRecycling = producer.IsClosedLoopRecycling,
-                NumberOfSubsidiaries = producer.Subsidiaries.Count,
-                NoOfSubsidiariesOnlineMarketplace = producer.Subsidiaries.Count(s => s.IsOnlineMarketplace),
-                NoOfSubsidiariesClosedLoopRecycling = producer.Subsidiaries.Count(s => s.IsClosedLoopRecycling),
-                IsLateFeeApplicable =
-                    isOriginalCsoLate
-                    || (noFirstSubmission && submissionLevelLate)
-                    || (submissionLevelLate && producer.IsNewJoiner),
-            };
-        }
+                return;
+            }
 
-        private static bool IsOnOrAfterDeadline(DateTime? candidate, DateTime deadline, DateTime today) =>
-            (candidate ?? today).Date >= deadline.Date;
+            var producersByMemberId = producers
+                .GroupBy(p => p.OrganisationId, StringComparer.Ordinal)
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.Ordinal);
+
+            foreach (var member in response.ComplianceSchemeMembersWithFees)
+            {
+                if (producersByMemberId.TryGetValue(member.MemberId, out var producer))
+                {
+                    member.MemberType = producer.OrganisationSize;
+                    member.NumberOfSubsidiaries = producer.Subsidiaries.Count;
+                }
+            }
+        }
     }
 }

@@ -13,6 +13,8 @@
     public class ComplianceSchemeMembersWithFeesDto
     {
         public required string MemberId { get; set; }
+        public string? MemberType { get; set; }
+        public int NumberOfSubsidiaries { get; set; }
         public decimal MemberRegistrationFee { get; set; }
         public decimal MemberOnlineMarketPlaceFee { get; set; }
         public decimal MemberClosedLoopRecyclingFee { get; set; }

@@ -97,9 +97,12 @@ namespace EPR.Payment.Service.Controllers.RegistrationFees.Producer
         [ProducesResponseType(typeof(RegistrationFeesResponseDto), 200)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<RegistrationFeesResponseDto>> GetFeesBySubmissionAsync(Guid submissionId, CancellationToken cancellationToken)
+        public async Task<ActionResult<RegistrationFeesResponseDto>> GetFeesBySubmissionAsync(
+            Guid submissionId,
+            [FromQuery] bool requireSubmittedForApproval,
+            CancellationToken cancellationToken)
         {
-            var result = await _feeBySubmissionService.GetFeesAsync(submissionId, cancellationToken);
+            var result = await _feeBySubmissionService.GetFeesAsync(submissionId, requireSubmittedForApproval, cancellationToken);
             return result is null ? NotFound() : Ok(result);
         }
     }

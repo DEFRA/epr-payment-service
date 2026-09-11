@@ -53,5 +53,22 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission
             await _dataContext.SaveChangesAsync(cancellationToken);
             return entity.Id;
         }
+
+        public async Task<Guid?> GetLatestIdByApplicationReferenceNumberAsync(string applicationReferenceNumber, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(applicationReferenceNumber))
+            {
+                return null;
+            }
+
+            var latest = await _dataContext.RegistrationSubmissionData
+                .AsNoTracking()
+                .Where(r => r.ApplicationReferenceNumber == applicationReferenceNumber)
+                .OrderByDescending(r => r.CreatedDate)
+                .Select(r => (Guid?)r.Id)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            return latest;
+        }
     }
 }

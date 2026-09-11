@@ -251,6 +251,57 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             result.CalcDate.Should().Be(DateTime.SpecifyKind(unspecifiedToday, DateTimeKind.Utc));
         }
 
+        [TestMethod]
+        public void Analyse_RequireSubmittedForApproval_ExcludesWipResubmissionAfterAcceptedCycle()
+        {
+            var acceptedEventDate = new DateTime(2026, 6, 10);
+            var acceptedCycle = Record(
+                created: new DateTime(2026, 6, 1),
+                events: new[] { (RegistrationEventNames.SubmittedForRegulatorApproval, acceptedEventDate) });
+            var wipResubmission = Record(created: new DateTime(2026, 7, 1));
+
+            var result = SubmissionLifecycleAnalyser.Analyse(new[] { acceptedCycle, wipResubmission }, Today, requireSubmittedForApproval: true);
+
+            using (new AssertionScope())
+            {
+                result.FirstNonRejected.Should().BeSameAs(acceptedCycle);
+                result.LatestNonRejected.Should().BeSameAs(acceptedCycle);
+                result.FirstSubmittedForApprovalDate.Should().Be(acceptedEventDate);
+                result.LatestSubmittedForApprovalDate.Should().Be(acceptedEventDate);
+                result.CalcDate.Should().Be(acceptedEventDate);
+            }
+        }
+
+        [TestMethod]
+        public void Analyse_RequireSubmittedForApproval_NoSubmittedCycle_ReturnsNulls()
+        {
+            var wipOnly = Record(created: new DateTime(2026, 7, 1));
+
+            var result = SubmissionLifecycleAnalyser.Analyse(new[] { wipOnly }, Today, requireSubmittedForApproval: true);
+
+            using (new AssertionScope())
+            {
+                result.FirstNonRejected.Should().BeNull();
+                result.LatestNonRejected.Should().BeNull();
+                result.FirstSubmittedForApprovalDate.Should().BeNull();
+                result.LatestSubmittedForApprovalDate.Should().BeNull();
+                result.CalcDate.Should().Be(Today);
+            }
+        }
+
+        [TestMethod]
+        public void Analyse_RequireSubmittedForApprovalFalse_PicksWipLatestByDefault()
+        {
+            var acceptedCycle = Record(
+                created: new DateTime(2026, 6, 1),
+                events: new[] { (RegistrationEventNames.SubmittedForRegulatorApproval, new DateTime(2026, 6, 10)) });
+            var wipResubmission = Record(created: new DateTime(2026, 7, 1));
+
+            var result = SubmissionLifecycleAnalyser.Analyse(new[] { acceptedCycle, wipResubmission }, Today);
+
+            result.LatestNonRejected.Should().BeSameAs(wipResubmission);
+        }
+
         private static RegistrationSubmissionData Record(DateTime created, (string EventName, DateTime EventDate)[]? events = null)
         {
             return new RegistrationSubmissionData

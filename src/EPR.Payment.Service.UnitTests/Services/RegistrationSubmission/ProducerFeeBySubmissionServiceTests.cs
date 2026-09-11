@@ -5,6 +5,8 @@ using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmis
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
+using EPR.Payment.Service.Common.Enums;
+using EPR.Payment.Service.Services.Interfaces.Payments;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.RegistrationSubmission;
 using FluentAssertions;
@@ -21,7 +23,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         private static readonly DateTime Deadline = new(2026, 4, 1, 0, 0, 0, DateTimeKind.Utc);
 
         private Mock<IRegistrationSubmissionDataRepository> _repositoryMock = null!;
+        private Mock<IRegistrationFeeSnapshotRepository> _snapshotRepositoryMock = null!;
         private Mock<IProducerFeesCalculatorService> _calculatorMock = null!;
+        private Mock<IPaymentsService> _paymentsServiceMock = null!;
         private Mock<TimeProvider> _timeProviderMock = null!;
         private Mock<ILogger<ProducerFeeBySubmissionService>> _loggerMock = null!;
         private ProducerFeeBySubmissionService _sut = null!;
@@ -32,7 +36,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         public void Init()
         {
             _repositoryMock = new Mock<IRegistrationSubmissionDataRepository>();
+            _snapshotRepositoryMock = new Mock<IRegistrationFeeSnapshotRepository>();
             _calculatorMock = new Mock<IProducerFeesCalculatorService>();
+            _paymentsServiceMock = new Mock<IPaymentsService>();
             _timeProviderMock = new Mock<TimeProvider>();
             _timeProviderMock.Setup(t => t.GetUtcNow()).Returns(new DateTimeOffset(Today, TimeSpan.Zero));
             _loggerMock = new Mock<ILogger<ProducerFeeBySubmissionService>>();
@@ -48,7 +54,9 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
 
             _sut = new ProducerFeeBySubmissionService(
                 _repositoryMock.Object,
+                _snapshotRepositoryMock.Object,
                 _calculatorMock.Object,
+                _paymentsServiceMock.Object,
                 _timeProviderMock.Object,
                 _loggerMock.Object);
         }
@@ -58,14 +66,129 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         {
             using (new AssertionScope())
             {
-                ((Action)(() => new ProducerFeeBySubmissionService(null!, _calculatorMock.Object, _timeProviderMock.Object, _loggerMock.Object)))
+                ((Action)(() => new ProducerFeeBySubmissionService(null!, _snapshotRepositoryMock.Object, _calculatorMock.Object, _paymentsServiceMock.Object, _timeProviderMock.Object, _loggerMock.Object)))
                     .Should().Throw<ArgumentNullException>();
-                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, null!, _timeProviderMock.Object, _loggerMock.Object)))
+                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, null!, _calculatorMock.Object, _paymentsServiceMock.Object, _timeProviderMock.Object, _loggerMock.Object)))
                     .Should().Throw<ArgumentNullException>();
-                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _calculatorMock.Object, null!, _loggerMock.Object)))
+                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _snapshotRepositoryMock.Object, null!, _paymentsServiceMock.Object, _timeProviderMock.Object, _loggerMock.Object)))
                     .Should().Throw<ArgumentNullException>();
-                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _calculatorMock.Object, _timeProviderMock.Object, null!)))
+                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _snapshotRepositoryMock.Object, _calculatorMock.Object, null!, _timeProviderMock.Object, _loggerMock.Object)))
                     .Should().Throw<ArgumentNullException>();
+                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _snapshotRepositoryMock.Object, _calculatorMock.Object, _paymentsServiceMock.Object, null!, _loggerMock.Object)))
+                    .Should().Throw<ArgumentNullException>();
+                ((Action)(() => new ProducerFeeBySubmissionService(_repositoryMock.Object, _snapshotRepositoryMock.Object, _calculatorMock.Object, _paymentsServiceMock.Object, _timeProviderMock.Object, null!)))
+                    .Should().Throw<ArgumentNullException>();
+            }
+        }
+
+        [TestMethod]
+        public async Task GetFeesAsync_SnapshotExists_ReturnsProjectedResponseAndSkipsCalculator()
+        {
+            var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { Producer() });
+            SetupRepo(record);
+
+            var snapshot = new RegistrationFeeSnapshot
+            {
+                Id = Guid.NewGuid(),
+                RegistrationSubmissionDataId = record.Id,
+                TotalFee = 2500m,
+                LineItems = new List<RegistrationFeeLineItem>
+                {
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.ProducerRegistrationFee,
+                        FeeTypeName = nameof(FeeTypeIds.ProducerRegistrationFee),
+                        Amount = 2000m,
+                    },
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.ProducerLateRegistrationFee,
+                        FeeTypeName = nameof(FeeTypeIds.ProducerLateRegistrationFee),
+                        Amount = 500m,
+                    },
+                },
+            };
+            _snapshotRepositoryMock
+                .Setup(s => s.GetByRegistrationSubmissionDataIdAsync(record.Id, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(snapshot);
+            _paymentsServiceMock
+                .Setup(p => p.GetPreviousPaymentsByReferenceAsync(record.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(600m);
+
+            var result = await _sut.GetFeesAsync(record.SubmissionId, false, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+                result!.TotalFee.Should().Be(2500m);
+                result.ProducerRegistrationFee.Should().Be(2000m);
+                result.ProducerLateRegistrationFee.Should().Be(500m);
+                result.PreviousPayment.Should().Be(600m);
+                result.OutstandingPayment.Should().Be(1900m);
+                result.RegistrationBlobName.Should().Be(record.RegistrationBlobName);
+                _calculatorMock.Verify(c => c.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()), Times.Never);
+            }
+        }
+
+        [TestMethod]
+        public async Task GetFeesAsync_SnapshotWithSubsidiaryOmpAndClrRows_SubsidiariesFeeIncludesAllContributions()
+        {
+            // Regression: projector must match ProducerFeesCalculatorService.cs:55 which sets
+            // SubsidiariesFee = band + OMP + CLR. Previously only the band sum was included, so
+            // frontends reading `SubsidiariesFee` saw a lower number for snapshot-backed responses.
+            var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { Producer() });
+            SetupRepo(record);
+
+            var snapshot = new RegistrationFeeSnapshot
+            {
+                Id = Guid.NewGuid(),
+                RegistrationSubmissionDataId = record.Id,
+                TotalFee = 8530m,
+                LineItems = new List<RegistrationFeeLineItem>
+                {
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.SubsidiaryFee,
+                        FeeTypeName = nameof(FeeTypeIds.SubsidiaryFee),
+                        BandNumber = 1,
+                        Quantity = 1,
+                        UnitPrice = 690m,
+                        Amount = 690m,
+                    },
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.SubsidiaryFee,
+                        FeeTypeName = nameof(FeeTypeIds.SubsidiaryFee),
+                        BandNumber = 2,
+                        Quantity = 2,
+                        UnitPrice = 1035m,
+                        Amount = 2070m,
+                    },
+                    new()
+                    {
+                        FeeTypeId = FeeTypeIds.SubsidiaryOnlineMarketplaceFee,
+                        FeeTypeName = nameof(FeeTypeIds.SubsidiaryOnlineMarketplaceFee),
+                        Quantity = 2,
+                        UnitPrice = 2885m,
+                        Amount = 5770m,
+                    },
+                },
+            };
+            _snapshotRepositoryMock
+                .Setup(s => s.GetByRegistrationSubmissionDataIdAsync(record.Id, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(snapshot);
+            _paymentsServiceMock
+                .Setup(p => p.GetPreviousPaymentsByReferenceAsync(record.ApplicationReferenceNumber, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(0m);
+
+            var result = await _sut.GetFeesAsync(record.SubmissionId, false, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                result.Should().NotBeNull();
+                result!.SubsidiariesFee.Should().Be(8530m);
+                result.SubsidiariesFeeBreakdown.FeeBreakdowns.Sum(f => f.TotalPrice).Should().Be(2760m);
+                result.SubsidiariesFeeBreakdown.TotalSubsidiariesOMPFees.Should().Be(5770m);
             }
         }
 
@@ -75,7 +198,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             _repositoryMock.Setup(r => r.GetAllForSubmissionAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Array.Empty<RegistrationSubmissionData>());
 
-            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
 
             using (new AssertionScope())
             {
@@ -96,7 +219,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 });
             SetupRepo(rejected);
 
-            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
 
             result.Should().BeNull();
         }
@@ -107,7 +230,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var record = BuildRecord(created: Today.AddDays(-1), producers: Array.Empty<RegistrationSubmissionProducer>());
             SetupRepo(record);
 
-            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
 
             using (new AssertionScope())
             {
@@ -127,7 +250,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var record = BuildRecord(created: Today.AddDays(-1), producers: producers);
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.ProducerType.Should().Be("Large");
@@ -143,7 +266,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { Producer(newJoiner: false) });
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.IsLateFeeApplicable.Should().BeTrue();
@@ -159,7 +282,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 producers: new[] { Producer(newJoiner: false) });
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.IsLateFeeApplicable.Should().BeTrue();
@@ -178,7 +301,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 producers: new[] { Producer(newJoiner: false) });
             SetupRepo(first, latest);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.IsLateFeeApplicable.Should().BeFalse();
@@ -201,7 +324,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 producers: new[] { Producer("ORG-1", newJoiner: true) });
             SetupRepo(first, latest);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.IsLateFeeApplicable.Should().BeFalse();
@@ -217,7 +340,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 producers: new[] { Producer() });
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.SubmissionDate.Should().Be(firstApproval);
@@ -229,7 +352,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { Producer() });
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             captured.SubmissionDate.Should().Be(Today);
@@ -249,7 +372,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 producers: new[] { Producer() });
             SetupRepo(first, latest);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             using (new AssertionScope())
@@ -265,7 +388,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { Producer() });
             SetupRepo(record);
 
-            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
 
             result.Should().BeSameAs(_calculatorResponse);
         }
@@ -290,7 +413,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var record = BuildRecord(created: Today.AddDays(-1), producers: new[] { producer });
             SetupRepo(record);
 
-            await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
             var captured = CapturedRequest();
 
             using (new AssertionScope())
@@ -311,10 +434,47 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             record.RegistrationBlobName = "producer-blob-under-test.csv";
             SetupRepo(record);
 
-            var result = await _sut.GetFeesAsync(Guid.NewGuid(), CancellationToken.None);
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), false, CancellationToken.None);
 
             result.Should().NotBeNull();
             result!.RegistrationBlobName.Should().Be("producer-blob-under-test.csv");
+        }
+
+        [TestMethod]
+        public async Task GetFeesAsync_RequireSubmittedForApproval_WipResubmissionAfterAcceptedCycle_ReturnsAcceptedCycleFees()
+        {
+            // Regulator-scope: cycle 1 was submitted for approval, cycle 2 is a WIP resubmission
+            // that has not fired SubmittedForRegulatorApproval yet. Regulator must see cycle 1 fees.
+            var acceptedCycle = BuildRecord(
+                created: Today.AddMonths(-1),
+                applicationReferenceNumber: "ACCEPTED-REF",
+                events: new[] { (RegistrationEventNames.SubmittedForRegulatorApproval, Today.AddMonths(-1)) },
+                producers: new[] { Producer() });
+            var wipResubmission = BuildRecord(
+                created: Today.AddDays(-1),
+                applicationReferenceNumber: "WIP-REF",
+                producers: new[] { Producer() });
+            SetupRepo(acceptedCycle, wipResubmission);
+
+            await _sut.GetFeesAsync(Guid.NewGuid(), true, CancellationToken.None);
+            var captured = CapturedRequest();
+
+            captured.ApplicationReferenceNumber.Should().Be("ACCEPTED-REF");
+        }
+
+        [TestMethod]
+        public async Task GetFeesAsync_RequireSubmittedForApproval_NoSubmittedCycle_ReturnsNull()
+        {
+            var wipOnly = BuildRecord(created: Today.AddDays(-1), producers: new[] { Producer() });
+            SetupRepo(wipOnly);
+
+            var result = await _sut.GetFeesAsync(Guid.NewGuid(), true, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                result.Should().BeNull();
+                _calculatorMock.Verify(c => c.CalculateFeesAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()), Times.Never);
+            }
         }
 
         // -------- helpers --------

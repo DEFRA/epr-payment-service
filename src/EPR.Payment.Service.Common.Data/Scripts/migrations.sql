@@ -5997,3 +5997,91 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260817093944_AddRegistrationFeeSnapshotAndPaymentLink'
+)
+BEGIN
+    ALTER TABLE [Payment] ADD [RegistrationSubmissionDataId] uniqueidentifier NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260817093944_AddRegistrationFeeSnapshotAndPaymentLink'
+)
+BEGIN
+    CREATE TABLE [registration].[RegistrationFeeSnapshot] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RegistrationSubmissionDataId] uniqueidentifier NOT NULL,
+        [TotalFee] decimal(19,4) NOT NULL,
+        [CreatedDate] datetimeoffset NOT NULL DEFAULT (SYSUTCDATETIME()),
+        CONSTRAINT [PK_RegistrationFeeSnapshot] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationFeeSnapshot_RegistrationSubmissionData_RegistrationSubmissionDataId] FOREIGN KEY ([RegistrationSubmissionDataId]) REFERENCES [registration].[RegistrationSubmissionData] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260817093944_AddRegistrationFeeSnapshotAndPaymentLink'
+)
+BEGIN
+    CREATE TABLE [registration].[RegistrationFeeLineItem] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RegistrationFeeSnapshotId] uniqueidentifier NOT NULL,
+        [FeeTypeId] int NOT NULL,
+        [FeeTypeName] nvarchar(100) NOT NULL,
+        [UnitPrice] decimal(19,4) NULL,
+        [Quantity] int NULL,
+        [Amount] decimal(19,4) NOT NULL,
+        [MemberId] nvarchar(50) NULL,
+        [BandNumber] int NULL,
+        CONSTRAINT [PK_RegistrationFeeLineItem] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationFeeLineItem_RegistrationFeeSnapshot_RegistrationFeeSnapshotId] FOREIGN KEY ([RegistrationFeeSnapshotId]) REFERENCES [registration].[RegistrationFeeSnapshot] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260817093944_AddRegistrationFeeSnapshotAndPaymentLink'
+)
+BEGIN
+    CREATE INDEX [IX_Payment_RegistrationSubmissionDataId] ON [Payment] ([RegistrationSubmissionDataId]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260817093944_AddRegistrationFeeSnapshotAndPaymentLink'
+)
+BEGIN
+    CREATE INDEX [IX_RegistrationFeeLineItem_RegistrationFeeSnapshotId_FeeTypeId] ON [registration].[RegistrationFeeLineItem] ([RegistrationFeeSnapshotId], [FeeTypeId]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260817093944_AddRegistrationFeeSnapshotAndPaymentLink'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_RegistrationFeeSnapshot_RegistrationSubmissionDataId] ON [registration].[RegistrationFeeSnapshot] ([RegistrationSubmissionDataId]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260817093944_AddRegistrationFeeSnapshotAndPaymentLink'
+)
+BEGIN
+    ALTER TABLE [Payment] ADD CONSTRAINT [FK_Payment_RegistrationSubmissionData_RegistrationSubmissionDataId] FOREIGN KEY ([RegistrationSubmissionDataId]) REFERENCES [registration].[RegistrationSubmissionData] ([Id]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260817093944_AddRegistrationFeeSnapshotAndPaymentLink'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260817093944_AddRegistrationFeeSnapshotAndPaymentLink', N'10.0.0');
+END;
+
+COMMIT;
+GO
+

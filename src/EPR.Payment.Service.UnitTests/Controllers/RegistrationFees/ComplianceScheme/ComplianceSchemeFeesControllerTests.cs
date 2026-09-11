@@ -231,10 +231,10 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
             var submissionId = Guid.NewGuid();
             var response = new ComplianceSchemeFeesResponseDto();
             _feeBySubmissionServiceMock
-                .Setup(s => s.GetFeesAsync(submissionId, It.IsAny<CancellationToken>()))
+                .Setup(s => s.GetFeesAsync(submissionId, false, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
 
-            var result = await _controller.GetFeesBySubmissionAsync(submissionId, CancellationToken.None);
+            var result = await _controller.GetFeesBySubmissionAsync(submissionId, false, CancellationToken.None);
 
             using (new AssertionScope())
             {
@@ -247,12 +247,30 @@ namespace EPR.Payment.Service.UnitTests.Controllers.RegistrationFees.ComplianceS
         {
             var submissionId = Guid.NewGuid();
             _feeBySubmissionServiceMock
-                .Setup(s => s.GetFeesAsync(submissionId, It.IsAny<CancellationToken>()))
+                .Setup(s => s.GetFeesAsync(submissionId, false, It.IsAny<CancellationToken>()))
                 .ReturnsAsync((ComplianceSchemeFeesResponseDto?)null);
 
-            var result = await _controller.GetFeesBySubmissionAsync(submissionId, CancellationToken.None);
+            var result = await _controller.GetFeesBySubmissionAsync(submissionId, false, CancellationToken.None);
 
             result.Result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [TestMethod]
+        public async Task GetFeesBySubmissionAsync_RequireSubmittedForApprovalTrue_ForwardsFlagToService()
+        {
+            var submissionId = Guid.NewGuid();
+            var response = new ComplianceSchemeFeesResponseDto();
+            _feeBySubmissionServiceMock
+                .Setup(s => s.GetFeesAsync(submissionId, true, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
+
+            var result = await _controller.GetFeesBySubmissionAsync(submissionId, true, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                result.Result.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeSameAs(response);
+                _feeBySubmissionServiceMock.Verify(s => s.GetFeesAsync(submissionId, true, It.IsAny<CancellationToken>()), Times.Once);
+            }
         }
     }
 }

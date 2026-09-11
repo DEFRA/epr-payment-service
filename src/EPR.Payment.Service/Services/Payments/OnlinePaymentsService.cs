@@ -1,5 +1,6 @@
-﻿using AutoMapper;
+using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmission;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Common.Dtos.Response.Payments;
 using EPR.Payment.Service.Services.Interfaces.Payments;
@@ -9,18 +10,26 @@ namespace EPR.Payment.Service.Services.Payments
     public class OnlinePaymentsService : IOnlinePaymentsService
     {
         private readonly IOnlinePaymentsRepository _onlinePaymentRepository;
+        private readonly IRegistrationSubmissionDataRepository _registrationSubmissionDataRepository;
         private readonly IMapper _mapper;
-        public OnlinePaymentsService(IMapper mapper,
-            IOnlinePaymentsRepository onlinePaymentRepository)
+
+        public OnlinePaymentsService(
+            IMapper mapper,
+            IOnlinePaymentsRepository onlinePaymentRepository,
+            IRegistrationSubmissionDataRepository registrationSubmissionDataRepository)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _onlinePaymentRepository = onlinePaymentRepository ?? throw new ArgumentNullException(nameof(onlinePaymentRepository));
+            _registrationSubmissionDataRepository = registrationSubmissionDataRepository ?? throw new ArgumentNullException(nameof(registrationSubmissionDataRepository));
         }
 
         public async Task<Guid> InsertOnlinePaymentAsync(OnlinePaymentInsertRequestDto onlinePaymentInsertRequest, CancellationToken cancellationToken)
         {
             var paymentEntity = _mapper.Map<Common.Data.DataModels.Payment>(onlinePaymentInsertRequest);
             paymentEntity.OnlinePayment = _mapper.Map<Common.Data.DataModels.OnlinePayment>(onlinePaymentInsertRequest);
+
+            paymentEntity.RegistrationSubmissionDataId = await _registrationSubmissionDataRepository
+                .GetLatestIdByApplicationReferenceNumberAsync(paymentEntity.Reference, cancellationToken);
 
             return await _onlinePaymentRepository.InsertOnlinePaymentAsync(paymentEntity, cancellationToken);
         }
@@ -44,6 +53,5 @@ namespace EPR.Payment.Service.Services.Payments
             var entity = await _onlinePaymentRepository.GetOnlinePaymentByExternalPaymentIdAsync(externalPaymentId, cancellationToken);
             return _mapper.Map<OnlinePaymentResponseDto>(entity);
         }
-
     }
 }
