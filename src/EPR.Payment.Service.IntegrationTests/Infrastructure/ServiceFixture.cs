@@ -15,11 +15,13 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
     private MsSqlContainer _sqlContainer = null!;
     private ServiceBusContainer _serviceBusContainer = null!;
 
-    private WebApplicationFactory<Program>? _factory;
+    private PaymentServiceFactory? _factory;
     
     private HttpClient? _httpClient;
     
     public HttpClient CreateHttpClient() => this._factory?.CreateClient() ?? throw new InvalidOperationException("WebApplicationFactory is null");
+
+    public TestLogSink Logs => _factory?.Logs ?? throw new InvalidOperationException("WebApplicationFactory is null");
     
     public async Task InitializeAsync()
     {

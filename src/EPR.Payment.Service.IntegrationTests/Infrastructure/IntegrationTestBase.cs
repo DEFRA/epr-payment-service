@@ -22,11 +22,20 @@ public abstract class IntegrationTestBase
     /// </summary>
     protected TestBuilders Builder { get; }
 
+    /// <summary>Publishes the real production Service Bus messages - see <see cref="ServiceBusEventPublisher"/>.</summary>
+    protected ServiceBusEventPublisher Events { get; }
+
+    /// <summary>Everything logged by the hosted app so far, across every test in the collection -
+    /// see <see cref="TestLogSink"/>. Filter by something unique to your own test (e.g. a Guid).</summary>
+    protected TestLogSink Logs { get; }
+
     protected IntegrationTestBase(ServiceFixture fixture)
     {
         _fixture = fixture;
         Client = _fixture.CreateHttpClient();
         Builder = new TestBuilders(fixture);
+        Events = new ServiceBusEventPublisher(fixture);
+        Logs = _fixture.Logs;
         ServiceBusAdministrationClient = _fixture.SharedServices.GetRequiredService<ServiceBusAdministrationClient>();
         Configuration = _fixture.SharedServices.GetRequiredService<IConfiguration>();
     }
