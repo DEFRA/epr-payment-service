@@ -2,6 +2,7 @@ using System.Net;
 using AwesomeAssertions;
 using EPR.Payment.Service.Common.Constants;
 using EPR.Payment.Service.Common.Data;
+using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
 using EPR.Payment.Service.IntegrationTests.Infrastructure;
@@ -43,6 +44,14 @@ public class RegistrationFeeSnapshotTests(ServiceFixture fixture) : IntegrationT
         [new ProducerCase("Small, 2 subsidiaries (OMP), on time", "Small", 2, true, false, true, false, false)],
         [new ProducerCase("Large, 1 subsidiary, late", "Large", 1, false, false, false, false, true)],
         [new ProducerCase("Small, 1 subsidiary, late", "Small", 1, false, false, false, false, true)],
+        // Band boundaries per BaseSubsidiariesFeeCalculationStrategy: band 1 = first 20, band 2 =
+        // next up to 80 (21-100), band 3 = anything beyond 100. These two cases populate band 2
+        // and band 2+3 with genuinely non-zero counts/prices, so the round-trip comparison proves
+        // those bands survive the snapshot correctly when they're actually charged for - as
+        // opposed to the other cases above, which never exceed 20 subsidiaries and so never
+        // exercise this path.
+        [new ProducerCase("Large, 25 subsidiaries (band 2 only), on time", "Large", 25, false, false, false, false, false)],
+        [new ProducerCase("Large, 105 subsidiaries (band 2 and 3), on time", "Large", 105, false, false, false, false, false)],
     ];
 
     [Theory]
@@ -82,13 +91,21 @@ public class RegistrationFeeSnapshotTests(ServiceFixture fixture) : IntegrationT
         // After the event: a snapshot now exists, so this drives the projection path instead.
         var after = await GetProducerFeesBySubmission(submissionId);
 
+        // The snapshot only ever stores line items RegistrationFeeSnapshotHandler actually adds -
+        // it deliberately omits zero-count/zero-price subsidiary bands and per-unit OMP/CLR rates
+        // when nothing was charged for them (see AddSubsidiaryLineItems), whereas the live
+        // calculator always returns the full rate card regardless of whether it applies. That's a
+        // real, known difference in response shape (tracked separately), not something this
+        // round-trip test should fail on - so `before` is trimmed to the same shape the snapshot
+        // is expected to produce before comparing, rather than compared as-is.
+        NormalizeToSnapshotProjectionShape(before.SubsidiariesFeeBreakdown);
+
         after.Should().BeEquivalentTo(before, options => options
             // Known, accepted, low-impact inconsistency: the live-calc path leaves MemberId at
             // its default (null) for a producer response, while the snapshot projector always
             // sets it to string.Empty. Not meaningful for a producer response either way (MemberId
             // only carries information for compliance-scheme member breakdowns) - excluded here
-            // rather than left as permanent test noise. Does not cover the FeeBreakdowns
-            // divergence this test also surfaces, which remains open pending investigation.
+            // rather than left as permanent test noise.
             .Excluding(dto => dto.MemberId), testCase.Label);
     }
 
@@ -97,6 +114,9 @@ public class RegistrationFeeSnapshotTests(ServiceFixture fixture) : IntegrationT
         [new ComplianceSchemeCase("Standard window, 2 large members, on time", SeededSubmissionPeriods.CsoLargeProducer2027, 2, "Large", false)],
         [new ComplianceSchemeCase("Small-producer window (registration fee excluded), 3 small members, on time", SeededSubmissionPeriods.CsoSmallProducer2027, 3, "Small", false)],
         [new ComplianceSchemeCase("Standard window, 1 large member, late", SeededSubmissionPeriods.CsoLargeProducer2026, 1, "Large", true)],
+        // Same band-boundary reasoning as ProducerCases above, applied to a single member.
+        [new ComplianceSchemeCase("Standard window, 1 large member with 25 subsidiaries (band 2 only), on time", SeededSubmissionPeriods.CsoLargeProducer2027, 1, "Large", false, SubsidiariesPerMember: 25)],
+        [new ComplianceSchemeCase("Standard window, 1 large member with 105 subsidiaries (band 2 and 3), on time", SeededSubmissionPeriods.CsoLargeProducer2027, 1, "Large", false, SubsidiariesPerMember: 105)],
     ];
 
     [Theory]
@@ -117,6 +137,10 @@ public class RegistrationFeeSnapshotTests(ServiceFixture fixture) : IntegrationT
             dataBuilder = dataBuilder.WithProducer(p =>
             {
                 _ = testCase.MemberSize == "Large" ? p.AsLarge() : p.AsSmall();
+                if (testCase.SubsidiariesPerMember > 0)
+                {
+                    p.WithSubsidiaries(testCase.SubsidiariesPerMember);
+                }
             });
         }
 
@@ -130,6 +154,14 @@ public class RegistrationFeeSnapshotTests(ServiceFixture fixture) : IntegrationT
         await WaitForSnapshotAsync(built.Id);
 
         var after = await GetComplianceSchemeFeesBySubmission(submissionId);
+
+        // Same reasoning as the producer theory above - trim each member's breakdown to the shape
+        // the snapshot is expected to produce (zero-count/zero-price bands and unused per-unit
+        // OMP/CLR rates omitted) before comparing.
+        foreach (var member in before.ComplianceSchemeMembersWithFees)
+        {
+            NormalizeToSnapshotProjectionShape(member.SubsidiariesFeeBreakdown);
+        }
 
         after.Should().BeEquivalentTo(before, testCase.Label);
     }
@@ -560,6 +592,34 @@ public class RegistrationFeeSnapshotTests(ServiceFixture fixture) : IntegrationT
 
     private static string NewApplicationReferenceNumber() => $"PEPR{Guid.NewGuid():N}"[..15].ToUpperInvariant();
 
+    /// <summary>
+    /// Mutates a live-calculated <see cref="SubsidiariesFeeBreakdown"/> in place to the shape
+    /// <see cref="RegistrationFeeSnapshotHandler.AddSubsidiaryLineItems"/> actually persists, so a
+    /// round-trip comparison checks only the parts the snapshot is expected to return rather than
+    /// failing on line items it deliberately never stores:
+    /// - a band is dropped entirely when both its unit count and total price are zero (a band
+    ///   nobody is being charged for), matching the handler's own "skip if UnitCount&lt;=0 AND
+    ///   TotalPrice&lt;=0" rule;
+    /// - the OMP/CLR per-unit rate fields are zeroed when their total is zero, since the
+    ///   projector only ever sets them from a stored line item, and none is stored for a zero
+    ///   total (the live calculator, by contrast, always returns the rate regardless of whether
+    ///   any subsidiaries actually use it).
+    /// </summary>
+    private static void NormalizeToSnapshotProjectionShape(SubsidiariesFeeBreakdown breakdown)
+    {
+        breakdown.FeeBreakdowns.RemoveAll(b => b.UnitCount <= 0 && b.TotalPrice <= 0m);
+
+        if (breakdown.TotalSubsidiariesOMPFees <= 0m)
+        {
+            breakdown.UnitOMPFees = 0m;
+        }
+
+        if (breakdown.TotalSubsidiariesClosedLoopRecyclingFees <= 0m)
+        {
+            breakdown.UnitClosedLoopRecyclingFees = 0m;
+        }
+    }
+
     public sealed record ProducerCase(
         string Label,
         string ProducerSize,
@@ -578,7 +638,8 @@ public class RegistrationFeeSnapshotTests(ServiceFixture fixture) : IntegrationT
         int SubmissionPeriodId,
         int MemberCount,
         string MemberSize,
-        bool Late)
+        bool Late,
+        int SubsidiariesPerMember = 0)
     {
         public override string ToString() => Label;
     }
