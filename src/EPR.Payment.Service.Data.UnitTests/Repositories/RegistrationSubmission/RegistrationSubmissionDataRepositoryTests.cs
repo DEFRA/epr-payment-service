@@ -139,6 +139,55 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
         }
 
         [TestMethod]
+        public async Task GetLatestIdByApplicationReferenceNumberAsync_Match_ReturnsLatestId()
+        {
+            const string reference = "PEPR2699999";
+            var older = new RegistrationSubmissionData
+            {
+                Id = Guid.NewGuid(),
+                SubmissionId = Guid.NewGuid(),
+                RegistrationBlobName = $"blob-{Guid.NewGuid()}",
+                CreatedDate = new DateTimeOffset(2026, 5, 28, 0, 0, 0, TimeSpan.Zero),
+                ApplicationReferenceNumber = reference,
+                RegulatorNation = "GB-ENG",
+            };
+            var newer = new RegistrationSubmissionData
+            {
+                Id = Guid.NewGuid(),
+                SubmissionId = Guid.NewGuid(),
+                RegistrationBlobName = $"blob-{Guid.NewGuid()}",
+                CreatedDate = new DateTimeOffset(2026, 6, 29, 0, 0, 0, TimeSpan.Zero),
+                ApplicationReferenceNumber = reference,
+                RegulatorNation = "GB-ENG",
+            };
+            _dataContextMock.Setup(c => c.RegistrationSubmissionData).ReturnsDbSet(new[] { older, newer });
+
+            var result = await _sut.GetLatestIdByApplicationReferenceNumberAsync(reference, _ct);
+
+            result.Should().Be(newer.Id);
+        }
+
+        [TestMethod]
+        public async Task GetLatestIdByApplicationReferenceNumberAsync_NoMatch_ReturnsNull()
+        {
+            _dataContextMock.Setup(c => c.RegistrationSubmissionData).ReturnsDbSet(Array.Empty<RegistrationSubmissionData>());
+
+            var result = await _sut.GetLatestIdByApplicationReferenceNumberAsync("MISSING", _ct);
+
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task GetLatestIdByApplicationReferenceNumberAsync_NullOrEmptyReference_ReturnsNull()
+        {
+            using (new AssertionScope())
+            {
+                (await _sut.GetLatestIdByApplicationReferenceNumberAsync(null!, _ct)).Should().BeNull();
+                (await _sut.GetLatestIdByApplicationReferenceNumberAsync(string.Empty, _ct)).Should().BeNull();
+            }
+        }
+
+        [TestMethod]
         public async Task CreateAsync_DbUpdateException_Rethrows()
         {
             var dbSetMock = new Mock<DbSet<RegistrationSubmissionData>>();

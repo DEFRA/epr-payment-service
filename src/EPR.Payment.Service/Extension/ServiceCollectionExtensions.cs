@@ -100,10 +100,12 @@ namespace EPR.Payment.Service.Extension
             // Registration submission snapshot
             services.AddScoped<IRegistrationSubmissionDataRepository, RegistrationSubmissionDataRepository>();
             services.AddScoped<IRegistrationSubmissionDataEventRepository, RegistrationSubmissionDataEventRepository>();
+            services.AddScoped<IRegistrationFeeSnapshotRepository, RegistrationFeeSnapshotRepository>();
             services.AddScoped<IBlobReader, BlobReader>();
             services.AddSingleton<ICsvStreamParser, CsvStreamParser>();
             services.AddScoped<IRegistrationSubmissionDataHandler, RegistrationSubmissionDataHandler>();
             services.AddScoped<IRegistrationSubmittedForRegulatorApprovalHandler, RegistrationSubmittedForRegulatorApprovalHandler>();
+            services.AddScoped<IRegistrationFeeSnapshotHandler, RegistrationFeeSnapshotHandler>();
             services.AddScoped<IRegulatorRegistrationDecisionHandler, RegulatorRegistrationDecisionHandler>();
             services.AddScoped<IRegistrationFeeCalculationDetailsService, RegistrationFeeCalculationDetailsService>();
             services.AddScoped<IComplianceSchemeFeeBySubmissionService, ComplianceSchemeFeeBySubmissionService>();

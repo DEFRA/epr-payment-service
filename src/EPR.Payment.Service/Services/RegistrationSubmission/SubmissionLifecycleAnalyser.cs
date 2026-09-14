@@ -7,13 +7,23 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
     {
         public static SubmissionLifecycle Analyse(
             IReadOnlyList<RegistrationSubmissionData> records,
-            DateTime today)
+            DateTime today,
+            bool requireSubmittedForApproval = false)
         {
             ArgumentNullException.ThrowIfNull(records);
 
             var nonRejected = records
                 .Where(r => !r.Events.Any(e => e.EventName == RegistrationEventNames.RejectedByRegulator))
                 .ToList();
+
+            // Regulator-scope callers must not see WIP resubmissions the producer has not
+            // formally submitted for approval yet — filter to cycles that fired the submit event.
+            if (requireSubmittedForApproval)
+            {
+                nonRejected = nonRejected
+                    .Where(r => r.Events.Any(e => e.EventName == RegistrationEventNames.SubmittedForRegulatorApproval))
+                    .ToList();
+            }
 
             var first = nonRejected.FirstOrDefault();
             var latest = nonRejected.LastOrDefault();

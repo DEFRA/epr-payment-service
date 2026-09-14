@@ -1,6 +1,7 @@
 using AutoFixture;
 using AutoMapper;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Payments;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmission;
 using EPR.Payment.Service.Common.Data.Profiles;
 using EPR.Payment.Service.Common.Dtos.Request.Payments;
 using EPR.Payment.Service.Common.Dtos.Response.Payments;
@@ -18,6 +19,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
     {
         private Fixture? _fixture = null!;
         private Mock<IOnlinePaymentsRepository> _onlinePaymentsRepositoryMock = null!;
+        private Mock<IRegistrationSubmissionDataRepository> _rsdRepositoryMock = null!;
         private Mapper _mapper = null!;
         private OnlinePaymentsService? _service = null!;
 
@@ -28,10 +30,11 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         {
             _fixture = new Fixture();
             _onlinePaymentsRepositoryMock = new Mock<IOnlinePaymentsRepository>();
+            _rsdRepositoryMock = new Mock<IRegistrationSubmissionDataRepository>();
             MapperConfiguration configuration = SetupAutomapper();
             _mapper = new Mapper(configuration);
             _cancellationToken = new CancellationToken();
-            _service = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object);
+            _service = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object, _rsdRepositoryMock.Object);
         }
 
         private static MapperConfiguration SetupAutomapper()
@@ -44,7 +47,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public void Constructor_WhenAllDependenciesAreNotNull_ShouldInitialize()
         {
             // Act
-            OnlinePaymentsService service = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object);
+            OnlinePaymentsService service = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object, _rsdRepositoryMock.Object);
 
             // Assert
             using (new AssertionScope())
@@ -58,7 +61,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
         public void Constructor_WhenMapperIsNull_ShouldThrowArgumentNullException()
         {
             // Act
-            Action act = () => { var unused = new OnlinePaymentsService(null!, _onlinePaymentsRepositoryMock.Object); };
+            Action act = () => { var unused = new OnlinePaymentsService(null!, _onlinePaymentsRepositoryMock.Object, _rsdRepositoryMock.Object); };
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -72,7 +75,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
             IOnlinePaymentsRepository? onlinePaymentsRepository = null;
 
             // Act
-            Action act = () => { var unused = new OnlinePaymentsService(_mapper, onlinePaymentsRepository!); };
+            Action act = () => { var unused = new OnlinePaymentsService(_mapper, onlinePaymentsRepository!, _rsdRepositoryMock.Object); };
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
@@ -170,6 +173,56 @@ namespace EPR.Payment.Service.UnitTests.Services.Payments
                 result.Description.Should().Be(expectedResult.Description);
                 result.RequestorType.Should().Be(expectedResult.RequestorType);
             }
-        }        
+        }
+
+        [TestMethod]
+        public void Constructor_WhenRsdRepositoryIsNull_ShouldThrowArgumentNullException()
+        {
+            Action act = () => { var unused = new OnlinePaymentsService(_mapper, _onlinePaymentsRepositoryMock.Object, null!); };
+
+            act.Should().Throw<ArgumentNullException>()
+                .WithMessage("Value cannot be null. (Parameter 'registrationSubmissionDataRepository')");
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task InsertOnlinePaymentAsync_MatchingReference_StampsRegistrationSubmissionDataId([Frozen] Guid expectedResult)
+        {
+            var request = _fixture!.Build<OnlinePaymentInsertRequestDto>().With(d => d.UserId, Guid.NewGuid()).With(x => x.OrganisationId, Guid.NewGuid()).With(x => x.Reference, "PEPR2699999").Create();
+            var expectedRsdId = Guid.NewGuid();
+            Common.Data.DataModels.Payment? captured = null;
+
+            _rsdRepositoryMock
+                .Setup(r => r.GetLatestIdByApplicationReferenceNumberAsync("PEPR2699999", _cancellationToken))
+                .ReturnsAsync(expectedRsdId);
+            _onlinePaymentsRepositoryMock
+                .Setup(r => r.InsertOnlinePaymentAsync(It.IsAny<Common.Data.DataModels.Payment>(), _cancellationToken))
+                .Callback<Common.Data.DataModels.Payment, CancellationToken>((p, _) => captured = p)
+                .ReturnsAsync(expectedResult);
+
+            await _service!.InsertOnlinePaymentAsync(request, _cancellationToken);
+
+            captured!.RegistrationSubmissionDataId.Should().Be(expectedRsdId);
+        }
+
+        [TestMethod]
+        [AutoMoqData]
+        public async Task InsertOnlinePaymentAsync_NoMatchingReference_LeavesRegistrationSubmissionDataIdNull([Frozen] Guid expectedResult)
+        {
+            var request = _fixture!.Build<OnlinePaymentInsertRequestDto>().With(d => d.UserId, Guid.NewGuid()).With(x => x.OrganisationId, Guid.NewGuid()).Create();
+            Common.Data.DataModels.Payment? captured = null;
+
+            _rsdRepositoryMock
+                .Setup(r => r.GetLatestIdByApplicationReferenceNumberAsync(It.IsAny<string>(), _cancellationToken))
+                .ReturnsAsync((Guid?)null);
+            _onlinePaymentsRepositoryMock
+                .Setup(r => r.InsertOnlinePaymentAsync(It.IsAny<Common.Data.DataModels.Payment>(), _cancellationToken))
+                .Callback<Common.Data.DataModels.Payment, CancellationToken>((p, _) => captured = p)
+                .ReturnsAsync(expectedResult);
+
+            await _service!.InsertOnlinePaymentAsync(request, _cancellationToken);
+
+            captured!.RegistrationSubmissionDataId.Should().BeNull();
+        }
     }
 }

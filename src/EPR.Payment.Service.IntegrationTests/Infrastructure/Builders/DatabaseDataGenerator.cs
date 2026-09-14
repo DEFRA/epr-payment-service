@@ -9,7 +9,7 @@ namespace EPR.Payment.Service.IntegrationTests.Infrastructure.Builders;
 // Kept independent because the two test projects deliberately don't reference each other.
 public static class DatabaseDataGenerator
 {
-    public static async Task<Common.Data.DataModels.Payment> InsertRandomPayment(AppDbContext context)
+    public static async Task<Common.Data.DataModels.Payment> InsertRandomPayment(AppDbContext context, string? reference = null)
     {
         var id = Guid.NewGuid();
         var payment = new Common.Data.DataModels.Payment();
@@ -27,7 +27,7 @@ public static class DatabaseDataGenerator
         payment.OnlinePayment = onlinePayment;
         payment.OnlinePayment.UpdatedByOrgId = payment.OnlinePayment.OrganisationId;
         payment.ReasonForPayment = "foo";
-        payment.Reference = "foobar";
+        payment.Reference = reference ?? "foobar";
         payment.Regulator = "GB-ENG";
         payment.Amount = 100;
         payment.InternalStatusId = Status.Success;

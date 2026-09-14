@@ -51,8 +51,13 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.Property(p => p.UpdatedDate)
                    .HasColumnOrder(11);
 
+            builder.Property(p => p.RegistrationSubmissionDataId)
+                   .HasColumnOrder(12);
+
             builder.HasIndex(p => p.ExternalPaymentId)
                    .IsUnique();
+
+            builder.HasIndex(p => p.RegistrationSubmissionDataId);
 
             builder.Property(x => x.ExternalPaymentId)
                    .HasDefaultValueSql("NEWID()");
@@ -60,6 +65,11 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations
             builder.HasOne(p => p.PaymentStatus)
                    .WithMany(p=> p.Payments)
                    .HasForeignKey(p => p.InternalStatusId);
+
+            builder.HasOne(p => p.RegistrationSubmissionData)
+                   .WithMany()
+                   .HasForeignKey(p => p.RegistrationSubmissionDataId)
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

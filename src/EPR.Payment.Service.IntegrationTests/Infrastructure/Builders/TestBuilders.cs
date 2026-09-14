@@ -19,4 +19,6 @@ public sealed class TestBuilders(ServiceFixture fixture)
     }
 
     public PaymentBuilder Payment() => new(this);
+
+    public RegistrationSubmissionDataBuilder RegistrationSubmissionData() => new(this);
 }
