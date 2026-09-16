@@ -6085,3 +6085,27 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260827114943_SUB-262-extend-2026-fees-end-date'
+)
+BEGIN
+
+    UPDATE [Lookup].[RegistrationFees]
+       SET [EffectiveTo] = '2050-12-31 23:59:59'
+     WHERE [EffectiveFrom] = '2026-01-01 00:00:00';
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260827114943_SUB-262-extend-2026-fees-end-date'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260827114943_SUB-262-extend-2026-fees-end-date', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
