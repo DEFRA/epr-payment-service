@@ -92,6 +92,28 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             });
         }
 
+        // Ignored rather than deleted: fixing the regulator query/accept handling is scoped to
+        // SUB-223, not SUB-225 itself. Keep this red-when-enabled test in place and re-enable
+        // it (remove this attribute) once SUB-223 lands.
+        [Ignore("Regulator query/accept handling for subsidiary late fees is being fixed in SUB-223, not SUB-225. Re-enable once SUB-223 lands.")]
+        [TestMethod]
+        public void Find_PriorSubmittedOnTimeButOnlyQueried_ShouldNotTreatPriorSubAsNewlyAdded()
+        {
+            var prior = NewCycle("p1", ("ORG-1", new[] { "S1" }));
+            AddSubmittedForApproval(prior, OnTime);
+            AddQueried(prior, OnTime.AddDays(5));
+            // no AcceptedByRegulator event — the query has not been resolved yet when the
+            // resubmission below is submitted, matching the ticket's worked example.
+
+            var current = NewCycle("cur", ("ORG-1", new[] { "S1" }));
+
+            var result = NewlyAddedSubsidiaryFinder.Find(current, new[] { prior, current }, Deadline);
+
+            result.Should().BeEmpty(
+                "S1 was already submitted on time in a prior cycle and is only reappearing because " +
+                "the regulator's query took too long — business rule #2 says no late fee applies here");
+        }
+
         [TestMethod]
         public void Find_UnionAcrossPriorApprovedOnTimeCycles_RestoredSubIsNotNew()
         {
@@ -212,6 +234,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             {
                 Id = Guid.NewGuid(),
                 EventName = RegistrationEventNames.SubmittedForRegulatorApproval,
+                EventDate = eventDate,
+            });
+        }
+
+        private static void AddQueried(RegistrationSubmissionData cycle, DateTime eventDate)
+        {
+            cycle.Events.Add(new RegistrationSubmissionDataEvent
+            {
+                Id = Guid.NewGuid(),
+                EventName = RegistrationEventNames.QueriedByRegulator,
                 EventDate = eventDate,
             });
         }

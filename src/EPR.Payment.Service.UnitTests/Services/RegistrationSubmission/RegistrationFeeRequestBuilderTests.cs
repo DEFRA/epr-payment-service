@@ -163,6 +163,38 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             }
         }
 
+        [DataTestMethod]
+        [DataRow("Rule1: first submission late", true)]
+        [DataRow("Rule2: on-time first submission, resubmitted after deadline", false)]
+        public void BuildProducerRequest_And_BuildComplianceSchemeRequest_AgreeOnLateFeeSemantics(
+            string scenario, bool firstSubmissionLate)
+        {
+            _ = scenario;
+            var firstSubmittedDate = firstSubmissionLate ? Deadline.AddDays(5) : Deadline.AddDays(-10);
+            var latestSubmittedDate = firstSubmissionLate ? firstSubmittedDate : (DateTime?)null;
+            var newlyAdded = new HashSet<(string, string)> { ("ORG-1", "S2") };
+
+            var producerRsd = ProducerRsdWithSubs("S1", "S2", "S3");
+            var producerLifecycle = new SubmissionLifecycle(producerRsd, producerRsd, firstSubmittedDate, latestSubmittedDate, firstSubmittedDate);
+            var producerRequest = RegistrationFeeRequestBuilder.BuildProducerRequest(
+                producerRsd, producerRsd.Producers.First(), producerLifecycle, Today, newlyAdded);
+
+            var csRsd = ComplianceSchemeRsdWithSubs(("ORG-1", new[] { "S1", "S2", "S3" }));
+            var csLifecycle = new SubmissionLifecycle(csRsd, csRsd, firstSubmittedDate, latestSubmittedDate, firstSubmittedDate);
+            var csRequest = RegistrationFeeRequestBuilder.BuildComplianceSchemeRequest(csRsd, csLifecycle, Today, newlyAdded);
+            var csMember = csRequest.ComplianceSchemeMembers.Single();
+
+            using (new AssertionScope())
+            {
+                csMember.IsLateFeeApplicable.Should().Be(
+                    producerRequest.IsLateFeeApplicable,
+                    "a single-member compliance scheme and an equivalent direct producer must reach the same late-fee decision for the same lifecycle history");
+                csMember.NumberOfLateSubsidiaries.Should().Be(
+                    producerRequest.NumberOfLateSubsidiaries,
+                    "the two paths must count late subsidiaries identically given the same newly-added set");
+            }
+        }
+
         [TestMethod]
         public void BuildComplianceSchemeRequest_CsoSmallProducerWindow_IncludeRegistrationFeeFalse()
         {
