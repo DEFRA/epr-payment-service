@@ -5,7 +5,9 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
 {
     // Determines which (OrganisationId, SubsidiaryId) pairs on the current registration cycle
     // are "newly added" — meaning they were not present in any prior cycle for the same
-    // submissionId that was both accepted by the regulator AND submitted before the deadline.
+    // submissionId that had its application submitted on time and is still active (not
+    // rejected or cancelled by the regulator). A queried cycle, or a cycle that has been
+    // submitted on time but has not yet been terminally decided, both establish baseline.
     // The baseline is the union across ALL such prior cycles so that a subsidiary registered
     // once, removed later, and re-added is not treated as new.
     public static class NewlyAddedSubsidiaryFinder
@@ -36,7 +38,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 {
                     continue;
                 }
-                if (!IsApprovedAndSubmittedOnTime(cycle, deadlineDate))
+                if (!IsApplicationSubmittedOnTimeAndActive(cycle, deadlineDate))
                 {
                     continue;
                 }
@@ -54,31 +56,27 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             return current;
         }
 
-        private static bool IsApprovedAndSubmittedOnTime(RegistrationSubmissionData cycle, DateTime deadlineDate)
+        private static bool IsApplicationSubmittedOnTimeAndActive(RegistrationSubmissionData cycle, DateTime deadlineDate)
         {
-            bool accepted = false;
             bool submittedOnTime = false;
 
             foreach (var evt in cycle.Events)
             {
-                if (!accepted && evt.EventName == RegistrationEventNames.AcceptedByRegulator)
+                if (evt.EventName == RegistrationEventNames.RejectedByRegulator
+                    || evt.EventName == RegistrationEventNames.CancelledByRegulator)
                 {
-                    accepted = true;
+                    return false;
                 }
-                else if (!submittedOnTime
-                         && evt.EventName == RegistrationEventNames.SubmittedForRegulatorApproval
-                         && evt.EventDate.Date <= deadlineDate)
+
+                if (!submittedOnTime
+                    && evt.EventName == RegistrationEventNames.SubmittedForRegulatorApproval
+                    && evt.EventDate.Date <= deadlineDate)
                 {
                     submittedOnTime = true;
                 }
-
-                if (accepted && submittedOnTime)
-                {
-                    return true;
-                }
             }
 
-            return accepted && submittedOnTime;
+            return submittedOnTime;
         }
 
         private sealed class SubsidiaryKeyComparer : IEqualityComparer<(string OrganisationId, string SubsidiaryId)>

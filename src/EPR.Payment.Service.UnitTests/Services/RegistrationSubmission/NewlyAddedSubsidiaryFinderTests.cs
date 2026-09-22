@@ -75,11 +75,63 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         }
 
         [TestMethod]
-        public void Find_PriorOnTimeButNotAccepted_TreatsPriorSubsAsNewlyAdded()
+        public void Find_PriorOnTimeAndNotTerminallyDecided_EstablishesBaseline()
         {
             var prior = NewCycle("p1", ("ORG-1", new[] { "S1" }));
             AddSubmittedForApproval(prior, OnTime);
-            // no AcceptedByRegulator event
+            // no terminal event yet — cycle is in flight but was submitted on time,
+            // so it is still active for baseline purposes.
+
+            var current = NewCycle("cur", ("ORG-1", new[] { "S1", "S2" }));
+
+            var result = NewlyAddedSubsidiaryFinder.Find(current, new[] { prior, current }, Deadline);
+
+            result.Should().BeEquivalentTo(new[] { ("ORG-1", "S2") });
+        }
+
+        [TestMethod]
+        public void Find_PriorSubmittedOnTimeAndQueried_EstablishesBaseline()
+        {
+            var prior = NewCycle("p1", ("ORG-1", new[] { "S1" }));
+            AddSubmittedForApproval(prior, OnTime);
+            AddQueried(prior, OnTime.AddDays(5));
+            // no AcceptedByRegulator event — the query has not been resolved yet when the
+            // resubmission below is submitted.
+
+            var current = NewCycle("cur", ("ORG-1", new[] { "S1" }));
+
+            var result = NewlyAddedSubsidiaryFinder.Find(current, new[] { prior, current }, Deadline);
+
+            result.Should().BeEmpty(
+                "S1 was already submitted on time in a prior cycle that has not been terminally " +
+                "rejected/cancelled — business rule #2 says no late fee applies here");
+        }
+
+        [TestMethod]
+        public void Find_PriorSubmittedOnTimeAndCancelled_DoesNotEstablishBaseline()
+        {
+            var prior = NewCycle("p1", ("ORG-1", new[] { "S1" }));
+            AddSubmittedForApproval(prior, OnTime);
+            AddCancelled(prior, OnTime.AddDays(5));
+
+            var current = NewCycle("cur", ("ORG-1", new[] { "S1", "S2" }));
+
+            var result = NewlyAddedSubsidiaryFinder.Find(current, new[] { prior, current }, Deadline);
+
+            // Cancelled cycles are treated the same as rejected — they do not shield subs.
+            result.Should().BeEquivalentTo(new[]
+            {
+                ("ORG-1", "S1"),
+                ("ORG-1", "S2"),
+            });
+        }
+
+        [TestMethod]
+        public void Find_PriorSubmittedOnTimeAndRejected_DoesNotEstablishBaseline()
+        {
+            var prior = NewCycle("p1", ("ORG-1", new[] { "S1" }));
+            AddSubmittedForApproval(prior, OnTime);
+            AddRejected(prior, OnTime.AddDays(5));
 
             var current = NewCycle("cur", ("ORG-1", new[] { "S1", "S2" }));
 
@@ -90,28 +142,6 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 ("ORG-1", "S1"),
                 ("ORG-1", "S2"),
             });
-        }
-
-        // Ignored rather than deleted: fixing the regulator query/accept handling is scoped to
-        // SUB-223, not SUB-225 itself. Keep this red-when-enabled test in place and re-enable
-        // it (remove this attribute) once SUB-223 lands.
-        [Ignore("Regulator query/accept handling for subsidiary late fees is being fixed in SUB-223, not SUB-225. Re-enable once SUB-223 lands.")]
-        [TestMethod]
-        public void Find_PriorSubmittedOnTimeButOnlyQueried_ShouldNotTreatPriorSubAsNewlyAdded()
-        {
-            var prior = NewCycle("p1", ("ORG-1", new[] { "S1" }));
-            AddSubmittedForApproval(prior, OnTime);
-            AddQueried(prior, OnTime.AddDays(5));
-            // no AcceptedByRegulator event — the query has not been resolved yet when the
-            // resubmission below is submitted, matching the ticket's worked example.
-
-            var current = NewCycle("cur", ("ORG-1", new[] { "S1" }));
-
-            var result = NewlyAddedSubsidiaryFinder.Find(current, new[] { prior, current }, Deadline);
-
-            result.Should().BeEmpty(
-                "S1 was already submitted on time in a prior cycle and is only reappearing because " +
-                "the regulator's query took too long — business rule #2 says no late fee applies here");
         }
 
         [TestMethod]
@@ -244,6 +274,26 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             {
                 Id = Guid.NewGuid(),
                 EventName = RegistrationEventNames.QueriedByRegulator,
+                EventDate = eventDate,
+            });
+        }
+
+        private static void AddCancelled(RegistrationSubmissionData cycle, DateTime eventDate)
+        {
+            cycle.Events.Add(new RegistrationSubmissionDataEvent
+            {
+                Id = Guid.NewGuid(),
+                EventName = RegistrationEventNames.CancelledByRegulator,
+                EventDate = eventDate,
+            });
+        }
+
+        private static void AddRejected(RegistrationSubmissionData cycle, DateTime eventDate)
+        {
+            cycle.Events.Add(new RegistrationSubmissionDataEvent
+            {
+                Id = Guid.NewGuid(),
+                EventName = RegistrationEventNames.RejectedByRegulator,
                 EventDate = eventDate,
             });
         }
