@@ -162,6 +162,50 @@ public class SubsidiaryLateFeeTests(ServiceFixture fixture) : IntegrationTestBas
     }
 
     [Fact]
+    public async Task GIVEN_subsidiary_submitted_on_time_but_only_queried_WHEN_resubmitted_after_deadline_with_another_subsidiary_THEN_subsidiary_late_fee_is_charged()
+    {
+        var submissionId = Guid.NewGuid();
+        var applicationReferenceNumber = NewApplicationReferenceNumber();
+        var organisationId = NewOrganisationId();
+
+        await Builder.RegistrationSubmissionData()
+            .ForSubmissionId(submissionId)
+            .WithApplicationReferenceNumber(applicationReferenceNumber)
+            .InSubmissionPeriod(SeededSubmissionPeriods.DirectLargeProducer2027)
+            .SubmittedOn(BeforeDeadline)
+            .WithProducer(p => p.WithOrganisationId(organisationId).AsLarge().WithSubsidiary(s => s.WithSubsidiaryId("S1")))
+            .WithEvent(RegistrationEventNames.SubmittedForRegulatorApproval, BeforeDeadline)
+            .Queried(BeforeDeadline.AddDays(30)) // regulator queries it, after the deadline - never accepted
+            .Build();
+
+        var resubmission = await Builder.RegistrationSubmissionData()
+            .ForSubmissionId(submissionId)
+            .WithApplicationReferenceNumber(applicationReferenceNumber)
+            .InSubmissionPeriod(SeededSubmissionPeriods.DirectLargeProducer2027)
+            .SubmittedOn(AfterDeadline)
+            .WithProducer(p => p.WithOrganisationId(organisationId).AsLarge()
+                .WithSubsidiary(s => s.WithSubsidiaryId("S1")) // same S1, answering the query
+                .WithSubsidiary(s => s.WithSubsidiaryId("S2"))) // and a brand-new S2
+            .Build();
+
+        await Events.PublishSubmittedForRegulatorApprovalAsync(submissionId, applicationReferenceNumber, AfterDeadline);
+        await WaitForSnapshotAsync(resubmission.Id);
+
+        var response = await GetProducerFeesBySubmission(submissionId);
+
+        response.Should().NotBeNull();
+        using (new AwesomeAssertions.Execution.AssertionScope())
+        {
+            response!.SubsidiariesFeeBreakdown.CountOfLateSubsidiaries.Should().Be(
+                1, "only S2 is newly appearing after the deadline - S1 was already submitted on time and only queried, not rejected or cancelled, so it still establishes baseline");
+            response.SubsidiariesFeeBreakdown.TotalSubsidiariesLateFees.Should().BeGreaterThan(
+                0m, "a positive late-subsidiary count must produce a positive fee");
+            response.ProducerLateRegistrationFee.Should().Be(
+                0m, "the submission-level late fee is separate from the subsidiary late fee - the first cycle was on time");
+        }
+    }
+
+    [Fact]
     public async Task GIVEN_CS_member_subsidiary_submitted_on_time_but_only_queried_WHEN_resubmitted_after_deadline_THEN_no_subsidiary_late_fee()
     {
         var submissionId = Guid.NewGuid();
