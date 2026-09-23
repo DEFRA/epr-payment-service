@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.Producer;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.Producer;
@@ -21,6 +22,10 @@ namespace EPR.Payment.Service.Services.RegistrationFees.Producer
         private readonly IPaymentsService _paymentsService;
         private readonly IClosedLoopRecyclingCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> _closedLoopRecyclingCalculationStrategy;
 
+        [SuppressMessage(
+            "Major Code Smell",
+            "S107:Methods should not have too many parameters",
+            Justification = "Calculator orchestrates independent per-fee-item strategies (base, OMP, CLR, late, sub-late, subsidiaries breakdown) plus a validator and the payments service. Each dependency is used exactly once at composition time; grouping them into a wrapper record would move the same shape onto a helper class without simplifying the calculator's logic.")]
         public ProducerFeesCalculatorService(
             IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal> baseFeeCalculationStrategy,
             IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown> subsidiariesFeeCalculationStrategy,

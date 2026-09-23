@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Constants.RegistrationFees.Exceptions;
 using EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees;
 using EPR.Payment.Service.Common.Dtos.Response.RegistrationFees.ComplianceScheme;
@@ -22,6 +23,10 @@ namespace EPR.Payment.Service.Services.RegistrationFees.ComplianceScheme
         private readonly IPaymentsService _paymentsService;
         private readonly ICSClosedLoopRecyclingCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> _complianceSchemeClosedLoopRecyclingStrategy;
 
+        [SuppressMessage(
+            "Major Code Smell",
+            "S107:Methods should not have too many parameters",
+            Justification = "Calculator orchestrates independent per-fee-item strategies (base, OMP, CLR, late, sub-late, member fee, subsidiaries breakdown) plus the payments service. Each dependency is used exactly once at composition time; grouping them into a wrapper record would move the same shape onto a helper class without simplifying the calculator's logic.")]
         public ComplianceSchemeCalculatorService(
             ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal> baseFeeCalculationStrategy,
             ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal> complianceSchemeOnlineMarketStrategy,

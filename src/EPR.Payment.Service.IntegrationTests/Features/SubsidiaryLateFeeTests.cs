@@ -126,7 +126,6 @@ public class SubsidiaryLateFeeTests(ServiceFixture fixture) : IntegrationTestBas
         }
     }
 
-    [Fact(Skip = "Regulator query/accept handling for subsidiary late fees is being fixed in SUB-223, not SUB-225. Re-enable once SUB-223 lands.")]
     public async Task GIVEN_subsidiary_submitted_on_time_but_only_queried_WHEN_resubmitted_after_deadline_THEN_no_subsidiary_late_fee()
     {
         var submissionId = Guid.NewGuid();
@@ -161,7 +160,6 @@ public class SubsidiaryLateFeeTests(ServiceFixture fixture) : IntegrationTestBas
             0, "S1 was already submitted on time before the deadline, no fee applies");
     }
 
-    [Fact(Skip = "Regulator query/accept handling for subsidiary late fees is being fixed in SUB-223, not SUB-225. Re-enable once SUB-223 lands.")]
     public async Task GIVEN_CS_member_subsidiary_submitted_on_time_but_only_queried_WHEN_resubmitted_after_deadline_THEN_no_subsidiary_late_fee()
     {
         var submissionId = Guid.NewGuid();
@@ -199,7 +197,6 @@ public class SubsidiaryLateFeeTests(ServiceFixture fixture) : IntegrationTestBas
             0, "S1 was already submitted on time before the deadline, no fee applies");
     }
 
-    [Fact(Skip = "Regulator query/accept handling for subsidiary late fees is being fixed in SUB-223, not SUB-225. Re-enable once SUB-223 lands.")]
     public async Task GIVEN_CS_member_subsidiary_submitted_on_time_but_only_queried_WHEN_resubmitted_after_deadline_with_another_subsidiary_THEN_subsidiary_late_fee_is_charged()
     {
         var submissionId = Guid.NewGuid();
