@@ -163,6 +163,39 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             }
         }
 
+        [TestMethod]
+        public void BuildComplianceSchemeRequest_NewJoinerDuringLateResubmission_IsLateOnlyForTheNewJoiner()
+        {
+            // The scheme's own original submission was on time (isOriginalCsoLate = false), so the
+            // scheme-wide Rule 1/Rule 2 branches of memberIsLate don't fire for anyone. This
+            // resubmission (filed after the deadline) adds a brand-new member alongside one that was
+            // already part of the scheme from that earlier on-time cycle - only the new joiner should
+            // read as late; the existing member's own late-fee status must be unaffected by it.
+            var rsd = ComplianceSchemeRsdWithSubs(
+                ("MEM-EXISTING", new[] { "S1" }),
+                ("MEM-NEW-JOINER", new[] { "S2" }));
+            rsd.Producers.Single(p => p.OrganisationId == "MEM-NEW-JOINER").IsNewJoiner = true;
+
+            var onTimeFirstSubmit = Deadline.AddDays(-10);
+            var lateResubmit = Deadline.AddDays(5);
+            var lifecycle = new SubmissionLifecycle(rsd, rsd, onTimeFirstSubmit, lateResubmit, lateResubmit);
+            var newlyAdded = new HashSet<(string, string)>(); // MEM-EXISTING's own subsidiary was already present, not newly added
+
+            var request = RegistrationFeeRequestBuilder.BuildComplianceSchemeRequest(rsd, lifecycle, Today, newlyAdded);
+
+            var existingMember = request.ComplianceSchemeMembers.Single(m => m.MemberId == "MEM-EXISTING");
+            var newJoinerMember = request.ComplianceSchemeMembers.Single(m => m.MemberId == "MEM-NEW-JOINER");
+
+            using (new AssertionScope())
+            {
+                existingMember.IsLateFeeApplicable.Should().BeFalse("the scheme's first submission was on time and this member isn't a new joiner");
+                existingMember.NumberOfLateSubsidiaries.Should().Be(0, "this member's subsidiary was already present in the earlier on-time cycle");
+
+                newJoinerMember.IsLateFeeApplicable.Should().BeTrue("this member joined the scheme during a resubmission filed after the deadline");
+                newJoinerMember.NumberOfLateSubsidiaries.Should().Be(1, "IsLateFeeApplicable true triggers Rule 1 - every subsidiary of a late member counts");
+            }
+        }
+
         [DataTestMethod]
         [DataRow("Rule1: first submission late", true)]
         [DataRow("Rule2: on-time first submission, resubmitted after deadline", false)]
