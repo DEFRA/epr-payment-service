@@ -350,6 +350,43 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             captured!.Producers.Single().IsNewJoiner.Should().Be(expected);
         }
 
+        // Mirrors HandleAsync_NewJoinerMapping above, but for a subsidiary's own row rather than its
+        // producer's - the mapping is independent per row (MapSubsidiary reads the subsidiary row's
+        // own JoinerDate, not the producer's), so a producer with joiner_date blank can still have a
+        // subsidiary whose own joiner_date is filled in, and vice versa. Note: as of this writing,
+        // RegistrationSubmissionSubsidiary.IsNewJoiner is persisted here but not read anywhere in fee
+        // calculation (only RegistrationSubmissionProducer.IsNewJoiner is, and only for compliance
+        // scheme members) - this test only proves the mapping itself, not that it affects any fee.
+        [DataTestMethod]
+        [DataRow("2026-04-01", true)]
+        [DataRow("anything-non-empty", true)]
+        [DataRow("", false)]
+        [DataRow(" ", false)]
+        public async Task HandleAsync_NewJoinerMapping_AppliesIndependentlyToSubsidiaryRow(string value, bool expected)
+        {
+            var request = NewRequest();
+            ArrangeNoExistingSnapshot(request);
+            ArrangeCsvRows(request.RegistrationBlobName, new[]
+            {
+                RegistrationCsvFixtureFactory.Producer("ORG-1"), // producer row's own joiner_date left blank
+                RegistrationCsvFixtureFactory.Subsidiary("ORG-1", "SUB-1", joinerDate: value),
+            });
+
+            RegistrationSubmissionData? captured = null;
+            _repositoryMock
+                .Setup(r => r.CreateAsync(It.IsAny<RegistrationSubmissionData>(), _ct))
+                .Callback<RegistrationSubmissionData, CancellationToken>((e, _) => captured = e)
+                .ReturnsAsync(Guid.NewGuid());
+
+            await _sut.HandleAsync(request, _ct);
+
+            using (new AssertionScope())
+            {
+                captured!.Producers.Single().IsNewJoiner.Should().BeFalse("the producer row's own joiner_date was left blank");
+                captured.Producers.Single().Subsidiaries.Single().IsNewJoiner.Should().Be(expected);
+            }
+        }
+
         [TestMethod]
         public async Task HandleAsync_PersistsSubmissionPeriodIdFromRequest()
         {
