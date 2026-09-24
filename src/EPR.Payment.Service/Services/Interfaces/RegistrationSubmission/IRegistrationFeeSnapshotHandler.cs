@@ -7,6 +7,7 @@ namespace EPR.Payment.Service.Services.Interfaces.RegistrationSubmission
     {
         Task HandleAsync(
             RegistrationSubmissionData latestRecord,
+            IReadOnlyList<RegistrationSubmissionData> allRecords,
             DateTime submissionDate,
             SubmissionLifecycle lifecycle,
             CancellationToken cancellationToken);

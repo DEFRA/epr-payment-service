@@ -101,7 +101,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 thrown.SubmissionId.Should().Be(request.SubmissionId);
                 thrown.EventName.Should().Be(RegistrationSubmittedForRegulatorApprovalHandler.EventName);
                 _snapshotHandlerMock.Verify(
-                    h => h.HandleAsync(It.IsAny<RegistrationSubmissionData>(), It.IsAny<DateTime>(), It.IsAny<SubmissionLifecycle>(), It.IsAny<CancellationToken>()),
+                    h => h.HandleAsync(It.IsAny<RegistrationSubmissionData>(), It.IsAny<IReadOnlyList<RegistrationSubmissionData>>(), It.IsAny<DateTime>(), It.IsAny<SubmissionLifecycle>(), It.IsAny<CancellationToken>()),
                     Times.Never);
             }
         }
@@ -117,7 +117,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             await _sut.HandleAsync(request, _ct);
 
             _snapshotHandlerMock.Verify(
-                h => h.HandleAsync(It.IsAny<RegistrationSubmissionData>(), It.IsAny<DateTime>(), It.IsAny<SubmissionLifecycle>(), It.IsAny<CancellationToken>()),
+                h => h.HandleAsync(It.IsAny<RegistrationSubmissionData>(), It.IsAny<IReadOnlyList<RegistrationSubmissionData>>(), It.IsAny<DateTime>(), It.IsAny<SubmissionLifecycle>(), It.IsAny<CancellationToken>()),
                 Times.Never);
         }
 
@@ -146,7 +146,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             await _sut.HandleAsync(request, _ct);
 
             _snapshotHandlerMock.Verify(
-                h => h.HandleAsync(rsd, request.SubmissionDate, It.IsAny<SubmissionLifecycle>(), _ct),
+                h => h.HandleAsync(rsd, It.IsAny<IReadOnlyList<RegistrationSubmissionData>>(), request.SubmissionDate, It.IsAny<SubmissionLifecycle>(), _ct),
                 Times.Once);
         }
 
@@ -172,7 +172,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .Setup(r => r.GetAllForSubmissionAsync(request.SubmissionId, _ct))
                 .ReturnsAsync(new[] { rsd });
             _snapshotHandlerMock
-                .Setup(h => h.HandleAsync(It.IsAny<RegistrationSubmissionData>(), It.IsAny<DateTime>(), It.IsAny<SubmissionLifecycle>(), It.IsAny<CancellationToken>()))
+                .Setup(h => h.HandleAsync(It.IsAny<RegistrationSubmissionData>(), It.IsAny<IReadOnlyList<RegistrationSubmissionData>>(), It.IsAny<DateTime>(), It.IsAny<SubmissionLifecycle>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new InvalidOperationException("boom"));
 
             Func<Task> act = () => _sut.HandleAsync(request, _ct);

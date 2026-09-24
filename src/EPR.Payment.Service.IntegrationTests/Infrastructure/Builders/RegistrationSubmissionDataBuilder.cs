@@ -85,6 +85,12 @@ public sealed class RegistrationSubmissionDataBuilder(TestBuilders builders)
     public RegistrationSubmissionDataBuilder Rejected(DateTime? eventDate = null) =>
         WithEvent(RegistrationEventNames.RejectedByRegulator, eventDate);
 
+    public RegistrationSubmissionDataBuilder Accepted(DateTime? eventDate = null) =>
+        WithEvent(RegistrationEventNames.AcceptedByRegulator, eventDate);
+
+    public RegistrationSubmissionDataBuilder Queried(DateTime? eventDate = null) =>
+        WithEvent(RegistrationEventNames.QueriedByRegulator, eventDate);
+
     public async Task<BuiltRegistrationSubmissionData> Build()
     {
         var entity = new RegistrationSubmissionData
@@ -219,6 +225,16 @@ public sealed class RegistrationSubmissionDataBuilder(TestBuilders builders)
         internal bool IsOnlineMarketplace { get; private set; }
         internal bool IsClosedLoopRecycling { get; private set; }
         internal bool IsNewJoiner { get; private set; }
+
+        /// <summary>Forces a specific SubsidiaryId instead of the default random one - needed to
+        /// represent "the same subsidiary" recurring across two separately-built cycles (e.g. one
+        /// already-granted prior RegistrationSubmissionData row and a current resubmission row),
+        /// which SUB-225's NewlyAddedSubsidiaryFinder identifies by (OrganisationId, SubsidiaryId).</summary>
+        public SubsidiarySpec WithSubsidiaryId(string subsidiaryId)
+        {
+            SubsidiaryId = subsidiaryId;
+            return this;
+        }
 
         public SubsidiarySpec AsOnlineMarketplace(bool isOnlineMarketplace = true)
         {

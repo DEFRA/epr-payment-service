@@ -19,6 +19,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
         private Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>> _baseFeeCalculationStrategyMock = null!;
         private Mock<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeOnlineMarketStrategyMock = null!;
         private Mock<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>> _complianceSchemeLateFeeStrategyMock = null!;
+        private Mock<ICSSubsidiaryLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>> _complianceSchemeSubsidiaryLateFeeStrategyMock = null!;
         private Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>> _complianceSchemeMemberStrategyMock = null!;
         private Mock<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>> _subsidiariesFeeCalculationStrategyMock = null!;
         private Mock<IPaymentsService> _paymentsServiceMock = null!;
@@ -31,15 +32,17 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             _baseFeeCalculationStrategyMock = new Mock<ICSBaseFeeCalculationStrategy<ComplianceSchemeFeesRequestDto, decimal>>();
             _complianceSchemeOnlineMarketStrategyMock = new Mock<ICSOnlineMarketCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _complianceSchemeLateFeeStrategyMock = new Mock<ICSLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>>();
+            _complianceSchemeSubsidiaryLateFeeStrategyMock = new Mock<ICSSubsidiaryLateFeeCalculationStrategy<ComplianceSchemeLateFeeRequestDto, decimal>>();
             _complianceSchemeMemberStrategyMock = new Mock<ICSMemberFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<IBaseSubsidiariesFeeCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, SubsidiariesFeeBreakdown>>();
             _paymentsServiceMock = new Mock<IPaymentsService>();
             _complianceSchemeClosedLoopRecyclingStrategyMock = new Mock<ICSClosedLoopRecyclingCalculationStrategy<ComplianceSchemeMemberWithRegulatorDto, decimal>>();
             _service = new ComplianceSchemeCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
-                _complianceSchemeOnlineMarketStrategyMock.Object, 
-                _complianceSchemeLateFeeStrategyMock.Object, 
-                _complianceSchemeMemberStrategyMock.Object, 
+                _complianceSchemeOnlineMarketStrategyMock.Object,
+                _complianceSchemeLateFeeStrategyMock.Object,
+                _complianceSchemeSubsidiaryLateFeeStrategyMock.Object,
+                _complianceSchemeMemberStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _paymentsServiceMock.Object,
                 _complianceSchemeClosedLoopRecyclingStrategyMock.Object);
@@ -56,6 +59,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 baseFeeCalculationStrategy!,
                 _complianceSchemeOnlineMarketStrategyMock.Object,
                 _complianceSchemeLateFeeStrategyMock.Object,
+                _complianceSchemeSubsidiaryLateFeeStrategyMock.Object,
                 _complianceSchemeMemberStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _paymentsServiceMock.Object,
@@ -79,6 +83,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     _baseFeeCalculationStrategyMock.Object,
                     complianceSchemeOnlineMarketStrategy!,
                     _complianceSchemeLateFeeStrategyMock.Object,
+                    _complianceSchemeSubsidiaryLateFeeStrategyMock.Object,
                     _complianceSchemeMemberStrategyMock.Object,
                     _subsidiariesFeeCalculationStrategyMock.Object,
                     _paymentsServiceMock.Object,
@@ -103,6 +108,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     _baseFeeCalculationStrategyMock.Object,
                     _complianceSchemeOnlineMarketStrategyMock.Object,
                     complianceSchemeLateFeeStrategy!,
+                    _complianceSchemeSubsidiaryLateFeeStrategyMock.Object,
                     _complianceSchemeMemberStrategyMock.Object,
                     _subsidiariesFeeCalculationStrategyMock.Object,
                     _paymentsServiceMock.Object,
@@ -127,6 +133,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     _baseFeeCalculationStrategyMock.Object,
                     _complianceSchemeOnlineMarketStrategyMock.Object,
                     _complianceSchemeLateFeeStrategyMock.Object,
+                    _complianceSchemeSubsidiaryLateFeeStrategyMock.Object,
                     complianceSchemeMemberStrategy!,
                     _subsidiariesFeeCalculationStrategyMock.Object,
                     _paymentsServiceMock.Object,
@@ -151,6 +158,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     _baseFeeCalculationStrategyMock.Object,
                     _complianceSchemeOnlineMarketStrategyMock.Object,
                     _complianceSchemeLateFeeStrategyMock.Object,
+                    _complianceSchemeSubsidiaryLateFeeStrategyMock.Object,
                     _complianceSchemeMemberStrategyMock.Object,
                     subsidiariesFeeCalculationStrategy!,
                     _paymentsServiceMock.Object,
@@ -176,6 +184,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     _baseFeeCalculationStrategyMock.Object,
                     _complianceSchemeOnlineMarketStrategyMock.Object,
                     _complianceSchemeLateFeeStrategyMock.Object,
+                    _complianceSchemeSubsidiaryLateFeeStrategyMock.Object,
                     _complianceSchemeMemberStrategyMock.Object,
                     _subsidiariesFeeCalculationStrategyMock.Object,
                     paymentsService!,
@@ -193,9 +202,10 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
             // Act
             var service = new ComplianceSchemeCalculatorService(
                 _baseFeeCalculationStrategyMock.Object,
-                _complianceSchemeOnlineMarketStrategyMock.Object, 
-                _complianceSchemeLateFeeStrategyMock.Object, 
-                _complianceSchemeMemberStrategyMock.Object, 
+                _complianceSchemeOnlineMarketStrategyMock.Object,
+                _complianceSchemeLateFeeStrategyMock.Object,
+                _complianceSchemeSubsidiaryLateFeeStrategyMock.Object,
+                _complianceSchemeMemberStrategyMock.Object,
                 _subsidiariesFeeCalculationStrategyMock.Object,
                 _paymentsServiceMock.Object,
                 _complianceSchemeClosedLoopRecyclingStrategyMock.Object);
@@ -709,6 +719,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                     IsOnlineMarketplace = false,
                     IsLateFeeApplicable = true,
                     NumberOfSubsidiaries = 5,
+                    NumberOfLateSubsidiaries = 5,
                     NoOfSubsidiariesOnlineMarketplace = 0
                 }
             }
@@ -727,6 +738,10 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 .ReturnsAsync(0);
 
             _complianceSchemeLateFeeStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeLateFeeRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(33200);
+
+            _complianceSchemeSubsidiaryLateFeeStrategyMock
                 .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeLateFeeRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(33200);
 
@@ -757,15 +772,15 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 var member = result.ComplianceSchemeMembersWithFees.First();
                 member.MemberRegistrationFee.Should().Be(63100M);
                 member.MemberOnlineMarketPlaceFee.Should().Be(0);
+                member.MemberLateRegistrationFee.Should().Be(33200M); // org-only late fee
 
-                // Update for late fee with subsidiaries: Member late fee + (5 subsidiaries * late fee per subsidiary)
-                var expectedMemberLateRegistrationFee = 33200M + (5 * 33200M);
-                member.MemberLateRegistrationFee.Should().Be(expectedMemberLateRegistrationFee);
+                var expectedSubsidiaryLateTotal = 5 * 33200M;
+                member.SubsidiariesFeeBreakdown.CountOfLateSubsidiaries.Should().Be(5);
+                member.SubsidiariesFeeBreakdown.UnitSubsidiaryLateFee.Should().Be(33200M);
+                member.SubsidiariesFeeBreakdown.TotalSubsidiariesLateFees.Should().Be(expectedSubsidiaryLateTotal);
+                member.SubsidiariesFee.Should().Be(279000M + expectedSubsidiaryLateTotal);
 
-                member.SubsidiariesFee.Should().Be(279000M);
-
-                // Update total member fee to include adjusted late fee
-                member.TotalMemberFee.Should().Be(63100M + 0 + 279000M + expectedMemberLateRegistrationFee);
+                member.TotalMemberFee.Should().Be(63100M + 0 + member.SubsidiariesFee + 33200M);
 
                 var expectedTotalFee = 1380400M + member.TotalMemberFee;
                 result.TotalFee.Should().Be(expectedTotalFee);
@@ -792,6 +807,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 IsOnlineMarketplace = false,
                 IsLateFeeApplicable = true,
                 NumberOfSubsidiaries = 5,
+                NumberOfLateSubsidiaries = 5,
                 NoOfSubsidiariesOnlineMarketplace = 0
             },
             new ComplianceSchemeMemberDto
@@ -801,6 +817,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 IsOnlineMarketplace = true,
                 IsLateFeeApplicable = true,
                 NumberOfSubsidiaries = 105,
+                NumberOfLateSubsidiaries = 105,
                 NoOfSubsidiariesOnlineMarketplace = 0
             }
         }
@@ -822,6 +839,10 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 .ReturnsAsync(257900);
 
             _complianceSchemeLateFeeStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeLateFeeRequestDto>(), cancellationToken))
+                .ReturnsAsync(33200);
+
+            _complianceSchemeSubsidiaryLateFeeStrategyMock
                 .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeLateFeeRequestDto>(), cancellationToken))
                 .ReturnsAsync(33200);
 
@@ -866,26 +887,24 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 member1.MemberId.Should().Be("12345");
                 member1.MemberRegistrationFee.Should().Be(63100M);
                 member1.MemberOnlineMarketPlaceFee.Should().Be(0);
+                member1.MemberLateRegistrationFee.Should().Be(33200M); // org-only
 
-                // Calculate the expected late fee for member 1
-                var expectedMember1LateRegistrationFee = 33200M + (5 * 33200M);
-                member1.MemberLateRegistrationFee.Should().Be(expectedMember1LateRegistrationFee);
-
-                member1.SubsidiariesFee.Should().Be(279000M);
-                member1.TotalMemberFee.Should().Be(63100M + 0 + 279000M + expectedMember1LateRegistrationFee);
+                var member1SubLate = 5 * 33200M;
+                member1.SubsidiariesFeeBreakdown.TotalSubsidiariesLateFees.Should().Be(member1SubLate);
+                member1.SubsidiariesFee.Should().Be(279000M + member1SubLate);
+                member1.TotalMemberFee.Should().Be(63100M + 0 + member1.SubsidiariesFee + 33200M);
 
                 // Member 2
                 var member2 = result.ComplianceSchemeMembersWithFees.Last();
                 member2.MemberId.Should().Be("67890");
                 member2.MemberRegistrationFee.Should().Be(165800M);
                 member2.MemberOnlineMarketPlaceFee.Should().Be(257900M);
+                member2.MemberLateRegistrationFee.Should().Be(33200M); // org-only
 
-                // Calculate the expected late fee for member 2
-                var expectedMember2LateRegistrationFee = 33200M + (105 * 33200M);
-                member2.MemberLateRegistrationFee.Should().Be(expectedMember2LateRegistrationFee);
-
-                member2.SubsidiariesFee.Should().Be(2236000M);
-                member2.TotalMemberFee.Should().Be(165800M + 257900M + 2236000M + expectedMember2LateRegistrationFee);
+                var member2SubLate = 105 * 33200M;
+                member2.SubsidiariesFeeBreakdown.TotalSubsidiariesLateFees.Should().Be(member2SubLate);
+                member2.SubsidiariesFee.Should().Be(2236000M + member2SubLate);
+                member2.TotalMemberFee.Should().Be(165800M + 257900M + member2.SubsidiariesFee + 33200M);
 
                 // Total fee calculation including both members
                 var expectedTotalFee = 1380400M + member1.TotalMemberFee + member2.TotalMemberFee;
@@ -922,6 +941,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                         IsOnlineMarketplace = true,
                         IsLateFeeApplicable = true,
                         NumberOfSubsidiaries = 105,
+                        NumberOfLateSubsidiaries = 105,
                         NoOfSubsidiariesOnlineMarketplace = 0
                     }
                 }
@@ -944,6 +964,10 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
 
             _complianceSchemeLateFeeStrategyMock
                 .SetupSequence(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeLateFeeRequestDto>(), cancellationToken))
+                .ReturnsAsync(33200);
+
+            _complianceSchemeSubsidiaryLateFeeStrategyMock
+                .Setup(s => s.CalculateFeeAsync(It.IsAny<ComplianceSchemeLateFeeRequestDto>(), cancellationToken))
                 .ReturnsAsync(33200);
 
             _subsidiariesFeeCalculationStrategyMock
@@ -995,15 +1019,12 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.ComplianceSche
                 member2.MemberId.Should().Be("67890");
                 member2.MemberRegistrationFee.Should().Be(165800M);
                 member2.MemberOnlineMarketPlaceFee.Should().Be(257900M);
+                member2.MemberLateRegistrationFee.Should().Be(33200M); // org-only
 
-                // Expected late fee: base late fee + (number of subsidiaries * late fee)
-                var expectedMemberLateRegistrationFee = 33200M + (105 * 33200M);
-                member2.MemberLateRegistrationFee.Should().Be(expectedMemberLateRegistrationFee);
-
-                member2.SubsidiariesFee.Should().Be(2236000M);
-
-                // Total member fee including adjusted late fee
-                member2.TotalMemberFee.Should().Be(165800M + 257900M + 2236000M + expectedMemberLateRegistrationFee);
+                var member2SubLate = 105 * 33200M;
+                member2.SubsidiariesFeeBreakdown.TotalSubsidiariesLateFees.Should().Be(member2SubLate);
+                member2.SubsidiariesFee.Should().Be(2236000M + member2SubLate);
+                member2.TotalMemberFee.Should().Be(165800M + 257900M + member2.SubsidiariesFee + 33200M);
 
                 // Total fee calculation including both members
                 var expectedTotalFee = 1380400M + member1.TotalMemberFee + member2.TotalMemberFee;

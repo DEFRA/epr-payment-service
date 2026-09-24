@@ -18,6 +18,8 @@
 
         public bool IsLateFeeApplicable { get; set; } // True or False
 
+        public int NumberOfLateSubsidiaries { get; set; } // subs subject to the new subsidiary late fee
+
         public required string ApplicationReferenceNumber { get; set; }
 
         public DateTime SubmissionDate { get; set; }

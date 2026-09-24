@@ -81,7 +81,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 return;
             }
 
-            await _feeSnapshotHandler.HandleAsync(lifecycle.LatestNonRejected, request.SubmissionDate, lifecycle, cancellationToken);
+            await _feeSnapshotHandler.HandleAsync(lifecycle.LatestNonRejected, allRecords, request.SubmissionDate, lifecycle, cancellationToken);
         }
     }
 }
