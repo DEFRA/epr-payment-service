@@ -21,17 +21,18 @@ namespace EPR.Payment.Service.IntegrationTests.Features;
 /// the ticket actually adds.
 ///
 /// Dates are deliberately kept within 2026: RegistrationFeesDataSeed only seeds
-/// ProducerSubsidiaries/LateFee and ComplianceSchemeSubsidiaries/LateFee from 2026-01-01 onward (a
+/// ProducerSubsidiaries/LateFee and ComplianceSchemeSubsidiaries/LateFee from 2026-10-01 onward (a
 /// SUB-225 addition, not present in the 2024/2025 historical band) - the fee lookup keys off
 /// lifecycle.CalcDate, which is pinned to the *first* submission's date, so a scenario whose first
-/// cycle is dated in 2025 silently prices the subsidiary late fee at zero regardless of how many
-/// subsidiaries are actually flagged as newly-added, masking the count this file is testing for.
-/// SeededSubmissionPeriods.DirectLargeProducer2027 / CsoLargeProducer2027 (deadline 2026-10-02) keep
-/// both the "before" and "after" dates in-year while still giving a real before/after split.
+/// cycle is dated before 2026-10-01 silently prices the subsidiary late fee at zero regardless of
+/// how many subsidiaries are actually flagged as newly-added, masking the count this file is
+/// testing for. SeededSubmissionPeriods.DirectLargeProducer2027 / CsoLargeProducer2027 (deadline
+/// 2026-10-02) still give a real before/after split: BeforeDeadline sits on 2026-10-01 so it's
+/// both in-window for the fee lookup and still before the 2026-10-02 deadline.
 /// </summary>
 public class SubsidiaryLateFeeTests(ServiceFixture fixture) : IntegrationTestBase(fixture)
 {
-    private static readonly DateTime BeforeDeadline = new(2026, 8, 1, 0, 0, 0, DateTimeKind.Utc); // DirectLargeProducer2027 / CsoLargeProducer2027 deadline is 2026-10-02
+    private static readonly DateTime BeforeDeadline = new(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc); // DirectLargeProducer2027 / CsoLargeProducer2027 deadline is 2026-10-02
     private static readonly DateTime AfterDeadline = new(2026, 12, 1, 0, 0, 0, DateTimeKind.Utc);
 
     // AC1 - happy path: a subsidiary that first appears in a post-deadline resubmission is charged.
@@ -101,7 +102,7 @@ public class SubsidiaryLateFeeTests(ServiceFixture fixture) : IntegrationTestBas
             .Accepted(BeforeDeadline.AddDays(2))
             .Build();
 
-        var stillBeforeDeadline = BeforeDeadline.AddDays(20);
+        var stillBeforeDeadline = BeforeDeadline.AddHours(12); // must stay before the 2026-10-02 deadline
         var resubmission = await Builder.RegistrationSubmissionData()
             .ForSubmissionId(submissionId)
             .WithApplicationReferenceNumber(applicationReferenceNumber)

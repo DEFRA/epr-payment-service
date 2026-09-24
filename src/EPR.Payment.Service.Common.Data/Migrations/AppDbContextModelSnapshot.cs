@@ -4387,7 +4387,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         {
                             Id = 26000068,
                             Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             GroupId = 3,
                             RegulatorId = 1,
@@ -4397,7 +4397,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         {
                             Id = 26000069,
                             Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             GroupId = 3,
                             RegulatorId = 2,
@@ -4407,7 +4407,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         {
                             Id = 26000070,
                             Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             GroupId = 3,
                             RegulatorId = 3,
@@ -4417,7 +4417,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         {
                             Id = 26000071,
                             Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             GroupId = 3,
                             RegulatorId = 4,
@@ -4427,7 +4427,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         {
                             Id = 26000072,
                             Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             GroupId = 4,
                             RegulatorId = 1,
@@ -4437,7 +4437,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         {
                             Id = 26000073,
                             Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             GroupId = 4,
                             RegulatorId = 2,
@@ -4447,7 +4447,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         {
                             Id = 26000074,
                             Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             GroupId = 4,
                             RegulatorId = 3,
@@ -4457,7 +4457,7 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         {
                             Id = 26000075,
                             Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
                             GroupId = 4,
                             RegulatorId = 4,

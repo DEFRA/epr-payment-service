@@ -897,26 +897,26 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
 
         [TestMethod]
         [AutoMoqData]
-        public async Task GetSubsidiaryLateFeeAsync_PriorTo2026_ReturnsZeroInsteadOfThrowing(
+        public async Task GetSubsidiaryLateFeeAsync_PriorToOct2026_ReturnsZeroInsteadOfThrowing(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] ProducerFeesRepository _producerFeesRepository)
         {
-            // The 2026-only sub-late-fee row exists but doesn't cover pre-2026 dates.
+            // The sub-late-fee row exists but only from 2026-10-01 onward.
             // Unlike other Get*FeeAsync methods, this one must NOT throw — it returns 0
-            // so the calculator omits the sub-late line item entirely for legacy dates.
+            // so the calculator omits the sub-late line item entirely for pre-window dates.
             var subLateFee = new Common.Data.DataModels.Lookups.RegistrationFees
             {
                 Group = new Common.Data.DataModels.Lookups.Group { Type = GroupTypeConstants.ProducerSubsidiaries, Description = "Producer Subsidiaries" },
                 SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.LateFee, Description = "Late Fee" },
                 Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG" },
                 Amount = 38600m,
-                EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc),
                 EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, DateTimeKind.Utc),
             };
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { subLateFee }.AsQueryable());
 
-            var pre2026 = new DateTime(2025, 12, 31, 0, 0, 0, DateTimeKind.Utc);
-            var result = await _producerFeesRepository.GetSubsidiaryLateFeeAsync(RegulatorType.Create("GB-ENG"), pre2026, _cancellationToken);
+            var priorToOct2026 = new DateTime(2026, 9, 30, 0, 0, 0, DateTimeKind.Utc);
+            var result = await _producerFeesRepository.GetSubsidiaryLateFeeAsync(RegulatorType.Create("GB-ENG"), priorToOct2026, _cancellationToken);
 
             result.Should().Be(0m);
         }
@@ -933,13 +933,13 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationFees
                 SubGroup = new Common.Data.DataModels.Lookups.SubGroup { Type = SubGroupTypeConstants.LateFee, Description = "Late Fee" },
                 Regulator = new Common.Data.DataModels.Lookups.Regulator { Type = "GB-ENG" },
                 Amount = 38600m,
-                EffectiveFrom = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc),
                 EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, DateTimeKind.Utc),
             };
             _dataContextMock.Setup(i => i.RegistrationFees).ReturnsDbSet(new[] { subLateFee }.AsQueryable());
 
-            var in2026 = new DateTime(2026, 6, 1, 0, 0, 0, DateTimeKind.Utc);
-            var result = await _producerFeesRepository.GetSubsidiaryLateFeeAsync(RegulatorType.Create("GB-ENG"), in2026, _cancellationToken);
+            var inRange = new DateTime(2026, 11, 1, 0, 0, 0, DateTimeKind.Utc);
+            var result = await _producerFeesRepository.GetSubsidiaryLateFeeAsync(RegulatorType.Create("GB-ENG"), inRange, _cancellationToken);
 
             result.Should().Be(38600m);
         }

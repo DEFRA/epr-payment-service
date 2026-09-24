@@ -38,7 +38,11 @@ namespace EPR.Payment.Service.Common.Data.SeedData
             ((int)Group.ProducerSubsidiaries, (int)SubGroup.MoreThan20, 17200),
             ((int)Group.ProducerResubmission, (int)SubGroup.ReSubmitting, 80700),
             ((int)Group.ComplianceScheme, (int)SubGroup.ClosedLoop, 254800),
-            ((int)Group.ProducerType, (int)SubGroup.ClosedLoop, 254800),
+            ((int)Group.ProducerType, (int)SubGroup.ClosedLoop, 254800)
+        };
+
+        private static readonly (int GroupId, int SubGroupId, int Amount)[] Fees2026SubsidiaryLate =
+        {
             ((int)Group.ProducerSubsidiaries, (int)SubGroup.LateFee, 38600),
             ((int)Group.ComplianceSchemeSubsidiaries, (int)SubGroup.LateFee, 38600)
         };
@@ -59,6 +63,14 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                 newRegistrationFees,
                 Fees2026,
                 new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                new DateTime(2050, 12, 31, 23, 59, 59, DateTimeKind.Utc),
+                ref seedIndex);
+
+            // Subsidiary late fees seeded from 2026-10-01 (SUB-225).
+            AddProducerFeesForPeriod(
+                newRegistrationFees,
+                Fees2026SubsidiaryLate,
+                new DateTime(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc),
                 new DateTime(2050, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 ref seedIndex);
 
