@@ -292,6 +292,71 @@ public class SubsidiaryLateFeeTests(ServiceFixture fixture) : IntegrationTestBas
         }
     }
 
+    // IsNewJoiner coverage: a compliance scheme member added via a resubmission filed after the
+    // deadline (RegistrationSubmissionProducer.IsNewJoiner, set from the registration CSV's
+    // joiner_date column - see RegistrationSubmissionDataHandler.MapProducer) is late regardless of
+    // whether the scheme's own original submission was on time, and Rule 1 in
+    // RegistrationFeeRequestBuilder.CountLateSubsidiaries then charges every one of that member's
+    // subsidiaries - not just ones individually "newly added". An existing member in the same
+    // resubmission, who isn't a new joiner, must be unaffected by it.
+
+    [Fact]
+    public async Task GIVEN_CS_scheme_submitted_on_time_WHEN_new_joiner_member_added_in_resubmission_after_deadline_THEN_new_joiners_subsidiaries_are_charged_but_existing_member_is_not()
+    {
+        var submissionId = Guid.NewGuid();
+        var applicationReferenceNumber = NewApplicationReferenceNumber();
+        var existingMemberId = NewOrganisationId();
+        var newJoinerMemberId = NewOrganisationId();
+
+        // Prior cycle: scheme's own original submission, on time, granted - one existing member.
+        await Builder.RegistrationSubmissionData()
+            .ForSubmissionId(submissionId)
+            .WithApplicationReferenceNumber(applicationReferenceNumber)
+            .InSubmissionPeriod(SeededSubmissionPeriods.CsoLargeProducer2027)
+            .ForComplianceScheme(Guid.NewGuid())
+            .SubmittedOn(BeforeDeadline)
+            .WithProducer(p => p.WithOrganisationId(existingMemberId).AsLarge().WithSubsidiary(s => s.WithSubsidiaryId("S1")))
+            .WithEvent(RegistrationEventNames.SubmittedForRegulatorApproval, BeforeDeadline)
+            .Accepted(BeforeDeadline.AddDays(2))
+            .Build();
+
+        // Resubmission after the deadline: existing member unchanged, plus a brand-new joiner with
+        // two subsidiaries of their own.
+        var resubmission = await Builder.RegistrationSubmissionData()
+            .ForSubmissionId(submissionId)
+            .WithApplicationReferenceNumber(applicationReferenceNumber)
+            .InSubmissionPeriod(SeededSubmissionPeriods.CsoLargeProducer2027)
+            .ForComplianceScheme(Guid.NewGuid())
+            .SubmittedOn(AfterDeadline)
+            .WithProducer(p => p.WithOrganisationId(existingMemberId).AsLarge().WithSubsidiary(s => s.WithSubsidiaryId("S1")))
+            .WithProducer(p => p.WithOrganisationId(newJoinerMemberId).AsLarge().AsNewJoiner()
+                .WithSubsidiary(s => s.WithSubsidiaryId("NJ1"))
+                .WithSubsidiary(s => s.WithSubsidiaryId("NJ2")))
+            .Build();
+
+        await Events.PublishSubmittedForRegulatorApprovalAsync(submissionId, applicationReferenceNumber, AfterDeadline);
+        await WaitForSnapshotAsync(resubmission.Id);
+
+        var response = await GetComplianceSchemeFeesBySubmission(submissionId);
+
+        response.Should().NotBeNull();
+        var existingMember = response!.ComplianceSchemeMembersWithFees.Should().ContainSingle(m => m.MemberId == existingMemberId).Subject;
+        var newJoinerMember = response.ComplianceSchemeMembersWithFees.Should().ContainSingle(m => m.MemberId == newJoinerMemberId).Subject;
+
+        using (new AwesomeAssertions.Execution.AssertionScope())
+        {
+            existingMember.MemberLateRegistrationFee.Should().Be(
+                0m, "this member isn't a new joiner and the scheme's own first submission was on time");
+            existingMember.SubsidiariesFeeBreakdown.CountOfLateSubsidiaries.Should().Be(
+                0, "S1 was already known from the granted on-time prior cycle and this member isn't late");
+
+            newJoinerMember.MemberLateRegistrationFee.Should().BeGreaterThan(
+                0m, "this member joined the scheme during a resubmission filed after the deadline");
+            newJoinerMember.SubsidiariesFeeBreakdown.CountOfLateSubsidiaries.Should().Be(
+                2, "a late member's subsidiaries are all counted as late (Rule 1), not just ones individually newly-added");
+        }
+    }
+
     /// <summary>See <see cref="RegistrationFeeSnapshotTests.WaitForSnapshotAsync"/> for why this
     /// polls the database rather than the by-submission GET endpoint.</summary>
     private async Task WaitForSnapshotAsync(Guid registrationSubmissionDataId)

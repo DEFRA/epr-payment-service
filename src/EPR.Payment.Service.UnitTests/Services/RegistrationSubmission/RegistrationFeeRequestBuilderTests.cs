@@ -196,6 +196,34 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             }
         }
 
+        [TestMethod]
+        public void BuildComplianceSchemeRequest_NewJoinerViaOnTimeResubmission_IsNotLate()
+        {
+            // Companion to the test above: IsNewJoiner only matters in combination with
+            // submissionLevelLate (memberIsLate's third disjunct is `submissionLevelLate &&
+            // producer.IsNewJoiner`) - a new joiner added via a resubmission that is itself still
+            // on time must not be treated as late just because they're new.
+            var rsd = ComplianceSchemeRsdWithSubs(
+                ("MEM-EXISTING", new[] { "S1" }),
+                ("MEM-NEW-JOINER", new[] { "S2" }));
+            rsd.Producers.Single(p => p.OrganisationId == "MEM-NEW-JOINER").IsNewJoiner = true;
+
+            var onTimeFirstSubmit = Deadline.AddDays(-10);
+            var onTimeResubmit = Deadline.AddDays(-3);
+            var lifecycle = new SubmissionLifecycle(rsd, rsd, onTimeFirstSubmit, onTimeResubmit, onTimeResubmit);
+            var newlyAdded = new HashSet<(string, string)>();
+
+            var request = RegistrationFeeRequestBuilder.BuildComplianceSchemeRequest(rsd, lifecycle, Today, newlyAdded);
+
+            var newJoinerMember = request.ComplianceSchemeMembers.Single(m => m.MemberId == "MEM-NEW-JOINER");
+
+            using (new AssertionScope())
+            {
+                newJoinerMember.IsLateFeeApplicable.Should().BeFalse("the resubmission that added this new joiner was itself still before the deadline");
+                newJoinerMember.NumberOfLateSubsidiaries.Should().Be(0, "not late, and not a resubmission-after-deadline either - Rule 2 doesn't apply");
+            }
+        }
+
         [DataTestMethod]
         [DataRow("Rule1: first submission late", true)]
         [DataRow("Rule2: on-time first submission, resubmitted after deadline", false)]
