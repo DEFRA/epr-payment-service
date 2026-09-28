@@ -600,10 +600,18 @@ public class RegistrationFeeSnapshotTests(ServiceFixture fixture) : IntegrationT
     /// - a band is dropped entirely when both its unit count and total price are zero (a band
     ///   nobody is being charged for), matching the handler's own "skip if UnitCount&lt;=0 AND
     ///   TotalPrice&lt;=0" rule;
-    /// - the OMP/CLR per-unit rate fields are zeroed when their total is zero, since the
-    ///   projector only ever sets them from a stored line item, and none is stored for a zero
-    ///   total (the live calculator, by contrast, always returns the rate regardless of whether
-    ///   any subsidiaries actually use it).
+    /// - for each of the OMP/CLR/late-fee aggregates, the *whole* line item - count and per-unit
+    ///   rate alike - is dropped when its total is zero (AddSubsidiaryLineItems gates each one on
+    ///   `Total... > 0`), so the projector's response leaves the matching Count/Unit fields at
+    ///   their zero default. The live calculator, by contrast, always reports the count and rate
+    ///   directly from the request/rate lookup regardless of whether the priced total happens to
+    ///   be zero - e.g. CountOfLateSubsidiaries is set to request.NumberOfLateSubsidiaries
+    ///   unconditionally in ProducerFeesCalculatorService. That divergence is real and business as
+    ///   usual whenever a rate lookup legitimately prices at zero (most commonly a subsidiary-late
+    ///   or OMP/CLR rate whose seeded EffectiveFrom hasn't started yet for the date this test
+    ///   happens to run on - see RegistrationFeesDataSeed's 2026-10-01 start for the subsidiary
+    ///   late-fee rate) - not something this round-trip test should fail on, so the zeroed-total
+    ///   fields are normalized here the same way the OMP/CLR unit rates already were.
     /// </summary>
     private static void NormalizeToSnapshotProjectionShape(SubsidiariesFeeBreakdown breakdown)
     {
@@ -612,11 +620,19 @@ public class RegistrationFeeSnapshotTests(ServiceFixture fixture) : IntegrationT
         if (breakdown.TotalSubsidiariesOMPFees <= 0m)
         {
             breakdown.UnitOMPFees = 0m;
+            breakdown.CountOfOMPSubsidiaries = 0;
         }
 
         if (breakdown.TotalSubsidiariesClosedLoopRecyclingFees <= 0m)
         {
             breakdown.UnitClosedLoopRecyclingFees = 0m;
+            breakdown.CountOfClosedLoopRecyclingSubsidiaries = 0;
+        }
+
+        if (breakdown.TotalSubsidiariesLateFees <= 0m)
+        {
+            breakdown.UnitSubsidiaryLateFee = 0m;
+            breakdown.CountOfLateSubsidiaries = 0;
         }
     }
 
