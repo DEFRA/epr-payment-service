@@ -20,6 +20,7 @@ namespace EPR.Payment.Service.Common.Dtos.Request.RegistrationFees.ComplianceSch
         public bool IsClosedLoopRecycling { get; set; }
         public bool IsLateFeeApplicable { get; set; }
         public int NumberOfSubsidiaries { get; set; }
+        public int NumberOfLateSubsidiaries { get; set; }
         public int NoOfSubsidiariesOnlineMarketplace { get; set; }
         public int NoOfSubsidiariesClosedLoopRecycling { get; set; }
     }

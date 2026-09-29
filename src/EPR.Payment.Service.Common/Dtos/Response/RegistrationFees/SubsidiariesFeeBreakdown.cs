@@ -8,6 +8,9 @@
         public decimal TotalSubsidiariesClosedLoopRecyclingFees { get; set; }
         public int CountOfClosedLoopRecyclingSubsidiaries { get; set; }
         public decimal UnitClosedLoopRecyclingFees { get; set; }
+        public decimal TotalSubsidiariesLateFees { get; set; }
+        public int CountOfLateSubsidiaries { get; set; }
+        public decimal UnitSubsidiaryLateFee { get; set; }
         public List<FeeBreakdown> FeeBreakdowns { get; set; } = new();
     }
 

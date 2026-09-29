@@ -12,11 +12,13 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             RegistrationSubmissionData latest,
             RegistrationSubmissionProducer producer,
             SubmissionLifecycle lifecycle,
-            DateTime today)
+            DateTime today,
+            IReadOnlySet<(string OrganisationId, string SubsidiaryId)> newlyAddedSubsidiaries)
         {
             ArgumentNullException.ThrowIfNull(latest);
             ArgumentNullException.ThrowIfNull(producer);
             ArgumentNullException.ThrowIfNull(lifecycle);
+            ArgumentNullException.ThrowIfNull(newlyAddedSubsidiaries);
 
             var deadline = latest.SubmissionPeriodWindow.DeadlineDate;
 
@@ -25,16 +27,19 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             var firstSubmissionWasLate = lifecycle.FirstSubmittedForApprovalDate is DateTime firstApproval
                                           && firstApproval.Date >= deadline.Date;
             var neverYetSubmittedForApproval = lifecycle.FirstSubmittedForApprovalDate is null;
+            var isLateFeeApplicable = firstSubmissionWasLate || (neverYetSubmittedForApproval && latestSubmittedOnOrAfterDeadline);
+            var isResubmissionAfterDeadline = !neverYetSubmittedForApproval && latestSubmittedOnOrAfterDeadline;
 
             return new ProducerRegistrationFeesRequestDto
             {
                 ProducerType = producer.OrganisationSize,
                 NumberOfSubsidiaries = producer.Subsidiaries.Count,
+                NumberOfLateSubsidiaries = CountLateSubsidiaries(producer, isLateFeeApplicable, isResubmissionAfterDeadline, newlyAddedSubsidiaries),
                 NoOfSubsidiariesOnlineMarketplace = producer.Subsidiaries.Count(s => s.IsOnlineMarketplace),
                 NoOfSubsidiariesClosedLoopRecycling = producer.Subsidiaries.Count(s => s.IsClosedLoopRecycling),
                 IsProducerOnlineMarketplace = producer.IsOnlineMarketplace,
                 IsClosedLoopRecycling = producer.IsClosedLoopRecycling,
-                IsLateFeeApplicable = firstSubmissionWasLate || (neverYetSubmittedForApproval && latestSubmittedOnOrAfterDeadline),
+                IsLateFeeApplicable = isLateFeeApplicable,
                 Regulator = latest.RegulatorNation,
                 ApplicationReferenceNumber = latest.ApplicationReferenceNumber,
                 SubmissionDate = lifecycle.CalcDate,
@@ -44,10 +49,12 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
         public static ComplianceSchemeFeesRequestDto BuildComplianceSchemeRequest(
             RegistrationSubmissionData latest,
             SubmissionLifecycle lifecycle,
-            DateTime today)
+            DateTime today,
+            IReadOnlySet<(string OrganisationId, string SubsidiaryId)> newlyAddedSubsidiaries)
         {
             ArgumentNullException.ThrowIfNull(latest);
             ArgumentNullException.ThrowIfNull(lifecycle);
+            ArgumentNullException.ThrowIfNull(newlyAddedSubsidiaries);
 
             var deadline = latest.SubmissionPeriodWindow.DeadlineDate;
 
@@ -55,6 +62,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             var isOriginalCsoLate = lifecycle.FirstSubmittedForApprovalDate is DateTime firstApproval
                                     && firstApproval.Date >= deadline.Date;
             var noFirstSubmission = lifecycle.FirstSubmittedForApprovalDate is null;
+            var isResubmissionAfterDeadline = !noFirstSubmission && submissionLevelLate;
 
             return new ComplianceSchemeFeesRequestDto
             {
@@ -66,7 +74,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                     CsoSmallProducerWindowType,
                     StringComparison.OrdinalIgnoreCase),
                 ComplianceSchemeMembers = latest.Producers
-                    .Select(p => MapMember(p, isOriginalCsoLate, noFirstSubmission, submissionLevelLate))
+                    .Select(p => MapMember(p, isOriginalCsoLate, noFirstSubmission, submissionLevelLate, isResubmissionAfterDeadline, newlyAddedSubsidiaries))
                     .ToList(),
             };
         }
@@ -75,8 +83,15 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             RegistrationSubmissionProducer producer,
             bool isOriginalCsoLate,
             bool noFirstSubmission,
-            bool submissionLevelLate)
+            bool submissionLevelLate,
+            bool isResubmissionAfterDeadline,
+            IReadOnlySet<(string OrganisationId, string SubsidiaryId)> newlyAddedSubsidiaries)
         {
+            var memberIsLate =
+                isOriginalCsoLate
+                || (noFirstSubmission && submissionLevelLate)
+                || (submissionLevelLate && producer.IsNewJoiner);
+
             return new ComplianceSchemeMemberDto
             {
                 MemberId = producer.OrganisationId,
@@ -84,13 +99,34 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                 IsOnlineMarketplace = producer.IsOnlineMarketplace,
                 IsClosedLoopRecycling = producer.IsClosedLoopRecycling,
                 NumberOfSubsidiaries = producer.Subsidiaries.Count,
+                NumberOfLateSubsidiaries = CountLateSubsidiaries(producer, memberIsLate, isResubmissionAfterDeadline, newlyAddedSubsidiaries),
                 NoOfSubsidiariesOnlineMarketplace = producer.Subsidiaries.Count(s => s.IsOnlineMarketplace),
                 NoOfSubsidiariesClosedLoopRecycling = producer.Subsidiaries.Count(s => s.IsClosedLoopRecycling),
-                IsLateFeeApplicable =
-                    isOriginalCsoLate
-                    || (noFirstSubmission && submissionLevelLate)
-                    || (submissionLevelLate && producer.IsNewJoiner),
+                IsLateFeeApplicable = memberIsLate,
             };
+        }
+
+        private static int CountLateSubsidiaries(
+            RegistrationSubmissionProducer producer,
+            bool isLateFeeApplicable,
+            bool isResubmissionAfterDeadline,
+            IReadOnlySet<(string OrganisationId, string SubsidiaryId)> newlyAddedSubsidiaries)
+        {
+            // Rule 1 — the whole submission is late: every subsidiary attracts the sub-late-fee.
+            if (isLateFeeApplicable)
+            {
+                return producer.Subsidiaries.Count;
+            }
+
+            // Rule 2 — on-time initial submission but the current cycle is a resubmission on/after
+            // the deadline: only subsidiaries not present in any prior approved on-time cycle count.
+            if (isResubmissionAfterDeadline)
+            {
+                return producer.Subsidiaries.Count(s =>
+                    newlyAddedSubsidiaries.Contains((producer.OrganisationId, s.SubsidiaryId)));
+            }
+
+            return 0;
         }
     }
 }

@@ -20,12 +20,21 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
             _keyValueStore = keyValueStore;
         }
 
-        protected async Task<decimal> GetFeeAsync(
+        protected Task<decimal> GetFeeAsync(
             string groupType,
             string subGroupType,
             RegulatorType regulator,
             DateTime submissionDate,
             CancellationToken cancellationToken)
+            => GetFeeAsync(groupType, subGroupType, regulator, submissionDate, cancellationToken, throwIfSubmissionDateOutOfRange: true);
+
+        protected async Task<decimal> GetFeeAsync(
+            string groupType,
+            string subGroupType,
+            RegulatorType regulator,
+            DateTime submissionDate,
+            CancellationToken cancellationToken,
+            bool throwIfSubmissionDateOutOfRange)
         {
             string inMemoryKey = GetInMemoryKey(groupType, subGroupType, regulator);
 
@@ -56,7 +65,7 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationFees
                 .Select(r => r.Amount)
                 .FirstOrDefault();
 
-            if (fee == 0)
+            if (fee == 0 && throwIfSubmissionDateOutOfRange)
             {
                 throw new ArgumentException(subGroupType == SubGroupTypeConstants.ReSubmitting ? ValidationMessages.ResubmissionDateIsNotInRange : ValidationMessages.SubmissionDateIsNotInRange);
             }

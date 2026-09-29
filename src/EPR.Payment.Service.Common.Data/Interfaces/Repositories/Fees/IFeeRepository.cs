@@ -15,5 +15,7 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationFe
         Task<decimal> GetOnlineMarketFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken);
 
         Task<decimal> GetClosedLoopRecyclingFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken);
+
+        Task<decimal> GetSubsidiaryLateFeeAsync(RegulatorType regulator, DateTime submissionDate, CancellationToken cancellationToken);
     }
 }

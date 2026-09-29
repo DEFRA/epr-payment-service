@@ -91,7 +91,11 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
             }
 
             var producer = latestRecord.Producers.First();
-            var request = RegistrationFeeRequestBuilder.BuildProducerRequest(latestRecord, producer, submissionLifecycle, nowUtc);
+            var newlyAddedSubs = NewlyAddedSubsidiaryFinder.Find(
+                latestRecord,
+                snapshotRecords,
+                latestRecord.SubmissionPeriodWindow.DeadlineDate);
+            var request = RegistrationFeeRequestBuilder.BuildProducerRequest(latestRecord, producer, submissionLifecycle, nowUtc, newlyAddedSubs);
 
             _logger.LogInformation(
                 "Calculating producer fee for SubmissionId {SubmissionId}; calcDate={CalcDate}.",

@@ -4,6 +4,7 @@ using EPR.Payment.Service.Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPR.Payment.Service.Common.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260827114943_SUB-262-extend-2026-fees-end-date")]
+    partial class SUB262extend2026feesenddate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4382,86 +4385,6 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             GroupId = 1,
                             RegulatorId = 4,
                             SubGroupId = 15
-                        },
-                        new
-                        {
-                            Id = 26000068,
-                            Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 3,
-                            RegulatorId = 1,
-                            SubGroupId = 8
-                        },
-                        new
-                        {
-                            Id = 26000069,
-                            Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 3,
-                            RegulatorId = 2,
-                            SubGroupId = 8
-                        },
-                        new
-                        {
-                            Id = 26000070,
-                            Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 3,
-                            RegulatorId = 3,
-                            SubGroupId = 8
-                        },
-                        new
-                        {
-                            Id = 26000071,
-                            Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 3,
-                            RegulatorId = 4,
-                            SubGroupId = 8
-                        },
-                        new
-                        {
-                            Id = 26000072,
-                            Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 4,
-                            RegulatorId = 1,
-                            SubGroupId = 8
-                        },
-                        new
-                        {
-                            Id = 26000073,
-                            Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 4,
-                            RegulatorId = 2,
-                            SubGroupId = 8
-                        },
-                        new
-                        {
-                            Id = 26000074,
-                            Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 4,
-                            RegulatorId = 3,
-                            SubGroupId = 8
-                        },
-                        new
-                        {
-                            Id = 26000075,
-                            Amount = 38600m,
-                            EffectiveFrom = new DateTime(2026, 10, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            EffectiveTo = new DateTime(2050, 12, 31, 23, 59, 59, 0, DateTimeKind.Utc),
-                            GroupId = 4,
-                            RegulatorId = 4,
-                            SubGroupId = 8
                         });
                 });
 

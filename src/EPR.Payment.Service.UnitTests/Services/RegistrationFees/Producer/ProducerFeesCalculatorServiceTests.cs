@@ -22,6 +22,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
         private Mock<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>> _onlineMarketCalculationStrategyMock = null!;
         private Mock<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>> _subsidiariesFeeCalculationStrategyMock = null!;
         private Mock<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>> _lateFeeCalculationStrategyMock = null!;
+        private Mock<ISubsidiaryLateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>> _subsidiaryLateFeeCalculationStrategyMock = null!;
         private Mock<IClosedLoopRecyclingCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>> _closedLoopRecyclingCalculationStrategyMock = null!;
         private Mock<IValidator<ProducerRegistrationFeesRequestDto>> _validatorMock = null!;
         private Mock<IPaymentsService> _paymentsServiceMock = null!;
@@ -33,6 +34,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             _baseFeeCalculationStrategyMock = new Mock<IBaseFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             _onlineMarketCalculationStrategyMock = new Mock<IOnlineMarketCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             _lateFeeCalculationStrategyMock = new Mock<ILateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
+            _subsidiaryLateFeeCalculationStrategyMock = new Mock<ISubsidiaryLateFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             _closedLoopRecyclingCalculationStrategyMock = new Mock<IClosedLoopRecyclingCalculationStrategy<ProducerRegistrationFeesRequestDto, decimal>>();
             _subsidiariesFeeCalculationStrategyMock = new Mock<IBaseSubsidiariesFeeCalculationStrategy<ProducerRegistrationFeesRequestDto, SubsidiariesFeeBreakdown>>();
             _validatorMock = new Mock<IValidator<ProducerRegistrationFeesRequestDto>>();
@@ -44,6 +46,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object,
+                _subsidiaryLateFeeCalculationStrategyMock.Object,
                 _paymentsServiceMock.Object,
                 _closedLoopRecyclingCalculationStrategyMock.Object
             );
@@ -63,6 +66,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                     _validatorMock.Object,
                     _onlineMarketCalculationStrategyMock.Object,
                     _lateFeeCalculationStrategyMock.Object,
+                    _subsidiaryLateFeeCalculationStrategyMock.Object,
                     _paymentsServiceMock.Object,
                     _closedLoopRecyclingCalculationStrategyMock.Object));
         }
@@ -81,6 +85,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                     _validatorMock.Object,
                     _onlineMarketCalculationStrategyMock.Object,
                     _lateFeeCalculationStrategyMock.Object,
+                    _subsidiaryLateFeeCalculationStrategyMock.Object,
                     _paymentsServiceMock.Object,
                     _closedLoopRecyclingCalculationStrategyMock.Object));
         }
@@ -99,6 +104,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                     validator!,
                     _onlineMarketCalculationStrategyMock.Object,
                     _lateFeeCalculationStrategyMock.Object,
+                    _subsidiaryLateFeeCalculationStrategyMock.Object,
                     _paymentsServiceMock.Object,
                     _closedLoopRecyclingCalculationStrategyMock.Object));
 
@@ -121,6 +127,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                     _validatorMock.Object,
                     onlineMarketCalculationStrategy!,
                     _lateFeeCalculationStrategyMock.Object,
+                    _subsidiaryLateFeeCalculationStrategyMock.Object,
                     _paymentsServiceMock.Object,
                     _closedLoopRecyclingCalculationStrategyMock.Object));
 
@@ -141,6 +148,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object!,
                 lateFeeCalculationStrategy!,
+                _subsidiaryLateFeeCalculationStrategyMock.Object,
                 _paymentsServiceMock.Object,
                 _closedLoopRecyclingCalculationStrategyMock.Object);
 
@@ -161,6 +169,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object,
+                _subsidiaryLateFeeCalculationStrategyMock.Object,
                 _paymentsServiceMock.Object,
                 closedLoopRecyclingCalculationStrategy!);
 
@@ -181,6 +190,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object!,
                 _lateFeeCalculationStrategyMock.Object,
+                _subsidiaryLateFeeCalculationStrategyMock.Object,
                 paymentsService!,
                 _closedLoopRecyclingCalculationStrategyMock.Object);
 
@@ -198,6 +208,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 _validatorMock.Object,
                 _onlineMarketCalculationStrategyMock.Object,
                 _lateFeeCalculationStrategyMock.Object,
+                _subsidiaryLateFeeCalculationStrategyMock.Object,
                 _paymentsServiceMock.Object,
                 _closedLoopRecyclingCalculationStrategyMock.Object);
 
@@ -897,6 +908,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             {
                 ProducerType = "Large",
                 NumberOfSubsidiaries = 10,
+                NumberOfLateSubsidiaries = 10,
                 Regulator = "GB-ENG",
                 ApplicationReferenceNumber = "A123",
                 IsLateFeeApplicable = true,
@@ -907,7 +919,10 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
                 .ReturnsAsync(262000m); // £2,620 represented in pence
 
             _lateFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(33200m); // £332 represented in pence
+                .ReturnsAsync(33200m); // £332 org late fee in pence
+
+            _subsidiaryLateFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(33200m); // per-sub late fee in pence
 
             _subsidiariesFeeCalculationStrategyMock.Setup(strategy => strategy.CalculateFeeAsync(It.IsAny<ProducerRegistrationFeesRequestDto>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(ExpectedSubsidiariesFeeBreakdown); // Total subsidiaries fee in pence
@@ -924,11 +939,13 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationFees.Producer
             // Assert
             using (new AssertionScope())
             {
-                result.ProducerRegistrationFee.Should().Be(262000m); // £2,620 represented in pence
-                result.ProducerOnlineMarketPlaceFee.Should().Be(0m); // Online Market fee in pence
-                result.ProducerLateRegistrationFee.Should().Be(365200m); // Late fee in pence
-                result.SubsidiariesFeeBreakdown.Should().Be(ExpectedSubsidiariesFeeBreakdown); // Expected Subsidiaries Fee Breakdown
-                result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee + result.ProducerLateRegistrationFee); // Total fee in pence
+                result.ProducerRegistrationFee.Should().Be(262000m);
+                result.ProducerOnlineMarketPlaceFee.Should().Be(0m);
+                result.ProducerLateRegistrationFee.Should().Be(33200m); // org-only late fee (per-sub is now on the breakdown)
+                result.SubsidiariesFeeBreakdown.CountOfLateSubsidiaries.Should().Be(10);
+                result.SubsidiariesFeeBreakdown.UnitSubsidiaryLateFee.Should().Be(33200m);
+                result.SubsidiariesFeeBreakdown.TotalSubsidiariesLateFees.Should().Be(332000m);
+                result.TotalFee.Should().Be(result.ProducerRegistrationFee + result.SubsidiariesFee + result.ProducerLateRegistrationFee);
                 result.PreviousPayment.Should().Be(100M);
                 result.OutstandingPayment.Should().Be(result.TotalFee - result.PreviousPayment);
             }

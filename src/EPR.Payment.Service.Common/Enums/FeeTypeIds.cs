@@ -14,5 +14,6 @@ namespace EPR.Payment.Service.Common.Enums
         MemberLateRegistrationFee = 10,
         SubsidiaryOnlineMarketplaceFee = 11,
         SubsidiaryClosedLoopRecyclingFee = 12,
+        SubsidiaryLateFee = 13,
     }
 }

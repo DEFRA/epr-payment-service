@@ -70,7 +70,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         [TestMethod]
         public async Task HandleAsync_NullLatestRecord_Throws()
         {
-            Func<Task> act = () => _sut.HandleAsync(null!, Today, NewLifecycle(), _ct);
+            Func<Task> act = () => _sut.HandleAsync(null!, Array.Empty<RegistrationSubmissionData>(), Today, NewLifecycle(), _ct);
             await act.Should().ThrowAsync<ArgumentNullException>();
         }
 
@@ -82,7 +82,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .Setup(s => s.GetByRegistrationSubmissionDataIdAsync(rsd.Id, _ct))
                 .ReturnsAsync(new RegistrationFeeSnapshot { Id = Guid.NewGuid(), RegistrationSubmissionDataId = rsd.Id });
 
-            await _sut.HandleAsync(rsd, Today, NewLifecycle(rsd), _ct);
+            await _sut.HandleAsync(rsd, new[] { rsd }, Today, NewLifecycle(rsd), _ct);
 
             using (new AssertionScope())
             {
@@ -114,6 +114,12 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                         CountOfOMPSubsidiaries = 2,
                         UnitOMPFees = 25m,
                         TotalSubsidiariesOMPFees = 50m,
+                        CountOfClosedLoopRecyclingSubsidiaries = 3,
+                        UnitClosedLoopRecyclingFees = 10m,
+                        TotalSubsidiariesClosedLoopRecyclingFees = 30m,
+                        CountOfLateSubsidiaries = 1,
+                        UnitSubsidiaryLateFee = 40m,
+                        TotalSubsidiariesLateFees = 40m,
                     },
                 });
 
@@ -123,7 +129,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .Callback<RegistrationFeeSnapshot, CancellationToken>((s, _) => captured = s)
                 .ReturnsAsync(Guid.NewGuid());
 
-            await _sut.HandleAsync(rsd, Today, NewLifecycle(rsd), _ct);
+            await _sut.HandleAsync(rsd, new[] { rsd }, Today, NewLifecycle(rsd), _ct);
 
             captured.Should().NotBeNull();
             using (new AssertionScope())
@@ -136,6 +142,8 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 captured.LineItems.Should().Contain(l => l.FeeTypeId == FeeTypeIds.ProducerLateRegistrationFee && l.Amount == 250m);
                 captured.LineItems.Should().Contain(l => l.FeeTypeId == FeeTypeIds.SubsidiaryFee && l.BandNumber == 1 && l.Amount == 300m);
                 captured.LineItems.Should().Contain(l => l.FeeTypeId == FeeTypeIds.SubsidiaryOnlineMarketplaceFee && l.Amount == 50m && l.Quantity == 2);
+                captured.LineItems.Should().Contain(l => l.FeeTypeId == FeeTypeIds.SubsidiaryClosedLoopRecyclingFee && l.Amount == 30m && l.Quantity == 3);
+                captured.LineItems.Should().Contain(l => l.FeeTypeId == FeeTypeIds.SubsidiaryLateFee && l.Amount == 40m && l.Quantity == 1);
             }
         }
 
@@ -174,7 +182,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .Callback<RegistrationFeeSnapshot, CancellationToken>((s, _) => captured = s)
                 .ReturnsAsync(Guid.NewGuid());
 
-            await _sut.HandleAsync(rsd, Today, NewLifecycle(rsd), _ct);
+            await _sut.HandleAsync(rsd, new[] { rsd }, Today, NewLifecycle(rsd), _ct);
 
             captured.Should().NotBeNull();
             using (new AssertionScope())
@@ -216,7 +224,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
                 .Callback<RegistrationFeeSnapshot, CancellationToken>((s, _) => captured = s)
                 .ReturnsAsync(Guid.NewGuid());
 
-            await _sut.HandleAsync(rsd, Today, NewLifecycle(rsd), _ct);
+            await _sut.HandleAsync(rsd, new[] { rsd }, Today, NewLifecycle(rsd), _ct);
 
             using (new AssertionScope())
             {
@@ -231,7 +239,7 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             var rsd = BuildProducerRsd();
             rsd.Producers.Clear();
 
-            await _sut.HandleAsync(rsd, Today, NewLifecycle(rsd), _ct);
+            await _sut.HandleAsync(rsd, new[] { rsd }, Today, NewLifecycle(rsd), _ct);
 
             using (new AssertionScope())
             {
