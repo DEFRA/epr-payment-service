@@ -609,7 +609,7 @@ public class RegistrationFeeSnapshotTests(ServiceFixture fixture) : IntegrationT
     ///   unconditionally in ProducerFeesCalculatorService. That divergence is real and business as
     ///   usual whenever a rate lookup legitimately prices at zero (most commonly a subsidiary-late
     ///   or OMP/CLR rate whose seeded EffectiveFrom hasn't started yet for the date this test
-    ///   happens to run on - see RegistrationFeesDataSeed's 2026-10-01 start for the subsidiary
+    ///   happens to run on - see RegistrationFeesDataSeed's 2026-07-01 start for the subsidiary
     ///   late-fee rate) - not something this round-trip test should fail on, so the zeroed-total
     ///   fields are normalized here the same way the OMP/CLR unit rates already were.
     /// </summary>
