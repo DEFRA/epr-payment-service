@@ -21,10 +21,10 @@ namespace EPR.Payment.Service.IntegrationTests.Features;
 /// the ticket actually adds.
 ///
 /// Dates are deliberately kept within 2026: RegistrationFeesDataSeed only seeds
-/// ProducerSubsidiaries/LateFee and ComplianceSchemeSubsidiaries/LateFee from 2026-10-01 onward (a
+/// ProducerSubsidiaries/LateFee and ComplianceSchemeSubsidiaries/LateFee from 2026-07-01 onward (a
 /// SUB-225 addition, not present in the 2024/2025 historical band) - the fee lookup keys off
 /// lifecycle.CalcDate, which is pinned to the *first* submission's date, so a scenario whose first
-/// cycle is dated before 2026-10-01 silently prices the subsidiary late fee at zero regardless of
+/// cycle is dated before 2026-07-01 silently prices the subsidiary late fee at zero regardless of
 /// how many subsidiaries are actually flagged as newly-added, masking the count this file is
 /// testing for. SeededSubmissionPeriods.DirectLargeProducer2027 / CsoLargeProducer2027 (deadline
 /// 2026-10-02) still give a real before/after split: BeforeDeadline sits on 2026-10-01 so it's

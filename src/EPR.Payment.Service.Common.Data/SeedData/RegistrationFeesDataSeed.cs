@@ -66,11 +66,11 @@ namespace EPR.Payment.Service.Common.Data.SeedData
                 new DateTime(2050, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 ref seedIndex);
 
-            // Subsidiary late fees seeded from 2026-10-01 (SUB-225).
+            // Subsidiary late fees seeded from 2026-07-01 (SUB-225).
             AddProducerFeesForPeriod(
                 newRegistrationFees,
                 Fees2026SubsidiaryLate,
-                new DateTime(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc),
+                new DateTime(2026, 7, 1, 0, 0, 0, DateTimeKind.Utc),
                 new DateTime(2050, 12, 31, 23, 59, 59, DateTimeKind.Utc),
                 ref seedIndex);
 
