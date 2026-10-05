@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -11,9 +14,17 @@ namespace EPR.Payment.Service.IntegrationTests.Infrastructure;
 /// Test classes share this via <see cref="PaymentServiceCollection"/> and use unique IDs
 /// (Guid.NewGuid + per-class label prefixes) to stay isolated from each other.
 /// </summary>
-public sealed class PaymentServiceFactory(IConfiguration? configuration = null)
+public sealed class PaymentServiceFactory(IConfiguration? configuration = null, Action<IServiceCollection>? configureTestServices = null)
     : WebApplicationFactory<Program>
 {
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        if (configureTestServices != null)
+        {
+            builder.ConfigureTestServices(configureTestServices);
+        }
+    }
+
     /// <summary>Captures everything logged by the hosted app - see <see cref="TestLogSink"/>.</summary>
     public TestLogSink Logs { get; } = new();
 

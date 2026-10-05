@@ -2,6 +2,7 @@
 using System.Reflection;
 using EPR.Payment.Service.Common.Data.DataModels;
 using EPR.Payment.Service.Common.Data.DataModels.Lookups;
+using EPR.Payment.Service.Common.Data.DataModels.Migration;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,6 +36,10 @@ namespace EPR.Payment.Service.Common.Data
         public DbSet<RegistrationSubmissionDataEvent> RegistrationSubmissionDataEvents => Set<RegistrationSubmissionDataEvent>();
         public DbSet<RegistrationFeeSnapshot> RegistrationFeeSnapshot => Set<RegistrationFeeSnapshot>();
         public DbSet<RegistrationFeeLineItem> RegistrationFeeLineItem => Set<RegistrationFeeLineItem>();
+        public DbSet<MigrationRun> MigrationRun => Set<MigrationRun>();
+        public DbSet<RegistrationHistoryStaging> RegistrationHistoryStaging => Set<RegistrationHistoryStaging>();
+        public DbSet<RegistrationSubmissionMigration> RegistrationSubmissionMigration => Set<RegistrationSubmissionMigration>();
+        public DbSet<MigratedEntity> MigratedEntity => Set<MigratedEntity>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

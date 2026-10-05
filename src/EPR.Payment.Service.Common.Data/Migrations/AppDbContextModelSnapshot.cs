@@ -4850,6 +4850,224 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Migration.MigratedEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FileId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("RegistrationSubmissionDataId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RunId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SubmissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RunId", "RegistrationSubmissionDataId");
+
+                    b.ToTable("MigratedEntity", "migration");
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Migration.MigrationRun", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<bool>("ClearDownApplied")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("CompletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("InstanceId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("NotRequiredCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RunKey")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("StagedRowCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("StagingCompletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("StartedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("SubmissionCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SucceededCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RunKey")
+                        .IsUnique();
+
+                    b.ToTable("MigrationRun", "migration");
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Migration.RegistrationHistoryStaging", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ApplicationReferenceNumber")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("BlobName")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("ComplianceSchemeId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Decision")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime?>("EventDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EventType")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("EventTypeOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("OrganisationId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("RegistrationJourney")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("RegulatorNation")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ReplayTs")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Roles")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<Guid>("RunId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SubmissionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SubmissionPeriod")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RunId", "SubmissionId", "ReplayTs");
+
+                    b.ToTable("RegistrationHistoryStaging", "migration");
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Migration.RegistrationSubmissionMigration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EventsReplayed")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventsSkipped")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FilesMigrated")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("ProcessedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("RunId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("SubmissionId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Warnings")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RunId", "Status");
+
+                    b.HasIndex("RunId", "SubmissionId")
+                        .IsUnique();
+
+                    b.ToTable("RegistrationSubmissionMigration", "migration");
+                });
+
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OfflinePayment", b =>
                 {
                     b.Property<int>("Id")
@@ -5299,6 +5517,33 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Navigation("Regulator");
 
                     b.Navigation("SubGroup");
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Migration.MigratedEntity", b =>
+                {
+                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Migration.MigrationRun", null)
+                        .WithMany()
+                        .HasForeignKey("RunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Migration.RegistrationHistoryStaging", b =>
+                {
+                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Migration.MigrationRun", null)
+                        .WithMany()
+                        .HasForeignKey("RunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Migration.RegistrationSubmissionMigration", b =>
+                {
+                    b.HasOne("EPR.Payment.Service.Common.Data.DataModels.Migration.MigrationRun", null)
+                        .WithMany()
+                        .HasForeignKey("RunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.OfflinePayment", b =>

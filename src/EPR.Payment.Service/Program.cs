@@ -61,6 +61,7 @@ builder.Services.AddSwaggerGen(setupAction =>
 builder.Services.AddDependencies();
 builder.Services.AddMessaging(builder.Configuration);
 builder.Services.AddDataContext(builder.Configuration["ConnectionStrings:PaymentConnectionString"]!);
+builder.Services.AddRegistrationHistoryMigration(builder.Configuration);
 
 builder.Services.Configure<StorageAccountOptions>(
     builder.Configuration.GetSection(StorageAccountOptions.SectionName));

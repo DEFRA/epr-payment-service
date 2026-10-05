@@ -1,5 +1,6 @@
 using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
     private ServiceBusContainer _serviceBusContainer = null!;
 
     private PaymentServiceFactory? _factory;
+    private IConfigurationRoot? _testConfig;
     
     private HttpClient? _httpClient;
     
@@ -90,6 +92,33 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
         return this._factory.Services.CreateScope();
     }
 
+    /// <summary>
+    /// A second host on the same database with services overridden (e.g. fakes for external storage).
+    /// The caller must dispose it. Its Service Bus worker is removed so it does not compete with the shared host.
+    /// </summary>
+    public WebApplicationFactory<Program> CreateHostWithServices(Action<IServiceCollection> configureServices)
+    {
+        if (this._testConfig is null)
+        {
+            throw new InvalidOperationException("You must call InitializeAsync before creating a derived host.");
+        }
+
+        // Built from the same test configuration (Testcontainers connection strings) as the shared host.
+        return new PaymentServiceFactory(this._testConfig, services =>
+        {
+            foreach (var worker in services.Where(d => d.ServiceType == typeof(IHostedService)
+                                                       && d.ImplementationType?.Name is "WorkerServiceBus" or "RegistrationHistoryMigrationHostedService").ToList())
+            {
+                services.Remove(worker);
+            }
+
+            configureServices(services);
+        });
+    }
+
+    public string TestConnectionString => _testConfig?["ConnectionStrings:PaymentConnectionString"]
+        ?? throw new InvalidOperationException("You must call InitializeAsync first.");
+
     public IServiceProvider SharedServices
     {
         get => _factory?.Services ?? throw new InvalidOperationException("SharedServices not initialized");
@@ -124,6 +153,7 @@ public class ServiceFixture : IAsyncLifetime, IDisposable
 
     private void StartTestServer(IConfigurationRoot testConfig)
     {
+        this._testConfig = testConfig;
         this._factory = new PaymentServiceFactory(testConfig);
         
         // start the host

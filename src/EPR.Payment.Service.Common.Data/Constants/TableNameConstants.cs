@@ -43,5 +43,15 @@
         public const string SubmissionPeriodTableName = "SubmissionPeriod";
 
         public const string RegistrationSchemaName = "registration";
+
+        public const string MigrationSchemaName = "migration";
+
+        public const string MigrationRunTableName = "MigrationRun";
+
+        public const string RegistrationHistoryStagingTableName = "RegistrationHistoryStaging";
+
+        public const string RegistrationSubmissionMigrationTableName = "RegistrationSubmissionMigration";
+
+        public const string MigratedEntityTableName = "MigratedEntity";
     }
 }

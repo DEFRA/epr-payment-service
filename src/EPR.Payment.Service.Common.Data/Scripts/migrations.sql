@@ -6142,3 +6142,155 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    IF SCHEMA_ID(N'migration') IS NULL EXEC(N'CREATE SCHEMA [migration];');
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE TABLE [migration].[MigrationRun] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RunKey] nvarchar(100) NOT NULL,
+        [Status] nvarchar(30) NOT NULL,
+        [InstanceId] nvarchar(200) NOT NULL,
+        [StartedAt] datetimeoffset NOT NULL,
+        [StagingCompletedAt] datetimeoffset NULL,
+        [CompletedAt] datetimeoffset NULL,
+        [StagedRowCount] int NOT NULL,
+        [SubmissionCount] int NOT NULL,
+        [SucceededCount] int NOT NULL,
+        [FailedCount] int NOT NULL,
+        [NotRequiredCount] int NOT NULL,
+        [ClearDownApplied] bit NOT NULL,
+        [ErrorMessage] nvarchar(max) NULL,
+        CONSTRAINT [PK_MigrationRun] PRIMARY KEY ([Id])
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE TABLE [migration].[MigratedEntity] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RunId] uniqueidentifier NOT NULL,
+        [SubmissionId] uniqueidentifier NOT NULL,
+        [FileId] nvarchar(100) NOT NULL,
+        [RegistrationSubmissionDataId] uniqueidentifier NOT NULL,
+        [CreatedAt] datetimeoffset NOT NULL,
+        CONSTRAINT [PK_MigratedEntity] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_MigratedEntity_MigrationRun_RunId] FOREIGN KEY ([RunId]) REFERENCES [migration].[MigrationRun] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE TABLE [migration].[RegistrationHistoryStaging] (
+        [Id] bigint NOT NULL IDENTITY,
+        [RunId] uniqueidentifier NOT NULL,
+        [SubmissionId] nvarchar(100) NULL,
+        [FileId] nvarchar(100) NULL,
+        [BlobName] nvarchar(1000) NULL,
+        [OrganisationId] nvarchar(100) NULL,
+        [ComplianceSchemeId] nvarchar(100) NULL,
+        [SubmissionPeriod] nvarchar(1000) NULL,
+        [RegistrationJourney] nvarchar(1000) NULL,
+        [RegulatorNation] nvarchar(100) NULL,
+        [Roles] nvarchar(1000) NULL,
+        [EventType] nvarchar(100) NULL,
+        [EventTypeOrder] int NOT NULL,
+        [ReplayTs] datetime2 NULL,
+        [EventDate] datetime2 NULL,
+        [ApplicationReferenceNumber] nvarchar(1000) NULL,
+        [Decision] nvarchar(1000) NULL,
+        CONSTRAINT [PK_RegistrationHistoryStaging] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationHistoryStaging_MigrationRun_RunId] FOREIGN KEY ([RunId]) REFERENCES [migration].[MigrationRun] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE TABLE [migration].[RegistrationSubmissionMigration] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RunId] uniqueidentifier NOT NULL,
+        [SubmissionId] nvarchar(100) NOT NULL,
+        [Status] nvarchar(30) NOT NULL,
+        [Reason] nvarchar(50) NULL,
+        [Error] nvarchar(max) NULL,
+        [Warnings] nvarchar(max) NULL,
+        [FilesMigrated] int NOT NULL,
+        [EventsReplayed] int NOT NULL,
+        [EventsSkipped] int NOT NULL,
+        [ProcessedAt] datetimeoffset NULL,
+        CONSTRAINT [PK_RegistrationSubmissionMigration] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationSubmissionMigration_MigrationRun_RunId] FOREIGN KEY ([RunId]) REFERENCES [migration].[MigrationRun] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE INDEX [IX_MigratedEntity_RunId_RegistrationSubmissionDataId] ON [migration].[MigratedEntity] ([RunId], [RegistrationSubmissionDataId]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_MigrationRun_RunKey] ON [migration].[MigrationRun] ([RunKey]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE INDEX [IX_RegistrationHistoryStaging_RunId_SubmissionId_ReplayTs] ON [migration].[RegistrationHistoryStaging] ([RunId], [SubmissionId], [ReplayTs]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE INDEX [IX_RegistrationSubmissionMigration_RunId_Status] ON [migration].[RegistrationSubmissionMigration] ([RunId], [Status]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_RegistrationSubmissionMigration_RunId_SubmissionId] ON [migration].[RegistrationSubmissionMigration] ([RunId], [SubmissionId]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261005105055_SUB-365-add-registration-history-migration-schema', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
