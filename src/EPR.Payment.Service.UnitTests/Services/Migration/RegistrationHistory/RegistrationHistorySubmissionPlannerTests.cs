@@ -10,7 +10,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
     [TestClass]
     public class RegistrationHistorySubmissionPlannerTests
     {
-        private static readonly DateTime Cutover = new(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTime Cutover = new(2026, 7, 1, 0, 0, 0, DateTimeKind.Utc);
         private static readonly DateTime T0 = new(2026, 3, 1, 9, 0, 0, DateTimeKind.Unspecified);
 
         private static readonly IReadOnlyList<SubmissionPeriod> Periods = new List<SubmissionPeriod>
@@ -156,15 +156,37 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
         }
 
         [TestMethod]
-        public void Plan_ApprovalOnOrAfterSubsidiaryLateFeeEffectiveDate_Fails()
+        [DataRow(null, DisplayName = "file count unknown")]
+        [DataRow(3, DisplayName = "fewer files migrated than declared")]
+        public void Plan_ApprovalOnOrAfterSubsidiaryLateFeeEffectiveDate_WithIncompleteHistory_Fails(int? submissionFileCount)
         {
             var rows = new List<RegistrationHistoryStaging>
             {
-                Row(RegistrationHistoryEventTypes.Submitted, "F1", T0, arn: "PEPR001"),
-                Row(RegistrationHistoryEventTypes.RegistrationApplicationSubmitted, "F1", Cutover, arn: "PEPR001", eventDate: Cutover),
+                Row(RegistrationHistoryEventTypes.Submitted, "F1", T0, arn: "PEPR001", submissionFileCount: submissionFileCount),
+                Row(RegistrationHistoryEventTypes.Submitted, "F3", T0.AddDays(1), arn: "PEPR001", submissionFileCount: submissionFileCount),
+                Row(RegistrationHistoryEventTypes.RegistrationApplicationSubmitted, "F3", Cutover, arn: "PEPR001", eventDate: Cutover, submissionFileCount: submissionFileCount),
             };
 
-            AssertFailed(Plan(rows), MigrationReasons.PostCutoverApproval);
+            var result = Plan(rows);
+
+            AssertFailed(result, MigrationReasons.PostCutoverApproval);
+            result.Outcome!.Error.Should().Contain($"only 2 of {submissionFileCount?.ToString() ?? "unknown"} declared files");
+        }
+
+        [TestMethod]
+        public void Plan_ApprovalOnOrAfterSubsidiaryLateFeeEffectiveDate_WithEveryDeclaredFile_Replays()
+        {
+            var rows = new List<RegistrationHistoryStaging>
+            {
+                Row(RegistrationHistoryEventTypes.Submitted, "F1", T0, arn: "PEPR001", submissionFileCount: 2),
+                Row(RegistrationHistoryEventTypes.Submitted, "F2", T0.AddDays(1), arn: "PEPR001", submissionFileCount: 2),
+                Row(RegistrationHistoryEventTypes.RegistrationApplicationSubmitted, "F2", Cutover, arn: "PEPR001", eventDate: Cutover, submissionFileCount: 2),
+            };
+
+            var result = Plan(rows);
+
+            result.Outcome.Should().BeNull();
+            result.Plan!.Steps.Should().HaveCount(3);
         }
 
         [TestMethod]
@@ -256,7 +278,8 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             string? journey = "DirectLargeProducer",
             string period = "January to December 2026",
             string? nation = "GB-ENG",
-            string? blobName = null) => new()
+            string? blobName = null,
+            int? submissionFileCount = null) => new()
             {
                 Id = _nextId++,
                 SubmissionId = _submissionId.ToString(),
@@ -266,6 +289,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
                 SubmissionPeriod = period,
                 RegistrationJourney = journey,
                 RegulatorNation = nation,
+                SubmissionFileCount = submissionFileCount,
                 EventType = eventType,
                 EventTypeOrder = eventType switch
                 {

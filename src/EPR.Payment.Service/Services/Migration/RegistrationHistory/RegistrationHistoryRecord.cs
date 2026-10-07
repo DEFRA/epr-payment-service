@@ -23,6 +23,8 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
 
         public string? Roles { get; init; }
 
+        public int? SubmissionFileCount { get; init; }
+
         public string? EventType { get; init; }
 
         public int EventTypeOrder { get; init; }

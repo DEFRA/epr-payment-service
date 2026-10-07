@@ -27,6 +27,8 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Migration
 
         public string? Roles { get; set; }
 
+        public int? SubmissionFileCount { get; set; }
+
         public string? EventType { get; set; }
 
         public int EventTypeOrder { get; set; }

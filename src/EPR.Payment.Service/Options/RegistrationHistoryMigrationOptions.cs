@@ -22,6 +22,6 @@ namespace EPR.Payment.Service.Options
         /// Subsidiary late-fee rates take effect from this date. Migrated subsidiary late fees are only zero
         /// while every migrated application-submitted date is earlier, so later dates fail the submission.
         /// </summary>
-        public DateTime SubsidiaryLateFeeEffectiveDate { get; set; } = new(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+        public DateTime SubsidiaryLateFeeEffectiveDate { get; set; } = new(2026, 7, 1, 0, 0, 0, DateTimeKind.Utc);
     }
 }

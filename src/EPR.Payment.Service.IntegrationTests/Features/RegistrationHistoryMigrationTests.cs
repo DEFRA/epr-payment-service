@@ -21,7 +21,7 @@ namespace EPR.Payment.Service.IntegrationTests.Features;
 /// Outside-in coverage of the Synapse registration history migration: the dataset is replayed
 /// through the real handlers, fee calculators and SQL Server schema. The common-data API and
 /// blob storage are faked. Dates sit in 2025 (DirectLargeProducer2026 / CsoLargeProducer2026,
-/// deadline 2025-10-02), before the 2026-10-01 subsidiary late-fee effective date, like real history.
+/// deadline 2025-10-02), before the 2026-07-01 subsidiary late-fee effective date, like real history.
 /// </summary>
 public class RegistrationHistoryMigrationTests(ServiceFixture fixture) : IntegrationTestBase(fixture), IAsyncLifetime
 {
@@ -101,7 +101,7 @@ public class RegistrationHistoryMigrationTests(ServiceFixture fixture) : Integra
     public async Task GIVEN_first_file_never_submitted_for_approval_WHEN_migrated_THEN_historic_replay_clock_drives_calc_date()
     {
         // The first non-rejected cycle has no approval event, so CalcDate falls back to the handler's "now".
-        // With the real clock that would be after 2026-10-01 and charge a subsidiary late fee; the replay
+        // With the real clock that would be after 2026-07-01 and charge a subsidiary late fee; the replay
         // clock makes it the historic approval time, so the late subsidiary is counted but priced at zero.
         var submission = NewSubmission();
         _blobs.Add(submission.Blob(1), $"{submission.OrganisationId},,EN,L,,,", $"{submission.OrganisationId},SUB1,,,,,");
@@ -122,7 +122,7 @@ public class RegistrationHistoryMigrationTests(ServiceFixture fixture) : Integra
         {
             fees!.RegistrationBlobName.Should().Be(submission.Blob(2));
             fees.ProducerLateRegistrationFee.Should().BeGreaterThan(0m, "the only approval was after the deadline");
-            fees.SubsidiariesFeeBreakdown.TotalSubsidiariesLateFees.Should().Be(0m, "subsidiary late-fee rates start 2026-10-01");
+            fees.SubsidiariesFeeBreakdown.TotalSubsidiariesLateFees.Should().Be(0m, "subsidiary late-fee rates start 2026-07-01");
         }
     }
 

@@ -5001,6 +5001,9 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<Guid>("RunId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int?>("SubmissionFileCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("SubmissionId")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");

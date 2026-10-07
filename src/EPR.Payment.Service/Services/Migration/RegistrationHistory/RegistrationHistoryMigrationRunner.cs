@@ -297,6 +297,7 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
             RegistrationJourney = record.RegistrationJourney,
             RegulatorNation = record.RegulatorNation,
             Roles = record.Roles,
+            SubmissionFileCount = record.SubmissionFileCount,
             EventType = record.EventType,
             EventTypeOrder = record.EventTypeOrder,
             ReplayTs = record.ReplayTs,

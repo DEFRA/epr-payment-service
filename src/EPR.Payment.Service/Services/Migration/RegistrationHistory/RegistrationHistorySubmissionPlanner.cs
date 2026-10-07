@@ -68,11 +68,15 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
 
             var postCutover = ordered.FirstOrDefault(r => IsType(r, RegistrationHistoryEventTypes.RegistrationApplicationSubmitted)
                                                           && r.EventDate!.Value >= subsidiaryLateFeeEffectiveDate);
-            if (postCutover is not null)
+            // Newly added subsidiaries are found by comparing against every earlier file, so once subsidiary
+            // late fees apply the submission can only be replayed if all of its declared files are migrated.
+            var migratedFiles = submittedRows.Select(r => r.FileId).Distinct(StringComparer.OrdinalIgnoreCase).Count();
+            var totalFiles = ordered.Select(r => r.SubmissionFileCount).FirstOrDefault(c => c is not null);
+            if (postCutover is not null && (totalFiles is null || migratedFiles < totalFiles))
             {
                 return SubmissionPlanResult.Failed(
                     MigrationReasons.PostCutoverApproval,
-                    $"Application submitted on {postCutover.EventDate:O} is on or after the subsidiary late-fee effective date {subsidiaryLateFeeEffectiveDate:O}.");
+                    $"Application submitted on {postCutover.EventDate:O} is on or after the subsidiary late-fee effective date {subsidiaryLateFeeEffectiveDate:O} and only {migratedFiles} of {totalFiles?.ToString() ?? "unknown"} declared files are migrated.");
             }
 
             var fallbackArn = ordered.Select(r => r.ApplicationReferenceNumber).FirstOrDefault(a => !string.IsNullOrWhiteSpace(a));
