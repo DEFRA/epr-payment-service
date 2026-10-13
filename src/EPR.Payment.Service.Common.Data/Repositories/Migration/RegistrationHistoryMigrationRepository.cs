@@ -74,8 +74,17 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Migration
 
         public async Task ResetStagingAsync(Guid runId, CancellationToken cancellationToken)
         {
-            await _context.RegistrationSubmissionMigration.Where(s => s.RunId == runId).ExecuteDeleteAsync(cancellationToken);
-            await _context.RegistrationHistoryStaging.Where(s => s.RunId == runId).ExecuteDeleteAsync(cancellationToken);
+            // Only a run resumed after interrupted staging has rows to clear; skipping the empty case means a
+            // normal run does not need DELETE permission, which the service's database login does not have.
+            if (await _context.RegistrationSubmissionMigration.AnyAsync(s => s.RunId == runId, cancellationToken))
+            {
+                await _context.RegistrationSubmissionMigration.Where(s => s.RunId == runId).ExecuteDeleteAsync(cancellationToken);
+            }
+
+            if (await _context.RegistrationHistoryStaging.AnyAsync(s => s.RunId == runId, cancellationToken))
+            {
+                await _context.RegistrationHistoryStaging.Where(s => s.RunId == runId).ExecuteDeleteAsync(cancellationToken);
+            }
         }
 
         public async Task AddStagingBatchAsync(IReadOnlyCollection<RegistrationHistoryStaging> rows, CancellationToken cancellationToken)

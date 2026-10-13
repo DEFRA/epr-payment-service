@@ -36,6 +36,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
         private Mock<IRegulatorRegistrationDecisionHandler> _decisionHandlerMock = null!;
         private Mock<IRegistrationReplayHandlerFactory> _handlerFactoryMock = null!;
         private TimeProvider? _clockGivenToHandlers;
+        private List<Dictionary<string, object>> _logScopes = null!;
         private RegistrationHistorySubmissionReplayer _sut = null!;
 
         [TestInitialize]
@@ -69,11 +70,16 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             var timeProviderMock = new Mock<TimeProvider>();
             timeProviderMock.Setup(t => t.GetUtcNow()).Returns(Now);
 
+            _logScopes = new List<Dictionary<string, object>>();
+            var loggerMock = new Mock<ILogger<RegistrationHistorySubmissionReplayer>>();
+            loggerMock.Setup(l => l.BeginScope(It.IsAny<Dictionary<string, object>>()))
+                .Callback<Dictionary<string, object>>(_logScopes.Add);
+
             _sut = new RegistrationHistorySubmissionReplayer(
                 scopeFactoryMock.Object,
                 _handlerFactoryMock.Object,
                 timeProviderMock.Object,
-                new Mock<ILogger<RegistrationHistorySubmissionReplayer>>().Object);
+                loggerMock.Object);
         }
 
         [TestMethod]
@@ -140,6 +146,19 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
                                                && m.RegistrationSubmissionDataId == _dataId && m.CreatedAt == Now),
                     It.IsAny<CancellationToken>()), Times.Once);
                 _transactionMock.Verify(t => t.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
+            }
+        }
+
+        [TestMethod]
+        public async Task ReplayAsync_ScopesLogsByReplayStep()
+        {
+            await _sut.ReplayAsync(_runId, Plan(), CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                _logScopes.Select(s => s["MigrationReplayStep"]).Should().Equal(nameof(SubmittedStep), nameof(ApplicationSubmittedStep), nameof(DecisionStep));
+                _logScopes.Select(s => s["MigrationReplayTs"]).Should().Equal(DeclaredAt, ApprovalAt, DecisionAt);
+                _logScopes.Should().OnlyContain(s => Equals(s["MigrationFileId"], "F1"));
             }
         }
 

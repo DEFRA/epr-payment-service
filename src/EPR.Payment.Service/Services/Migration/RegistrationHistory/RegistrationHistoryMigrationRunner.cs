@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using EPR.Payment.Service.Common.Data.DataModels.Migration;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Migration;
+using EPR.Payment.Service.Common.Logging;
 using EPR.Payment.Service.Options;
 using Microsoft.Extensions.Options;
 
@@ -58,7 +59,7 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
                 return;
             }
 
-            using var logScope = _logger.BeginScope(new Dictionary<string, object> { ["MigrationRunKey"] = _options.RunKey });
+            using var logScope = _logger.AddScopedData(new Dictionary<string, object> { ["MigrationRunKey"] = _options.RunKey });
 
             if (!await _repository.TryAcquireRunLockAsync(cancellationToken))
             {
@@ -92,7 +93,11 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
             var resumed = run is not null;
             run ??= await _repository.CreateRunAsync(_options.RunKey, Environment.MachineName, _timeProvider.GetUtcNow(), cancellationToken);
 
-            using var runScope = _logger.BeginScope(new Dictionary<string, object> { ["MigrationRunId"] = run.Id });
+            using var runScope = _logger.AddScopedData(new Dictionary<string, object>
+            {
+                ["MigrationRunId"] = run.Id,
+                ["MigrationRunResumed"] = resumed,
+            });
             _logger.LogInformation(
                 "Registration history migration Started: RunKey {RunKey} RunId {RunId} Resumed {Resumed} ClearDownMigratedDataOnError {ClearDown}.",
                 _options.RunKey,
@@ -141,6 +146,8 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
 
         private async Task StageAsync(MigrationRun run, CancellationToken cancellationToken)
         {
+            using var phaseScope = _logger.AddScopedData(new Dictionary<string, object> { ["MigrationPhase"] = "Staging" });
+
             var stopwatch = Stopwatch.StartNew();
             await _repository.ResetStagingAsync(run.Id, cancellationToken);
 
@@ -180,6 +187,8 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
 
         private async Task ProcessPendingSubmissionsAsync(MigrationRun run, CancellationToken cancellationToken)
         {
+            using var phaseScope = _logger.AddScopedData(new Dictionary<string, object> { ["MigrationPhase"] = "Replay" });
+
             var periods = await _repository.GetSubmissionPeriodsAsync(cancellationToken);
             var pending = await _repository.GetPendingSubmissionsAsync(run.Id, cancellationToken);
             var processed = 0;
@@ -188,8 +197,10 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
+                using var submissionScope = _logger.AddScopedData(new Dictionary<string, object> { ["SubmissionId"] = submission.SubmissionId });
+
                 var rows = await _repository.GetStagingForSubmissionAsync(run.Id, submission.SubmissionId, cancellationToken);
-                var planResult = RegistrationHistorySubmissionPlanner.Plan(rows, periods, _options.SubsidiaryLateFeeEffectiveDate);
+                var planResult = RegistrationHistorySubmissionPlanner.Plan(rows, periods, _options.SubsidiaryLateFeeChargedFrom);
 
                 var outcome = planResult.Outcome
                     ?? await _replayer.ReplayAsync(run.Id, planResult.Plan!, cancellationToken);
@@ -237,6 +248,8 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
 
         private async Task FinishAsync(MigrationRun run, string? runError, TimeSpan elapsed, CancellationToken cancellationToken)
         {
+            using var phaseScope = _logger.AddScopedData(new Dictionary<string, object> { ["MigrationPhase"] = "Finish" });
+
             var counts = await _repository.GetStatusCountsAsync(run.Id, cancellationToken);
             var hasErrors = runError is not null || counts.Failed > 0;
 

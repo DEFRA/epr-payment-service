@@ -19,9 +19,9 @@ namespace EPR.Payment.Service.Options
         public int StagingBatchSize { get; set; } = 1000;
 
         /// <summary>
-        /// Subsidiary late-fee rates take effect from this date. Migrated subsidiary late fees are only zero
-        /// while every migrated application-submitted date is earlier, so later dates fail the submission.
+        /// The live service started charging subsidiary late fees on this date. Applications submitted earlier
+        /// are replayed without them; later ones are charged, which needs the submission's full file history.
         /// </summary>
-        public DateTime SubsidiaryLateFeeEffectiveDate { get; set; } = new(2026, 7, 1, 0, 0, 0, DateTimeKind.Utc);
+        public DateTime SubsidiaryLateFeeChargedFrom { get; set; } = new(2026, 10, 5, 0, 0, 0, DateTimeKind.Utc);
     }
 }

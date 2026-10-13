@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using EPR.Payment.Service.Common.Logging;
 
 namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
 {
@@ -20,6 +21,12 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await Task.Yield();
+
+            using var logScope = _logger.AddScopedData(new Dictionary<string, object>
+            {
+                ["MigrationName"] = "RegistrationHistory",
+                ["MigrationInstanceId"] = Environment.MachineName,
+            });
 
             try
             {

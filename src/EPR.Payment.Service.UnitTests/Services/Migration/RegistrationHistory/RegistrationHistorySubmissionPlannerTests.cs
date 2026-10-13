@@ -10,7 +10,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
     [TestClass]
     public class RegistrationHistorySubmissionPlannerTests
     {
-        private static readonly DateTime Cutover = new(2026, 7, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTime Cutover = new(2026, 10, 5, 0, 0, 0, DateTimeKind.Utc);
         private static readonly DateTime T0 = new(2026, 3, 1, 9, 0, 0, DateTimeKind.Unspecified);
 
         private static readonly IReadOnlyList<SubmissionPeriod> Periods = new List<SubmissionPeriod>
@@ -158,7 +158,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
         [TestMethod]
         [DataRow(null, DisplayName = "file count unknown")]
         [DataRow(3, DisplayName = "fewer files migrated than declared")]
-        public void Plan_ApprovalOnOrAfterSubsidiaryLateFeeEffectiveDate_WithIncompleteHistory_Fails(int? submissionFileCount)
+        public void Plan_ApprovalOnOrAfterSubsidiaryLateFeeChargedFrom_WithIncompleteHistory_Fails(int? submissionFileCount)
         {
             var rows = new List<RegistrationHistoryStaging>
             {
@@ -174,7 +174,24 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
         }
 
         [TestMethod]
-        public void Plan_ApprovalOnOrAfterSubsidiaryLateFeeEffectiveDate_WithEveryDeclaredFile_Replays()
+        public void Plan_ApprovalBeforeSubsidiaryLateFeeChargedFrom_WithIncompleteHistory_Replays()
+        {
+            var beforeCutover = Cutover.AddDays(-1);
+            var rows = new List<RegistrationHistoryStaging>
+            {
+                Row(RegistrationHistoryEventTypes.Submitted, "F1", T0, arn: "PEPR001", submissionFileCount: 3),
+                Row(RegistrationHistoryEventTypes.Submitted, "F3", T0.AddDays(1), arn: "PEPR001", submissionFileCount: 3),
+                Row(RegistrationHistoryEventTypes.RegistrationApplicationSubmitted, "F3", beforeCutover, arn: "PEPR001", eventDate: beforeCutover, submissionFileCount: 3),
+            };
+
+            var result = Plan(rows);
+
+            result.Outcome.Should().BeNull();
+            result.Plan!.Steps.Should().HaveCount(3);
+        }
+
+        [TestMethod]
+        public void Plan_ApprovalOnOrAfterSubsidiaryLateFeeChargedFrom_WithEveryDeclaredFile_Replays()
         {
             var rows = new List<RegistrationHistoryStaging>
             {

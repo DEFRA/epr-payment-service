@@ -13,7 +13,7 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
         public static SubmissionPlanResult Plan(
             IReadOnlyList<RegistrationHistoryStaging> rows,
             IReadOnlyList<SubmissionPeriod> periods,
-            DateTime subsidiaryLateFeeEffectiveDate)
+            DateTime subsidiaryLateFeeChargedFrom)
         {
             ArgumentNullException.ThrowIfNull(rows);
             ArgumentNullException.ThrowIfNull(periods);
@@ -66,17 +66,18 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
                 return SubmissionPlanResult.Failed(MigrationReasons.InvalidData, $"{invalid.EventType} row {invalid.Id} is missing ReplayTs, EventDate or FileId.");
             }
 
+            // The replay calculators charge subsidiary late fees from the replay clock (ReplayTs) onwards.
             var postCutover = ordered.FirstOrDefault(r => IsType(r, RegistrationHistoryEventTypes.RegistrationApplicationSubmitted)
-                                                          && r.EventDate!.Value >= subsidiaryLateFeeEffectiveDate);
+                                                          && r.ReplayTs!.Value >= subsidiaryLateFeeChargedFrom);
             // Newly added subsidiaries are found by comparing against every earlier file, so once subsidiary
-            // late fees apply the submission can only be replayed if all of its declared files are migrated.
+            // late fees are charged the submission can only be replayed if all of its declared files are migrated.
             var migratedFiles = submittedRows.Select(r => r.FileId).Distinct(StringComparer.OrdinalIgnoreCase).Count();
             var totalFiles = ordered.Select(r => r.SubmissionFileCount).FirstOrDefault(c => c is not null);
             if (postCutover is not null && (totalFiles is null || migratedFiles < totalFiles))
             {
                 return SubmissionPlanResult.Failed(
                     MigrationReasons.PostCutoverApproval,
-                    $"Application submitted on {postCutover.EventDate:O} is on or after the subsidiary late-fee effective date {subsidiaryLateFeeEffectiveDate:O} and only {migratedFiles} of {totalFiles?.ToString() ?? "unknown"} declared files are migrated.");
+                    $"Application submitted on {postCutover.ReplayTs:O} is on or after subsidiary late fees were charged from {subsidiaryLateFeeChargedFrom:O} and only {migratedFiles} of {totalFiles?.ToString() ?? "unknown"} declared files are migrated.");
             }
 
             var fallbackArn = ordered.Select(r => r.ApplicationReferenceNumber).FirstOrDefault(a => !string.IsNullOrWhiteSpace(a));

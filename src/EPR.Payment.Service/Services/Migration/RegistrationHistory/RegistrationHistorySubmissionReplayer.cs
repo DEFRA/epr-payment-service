@@ -3,6 +3,7 @@ using CsvHelper;
 using EPR.Payment.Service.Common.Data.DataModels.Migration;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Migration;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmission;
+using EPR.Payment.Service.Common.Logging;
 
 namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
 {
@@ -59,6 +60,13 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
                 foreach (var step in plan.Steps)
                 {
                     clock.SetUtcNow(step.ReplayTs);
+
+                    using var stepScope = _logger.AddScopedData(new Dictionary<string, object>
+                    {
+                        ["MigrationFileId"] = step.FileId,
+                        ["MigrationReplayStep"] = step.GetType().Name,
+                        ["MigrationReplayTs"] = step.ReplayTs,
+                    });
 
                     switch (step)
                     {

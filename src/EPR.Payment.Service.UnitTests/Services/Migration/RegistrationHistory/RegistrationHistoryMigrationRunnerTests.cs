@@ -25,6 +25,8 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
         private Mock<ICommonDataApiClient> _clientMock = null!;
         private Mock<IRegistrationHistoryMigrationRepository> _repositoryMock = null!;
         private Mock<IRegistrationHistorySubmissionReplayer> _replayerMock = null!;
+        private Mock<ILogger<RegistrationHistoryMigrationRunner>> _loggerMock = null!;
+        private List<Dictionary<string, object>> _logScopes = null!;
         private MigrationRun? _existingRun;
         private MigrationRun _createdRun = null!;
         private List<RegistrationHistoryStaging> _stagedRows = null!;
@@ -40,6 +42,10 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             _clientMock = new Mock<ICommonDataApiClient>();
             _repositoryMock = new Mock<IRegistrationHistoryMigrationRepository>();
             _replayerMock = new Mock<IRegistrationHistorySubmissionReplayer>();
+            _loggerMock = new Mock<ILogger<RegistrationHistoryMigrationRunner>>();
+            _logScopes = new List<Dictionary<string, object>>();
+            _loggerMock.Setup(l => l.BeginScope(It.IsAny<Dictionary<string, object>>()))
+                .Callback<Dictionary<string, object>>(_logScopes.Add);
             _existingRun = null;
             _createdRun = new MigrationRun { Id = Guid.NewGuid(), RunKey = RunKey, Status = MigrationRunStatus.Running };
             _stagedRows = new List<RegistrationHistoryStaging>();
@@ -326,6 +332,24 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             _repositoryMock.Verify(r => r.ReleaseRunLockAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
+        [TestMethod]
+        public async Task RunAsync_NewRun_ScopesLogsByRunPhaseAndSubmission()
+        {
+            await CreateSut().RunAsync(CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                _logScopes.Should().ContainSingle(s => s.ContainsKey("MigrationRunKey") && Equals(s["MigrationRunKey"], RunKey));
+                _logScopes.Should().ContainSingle(s => s.ContainsKey("MigrationRunId")
+                    && Equals(s["MigrationRunId"], _createdRun.Id)
+                    && Equals(s["MigrationRunResumed"], false));
+                _logScopes.Where(s => s.ContainsKey("MigrationPhase")).Select(s => s["MigrationPhase"])
+                    .Should().Equal("Staging", "Replay", "Finish");
+                _logScopes.Where(s => s.ContainsKey("SubmissionId")).Select(s => s["SubmissionId"])
+                    .Should().Equal(_validSubmissionId.ToString(), _unmappedSubmissionId.ToString());
+            }
+        }
+
         private void ReplayerFails()
         {
             _finalCounts = new MigrationStatusCounts(2, 0, 0, 1, 1);
@@ -346,7 +370,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
                 _repositoryMock.Object,
                 _replayerMock.Object,
                 timeProviderMock.Object,
-                new Mock<ILogger<RegistrationHistoryMigrationRunner>>().Object);
+                _loggerMock.Object);
         }
 
         private IEnumerable<RegistrationHistoryRecord> Records()

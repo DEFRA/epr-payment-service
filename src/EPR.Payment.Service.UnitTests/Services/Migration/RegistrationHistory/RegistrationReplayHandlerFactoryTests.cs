@@ -1,5 +1,6 @@
 ﻿using EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSubmission;
 using EPR.Payment.Service.Common.Services.Interfaces.RegistrationSubmission;
+using EPR.Payment.Service.Options;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Services.Interfaces.RegistrationFees.Producer;
 using EPR.Payment.Service.Services.Migration.RegistrationHistory;
@@ -33,7 +34,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             services.AddSingleton(decisionHandler);
             using var provider = services.BuildServiceProvider();
 
-            var handlers = new RegistrationReplayHandlerFactory().Create(provider, new ReplayTimeProvider());
+            var handlers = new RegistrationReplayHandlerFactory(Microsoft.Extensions.Options.Options.Create(new RegistrationHistoryMigrationOptions())).Create(provider, new ReplayTimeProvider());
 
             using (new AssertionScope())
             {
@@ -46,12 +47,13 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
         [TestMethod]
         public void Create_NullArguments_Throw()
         {
-            var sut = new RegistrationReplayHandlerFactory();
+            var sut = new RegistrationReplayHandlerFactory(Microsoft.Extensions.Options.Options.Create(new RegistrationHistoryMigrationOptions()));
 
             using (new AssertionScope())
             {
                 ((Action)(() => sut.Create(null!, new ReplayTimeProvider()))).Should().Throw<ArgumentNullException>();
                 ((Action)(() => sut.Create(Mock.Of<IServiceProvider>(), null!))).Should().Throw<ArgumentNullException>();
+                ((Action)(() => new RegistrationReplayHandlerFactory(null!))).Should().Throw<ArgumentNullException>();
             }
         }
     }
