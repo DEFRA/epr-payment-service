@@ -17,7 +17,6 @@ parameters:
     - DEV8
     - DEV9
     - DEV14
-    - DEV16
 - name: envToDeploy
   displayName: 'Target Environment to deploy:'
   default: development
