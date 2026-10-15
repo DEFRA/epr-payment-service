@@ -4800,6 +4800,24 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                             OpeningDate = new DateTime(2027, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             RegistrationYear = 2027,
                             WindowType = "DirectSmallProducer"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ClosingDate = new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DeadlineDate = new DateTime(2024, 4, 2, 0, 0, 0, 0, DateTimeKind.Utc),
+                            OpeningDate = new DateTime(2023, 7, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RegistrationYear = 2024,
+                            WindowType = "Cso"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ClosingDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DeadlineDate = new DateTime(2024, 4, 2, 0, 0, 0, 0, DateTimeKind.Utc),
+                            OpeningDate = new DateTime(2023, 7, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RegistrationYear = 2024,
+                            WindowType = "Direct"
                         });
                 });
 

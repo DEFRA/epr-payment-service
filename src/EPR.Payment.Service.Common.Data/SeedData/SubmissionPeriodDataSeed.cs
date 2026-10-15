@@ -34,6 +34,10 @@ namespace EPR.Payment.Service.Common.Data.SeedData
             (8, "CsoSmallProducer",    2027, new DateTime(2027, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2027, 4, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2028, 1, 29, 0, 0, 0, DateTimeKind.Utc)),
             (9, "DirectLargeProducer", 2027, new DateTime(2026, 7, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2026, 10, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2028, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
             (10, "DirectSmallProducer", 2027, new DateTime(2027, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2027, 4, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2028, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
+
+            // 2024 pattern (2025 pattern shifted back one year)
+            (11, "Cso",                2024, new DateTime(2023, 7, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2024, 4, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc)),
+            (12, "Direct",             2024, new DateTime(2023, 7, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2024, 4, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)),
         };
 
         public static void SeedSubmissionPeriods(EntityTypeBuilder<SubmissionPeriod> builder)
