@@ -30,5 +30,7 @@
         public const string PostCutoverApproval = "PostCutoverApproval";
 
         public const string HandlerError = "HandlerError";
+
+        public const string KnownIssue = "KnownIssue";
     }
 }

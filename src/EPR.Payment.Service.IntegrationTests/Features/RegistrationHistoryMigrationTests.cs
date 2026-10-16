@@ -248,6 +248,32 @@ public class RegistrationHistoryMigrationTests(ServiceFixture fixture) : Integra
     }
 
     [Fact]
+    public async Task GIVEN_an_excluded_submission_WHEN_migrated_THEN_it_is_recorded_as_excluded_and_does_not_trigger_clear_down()
+    {
+        var good = NewSubmission();
+        var knownBad = NewSubmission();
+        _blobs.Add(good.Blob(1), $"{good.OrganisationId},,EN,L,,,");
+        await ExcludeAsync(knownBad.Id.ToString().ToUpperInvariant(), MigrationReasons.BlobNotFound, "Known missing blob");
+        var records = new List<RegistrationHistoryRecord> { good.Declared(1, OnTime), knownBad.Declared(1, OnTime) };
+
+        var run = await RunMigrationAsync(records, clearDown: true);
+
+        using (new AwesomeAssertions.Execution.AssertionScope())
+        {
+            run.Status.Should().Be(MigrationRunStatus.Completed);
+            run.ClearDownApplied.Should().BeFalse();
+            run.FailedCount.Should().Be(0);
+            run.ExcludedCount.Should().Be(1);
+            (await CountDataRowsAsync(good.Id)).Should().Be(1);
+            (await CountDataRowsAsync(knownBad.Id)).Should().Be(0);
+            var excluded = await SubmissionStatusAsync(run, knownBad.Id);
+            excluded.Status.Should().Be(SubmissionMigrationStatus.Excluded);
+            excluded.Reason.Should().Be(MigrationReasons.KnownIssue);
+            excluded.Error.Should().Be("BlobNotFound: Known missing blob");
+        }
+    }
+
+    [Fact]
     public async Task GIVEN_a_completed_run_WHEN_started_again_with_the_same_run_key_THEN_it_never_runs_a_second_time()
     {
         var submission = NewSubmission();
@@ -286,6 +312,14 @@ public class RegistrationHistoryMigrationTests(ServiceFixture fixture) : Integra
 
         await using var readScope = _host.Services.CreateAsyncScope();
         return await readScope.ServiceProvider.GetRequiredService<AppDbContext>().MigrationRun.AsNoTracking().SingleAsync(r => r.RunKey == runKey);
+    }
+
+    private async Task ExcludeAsync(string submissionId, string reason, string note)
+    {
+        await using var scope = _host.Services.CreateAsyncScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        context.ExcludedSubmission.Add(new ExcludedSubmission { SubmissionId = submissionId, Reason = reason, Note = note });
+        await context.SaveChangesAsync();
     }
 
     private async Task<RegistrationSubmissionMigration> SubmissionStatusAsync(MigrationRun run, Guid submissionId)

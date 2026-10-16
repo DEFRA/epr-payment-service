@@ -6315,3 +6315,56 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261016140650_SUB-365-add-migration-excluded-submissions'
+)
+BEGIN
+    ALTER TABLE [migration].[MigrationRun] ADD [ExcludedCount] int NOT NULL DEFAULT 0;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261016140650_SUB-365-add-migration-excluded-submissions'
+)
+BEGIN
+    CREATE TABLE [migration].[ExcludedSubmission] (
+        [SubmissionId] nvarchar(100) NOT NULL,
+        [Reason] nvarchar(50) NOT NULL,
+        [Note] nvarchar(1000) NULL,
+        [CreatedAt] datetimeoffset NOT NULL DEFAULT (SYSUTCDATETIME()),
+        CONSTRAINT [PK_ExcludedSubmission] PRIMARY KEY ([SubmissionId])
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261016140650_SUB-365-add-migration-excluded-submissions'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'SubmissionId', N'Reason', N'Note') AND [object_id] = OBJECT_ID(N'[migration].[ExcludedSubmission]'))
+        SET IDENTITY_INSERT [migration].[ExcludedSubmission] ON;
+    EXEC(N'INSERT INTO [migration].[ExcludedSubmission] ([SubmissionId], [Reason], [Note])
+    VALUES (N''ea0be992-d316-410a-9235-2e9d024cb79d'', N''CsvInvalid'', N''Compliance scheme file has subsidiary rows for OrganisationId 101002 but no parent row (row validation did not run on upload).''),
+    (N''0341aca8-240c-40c5-9080-83b2689d2a48'', N''CsvInvalid'', N''Compliance scheme file has subsidiary rows for OrganisationId 101594 but no parent row (row validation did not run on upload).''),
+    (N''f09c6273-e322-4b9b-8d21-0ae7800bfbdd'', N''CsvInvalid'', N''Compliance scheme file has subsidiary rows for OrganisationId 115537 but no parent row (row validation did not run on upload).''),
+    (N''28ba0d67-3b18-4704-92e4-a2ddd9c8de99'', N''CsvInvalid'', N''Compliance scheme file has subsidiary rows for OrganisationId 101877 but no parent row (row validation did not run on upload).''),
+    (N''2b8337bb-34aa-4a86-ad47-5a9aebbd07a3'', N''ArnMissing'', N''File e6f91b8b-5d65-442c-a081-e6e868211612: no application reference number recorded in Synapse.''),
+    (N''579c33d6-034a-45d7-b3e5-523b58eb90b3'', N''ArnMissing'', N''File 1bb2cb86-fe76-42bf-a553-1d1019a92e80: no application reference number recorded in Synapse.'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'SubmissionId', N'Reason', N'Note') AND [object_id] = OBJECT_ID(N'[migration].[ExcludedSubmission]'))
+        SET IDENTITY_INSERT [migration].[ExcludedSubmission] OFF;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261016140650_SUB-365-add-migration-excluded-submissions'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261016140650_SUB-365-add-migration-excluded-submissions', N'10.0.0');
+END;
+
+COMMIT;
+GO
+

@@ -4,6 +4,7 @@
     producers, subsidiaries, events, fee snapshots and line items go with them via ON DELETE CASCADE.
     Payments linked to those rows are unlinked first (FK is NO ACTION).
     The [migration] control, staging and log tables are kept for diagnosis.
+    [migration].[ExcludedSubmission] is not run-scoped and is deliberately left alone.
 
     To run the migration again afterwards, deploy with a new Migration:RegistrationHistory:RunKey
     (or delete the [migration].[MigrationRun] row for @RunKey, which cascades its staging/status/audit rows).

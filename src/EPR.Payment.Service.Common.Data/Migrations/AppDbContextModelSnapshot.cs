@@ -4850,6 +4850,31 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Migration.ExcludedSubmission", b =>
+                {
+                    b.Property<string>("SubmissionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("SubmissionId");
+
+                    b.ToTable("ExcludedSubmission", "migration");
+                });
+
             modelBuilder.Entity("EPR.Payment.Service.Common.Data.DataModels.Migration.MigratedEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -4896,6 +4921,9 @@ namespace EPR.Payment.Service.Common.Data.Migrations
 
                     b.Property<string>("ErrorMessage")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ExcludedCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("FailedCount")
                         .HasColumnType("int");

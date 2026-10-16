@@ -29,6 +29,8 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Migration
 
         public int NotRequiredCount { get; set; }
 
+        public int ExcludedCount { get; set; }
+
         public bool ClearDownApplied { get; set; }
 
         public string? ErrorMessage { get; set; }

@@ -40,6 +40,7 @@ namespace EPR.Payment.Service.Common.Data
         public DbSet<RegistrationHistoryStaging> RegistrationHistoryStaging => Set<RegistrationHistoryStaging>();
         public DbSet<RegistrationSubmissionMigration> RegistrationSubmissionMigration => Set<RegistrationSubmissionMigration>();
         public DbSet<MigratedEntity> MigratedEntity => Set<MigratedEntity>();
+        public DbSet<ExcludedSubmission> ExcludedSubmission => Set<ExcludedSubmission>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

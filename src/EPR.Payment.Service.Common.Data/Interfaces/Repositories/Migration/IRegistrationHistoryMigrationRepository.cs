@@ -33,6 +33,8 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.Migration
 
         Task<IReadOnlyList<SubmissionPeriod>> GetSubmissionPeriodsAsync(CancellationToken cancellationToken);
 
+        Task<IReadOnlyDictionary<string, ExcludedSubmission>> GetExcludedSubmissionsAsync(CancellationToken cancellationToken);
+
         Task<bool> SubmissionExistsAsync(Guid submissionId, CancellationToken cancellationToken);
 
         Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);

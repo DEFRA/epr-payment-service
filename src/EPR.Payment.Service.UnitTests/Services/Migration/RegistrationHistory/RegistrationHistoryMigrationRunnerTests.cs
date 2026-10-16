@@ -33,6 +33,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
         private List<int> _batchSizes = null!;
         private List<RegistrationSubmissionMigration> _updatedSubmissions = null!;
         private MigrationStatusCounts _finalCounts = null!;
+        private Dictionary<string, ExcludedSubmission> _excluded = null!;
 
         [TestInitialize]
         public void Init()
@@ -51,7 +52,8 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             _stagedRows = new List<RegistrationHistoryStaging>();
             _batchSizes = new List<int>();
             _updatedSubmissions = new List<RegistrationSubmissionMigration>();
-            _finalCounts = new MigrationStatusCounts(2, 0, 1, 0, 1);
+            _finalCounts = new MigrationStatusCounts(2, 0, 1, 0, 1, 0);
+            _excluded = new Dictionary<string, ExcludedSubmission>(StringComparer.OrdinalIgnoreCase);
 
             _clientMock.Setup(c => c.GetRegistrationHistoryAsync(It.IsAny<CancellationToken>())).Returns(Records().ToAsyncEnumerable());
 
@@ -69,6 +71,8 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             _repositoryMock.Setup(r => r.CreatePendingSubmissionsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(2);
             _repositoryMock.Setup(r => r.GetSubmissionPeriodsAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<SubmissionPeriod> { new() { Id = 5, WindowType = "DirectLargeProducer", RegistrationYear = 2026 } });
+            _repositoryMock.Setup(r => r.GetExcludedSubmissionsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => _excluded);
             _repositoryMock.Setup(r => r.GetPendingSubmissionsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => new List<RegistrationSubmissionMigration>
                 {
@@ -229,6 +233,61 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
         }
 
         [TestMethod]
+        public async Task RunAsync_ExcludedSubmission_RecordsExcludedWithoutPlanningOrReplaying()
+        {
+            _excluded[_validSubmissionId.ToString().ToUpperInvariant()] = new ExcludedSubmission
+            {
+                SubmissionId = _validSubmissionId.ToString().ToUpperInvariant(),
+                Reason = MigrationReasons.CsvInvalid,
+                Note = "No parent row",
+            };
+            _finalCounts = new MigrationStatusCounts(2, 0, 0, 0, 1, 1);
+
+            await CreateSut().RunAsync(CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                _replayerMock.VerifyNoOtherCalls();
+                _repositoryMock.Verify(r => r.GetStagingForSubmissionAsync(It.IsAny<Guid>(), _validSubmissionId.ToString(), It.IsAny<CancellationToken>()), Times.Never);
+
+                var excluded = _updatedSubmissions.Single(s => s.SubmissionId == _validSubmissionId.ToString());
+                excluded.Status.Should().Be(SubmissionMigrationStatus.Excluded);
+                excluded.Reason.Should().Be(MigrationReasons.KnownIssue);
+                excluded.Error.Should().Be("CsvInvalid: No parent row");
+                excluded.ProcessedAt.Should().Be(Now);
+                _updatedSubmissions.Single(s => s.SubmissionId == _unmappedSubmissionId.ToString()).Status.Should().Be(SubmissionMigrationStatus.NotRequired);
+            }
+        }
+
+        [TestMethod]
+        public async Task RunAsync_ExcludedSubmissionWithoutNote_RecordsReasonAsError()
+        {
+            _excluded[_validSubmissionId.ToString()] = new ExcludedSubmission { SubmissionId = _validSubmissionId.ToString(), Reason = MigrationReasons.ArnMissing };
+
+            await CreateSut().RunAsync(CancellationToken.None);
+
+            _updatedSubmissions.Single(s => s.SubmissionId == _validSubmissionId.ToString()).Error.Should().Be(MigrationReasons.ArnMissing);
+        }
+
+        [TestMethod]
+        public async Task RunAsync_OnlyExclusions_CompletesWithoutClearDown()
+        {
+            _excluded[_validSubmissionId.ToString()] = new ExcludedSubmission { SubmissionId = _validSubmissionId.ToString(), Reason = MigrationReasons.CsvInvalid };
+            _finalCounts = new MigrationStatusCounts(2, 0, 0, 0, 1, 1);
+
+            await CreateSut().RunAsync(CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                _createdRun.Status.Should().Be(MigrationRunStatus.Completed);
+                _createdRun.ExcludedCount.Should().Be(1);
+                _createdRun.FailedCount.Should().Be(0);
+                _createdRun.ClearDownApplied.Should().BeFalse();
+                _repositoryMock.Verify(r => r.ClearDownAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+            }
+        }
+
+        [TestMethod]
         public async Task RunAsync_SubmissionFailsAndClearDownEnabled_ClearsDownAndKeepsLogs()
         {
             ReplayerFails();
@@ -352,7 +411,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
 
         private void ReplayerFails()
         {
-            _finalCounts = new MigrationStatusCounts(2, 0, 0, 1, 1);
+            _finalCounts = new MigrationStatusCounts(2, 0, 0, 1, 1, 0);
             _replayerMock
                 .Setup(r => r.ReplayAsync(It.IsAny<Guid>(), It.IsAny<SubmissionReplayPlan>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new SubmissionOutcome(SubmissionMigrationStatus.Failed, MigrationReasons.BlobNotFound, "missing", new List<string> { "w1", "w2" }));

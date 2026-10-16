@@ -145,11 +145,21 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Migration
                 CountOf(SubmissionMigrationStatus.Pending),
                 CountOf(SubmissionMigrationStatus.Succeeded),
                 CountOf(SubmissionMigrationStatus.Failed),
-                CountOf(SubmissionMigrationStatus.NotRequired));
+                CountOf(SubmissionMigrationStatus.NotRequired),
+                CountOf(SubmissionMigrationStatus.Excluded));
         }
 
         public async Task<IReadOnlyList<SubmissionPeriod>> GetSubmissionPeriodsAsync(CancellationToken cancellationToken) =>
             await _context.SubmissionPeriod.AsNoTracking().ToListAsync(cancellationToken);
+
+        public async Task<IReadOnlyDictionary<string, ExcludedSubmission>> GetExcludedSubmissionsAsync(CancellationToken cancellationToken)
+        {
+            var excluded = await _context.ExcludedSubmission.AsNoTracking().ToListAsync(cancellationToken);
+
+            return excluded
+                .GroupBy(e => e.SubmissionId.Trim(), StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+        }
 
         public Task<bool> SubmissionExistsAsync(Guid submissionId, CancellationToken cancellationToken) =>
             _context.RegistrationSubmissionData.AsNoTracking().AnyAsync(r => r.SubmissionId == submissionId, cancellationToken);

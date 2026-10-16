@@ -53,5 +53,7 @@
         public const string RegistrationSubmissionMigrationTableName = "RegistrationSubmissionMigration";
 
         public const string MigratedEntityTableName = "MigratedEntity";
+
+        public const string ExcludedSubmissionTableName = "ExcludedSubmission";
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using EPR.Payment.Service.Common.Data.DataModels.Migration;
 using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Migration;
 using EPR.Payment.Service.Common.Logging;
@@ -190,8 +191,14 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
             using var phaseScope = _logger.AddScopedData(new Dictionary<string, object> { ["MigrationPhase"] = "Replay" });
 
             var periods = await _repository.GetSubmissionPeriodsAsync(cancellationToken);
+            var excluded = await _repository.GetExcludedSubmissionsAsync(cancellationToken);
             var pending = await _repository.GetPendingSubmissionsAsync(run.Id, cancellationToken);
             var processed = 0;
+
+            if (excluded.Count > 0)
+            {
+                _logger.LogInformation("Registration history migration has {ExcludedCount} excluded submissions configured.", excluded.Count);
+            }
 
             foreach (var submission in pending)
             {
@@ -199,11 +206,7 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
 
                 using var submissionScope = _logger.AddScopedData(new Dictionary<string, object> { ["SubmissionId"] = submission.SubmissionId });
 
-                var rows = await _repository.GetStagingForSubmissionAsync(run.Id, submission.SubmissionId, cancellationToken);
-                var planResult = RegistrationHistorySubmissionPlanner.Plan(rows, periods, _options.SubsidiaryLateFeeChargedFrom);
-
-                var outcome = planResult.Outcome
-                    ?? await _replayer.ReplayAsync(run.Id, planResult.Plan!, cancellationToken);
+                var outcome = await ProcessSubmissionAsync(run, submission, periods, excluded, cancellationToken);
 
                 await RecordOutcomeAsync(submission, outcome, cancellationToken);
 
@@ -212,15 +215,41 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
                 {
                     var counts = await _repository.GetStatusCountsAsync(run.Id, cancellationToken);
                     _logger.LogInformation(
-                        "Registration history migration Progress: {Processed}/{Total} processed this session; Succeeded {Succeeded} Failed {Failed} NotRequired {NotRequired} Pending {Pending}.",
+                        "Registration history migration Progress: {Processed}/{Total} processed this session; Succeeded {Succeeded} Failed {Failed} NotRequired {NotRequired} Excluded {Excluded} Pending {Pending}.",
                         processed,
                         pending.Count,
                         counts.Succeeded,
                         counts.Failed,
                         counts.NotRequired,
+                        counts.Excluded,
                         counts.Pending);
                 }
             }
+        }
+
+        private async Task<SubmissionOutcome> ProcessSubmissionAsync(
+            MigrationRun run,
+            RegistrationSubmissionMigration submission,
+            IReadOnlyList<SubmissionPeriod> periods,
+            IReadOnlyDictionary<string, ExcludedSubmission> excluded,
+            CancellationToken cancellationToken)
+        {
+            if (excluded.TryGetValue(submission.SubmissionId.Trim(), out var exclusion))
+            {
+                _logger.LogInformation(
+                    "Registration history migration SubmissionExcluded: SubmissionId {SubmissionId} Reason {Reason}.",
+                    submission.SubmissionId,
+                    exclusion.Reason);
+
+                var error = string.IsNullOrWhiteSpace(exclusion.Note) ? exclusion.Reason : $"{exclusion.Reason}: {exclusion.Note}";
+                return new SubmissionOutcome(SubmissionMigrationStatus.Excluded, MigrationReasons.KnownIssue, error);
+            }
+
+            var rows = await _repository.GetStagingForSubmissionAsync(run.Id, submission.SubmissionId, cancellationToken);
+            var planResult = RegistrationHistorySubmissionPlanner.Plan(rows, periods, _options.SubsidiaryLateFeeChargedFrom);
+
+            return planResult.Outcome
+                ?? await _replayer.ReplayAsync(run.Id, planResult.Plan!, cancellationToken);
         }
 
         private async Task RecordOutcomeAsync(RegistrationSubmissionMigration submission, SubmissionOutcome outcome, CancellationToken cancellationToken)
@@ -256,6 +285,7 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
             run.SucceededCount = counts.Succeeded;
             run.FailedCount = counts.Failed;
             run.NotRequiredCount = counts.NotRequired;
+            run.ExcludedCount = counts.Excluded;
             run.ErrorMessage = runError;
 
             if (hasErrors && _options.ClearDownMigratedDataOnError)
@@ -288,12 +318,13 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
             await _repository.SaveRunAsync(run, cancellationToken);
 
             _logger.LogInformation(
-                "Registration history migration Completed: Status {Status} Submissions {Total} Succeeded {Succeeded} Failed {Failed} NotRequired {NotRequired} Pending {Pending} Duration {Duration}.",
+                "Registration history migration Completed: Status {Status} Submissions {Total} Succeeded {Succeeded} Failed {Failed} NotRequired {NotRequired} Excluded {Excluded} Pending {Pending} Duration {Duration}.",
                 run.Status,
                 counts.Total,
                 counts.Succeeded,
                 counts.Failed,
                 counts.NotRequired,
+                counts.Excluded,
                 counts.Pending,
                 elapsed.ToString("g"));
         }

@@ -7,5 +7,6 @@
         Failed,
         NotRequired,
         ClearedDown,
+        Excluded,
     }
 }
