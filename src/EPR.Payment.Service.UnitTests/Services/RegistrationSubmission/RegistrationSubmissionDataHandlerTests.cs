@@ -407,6 +407,93 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
         }
 
         [TestMethod]
+        [DataRow("S", "DirectSmallProducer", 5, 6)]
+        [DataRow("L", "DirectLargeProducer", 6, 5)]
+        public async Task HandleAsync_DirectProducer_ResolvesSubmissionPeriodFromOrganisationSize(
+            string organisationSize, string expectedWindowType, int requestedPeriodId, int resolvedPeriodId)
+        {
+            var request = NewRequest();
+            request.ComplianceSchemeId = null;
+            request.SubmissionPeriodId = requestedPeriodId;
+            ArrangeNoExistingSnapshot(request);
+            ArrangeCsvRows(request.RegistrationBlobName, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", organisationSize: organisationSize) });
+            _repositoryMock
+                .Setup(r => r.GetSubmissionPeriodIdForSameYearAsync(requestedPeriodId, expectedWindowType, _ct))
+                .ReturnsAsync(resolvedPeriodId);
+
+            var captured = CaptureCreatedEntity();
+
+            await _sut.HandleAsync(request, _ct);
+
+            captured()!.SubmissionPeriodId.Should().Be(resolvedPeriodId);
+        }
+
+        [TestMethod]
+        public async Task HandleAsync_DirectProducerWithSubsidiaries_UsesProducerRowSize()
+        {
+            var request = NewRequest();
+            request.ComplianceSchemeId = null;
+            request.SubmissionPeriodId = 5;
+            ArrangeNoExistingSnapshot(request);
+            var subsidiary = RegistrationCsvFixtureFactory.Subsidiary("ORG-1", "SUB-1");
+            subsidiary.OrganisationSize = "L";
+            ArrangeCsvRows(request.RegistrationBlobName, new[]
+            {
+                RegistrationCsvFixtureFactory.Producer("ORG-1", organisationSize: "S"),
+                subsidiary,
+            });
+            _repositoryMock
+                .Setup(r => r.GetSubmissionPeriodIdForSameYearAsync(5, "DirectSmallProducer", _ct))
+                .ReturnsAsync(6);
+
+            var captured = CaptureCreatedEntity();
+
+            await _sut.HandleAsync(request, _ct);
+
+            captured()!.SubmissionPeriodId.Should().Be(6);
+        }
+
+        [TestMethod]
+        public async Task HandleAsync_DirectProducerWithNoMatchingWindow_KeepsRequestedSubmissionPeriodId()
+        {
+            var request = NewRequest();
+            request.ComplianceSchemeId = null;
+            request.SubmissionPeriodId = 2;
+            ArrangeNoExistingSnapshot(request);
+            ArrangeCsvRows(request.RegistrationBlobName, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", organisationSize: "S") });
+            _repositoryMock
+                .Setup(r => r.GetSubmissionPeriodIdForSameYearAsync(2, "DirectSmallProducer", _ct))
+                .ReturnsAsync((int?)null);
+
+            var captured = CaptureCreatedEntity();
+
+            await _sut.HandleAsync(request, _ct);
+
+            captured()!.SubmissionPeriodId.Should().Be(2);
+        }
+
+        [TestMethod]
+        public async Task HandleAsync_ComplianceScheme_DoesNotResolveSubmissionPeriod()
+        {
+            var request = NewRequest();
+            request.SubmissionPeriodId = 4;
+            ArrangeNoExistingSnapshot(request);
+            ArrangeCsvRows(request.RegistrationBlobName, new[] { RegistrationCsvFixtureFactory.Producer("ORG-1", organisationSize: "S") });
+
+            var captured = CaptureCreatedEntity();
+
+            await _sut.HandleAsync(request, _ct);
+
+            using (new AssertionScope())
+            {
+                captured()!.SubmissionPeriodId.Should().Be(4);
+                _repositoryMock.Verify(
+                    r => r.GetSubmissionPeriodIdForSameYearAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
+                    Times.Never);
+            }
+        }
+
+        [TestMethod]
         public async Task HandleAsync_DownloadsBlobByRegistrationBlobName()
         {
             var request = NewRequest();
@@ -428,6 +515,16 @@ namespace EPR.Payment.Service.UnitTests.Services.RegistrationSubmission
             SubmissionDate = new DateTime(2026, 5, 28, 12, 0, 0, DateTimeKind.Utc),
             SubmissionPeriodId = 1,
         };
+
+        private Func<RegistrationSubmissionData?> CaptureCreatedEntity()
+        {
+            RegistrationSubmissionData? captured = null;
+            _repositoryMock
+                .Setup(r => r.CreateAsync(It.IsAny<RegistrationSubmissionData>(), _ct))
+                .Callback<RegistrationSubmissionData, CancellationToken>((e, _) => captured = e)
+                .ReturnsAsync(Guid.NewGuid());
+            return () => captured;
+        }
 
         private void ArrangeNoExistingSnapshot(CreateRegistrationSubmissionDataRequest request)
         {

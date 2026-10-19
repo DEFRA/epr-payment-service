@@ -1,4 +1,5 @@
 ﻿using EPR.Payment.Service.Common.Data.DataModels;
+using EPR.Payment.Service.Common.Data.DataModels.Lookups;
 using EPR.Payment.Service.Common.Data.Interfaces;
 using EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission;
 using FluentAssertions;
@@ -186,6 +187,40 @@ namespace EPR.Payment.Service.Data.UnitTests.Repositories.RegistrationSubmission
                 (await _sut.GetLatestIdByApplicationReferenceNumberAsync(string.Empty, _ct)).Should().BeNull();
             }
         }
+
+        [TestMethod]
+        [DataRow(5, "DirectSmallProducer", 6)]
+        [DataRow(10, "DirectLargeProducer", 9)]
+        [DataRow(6, "DirectSmallProducer", 6)]
+        public async Task GetSubmissionPeriodIdForSameYearAsync_MatchingWindowInSameYear_ReturnsId(int submissionPeriodId, string windowType, int expectedId)
+        {
+            _dataContextMock.Setup(c => c.SubmissionPeriod).ReturnsDbSet(SubmissionPeriods());
+
+            var result = await _sut.GetSubmissionPeriodIdForSameYearAsync(submissionPeriodId, windowType, _ct);
+
+            result.Should().Be(expectedId);
+        }
+
+        [TestMethod]
+        [DataRow(2, "DirectSmallProducer")]
+        [DataRow(99, "DirectSmallProducer")]
+        public async Task GetSubmissionPeriodIdForSameYearAsync_NoMatchingWindow_ReturnsNull(int submissionPeriodId, string windowType)
+        {
+            _dataContextMock.Setup(c => c.SubmissionPeriod).ReturnsDbSet(SubmissionPeriods());
+
+            var result = await _sut.GetSubmissionPeriodIdForSameYearAsync(submissionPeriodId, windowType, _ct);
+
+            result.Should().BeNull();
+        }
+
+        private static SubmissionPeriod[] SubmissionPeriods() => new[]
+        {
+            new SubmissionPeriod { Id = 2, WindowType = "Direct", RegistrationYear = 2025 },
+            new SubmissionPeriod { Id = 5, WindowType = "DirectLargeProducer", RegistrationYear = 2026 },
+            new SubmissionPeriod { Id = 6, WindowType = "DirectSmallProducer", RegistrationYear = 2026 },
+            new SubmissionPeriod { Id = 9, WindowType = "DirectLargeProducer", RegistrationYear = 2027 },
+            new SubmissionPeriod { Id = 10, WindowType = "DirectSmallProducer", RegistrationYear = 2027 },
+        };
 
         [TestMethod]
         public async Task CreateAsync_DbUpdateException_Rethrows()
