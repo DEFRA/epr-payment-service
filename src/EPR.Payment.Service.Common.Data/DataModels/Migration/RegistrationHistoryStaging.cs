@@ -29,6 +29,10 @@ namespace EPR.Payment.Service.Common.Data.DataModels.Migration
 
         public int? SubmissionFileCount { get; set; }
 
+        public int? UnselectedAppSubmittedFileCount { get; set; }
+
+        public DateTime? EarliestUnselectedAppSubmittedDate { get; set; }
+
         public string? EventType { get; set; }
 
         public int EventTypeOrder { get; set; }

@@ -69,15 +69,16 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
             // The replay calculators charge subsidiary late fees from the replay clock (ReplayTs) onwards.
             var postCutover = ordered.FirstOrDefault(r => IsType(r, RegistrationHistoryEventTypes.RegistrationApplicationSubmitted)
                                                           && r.ReplayTs!.Value >= subsidiaryLateFeeChargedFrom);
-            // Newly added subsidiaries are found by comparing against every earlier file, so once subsidiary
-            // late fees are charged the submission can only be replayed if all of its declared files are migrated.
-            var migratedFiles = submittedRows.Select(r => r.FileId).Distinct(StringComparer.OrdinalIgnoreCase).Count();
-            var totalFiles = ordered.Select(r => r.SubmissionFileCount).FirstOrDefault(c => c is not null);
-            if (postCutover is not null && (totalFiles is null || migratedFiles < totalFiles))
+            if (postCutover is not null)
             {
-                return SubmissionPlanResult.Failed(
-                    MigrationReasons.PostCutoverApproval,
-                    $"Application submitted on {postCutover.ReplayTs:O} is on or after subsidiary late fees were charged from {subsidiaryLateFeeChargedFrom:O} and only {migratedFiles} of {totalFiles?.ToString() ?? "unknown"} declared files are migrated.");
+                var deadline = periods.First(p => p.Id == submissionPeriodId).DeadlineDate;
+                var incompleteBaseline = IncompleteSubsidiaryBaseline(ordered, submittedRows, deadline);
+                if (incompleteBaseline is not null)
+                {
+                    return SubmissionPlanResult.Failed(
+                        MigrationReasons.PostCutoverApproval,
+                        $"Application submitted on {postCutover.ReplayTs:O} is on or after subsidiary late fees were charged from {subsidiaryLateFeeChargedFrom:O} and {incompleteBaseline}");
+                }
             }
 
             var fallbackArn = ordered.Select(r => r.ApplicationReferenceNumber).FirstOrDefault(a => !string.IsNullOrWhiteSpace(a));
@@ -179,6 +180,39 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
             }
 
             return SubmissionPlanResult.Replay(new SubmissionReplayPlan(submissionId, steps, warnings, skipped));
+        }
+
+        /// <summary>
+        /// Once subsidiary late fees are charged, newly added subsidiaries are found by comparing against the
+        /// baseline of earlier cycles whose application was submitted on or before the deadline
+        /// (NewlyAddedSubsidiaryFinder). The dataset selects those cycles (OnTimeAppSubmitted), so the baseline is
+        /// incomplete only if a file left out had its application submitted on time. Returns why, or null.
+        /// </summary>
+        private static string? IncompleteSubsidiaryBaseline(
+            IReadOnlyList<RegistrationHistoryStaging> ordered,
+            IReadOnlyList<RegistrationHistoryStaging> submittedRows,
+            DateTime deadline)
+        {
+            var unselectedAppFiles = ordered.Select(r => r.UnselectedAppSubmittedFileCount).FirstOrDefault(c => c is not null);
+            if (unselectedAppFiles is null)
+            {
+                // Staged before the dataset described the files it left out: every declared file must be migrated.
+                var migratedFiles = submittedRows.Select(r => r.FileId).Distinct(StringComparer.OrdinalIgnoreCase).Count();
+                var totalFiles = ordered.Select(r => r.SubmissionFileCount).FirstOrDefault(c => c is not null);
+                return totalFiles is null || migratedFiles < totalFiles
+                    ? $"only {migratedFiles} of {totalFiles?.ToString() ?? "unknown"} declared files are migrated."
+                    : null;
+            }
+
+            if (unselectedAppFiles == 0)
+            {
+                return null;
+            }
+
+            var earliest = ordered.Select(r => r.EarliestUnselectedAppSubmittedDate).FirstOrDefault(d => d is not null);
+            return earliest is null || earliest.Value.Date <= deadline.Date
+                ? $"a file not migrated had its application submitted on {earliest?.ToString("O") ?? "an unknown date"}, on or before the {deadline:yyyy-MM-dd} deadline."
+                : null;
         }
 
         private static bool IsType(RegistrationHistoryStaging row, string eventType) =>

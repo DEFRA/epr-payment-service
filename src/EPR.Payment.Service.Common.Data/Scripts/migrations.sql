@@ -6368,3 +6368,32 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261020162646_SUB-365-add-staging-unselected-app-submitted'
+)
+BEGIN
+    ALTER TABLE [migration].[RegistrationHistoryStaging] ADD [EarliestUnselectedAppSubmittedDate] datetime2 NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261020162646_SUB-365-add-staging-unselected-app-submitted'
+)
+BEGIN
+    ALTER TABLE [migration].[RegistrationHistoryStaging] ADD [UnselectedAppSubmittedFileCount] int NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261020162646_SUB-365-add-staging-unselected-app-submitted'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261020162646_SUB-365-add-staging-unselected-app-submitted', N'10.0.0');
+END;
+
+COMMIT;
+GO
+

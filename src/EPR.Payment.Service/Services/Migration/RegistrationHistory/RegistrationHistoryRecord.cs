@@ -25,6 +25,10 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
 
         public int? SubmissionFileCount { get; init; }
 
+        public int? UnselectedAppSubmittedFileCount { get; init; }
+
+        public DateTime? EarliestUnselectedAppSubmittedDate { get; init; }
+
         public string? EventType { get; init; }
 
         public int EventTypeOrder { get; init; }

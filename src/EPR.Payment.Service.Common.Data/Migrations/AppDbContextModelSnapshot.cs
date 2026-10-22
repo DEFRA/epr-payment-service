@@ -4993,6 +4993,9 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<DateTime?>("EarliestUnselectedAppSubmittedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("EventDate")
                         .HasColumnType("datetime2");
 
@@ -5039,6 +5042,9 @@ namespace EPR.Payment.Service.Common.Data.Migrations
                     b.Property<string>("SubmissionPeriod")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int?>("UnselectedAppSubmittedFileCount")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

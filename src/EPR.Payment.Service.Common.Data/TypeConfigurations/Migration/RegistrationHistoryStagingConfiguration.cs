@@ -31,6 +31,7 @@ namespace EPR.Payment.Service.Common.Data.TypeConfigurations.Migration
             builder.Property(e => e.EventType).HasMaxLength(IdLength);
             builder.Property(e => e.ReplayTs).HasColumnType("datetime2");
             builder.Property(e => e.EventDate).HasColumnType("datetime2");
+            builder.Property(e => e.EarliestUnselectedAppSubmittedDate).HasColumnType("datetime2");
             builder.Property(e => e.ApplicationReferenceNumber).HasMaxLength(TextLength);
             builder.Property(e => e.Decision).HasMaxLength(TextLength);
 

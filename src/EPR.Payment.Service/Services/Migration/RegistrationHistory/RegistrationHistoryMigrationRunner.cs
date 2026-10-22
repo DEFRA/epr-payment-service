@@ -342,6 +342,8 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
             RegulatorNation = record.RegulatorNation,
             Roles = record.Roles,
             SubmissionFileCount = record.SubmissionFileCount,
+            UnselectedAppSubmittedFileCount = record.UnselectedAppSubmittedFileCount,
+            EarliestUnselectedAppSubmittedDate = record.EarliestUnselectedAppSubmittedDate,
             EventType = record.EventType,
             EventTypeOrder = record.EventTypeOrder,
             ReplayTs = record.ReplayTs,

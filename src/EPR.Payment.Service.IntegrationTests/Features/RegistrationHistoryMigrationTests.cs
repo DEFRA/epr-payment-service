@@ -273,6 +273,38 @@ public class RegistrationHistoryMigrationTests(ServiceFixture fixture) : Integra
         }
     }
 
+    [Theory]
+    [InlineData(false, SubmissionMigrationStatus.Succeeded, null)]
+    [InlineData(true, SubmissionMigrationStatus.Failed, MigrationReasons.PostCutoverApproval)]
+    public async Task GIVEN_application_after_subsidiary_late_fee_cutover_with_a_file_left_out_WHEN_migrated_THEN_only_an_on_time_left_out_file_blocks_it(
+        bool leftOutFileWasOnTime, SubmissionMigrationStatus expectedStatus, string? expectedReason)
+    {
+        var submission = NewSubmission();
+        _blobs.Add(submission.Blob(1), $"{submission.OrganisationId},,EN,L,,,");
+        _blobs.Add(submission.Blob(3), $"{submission.OrganisationId},,EN,L,,,");
+        var afterCutover = new DateTime(2026, 10, 10, 9, 0, 0, DateTimeKind.Utc);
+        var leftOutApplication = leftOutFileWasOnTime ? OnTime.AddDays(3) : Late;
+        var records = new List<RegistrationHistoryRecord>
+        {
+            submission.Declared(1, OnTime),
+            submission.ApplicationSubmitted(1, OnTime.AddHours(1)),
+            submission.Decision(1, OnTime.AddDays(2), "Accepted"),
+            submission.Declared(3, afterCutover),
+            submission.ApplicationSubmitted(3, afterCutover.AddHours(1)),
+        }.Select(r => r with
+        {
+            SubmissionFileCount = 3,
+            UnselectedAppSubmittedFileCount = 1,
+            EarliestUnselectedAppSubmittedDate = leftOutApplication,
+        }).ToList();
+
+        var run = await RunMigrationAsync(records);
+
+        var status = await SubmissionStatusAsync(run, submission.Id);
+        status.Status.Should().Be(expectedStatus);
+        status.Reason.Should().Be(expectedReason);
+    }
+
     [Fact]
     public async Task GIVEN_a_completed_run_WHEN_started_again_with_the_same_run_key_THEN_it_never_runs_a_second_time()
     {

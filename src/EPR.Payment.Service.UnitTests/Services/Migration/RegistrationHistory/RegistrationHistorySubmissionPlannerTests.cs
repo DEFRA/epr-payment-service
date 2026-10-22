@@ -12,13 +12,14 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
     {
         private static readonly DateTime Cutover = new(2026, 10, 5, 0, 0, 0, DateTimeKind.Utc);
         private static readonly DateTime T0 = new(2026, 3, 1, 9, 0, 0, DateTimeKind.Unspecified);
+        private static readonly DateTime Deadline2026Large = new(2025, 10, 2, 0, 0, 0, DateTimeKind.Utc);
 
         private static readonly IReadOnlyList<SubmissionPeriod> Periods = new List<SubmissionPeriod>
         {
             new() { Id = 1, WindowType = "Cso", RegistrationYear = 2025 },
             new() { Id = 2, WindowType = "Direct", RegistrationYear = 2025 },
             new() { Id = 3, WindowType = "CsoLargeProducer", RegistrationYear = 2026 },
-            new() { Id = 5, WindowType = "DirectLargeProducer", RegistrationYear = 2026 },
+            new() { Id = 5, WindowType = "DirectLargeProducer", RegistrationYear = 2026, DeadlineDate = Deadline2026Large },
         };
 
         private readonly Guid _submissionId = Guid.NewGuid();
@@ -207,6 +208,58 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
         }
 
         [TestMethod]
+        public void Plan_ApprovalOnOrAfterSubsidiaryLateFeeChargedFrom_NoApplicationFileLeftOut_Replays()
+        {
+            var result = Plan(PostCutoverRows(submissionFileCount: 24, unselectedAppFiles: 0, earliestUnselectedApp: null));
+
+            result.Outcome.Should().BeNull("files left out without an application submitted cannot be in the baseline");
+            result.Plan!.Steps.Should().HaveCount(3);
+        }
+
+        [TestMethod]
+        public void Plan_ApprovalOnOrAfterSubsidiaryLateFeeChargedFrom_ApplicationFilesLeftOutAfterDeadline_Replays()
+        {
+            var result = Plan(PostCutoverRows(submissionFileCount: 24, unselectedAppFiles: 22, earliestUnselectedApp: Deadline2026Large.AddDays(21)));
+
+            result.Outcome.Should().BeNull("cycles submitted after the deadline never form the subsidiary baseline");
+            result.Plan!.Steps.Should().HaveCount(3);
+        }
+
+        [TestMethod]
+        [DataRow(0, DisplayName = "on the deadline day")]
+        [DataRow(-1, DisplayName = "before the deadline")]
+        public void Plan_ApprovalOnOrAfterSubsidiaryLateFeeChargedFrom_OnTimeApplicationFileLeftOut_Fails(int daysFromDeadline)
+        {
+            var earliest = Deadline2026Large.AddDays(daysFromDeadline).AddHours(15);
+
+            var result = Plan(PostCutoverRows(submissionFileCount: 24, unselectedAppFiles: 3, earliestUnselectedApp: earliest));
+
+            AssertFailed(result, MigrationReasons.PostCutoverApproval);
+            result.Outcome!.Error.Should().Contain("on or before the 2025-10-02 deadline");
+        }
+
+        [TestMethod]
+        public void Plan_ApprovalOnOrAfterSubsidiaryLateFeeChargedFrom_ApplicationFilesLeftOutWithoutDate_Fails()
+        {
+            var result = Plan(PostCutoverRows(submissionFileCount: 24, unselectedAppFiles: 1, earliestUnselectedApp: null));
+
+            AssertFailed(result, MigrationReasons.PostCutoverApproval);
+        }
+
+        [TestMethod]
+        public void Plan_ApprovalBeforeSubsidiaryLateFeeChargedFrom_OnTimeApplicationFileLeftOut_Replays()
+        {
+            var beforeCutover = Cutover.AddDays(-1);
+            var rows = new List<RegistrationHistoryStaging>
+            {
+                Row(RegistrationHistoryEventTypes.Submitted, "F1", T0, arn: "PEPR001", submissionFileCount: 3, unselectedAppFiles: 1, earliestUnselectedApp: Deadline2026Large.AddDays(-5)),
+                Row(RegistrationHistoryEventTypes.RegistrationApplicationSubmitted, "F1", beforeCutover, arn: "PEPR001", eventDate: beforeCutover, submissionFileCount: 3, unselectedAppFiles: 1, earliestUnselectedApp: Deadline2026Large.AddDays(-5)),
+            };
+
+            Plan(rows).Outcome.Should().BeNull();
+        }
+
+        [TestMethod]
         public void Plan_NoRows_Fails() =>
             AssertFailed(RegistrationHistorySubmissionPlanner.Plan(new List<RegistrationHistoryStaging>(), Periods, Cutover), MigrationReasons.NoSubmittedFile);
 
@@ -273,6 +326,13 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             }
         }
 
+        private List<RegistrationHistoryStaging> PostCutoverRows(int? submissionFileCount, int? unselectedAppFiles, DateTime? earliestUnselectedApp) => new()
+        {
+            Row(RegistrationHistoryEventTypes.Submitted, "F1", T0, arn: "PEPR001", submissionFileCount: submissionFileCount, unselectedAppFiles: unselectedAppFiles, earliestUnselectedApp: earliestUnselectedApp),
+            Row(RegistrationHistoryEventTypes.Submitted, "F24", T0.AddDays(1), arn: "PEPR001", submissionFileCount: submissionFileCount, unselectedAppFiles: unselectedAppFiles, earliestUnselectedApp: earliestUnselectedApp),
+            Row(RegistrationHistoryEventTypes.RegistrationApplicationSubmitted, "F24", Cutover, arn: "PEPR001", eventDate: Cutover, submissionFileCount: submissionFileCount, unselectedAppFiles: unselectedAppFiles, earliestUnselectedApp: earliestUnselectedApp),
+        };
+
         private SubmissionPlanResult Plan(IReadOnlyList<RegistrationHistoryStaging> rows) =>
             RegistrationHistorySubmissionPlanner.Plan(rows, Periods, Cutover);
 
@@ -296,7 +356,9 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             string period = "January to December 2026",
             string? nation = "GB-ENG",
             string? blobName = null,
-            int? submissionFileCount = null) => new()
+            int? submissionFileCount = null,
+            int? unselectedAppFiles = null,
+            DateTime? earliestUnselectedApp = null) => new()
             {
                 Id = _nextId++,
                 SubmissionId = _submissionId.ToString(),
@@ -307,6 +369,8 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
                 RegistrationJourney = journey,
                 RegulatorNation = nation,
                 SubmissionFileCount = submissionFileCount,
+                UnselectedAppSubmittedFileCount = unselectedAppFiles,
+                EarliestUnselectedAppSubmittedDate = earliestUnselectedApp,
                 EventType = eventType,
                 EventTypeOrder = eventType switch
                 {
