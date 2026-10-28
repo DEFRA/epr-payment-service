@@ -6318,6 +6318,33 @@ GO
 BEGIN TRANSACTION;
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261014152006_SUB-399-add-2024-submission-periods'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ClosingDate', N'DeadlineDate', N'OpeningDate', N'RegistrationYear', N'WindowType') AND [object_id] = OBJECT_ID(N'[Lookup].[SubmissionPeriod]'))
+        SET IDENTITY_INSERT [Lookup].[SubmissionPeriod] ON;
+    EXEC(N'INSERT INTO [Lookup].[SubmissionPeriod] ([Id], [ClosingDate], [DeadlineDate], [OpeningDate], [RegistrationYear], [WindowType])
+    VALUES (11, ''2025-02-01T00:00:00.0000000Z'', ''2024-04-02T00:00:00.0000000Z'', ''2023-07-01T00:00:00.0000000Z'', 2024, N''Cso''),
+    (12, ''2025-01-01T00:00:00.0000000Z'', ''2024-04-02T00:00:00.0000000Z'', ''2023-07-01T00:00:00.0000000Z'', 2024, N''Direct'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'ClosingDate', N'DeadlineDate', N'OpeningDate', N'RegistrationYear', N'WindowType') AND [object_id] = OBJECT_ID(N'[Lookup].[SubmissionPeriod]'))
+        SET IDENTITY_INSERT [Lookup].[SubmissionPeriod] OFF;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261014152006_SUB-399-add-2024-submission-periods'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261014152006_SUB-399-add-2024-submission-periods', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20261016140650_SUB-365-add-migration-excluded-submissions'
 )
 BEGIN

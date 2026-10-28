@@ -13,5 +13,7 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.RegistrationSu
         Task<Guid> CreateAsync(RegistrationSubmissionData entity, CancellationToken cancellationToken);
 
         Task<Guid?> GetLatestIdByApplicationReferenceNumberAsync(string applicationReferenceNumber, CancellationToken cancellationToken);
+
+        Task<int?> GetSubmissionPeriodIdForSameYearAsync(int submissionPeriodId, string windowType, CancellationToken cancellationToken);
     }
 }

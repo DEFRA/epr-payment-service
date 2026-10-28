@@ -13,6 +13,9 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
 {
     public class RegistrationSubmissionDataHandler : IRegistrationSubmissionDataHandler
     {
+        private const string DirectSmallProducerWindowType = "DirectSmallProducer";
+        private const string DirectLargeProducerWindowType = "DirectLargeProducer";
+
         private readonly IRegistrationSubmissionDataRepository _repository;
         private readonly IBlobReader _blobReader;
         private readonly ICsvStreamParser _csvStreamParser;
@@ -67,6 +70,7 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
 
                 var now = _timeProvider.GetUtcNow();
                 var entity = BuildEntity(request, rows, now);
+                await ApplyDirectProducerSubmissionPeriodAsync(request, entity, cancellationToken);
 
                 var createStart = Stopwatch.GetTimestamp();
                 var newId = await _repository.CreateAsync(entity, cancellationToken);
@@ -91,6 +95,39 @@ namespace EPR.Payment.Service.Services.RegistrationSubmission
                     request.RegistrationBlobName);
                 throw;
             }
+        }
+
+        // Direct producers share a single registration tile, so the incoming SubmissionPeriodId cannot tell small from large.
+        // The producer row (no subsidiary id) in the uploaded file is authoritative, so resolve the matching Direct window for
+        // the same registration year. Years with a single "Direct" window have no match and keep the incoming id.
+        private async Task ApplyDirectProducerSubmissionPeriodAsync(
+            CreateRegistrationSubmissionDataRequest request,
+            RegistrationSubmissionData entity,
+            CancellationToken cancellationToken)
+        {
+            if (request.ComplianceSchemeId is not null || entity.Producers.Count != 1)
+            {
+                return;
+            }
+
+            var windowType = string.Equals(entity.Producers.Single().OrganisationSize, "Small", StringComparison.OrdinalIgnoreCase)
+                ? DirectSmallProducerWindowType
+                : DirectLargeProducerWindowType;
+
+            var resolvedId = await _repository.GetSubmissionPeriodIdForSameYearAsync(request.SubmissionPeriodId, windowType, cancellationToken);
+            if (resolvedId is null || resolvedId == entity.SubmissionPeriodId)
+            {
+                return;
+            }
+
+            _logger.LogInformation(
+                "Corrected SubmissionPeriodId for direct producer SubmissionId {SubmissionId} from {RequestedSubmissionPeriodId} to {ResolvedSubmissionPeriodId} ({WindowType}).",
+                request.SubmissionId,
+                request.SubmissionPeriodId,
+                resolvedId,
+                windowType);
+
+            entity.SubmissionPeriodId = resolvedId.Value;
         }
 
         private async Task<List<RegistrationCsvRow>> ReadCsvAsync(string registrationBlobName, CancellationToken cancellationToken)
