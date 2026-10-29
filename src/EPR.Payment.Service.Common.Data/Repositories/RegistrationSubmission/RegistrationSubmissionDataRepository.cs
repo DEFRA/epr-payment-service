@@ -70,5 +70,18 @@ namespace EPR.Payment.Service.Common.Data.Repositories.RegistrationSubmission
 
             return latest;
         }
+
+        public Task<int?> GetSubmissionPeriodIdForSameYearAsync(int submissionPeriodId, string windowType, CancellationToken cancellationToken)
+        {
+            var registrationYear = _dataContext.SubmissionPeriod
+                .Where(p => p.Id == submissionPeriodId)
+                .Select(p => p.RegistrationYear);
+
+            return _dataContext.SubmissionPeriod
+                .AsNoTracking()
+                .Where(p => registrationYear.Contains(p.RegistrationYear) && p.WindowType == windowType)
+                .Select(p => (int?)p.Id)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
     }
 }
