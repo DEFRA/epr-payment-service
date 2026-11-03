@@ -14,7 +14,9 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
 
     /// <summary>
     /// Replays one submission through the live handlers in its own DI scope and DB transaction, so a
-    /// failure leaves nothing behind for that submission.
+    /// failure leaves nothing behind for that submission. A file whose CSV has subsidiary rows without a
+    /// producer row is skipped with its events and the rest of the submission is migrated; the submission
+    /// fails only when no file can be migrated.
     /// </summary>
     public class RegistrationHistorySubmissionReplayer : IRegistrationHistorySubmissionReplayer
     {
@@ -51,7 +53,10 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
             var clock = new ReplayTimeProvider();
             var handlers = _handlerFactory.Create(provider, clock);
             var dataIdsByFile = new Dictionary<string, Guid>(StringComparer.OrdinalIgnoreCase);
+            var skippedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var skippedFileWarnings = new List<string>();
             var eventsReplayed = 0;
+            var eventsSkipped = plan.EventsSkipped;
 
             try
             {
@@ -68,10 +73,34 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
                         ["MigrationReplayTs"] = step.ReplayTs,
                     });
 
+                    // The live handlers attach events to the latest declared file, so a skipped file's events are skipped too.
+                    if (step is not SubmittedStep && skippedFiles.Contains(step.FileId))
+                    {
+                        eventsSkipped++;
+                        continue;
+                    }
+
                     switch (step)
                     {
                         case SubmittedStep submitted:
-                            var dataId = await handlers.SubmissionData.HandleAsync(submitted.Request, cancellationToken);
+                            Guid dataId;
+                            try
+                            {
+                                dataId = await handlers.SubmissionData.HandleAsync(submitted.Request, cancellationToken);
+                            }
+                            catch (InvalidOperationException ex) when (IsMissingProducerRow(ex))
+                            {
+                                // Thrown while the CSV is mapped, before anything is added, so the transaction carries on.
+                                _logger.LogWarning(
+                                    "Registration history migration skipped file {FileId} of SubmissionId {SubmissionId}: {Error}",
+                                    submitted.FileId,
+                                    plan.SubmissionId,
+                                    ex.Message);
+                                skippedFiles.Add(submitted.FileId);
+                                skippedFileWarnings.Add($"{MigrationReasons.CsvInvalid}: file {submitted.FileId} skipped - {ex.Message}");
+                                break;
+                            }
+
                             dataIdsByFile[submitted.FileId] = dataId;
                             await repository.AddMigratedEntityAsync(new MigratedEntity
                             {
@@ -93,7 +122,21 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
                     }
                 }
 
-                var warnings = plan.Warnings.Concat(await VerifyEventPairingAsync(provider, plan, dataIdsByFile, cancellationToken)).ToList();
+                if (dataIdsByFile.Count == 0)
+                {
+                    // Nothing migratable; the transaction is disposed without committing.
+                    return new SubmissionOutcome(
+                        SubmissionMigrationStatus.Failed,
+                        MigrationReasons.CsvInvalid,
+                        string.Join(" ", skippedFileWarnings),
+                        plan.Warnings,
+                        EventsSkipped: eventsSkipped);
+                }
+
+                var warnings = plan.Warnings
+                    .Concat(skippedFileWarnings)
+                    .Concat(await VerifyEventPairingAsync(provider, plan, dataIdsByFile, cancellationToken))
+                    .ToList();
 
                 await transaction.CommitAsync(cancellationToken);
 
@@ -102,7 +145,7 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
                     Warnings: warnings,
                     FilesMigrated: dataIdsByFile.Count,
                     EventsReplayed: eventsReplayed,
-                    EventsSkipped: plan.EventsSkipped);
+                    EventsSkipped: eventsSkipped);
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
@@ -151,8 +194,12 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
         {
             RequestFailedException { Status: 404 } => MigrationReasons.BlobNotFound,
             CsvHelperException => MigrationReasons.CsvInvalid,
-            InvalidOperationException when ex.Message.StartsWith("No producer row", StringComparison.Ordinal) => MigrationReasons.CsvInvalid,
+            _ when IsMissingProducerRow(ex) => MigrationReasons.CsvInvalid,
             _ => MigrationReasons.HandlerError,
         };
+
+        // RegistrationSubmissionDataHandler's error for an OrganisationId with subsidiary rows but no producer row.
+        private static bool IsMissingProducerRow(Exception ex) =>
+            ex is InvalidOperationException && ex.Message.StartsWith("No producer row", StringComparison.Ordinal);
     }
 }

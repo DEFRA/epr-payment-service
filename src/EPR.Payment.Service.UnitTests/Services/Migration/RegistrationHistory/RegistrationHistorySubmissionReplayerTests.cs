@@ -186,7 +186,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
         }
 
         [TestMethod]
-        public async Task ReplayAsync_CsvWithoutProducerRow_FailsWithCsvInvalid()
+        public async Task ReplayAsync_OnlyFileWithoutProducerRow_FailsWithCsvInvalidAndDoesNotCommit()
         {
             _dataHandlerMock
                 .Setup(h => h.HandleAsync(It.IsAny<CreateRegistrationSubmissionDataRequest>(), It.IsAny<CancellationToken>()))
@@ -195,6 +195,67 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             var outcome = await _sut.ReplayAsync(_runId, Plan(), CancellationToken.None);
 
             AssertFailed(outcome, MigrationReasons.CsvInvalid);
+            using (new AssertionScope())
+            {
+                outcome.Error.Should().Contain("CsvInvalid: file F1 skipped - No producer row found for OrganisationId '100001'.");
+                outcome.EventsSkipped.Should().Be(3, "the plan's skipped event plus F1's approval and decision");
+                _approvalHandlerMock.VerifyNoOtherCalls();
+                _decisionHandlerMock.VerifyNoOtherCalls();
+            }
+        }
+
+        [TestMethod]
+        public async Task ReplayAsync_OneFileWithoutProducerRow_SkipsThatFileAndItsEventsAndMigratesTheRest()
+        {
+            _dataHandlerMock
+                .Setup(h => h.HandleAsync(It.Is<CreateRegistrationSubmissionDataRequest>(r => r.RegistrationBlobName == "blob1"), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new InvalidOperationException("No producer row found for OrganisationId '100001'."));
+            SetupRecordedEvents(1);
+            var secondApprovalAt = DecisionAt.AddDays(1);
+
+            var plan = new SubmissionReplayPlan(
+                _submissionId,
+                new List<ReplayStep>
+                {
+                    new SubmittedStep("F1", DeclaredAt, new CreateRegistrationSubmissionDataRequest { SubmissionId = _submissionId, RegistrationBlobName = "blob1" }),
+                    new ApplicationSubmittedStep("F1", ApprovalAt, new RegistrationSubmittedForRegulatorApprovalRequest { SubmissionId = _submissionId, SubmissionDate = ApprovalAt }),
+                    new DecisionStep("F1", DecisionAt, new RegulatorRegistrationDecisionRequest { SubmissionId = _submissionId, EventName = RegistrationEventNames.QueriedByRegulator, DecisionDate = DecisionAt }),
+                    new SubmittedStep("F2", DecisionAt.AddHours(1), new CreateRegistrationSubmissionDataRequest { SubmissionId = _submissionId, RegistrationBlobName = "blob2" }),
+                    new ApplicationSubmittedStep("F2", secondApprovalAt, new RegistrationSubmittedForRegulatorApprovalRequest { SubmissionId = _submissionId, SubmissionDate = secondApprovalAt }),
+                },
+                new List<string> { "a plan warning" },
+                1);
+
+            var outcome = await _sut.ReplayAsync(_runId, plan, CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                outcome.Status.Should().Be(SubmissionMigrationStatus.Succeeded);
+                outcome.FilesMigrated.Should().Be(1);
+                outcome.EventsReplayed.Should().Be(1);
+                outcome.EventsSkipped.Should().Be(3, "the plan's skipped event plus F1's approval and decision");
+                outcome.Warnings.Should().Contain("CsvInvalid: file F1 skipped - No producer row found for OrganisationId '100001'.");
+                outcome.Warnings.Should().NotContain(w => w.StartsWith("PairingMismatch"));
+                _approvalHandlerMock.Verify(h => h.HandleAsync(
+                    It.Is<RegistrationSubmittedForRegulatorApprovalRequest>(r => r.SubmissionDate == secondApprovalAt), It.IsAny<CancellationToken>()), Times.Once);
+                _approvalHandlerMock.VerifyNoOtherCalls();
+                _decisionHandlerMock.VerifyNoOtherCalls();
+                _repositoryMock.Verify(r => r.AddMigratedEntityAsync(It.Is<MigratedEntity>(m => m.FileId == "F2"), It.IsAny<CancellationToken>()), Times.Once);
+                _repositoryMock.Verify(r => r.AddMigratedEntityAsync(It.Is<MigratedEntity>(m => m.FileId == "F1"), It.IsAny<CancellationToken>()), Times.Never);
+                _transactionMock.Verify(t => t.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
+            }
+        }
+
+        [TestMethod]
+        public async Task ReplayAsync_OtherInvalidOperationFromDataHandler_FailsWithHandlerError()
+        {
+            _dataHandlerMock
+                .Setup(h => h.HandleAsync(It.IsAny<CreateRegistrationSubmissionDataRequest>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new InvalidOperationException("boom"));
+
+            var outcome = await _sut.ReplayAsync(_runId, Plan(), CancellationToken.None);
+
+            AssertFailed(outcome, MigrationReasons.HandlerError);
         }
 
         [TestMethod]
