@@ -6419,3 +6419,93 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF SCHEMA_ID(N'registration_pre_migration') IS NULL EXEC(N'CREATE SCHEMA [registration_pre_migration];');
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationSubmissionData]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationSubmissionData] FROM [registration].[RegistrationSubmissionData];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationSubmissionProducer]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationSubmissionProducer] FROM [registration].[RegistrationSubmissionProducer];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationSubmissionSubsidiary]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationSubmissionSubsidiary] FROM [registration].[RegistrationSubmissionSubsidiary];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationSubmissionDataEvents]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationSubmissionDataEvents] FROM [registration].[RegistrationSubmissionDataEvents];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationFeeSnapshot]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationFeeSnapshot] FROM [registration].[RegistrationFeeSnapshot];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationFeeLineItem]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationFeeLineItem] FROM [registration].[RegistrationFeeLineItem];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[payments_unlinked]') IS NULL
+    CREATE TABLE [registration_pre_migration].[payments_unlinked] (
+        [PaymentId] int NOT NULL,
+        [ExternalPaymentId] uniqueidentifier NULL,
+        [Reference] nvarchar(255) NULL,
+        [Amount] decimal(19,4) NULL,
+        [ReasonForPayment] nvarchar(255) NULL,
+        [Regulator] varchar(20) NULL,
+        [InternalStatusId] int NULL,
+        [CreatedDate] datetime2 NULL,
+        [UpdatedDate] datetime2 NULL,
+        [RegistrationSubmissionDataId] uniqueidentifier NULL,
+        [BackedUpAt] datetime2 NOT NULL
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261104151355_SUB-365-add-registration-pre-migration-schema', N'10.0.0');
+END;
+
+COMMIT;
+GO
+

@@ -3,54 +3,62 @@
     Run automatically by the migration (RegistrationHistoryMigrationRepository.BackupAndClearRegistrationDataAsync),
     in the same transaction as the clear-down, every time a new run has staged its dataset. Can also be run by hand.
 
-    Recreates [registration_pre_migration] with:
-      - a copy of every table in [registration] (same name, columns and data; no keys or indexes);
-      - [payments_unlinked]: every [dbo].[Payment] currently linked to a RegistrationSubmissionData row,
-        i.e. the payments the clear-down unlinks.
+    Data changes only: the [registration_pre_migration] schema and tables are created by the EF Core migration
+    20261104151355_SUB-365-add-registration-pre-migration-schema (run by the pipeline), because the service's login
+    cannot create objects. It needs SELECT on [registration] and [dbo].[Payment], and SELECT, INSERT and DELETE on
+    [registration_pre_migration].
 
-    Any tables already in [registration_pre_migration] (an earlier backup) are dropped first.
-    Fails, rolling everything back, if a copied row count does not match its source.
+    Steps:
+      - empties every [registration_pre_migration] table (an earlier backup);
+      - copies every [registration] table into its namesake (columns common to both);
+      - fills [payments_unlinked] with every [dbo].[Payment] linked to a RegistrationSubmissionData row,
+        i.e. the payments the clear-down unlinks;
+      - fails, rolling everything back, if a backup table is missing or a row count does not match its source.
     Restore with Scripts/Migration/rollback-registration-migration.sql.
 */
 SET XACT_ABORT ON;
 SET NOCOUNT ON;
 
-IF SCHEMA_ID(N'registration_pre_migration') IS NULL
-    EXEC (N'CREATE SCHEMA [registration_pre_migration]');
+IF OBJECT_ID(N'[registration_pre_migration].[payments_unlinked]') IS NULL
+   OR EXISTS (SELECT 1 FROM sys.tables t
+              WHERE t.schema_id = SCHEMA_ID(N'registration')
+                AND OBJECT_ID(N'[registration_pre_migration].' + QUOTENAME(t.name)) IS NULL)
+    THROW 50000, N'[registration_pre_migration] is missing a backup table; apply the EF Core migrations first. Nothing has been changed.', 1;
 
 BEGIN TRANSACTION;
 
--- Drop an earlier backup
-DECLARE @drop NVARCHAR(MAX) = N'';
-SELECT @drop += N'DROP TABLE [registration_pre_migration].' + QUOTENAME(t.name) + N';' + CHAR(10)
+-- Empty the earlier backup
+DECLARE @empty NVARCHAR(MAX) = N'';
+SELECT @empty += N'DELETE FROM [registration_pre_migration].' + QUOTENAME(t.name) + N';' + CHAR(10)
 FROM sys.tables t
 WHERE t.schema_id = SCHEMA_ID(N'registration_pre_migration');
 
-IF @drop <> N''
-    EXEC sp_executesql @drop;
+EXEC sp_executesql @empty;
 
 -- Copy every table in [registration]
 DECLARE @copy NVARCHAR(MAX) = N'';
-SELECT @copy += N'SELECT * INTO [registration_pre_migration].' + QUOTENAME(t.name)
-              + N' FROM [registration].' + QUOTENAME(t.name) + N';' + CHAR(10)
+SELECT @copy += N'INSERT INTO [registration_pre_migration].' + QUOTENAME(t.name) + N' (' + c.Cols + N') '
+              + N'SELECT ' + c.Cols + N' FROM [registration].' + QUOTENAME(t.name) + N';' + CHAR(10)
 FROM sys.tables t
+CROSS APPLY (
+    SELECT STRING_AGG(CAST(QUOTENAME(sc.name) AS NVARCHAR(MAX)), N', ') WITHIN GROUP (ORDER BY sc.column_id) AS Cols
+    FROM sys.columns sc
+    WHERE sc.object_id = t.object_id
+      AND sc.is_computed = 0
+      AND EXISTS (SELECT 1 FROM sys.columns bc
+                  WHERE bc.object_id = OBJECT_ID(N'[registration_pre_migration].' + QUOTENAME(t.name))
+                    AND bc.name = sc.name)
+) c
 WHERE t.schema_id = SCHEMA_ID(N'registration');
 
 EXEC sp_executesql @copy;
 
 -- Payments the clear-down unlinks
-SELECT p.[Id] AS [PaymentId],
-       p.[ExternalPaymentId],
-       p.[Reference],
-       p.[Amount],
-       p.[ReasonForPayment],
-       p.[Regulator],
-       p.[InternalStatusId],
-       p.[CreatedDate],
-       p.[UpdatedDate],
-       p.[RegistrationSubmissionDataId],
-       SYSUTCDATETIME() AS [BackedUpAt]
-INTO [registration_pre_migration].[payments_unlinked]
+INSERT INTO [registration_pre_migration].[payments_unlinked]
+       ([PaymentId], [ExternalPaymentId], [Reference], [Amount], [ReasonForPayment], [Regulator],
+        [InternalStatusId], [CreatedDate], [UpdatedDate], [RegistrationSubmissionDataId], [BackedUpAt])
+SELECT p.[Id], p.[ExternalPaymentId], p.[Reference], p.[Amount], p.[ReasonForPayment], p.[Regulator],
+       p.[InternalStatusId], p.[CreatedDate], p.[UpdatedDate], p.[RegistrationSubmissionDataId], SYSUTCDATETIME()
 FROM [dbo].[Payment] p
 WHERE p.[RegistrationSubmissionDataId] IS NOT NULL;
 

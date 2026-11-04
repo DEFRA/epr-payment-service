@@ -44,7 +44,8 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.Migration
         Task<ClearDownResult> ClearDownAsync(Guid runId, CancellationToken cancellationToken);
 
         /// <summary>
-        /// In one transaction: backs up the [registration] schema and the linked payments into [registration_pre_migration]
+        /// In one transaction: backs up the [registration] schema and the linked payments into the [registration_pre_migration]
+        /// tables created by EF Core migration SUB-365-add-registration-pre-migration-schema
         /// (Scripts/Migration/backup-registration-pre-migration.sql, replacing any earlier backup), then removes every
         /// [registration] row so the migration can recreate them - all payments are unlinked from RegistrationSubmissionData
         /// and it is deleted (producers, subsidiaries, events, snapshots and line items cascade).

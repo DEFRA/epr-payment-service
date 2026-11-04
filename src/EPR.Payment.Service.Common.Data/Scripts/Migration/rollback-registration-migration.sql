@@ -1,7 +1,8 @@
 /*
     Manual rollback of the registration history migration: restores the [registration] schema and the payment links
-    from [registration_pre_migration], which the migration fills (Scripts/Migration/backup-registration-pre-migration.sql)
-    immediately before it clears [registration]. Each new run replaces that backup, so roll back before starting another run.
+    from [registration_pre_migration] (created by EF Core migration SUB-365-add-registration-pre-migration-schema), which
+    the migration fills (Scripts/Migration/backup-registration-pre-migration.sql) immediately before it clears [registration].
+    Each new run replaces that backup, so roll back before starting another run.
 
     BEFORE RUNNING: stop the migration from running again - set Migration:RegistrationHistory:Enabled to false
     (a run left in Running status resumes on startup and would replay on top of the restored data).
