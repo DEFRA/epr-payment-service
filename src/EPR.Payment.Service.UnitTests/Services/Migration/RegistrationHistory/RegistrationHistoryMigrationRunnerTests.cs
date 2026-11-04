@@ -102,6 +102,8 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             _repositoryMock.Setup(r => r.GetStatusCountsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(() => _finalCounts);
             _repositoryMock.Setup(r => r.ClearDownAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new ClearDownResult(1, new List<int>()));
+            _repositoryMock.Setup(r => r.BackupAndClearRegistrationDataAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ClearDownResult(5, new List<int> { 11, 12 }));
 
             _replayerMock
                 .Setup(r => r.ReplayAsync(It.IsAny<Guid>(), It.IsAny<SubmissionReplayPlan>(), It.IsAny<CancellationToken>()))
@@ -233,6 +235,38 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
         }
 
         [TestMethod]
+        public async Task RunAsync_NewRun_BacksUpAndClearsRegistrationDataOnceAfterStagingAndBeforeReplay()
+        {
+            int? stagedRowsWhenCleared = null;
+            DateTimeOffset? stagingCompletedWhenCleared = Now;
+            var replayedBeforeClear = false;
+            var cleared = false;
+            _repositoryMock.Setup(r => r.BackupAndClearRegistrationDataAsync(It.IsAny<CancellationToken>()))
+                .Callback(() =>
+                {
+                    cleared = true;
+                    stagedRowsWhenCleared = _stagedRows.Count;
+                    stagingCompletedWhenCleared = _createdRun.StagingCompletedAt;
+                })
+                .ReturnsAsync(new ClearDownResult(5, new List<int> { 11, 12 }));
+            _replayerMock
+                .Setup(r => r.ReplayAsync(It.IsAny<Guid>(), It.IsAny<SubmissionReplayPlan>(), It.IsAny<CancellationToken>()))
+                .Callback(() => replayedBeforeClear |= !cleared)
+                .ReturnsAsync(new SubmissionOutcome(SubmissionMigrationStatus.Succeeded));
+
+            await CreateSut().RunAsync(CancellationToken.None);
+
+            using (new AssertionScope())
+            {
+                _repositoryMock.Verify(r => r.BackupAndClearRegistrationDataAsync(It.IsAny<CancellationToken>()), Times.Once);
+                stagedRowsWhenCleared.Should().Be(3, "the dataset is fully staged before anything is cleared");
+                stagingCompletedWhenCleared.Should().BeNull("clearing is part of staging, so an interrupted run clears again");
+                replayedBeforeClear.Should().BeFalse();
+                _createdRun.Status.Should().Be(MigrationRunStatus.Completed);
+            }
+        }
+
+        [TestMethod]
         public async Task RunAsync_ExcludedSubmission_RecordsExcludedWithoutPlanningOrReplaying()
         {
             _excluded[_validSubmissionId.ToString().ToUpperInvariant()] = new ExcludedSubmission
@@ -339,6 +373,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
                 _createdRun.ErrorMessage.Should().Contain("unreachable");
                 _createdRun.CompletedAt.Should().Be(Now);
                 _repositoryMock.Verify(r => r.ClearDownAsync(_createdRun.Id, It.IsAny<CancellationToken>()), clearDown ? Times.Once() : Times.Never());
+                _repositoryMock.Verify(r => r.BackupAndClearRegistrationDataAsync(It.IsAny<CancellationToken>()), Times.Never, "a failed fetch leaves the registration schema untouched");
                 _replayerMock.VerifyNoOtherCalls();
             }
         }
@@ -354,6 +389,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             {
                 _repositoryMock.Verify(r => r.CreateRunAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTimeOffset>(), It.IsAny<CancellationToken>()), Times.Never);
                 _repositoryMock.Verify(r => r.ResetStagingAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+                _repositoryMock.Verify(r => r.BackupAndClearRegistrationDataAsync(It.IsAny<CancellationToken>()), Times.Never, "a resumed replay keeps what it has migrated");
                 _clientMock.VerifyNoOtherCalls();
                 _replayerMock.Verify(r => r.ReplayAsync(_existingRun.Id, It.IsAny<SubmissionReplayPlan>(), It.IsAny<CancellationToken>()), Times.Once);
                 _existingRun.Status.Should().Be(MigrationRunStatus.Completed);
@@ -370,6 +406,7 @@ namespace EPR.Payment.Service.UnitTests.Services.Migration.RegistrationHistory
             using (new AssertionScope())
             {
                 _repositoryMock.Verify(r => r.ResetStagingAsync(_existingRun.Id, It.IsAny<CancellationToken>()), Times.Once);
+                _repositoryMock.Verify(r => r.BackupAndClearRegistrationDataAsync(It.IsAny<CancellationToken>()), Times.Once);
                 _stagedRows.Should().HaveCount(3);
             }
         }

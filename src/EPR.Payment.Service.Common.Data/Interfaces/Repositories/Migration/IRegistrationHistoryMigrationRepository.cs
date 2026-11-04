@@ -42,5 +42,13 @@ namespace EPR.Payment.Service.Common.Data.Interfaces.Repositories.Migration
         Task AddMigratedEntityAsync(MigratedEntity entity, CancellationToken cancellationToken);
 
         Task<ClearDownResult> ClearDownAsync(Guid runId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// In one transaction: backs up the [registration] schema and the linked payments into [registration_pre_migration]
+        /// (Scripts/Migration/backup-registration-pre-migration.sql, replacing any earlier backup), then removes every
+        /// [registration] row so the migration can recreate them - all payments are unlinked from RegistrationSubmissionData
+        /// and it is deleted (producers, subsidiaries, events, snapshots and line items cascade).
+        /// </summary>
+        Task<ClearDownResult> BackupAndClearRegistrationDataAsync(CancellationToken cancellationToken);
     }
 }

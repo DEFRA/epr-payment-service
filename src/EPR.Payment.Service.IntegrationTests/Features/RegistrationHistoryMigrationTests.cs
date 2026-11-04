@@ -179,25 +179,34 @@ public class RegistrationHistoryMigrationTests(ServiceFixture fixture) : Integra
     }
 
     [Fact]
-    public async Task GIVEN_submission_already_captured_live_WHEN_migrated_THEN_it_is_not_required_and_untouched()
+    public async Task GIVEN_submission_already_captured_live_with_a_linked_payment_WHEN_migrated_THEN_it_is_backed_up_cleared_recreated_and_the_payment_unlinked()
     {
         var submission = NewSubmission();
-        await Builder.RegistrationSubmissionData()
+        var live = await Builder.RegistrationSubmissionData()
             .ForSubmissionId(submission.Id)
             .WithApplicationReferenceNumber(submission.Arn)
             .InSubmissionPeriod(SeededSubmissionPeriods.DirectLargeProducer2026)
             .SubmittedOn(OnTime)
             .WithProducer(p => p.WithOrganisationId(submission.OrganisationId).AsLarge())
             .Build();
+        var payment = await Builder.Payment().WithReference(submission.Arn).Build();
+        await LinkPaymentAsync(payment.Payment.Id, live.Entity.Id);
         _blobs.Add(submission.Blob(1), $"{submission.OrganisationId},,EN,L,,,");
 
         var run = await RunMigrationAsync(new List<RegistrationHistoryRecord> { submission.Declared(1, OnTime) });
 
-        run.Status.Should().Be(MigrationRunStatus.Completed);
-        var status = await SubmissionStatusAsync(run, submission.Id);
-        status.Status.Should().Be(SubmissionMigrationStatus.NotRequired);
-        status.Reason.Should().Be(MigrationReasons.AlreadyCaptured);
-        (await CountDataRowsAsync(submission.Id)).Should().Be(1);
+        using (new AwesomeAssertions.Execution.AssertionScope())
+        {
+            run.Status.Should().Be(MigrationRunStatus.Completed);
+            (await SubmissionStatusAsync(run, submission.Id)).Status.Should().Be(SubmissionMigrationStatus.Succeeded);
+            (await CountDataRowsAsync(submission.Id)).Should().Be(1);
+            (await DataRowIdsAsync(submission.Id)).Should().NotContain(live.Entity.Id, "the live row is cleared and recreated from the dataset");
+            (await PaymentLinkAsync(payment.Payment.Id)).Should().BeNull("payments are unlinked before the schema is cleared");
+            (await CountRowsAsync($"SELECT COUNT(*) AS [Value] FROM [registration_pre_migration].[RegistrationSubmissionData] WHERE [Id] = {live.Entity.Id}"))
+                .Should().Be(1, "the live row is backed up before it is cleared");
+            (await CountRowsAsync($"SELECT COUNT(*) AS [Value] FROM [registration_pre_migration].[payments_unlinked] WHERE [PaymentId] = {payment.Payment.Id} AND [RegistrationSubmissionDataId] = {live.Entity.Id}"))
+                .Should().Be(1, "the unlinked payment is recorded with its original link");
+        }
     }
 
     [Fact]
@@ -365,6 +374,34 @@ public class RegistrationHistoryMigrationTests(ServiceFixture fixture) : Integra
     {
         await using var scope = _host.Services.CreateAsyncScope();
         return await scope.ServiceProvider.GetRequiredService<AppDbContext>().RegistrationSubmissionData.CountAsync(r => r.SubmissionId == submissionId);
+    }
+
+    private async Task<List<Guid>> DataRowIdsAsync(Guid submissionId)
+    {
+        await using var scope = _host.Services.CreateAsyncScope();
+        return await scope.ServiceProvider.GetRequiredService<AppDbContext>().RegistrationSubmissionData.AsNoTracking()
+            .Where(r => r.SubmissionId == submissionId).Select(r => r.Id).ToListAsync();
+    }
+
+    private async Task LinkPaymentAsync(int paymentId, Guid registrationSubmissionDataId)
+    {
+        await using var scope = _host.Services.CreateAsyncScope();
+        await scope.ServiceProvider.GetRequiredService<AppDbContext>().Payment
+            .Where(p => p.Id == paymentId)
+            .ExecuteUpdateAsync(s => s.SetProperty(p => p.RegistrationSubmissionDataId, registrationSubmissionDataId));
+    }
+
+    private async Task<int> CountRowsAsync(FormattableString sql)
+    {
+        await using var scope = _host.Services.CreateAsyncScope();
+        return await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.SqlQuery<int>(sql).SingleAsync();
+    }
+
+    private async Task<Guid?> PaymentLinkAsync(int paymentId)
+    {
+        await using var scope = _host.Services.CreateAsyncScope();
+        return await scope.ServiceProvider.GetRequiredService<AppDbContext>().Payment.AsNoTracking()
+            .Where(p => p.Id == paymentId).Select(p => p.RegistrationSubmissionDataId).SingleAsync();
     }
 
     private async Task<int> CountStagingRowsAsync(MigrationRun run)

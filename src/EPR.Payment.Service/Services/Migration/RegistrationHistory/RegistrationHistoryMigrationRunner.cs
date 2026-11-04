@@ -15,8 +15,10 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
 
     /// <summary>
     /// One-off migration of historic Synapse registration submissions into the [registration] schema:
-    /// stage the common-data dataset, replay each submission through the live handlers, then
-    /// optionally clear down everything it created if any submission failed.
+    /// stage the common-data dataset, back up the [registration] schema and payment links into
+    /// [registration_pre_migration] and clear it (unlinking payments) so every submission is recreated from the
+    /// dataset, replay each submission through the live handlers, then optionally clear down everything it
+    /// created if any submission failed. Restore with Scripts/Migration/rollback-registration-migration.sql.
     /// </summary>
     public class RegistrationHistoryMigrationRunner : IRegistrationHistoryMigrationRunner
     {
@@ -173,6 +175,15 @@ namespace EPR.Payment.Service.Services.Migration.RegistrationHistory
             }
 
             var submissionCount = await _repository.CreatePendingSubmissionsAsync(run.Id, cancellationToken);
+
+            // Backed up and cleared only once the dataset is staged, so a failed fetch leaves the schema as it was. It is
+            // part of staging, so a run interrupted before StagingCompletedAt is saved backs up and clears again (nothing
+            // migrated yet) and a run resumed during replay never touches the backup or what it has already migrated.
+            var cleared = await _repository.BackupAndClearRegistrationDataAsync(cancellationToken);
+            _logger.LogWarning(
+                "Registration history migration RegistrationDataBackedUpAndCleared: backed up to [registration_pre_migration]; deleted {Deleted} RegistrationSubmissionData rows; unlinked {UnlinkedPaymentCount} payments.",
+                cleared.DeletedRegistrationSubmissionDataCount,
+                cleared.UnlinkedPaymentIds.Count);
 
             run.StagedRowCount = rowCount;
             run.SubmissionCount = submissionCount;

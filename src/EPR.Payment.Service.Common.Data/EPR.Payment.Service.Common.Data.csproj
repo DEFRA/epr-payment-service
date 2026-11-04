@@ -62,4 +62,9 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+		<!-- Run by the registration history migration before it clears the [registration] schema. -->
+		<EmbeddedResource Include="Scripts\Migration\backup-registration-pre-migration.sql" LogicalName="RegistrationPreMigrationBackup.sql" />
+	</ItemGroup>
+
 </Project>

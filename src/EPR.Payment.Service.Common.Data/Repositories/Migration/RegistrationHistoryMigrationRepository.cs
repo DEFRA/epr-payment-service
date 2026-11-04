@@ -20,6 +20,8 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Migration
 
         private const int ClearDownChunkSize = 1000;
 
+        private static readonly TimeSpan BackupCommandTimeout = TimeSpan.FromMinutes(10);
+
         private readonly AppDbContext _context;
 
         public RegistrationHistoryMigrationRepository(AppDbContext context)
@@ -203,6 +205,43 @@ namespace EPR.Payment.Service.Common.Data.Repositories.Migration
                 .ExecuteUpdateAsync(s => s.SetProperty(x => x.Status, SubmissionMigrationStatus.ClearedDown), cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
+
+            return new ClearDownResult(deleted, unlinkedPaymentIds);
+        }
+
+        public async Task<ClearDownResult> BackupAndClearRegistrationDataAsync(CancellationToken cancellationToken)
+        {
+            // Copying the whole schema can outlast the default command timeout.
+            var previousTimeout = _context.Database.GetCommandTimeout();
+            _context.Database.SetCommandTimeout(BackupCommandTimeout);
+
+            try
+            {
+                await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+
+                // Same transaction as the clear-down: nothing is deleted unless the backup completed and verified.
+                await _context.Database.ExecuteSqlRawAsync(RegistrationPreMigrationBackupSql.Load(), cancellationToken);
+
+                var result = await ClearRegistrationDataInTransactionAsync(cancellationToken);
+
+                await transaction.CommitAsync(cancellationToken);
+
+                return result;
+            }
+            finally
+            {
+                _context.Database.SetCommandTimeout(previousTimeout);
+            }
+        }
+
+        private async Task<ClearDownResult> ClearRegistrationDataInTransactionAsync(CancellationToken cancellationToken)
+        {
+            var linkedPayments = _context.Payment.Where(p => p.RegistrationSubmissionDataId != null);
+            var unlinkedPaymentIds = await linkedPayments.Select(p => p.Id).ToListAsync(cancellationToken);
+            await linkedPayments.ExecuteUpdateAsync(s => s.SetProperty(p => p.RegistrationSubmissionDataId, (Guid?)null), cancellationToken);
+
+            // Producers, subsidiaries, events, snapshots and line items are removed by ON DELETE CASCADE.
+            var deleted = await _context.RegistrationSubmissionData.ExecuteDeleteAsync(cancellationToken);
 
             return new ClearDownResult(deleted, unlinkedPaymentIds);
         }
