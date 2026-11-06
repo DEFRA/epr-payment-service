@@ -17,4 +17,4 @@ variables:
 - name: sqlDB
   value: 'prd1_feespayment'
 - name: acr.Subscription
-  value: 'AZR-RWD-PRD1'
+  value: $(ServiceConnectionPRD1)
