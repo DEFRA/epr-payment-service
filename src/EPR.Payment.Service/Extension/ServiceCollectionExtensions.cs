@@ -44,8 +44,14 @@ using EPR.Payment.Service.Strategies.RegistrationFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.RegistrationFees.Producer;
 using EPR.Payment.Service.Strategies.ResubmissionFees.ComplianceScheme;
 using EPR.Payment.Service.Strategies.ResubmissionFees.Producer;
+using EPR.Payment.Service.Common.Data.Interfaces.Repositories.Migration;
+using EPR.Payment.Service.Common.Data.Repositories.Migration;
+using EPR.Payment.Service.Options;
+using EPR.Payment.Service.Services.Migration.RegistrationHistory;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 
 namespace EPR.Payment.Service.Extension
 {
@@ -117,6 +123,35 @@ namespace EPR.Payment.Service.Extension
             return services;
         }
 
+
+        public static IServiceCollection AddRegistrationHistoryMigration(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<RegistrationHistoryMigrationOptions>(configuration.GetSection(RegistrationHistoryMigrationOptions.SectionName));
+            services.Configure<CommonDataApiOptions>(configuration.GetSection(CommonDataApiOptions.SectionName));
+
+            services.AddHttpClient<ICommonDataApiClient, CommonDataApiClient>((provider, client) =>
+                {
+                    var options = provider.GetRequiredService<IOptions<CommonDataApiOptions>>().Value;
+                    if (!string.IsNullOrWhiteSpace(options.BaseUrl))
+                    {
+                        client.BaseAddress = new Uri(options.BaseUrl.TrimEnd('/') + "/");
+                    }
+
+                    client.Timeout = options.Timeout;
+                })
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                });
+
+            services.AddScoped<IRegistrationHistoryMigrationRepository, RegistrationHistoryMigrationRepository>();
+            services.AddSingleton<IRegistrationReplayHandlerFactory, RegistrationReplayHandlerFactory>();
+            services.AddScoped<IRegistrationHistorySubmissionReplayer, RegistrationHistorySubmissionReplayer>();
+            services.AddScoped<IRegistrationHistoryMigrationRunner, RegistrationHistoryMigrationRunner>();
+            services.AddHostedService<RegistrationHistoryMigrationHostedService>();
+
+            return services;
+        }
 
         public static IServiceCollection AddDataContext(this IServiceCollection services, string connectionString)
         {

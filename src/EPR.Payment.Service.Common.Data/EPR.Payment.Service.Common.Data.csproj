@@ -9,12 +9,12 @@
 	</Target>
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.exclusions">
-			<Value>**/*.sql,Scripts/**,Migrations/**</Value>
+			<Value>**/*.sql,Scripts/**,Migrations/**,**/Migration/**</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
-			<Value>Migrations/**,Scripts/**</Value>
+			<Value>Migrations/**,Scripts/**,**/Migration/**</Value>
 		</SonarQubeSetting>
 	</ItemGroup>
 	<ItemGroup>
@@ -46,7 +46,7 @@
 
 	<ItemGroup>
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
-			<value>Scripts/**,Migrations/**,TypeConfigurations/*.*,Constants/*.*</value>
+			<value>Scripts/**,Migrations/**,TypeConfigurations/*.*,Constants/*.*,**/Migration/**</value>
 		</SonarQubeSetting>
 		<SonarQubeSetting Include="sonar.cpd.exclusions">
 			<Value>Scripts/**,Migrations/**,TypeConfigurations/*.*,Constants/*.*</Value>
@@ -60,6 +60,11 @@
 		<None Update="Scripts\**\*">
 			<SonarQubeExclude>true</SonarQubeExclude>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Run by the registration history migration before it clears the [registration] schema. -->
+		<EmbeddedResource Include="Scripts\Migration\backup-registration-pre-migration.sql" LogicalName="RegistrationPreMigrationBackup.sql" />
 	</ItemGroup>
 
 </Project>

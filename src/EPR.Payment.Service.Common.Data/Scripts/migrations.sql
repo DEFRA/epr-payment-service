@@ -6145,6 +6145,179 @@ GO
 BEGIN TRANSACTION;
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    IF SCHEMA_ID(N'migration') IS NULL EXEC(N'CREATE SCHEMA [migration];');
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE TABLE [migration].[MigrationRun] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RunKey] nvarchar(100) NOT NULL,
+        [Status] nvarchar(30) NOT NULL,
+        [InstanceId] nvarchar(200) NOT NULL,
+        [StartedAt] datetimeoffset NOT NULL,
+        [StagingCompletedAt] datetimeoffset NULL,
+        [CompletedAt] datetimeoffset NULL,
+        [StagedRowCount] int NOT NULL,
+        [SubmissionCount] int NOT NULL,
+        [SucceededCount] int NOT NULL,
+        [FailedCount] int NOT NULL,
+        [NotRequiredCount] int NOT NULL,
+        [ClearDownApplied] bit NOT NULL,
+        [ErrorMessage] nvarchar(max) NULL,
+        CONSTRAINT [PK_MigrationRun] PRIMARY KEY ([Id])
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE TABLE [migration].[MigratedEntity] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RunId] uniqueidentifier NOT NULL,
+        [SubmissionId] uniqueidentifier NOT NULL,
+        [FileId] nvarchar(100) NOT NULL,
+        [RegistrationSubmissionDataId] uniqueidentifier NOT NULL,
+        [CreatedAt] datetimeoffset NOT NULL,
+        CONSTRAINT [PK_MigratedEntity] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_MigratedEntity_MigrationRun_RunId] FOREIGN KEY ([RunId]) REFERENCES [migration].[MigrationRun] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE TABLE [migration].[RegistrationHistoryStaging] (
+        [Id] bigint NOT NULL IDENTITY,
+        [RunId] uniqueidentifier NOT NULL,
+        [SubmissionId] nvarchar(100) NULL,
+        [FileId] nvarchar(100) NULL,
+        [BlobName] nvarchar(1000) NULL,
+        [OrganisationId] nvarchar(100) NULL,
+        [ComplianceSchemeId] nvarchar(100) NULL,
+        [SubmissionPeriod] nvarchar(1000) NULL,
+        [RegistrationJourney] nvarchar(1000) NULL,
+        [RegulatorNation] nvarchar(100) NULL,
+        [Roles] nvarchar(1000) NULL,
+        [EventType] nvarchar(100) NULL,
+        [EventTypeOrder] int NOT NULL,
+        [ReplayTs] datetime2 NULL,
+        [EventDate] datetime2 NULL,
+        [ApplicationReferenceNumber] nvarchar(1000) NULL,
+        [Decision] nvarchar(1000) NULL,
+        CONSTRAINT [PK_RegistrationHistoryStaging] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationHistoryStaging_MigrationRun_RunId] FOREIGN KEY ([RunId]) REFERENCES [migration].[MigrationRun] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE TABLE [migration].[RegistrationSubmissionMigration] (
+        [Id] uniqueidentifier NOT NULL DEFAULT (NEWID()),
+        [RunId] uniqueidentifier NOT NULL,
+        [SubmissionId] nvarchar(100) NOT NULL,
+        [Status] nvarchar(30) NOT NULL,
+        [Reason] nvarchar(50) NULL,
+        [Error] nvarchar(max) NULL,
+        [Warnings] nvarchar(max) NULL,
+        [FilesMigrated] int NOT NULL,
+        [EventsReplayed] int NOT NULL,
+        [EventsSkipped] int NOT NULL,
+        [ProcessedAt] datetimeoffset NULL,
+        CONSTRAINT [PK_RegistrationSubmissionMigration] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_RegistrationSubmissionMigration_MigrationRun_RunId] FOREIGN KEY ([RunId]) REFERENCES [migration].[MigrationRun] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE INDEX [IX_MigratedEntity_RunId_RegistrationSubmissionDataId] ON [migration].[MigratedEntity] ([RunId], [RegistrationSubmissionDataId]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_MigrationRun_RunKey] ON [migration].[MigrationRun] ([RunKey]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE INDEX [IX_RegistrationHistoryStaging_RunId_SubmissionId_ReplayTs] ON [migration].[RegistrationHistoryStaging] ([RunId], [SubmissionId], [ReplayTs]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE INDEX [IX_RegistrationSubmissionMigration_RunId_Status] ON [migration].[RegistrationSubmissionMigration] ([RunId], [Status]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_RegistrationSubmissionMigration_RunId_SubmissionId] ON [migration].[RegistrationSubmissionMigration] ([RunId], [SubmissionId]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261005105055_SUB-365-add-registration-history-migration-schema'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261005105055_SUB-365-add-registration-history-migration-schema', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261007101044_SUB-365-add-staging-submission-file-count'
+)
+BEGIN
+    ALTER TABLE [migration].[RegistrationHistoryStaging] ADD [SubmissionFileCount] int NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261007101044_SUB-365-add-staging-submission-file-count'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261007101044_SUB-365-add-staging-submission-file-count', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
     WHERE [MigrationId] = N'20261014152006_SUB-399-add-2024-submission-periods'
 )
 BEGIN
@@ -6164,6 +6337,173 @@ IF NOT EXISTS (
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
     VALUES (N'20261014152006_SUB-399-add-2024-submission-periods', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261016140650_SUB-365-add-migration-excluded-submissions'
+)
+BEGIN
+    ALTER TABLE [migration].[MigrationRun] ADD [ExcludedCount] int NOT NULL DEFAULT 0;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261016140650_SUB-365-add-migration-excluded-submissions'
+)
+BEGIN
+    CREATE TABLE [migration].[ExcludedSubmission] (
+        [SubmissionId] nvarchar(100) NOT NULL,
+        [Reason] nvarchar(50) NOT NULL,
+        [Note] nvarchar(1000) NULL,
+        [CreatedAt] datetimeoffset NOT NULL DEFAULT (SYSUTCDATETIME()),
+        CONSTRAINT [PK_ExcludedSubmission] PRIMARY KEY ([SubmissionId])
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261016140650_SUB-365-add-migration-excluded-submissions'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'SubmissionId', N'Reason', N'Note') AND [object_id] = OBJECT_ID(N'[migration].[ExcludedSubmission]'))
+        SET IDENTITY_INSERT [migration].[ExcludedSubmission] ON;
+    EXEC(N'INSERT INTO [migration].[ExcludedSubmission] ([SubmissionId], [Reason], [Note])
+    VALUES (N''f09c6273-e322-4b9b-8d21-0ae7800bfbdd'', N''CsvInvalid'', N''Only file 37c0f3f5-cf86-4960-90cf-c41fbdf25028 has subsidiary rows for OrganisationId 115537 but no parent row (row validation did not run on upload); no application submitted.'')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'SubmissionId', N'Reason', N'Note') AND [object_id] = OBJECT_ID(N'[migration].[ExcludedSubmission]'))
+        SET IDENTITY_INSERT [migration].[ExcludedSubmission] OFF;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261016140650_SUB-365-add-migration-excluded-submissions'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261016140650_SUB-365-add-migration-excluded-submissions', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261020162646_SUB-365-add-staging-unselected-app-submitted'
+)
+BEGIN
+    ALTER TABLE [migration].[RegistrationHistoryStaging] ADD [EarliestUnselectedAppSubmittedDate] datetime2 NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261020162646_SUB-365-add-staging-unselected-app-submitted'
+)
+BEGIN
+    ALTER TABLE [migration].[RegistrationHistoryStaging] ADD [UnselectedAppSubmittedFileCount] int NULL;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261020162646_SUB-365-add-staging-unselected-app-submitted'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261020162646_SUB-365-add-staging-unselected-app-submitted', N'10.0.0');
+END;
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF SCHEMA_ID(N'registration_pre_migration') IS NULL EXEC(N'CREATE SCHEMA [registration_pre_migration];');
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationSubmissionData]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationSubmissionData] FROM [registration].[RegistrationSubmissionData];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationSubmissionProducer]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationSubmissionProducer] FROM [registration].[RegistrationSubmissionProducer];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationSubmissionSubsidiary]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationSubmissionSubsidiary] FROM [registration].[RegistrationSubmissionSubsidiary];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationSubmissionDataEvents]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationSubmissionDataEvents] FROM [registration].[RegistrationSubmissionDataEvents];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationFeeSnapshot]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationFeeSnapshot] FROM [registration].[RegistrationFeeSnapshot];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[RegistrationFeeLineItem]') IS NULL SELECT TOP (0) * INTO [registration_pre_migration].[RegistrationFeeLineItem] FROM [registration].[RegistrationFeeLineItem];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    IF OBJECT_ID(N'[registration_pre_migration].[payments_unlinked]') IS NULL
+    CREATE TABLE [registration_pre_migration].[payments_unlinked] (
+        [PaymentId] int NOT NULL,
+        [ExternalPaymentId] uniqueidentifier NULL,
+        [Reference] nvarchar(255) NULL,
+        [Amount] decimal(19,4) NULL,
+        [ReasonForPayment] nvarchar(255) NULL,
+        [Regulator] varchar(20) NULL,
+        [InternalStatusId] int NULL,
+        [CreatedDate] datetime2 NULL,
+        [UpdatedDate] datetime2 NULL,
+        [RegistrationSubmissionDataId] uniqueidentifier NULL,
+        [BackedUpAt] datetime2 NOT NULL
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261104151355_SUB-365-add-registration-pre-migration-schema'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261104151355_SUB-365-add-registration-pre-migration-schema', N'10.0.0');
 END;
 
 COMMIT;
