@@ -43,7 +43,11 @@
 
   <ItemGroup>
     <SonarQubeSetting Include="sonar.coverage.exclusions">
-      <Value>**/Program.cs</Value>
+      <Value>**/Program.cs,**/Services/Migration/**,**/Options/RegistrationHistoryMigrationOptions.cs,**/Options/CommonDataApiOptions.cs</Value>
+    </SonarQubeSetting>
+    <!-- One-off registration history migration (SUB-365); removed once the migration has run. -->
+    <SonarQubeSetting Include="sonar.exclusions">
+      <Value>**/Services/Migration/**,**/Options/RegistrationHistoryMigrationOptions.cs,**/Options/CommonDataApiOptions.cs</Value>
     </SonarQubeSetting>
   </ItemGroup>
 
