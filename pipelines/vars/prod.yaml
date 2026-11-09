@@ -1,5 +1,7 @@
 variables:
-- group: ServiceConnection-PRD1
+- group: ServiceConnections
+- name: azureSubscription
+  value: $(ServiceConnectionPRD1)
 - name: docker.imageName
   value: 'eprpaymentbackend'
 - name: acr.azureContainerRegistryName
@@ -15,4 +17,4 @@ variables:
 - name: sqlDB
   value: 'prd1_feespayment'
 - name: acr.Subscription
-  value: 'AZR-RWD-PRD1'
+  value: $(ServiceConnectionPRD1)
