@@ -37,6 +37,9 @@ parameters:
   default: ''
 
 variables:
+  # DockerPassword for the Additional Copy Image step (not needed on development)
+  - ${{ if ne(parameters.envToDeploy, 'development') }}:
+    - group: EPR-DockerRegistry
   - ${{ if eq(parameters.envToDeploy, 'development') }}:
     - template: vars/${{ parameters.teamName }}-${{ parameters.envToDeploy }}.yaml
   - ${{ if eq(parameters.envToDeploy, 'tst') }}:
